@@ -139,29 +139,31 @@
 	on:scrollend={onScrollEnd}
 	bind:this={scrollContainer}
 >
-	{#each pages as pageObject (pageObject.id)}
-		{#await pageObject.tpData}
-			Lade Seite...
-		{:then tpData}
-			{@const pageColumns = tpData.content.split('<br class="tei-cb">')}
-			<div
-				class="page grid grid-cols-[repeat(auto-fit,minmax(12rem,1fr))] gap-4"
-				data-id={pageObject.id}
-				data-next={tpData.nextId}
-				data-previous={tpData.previousId}
-				use:scrollToVerse={$targetVerse}
-			>
-				{#each pageColumns as column}
-					{#if !isEmptyColumn(column)}
-						<div class="column">{@html column}</div>
-					{/if}
-				{/each}
-			</div>
-			<hr class="!border-t-4" />
-		{:catch error}
-			{error.message}
-		{/await}
-	{/each}
+	{#if pages}
+		{#each pages as pageObject (pageObject.id)}
+			{#await pageObject.tpData}
+				Lade Seite...
+			{:then tpData}
+				{@const pageColumns = tpData.content.split('<br class="tei-cb">')}
+				<div
+					class="page grid grid-cols-[repeat(auto-fit,minmax(12rem,1fr))] gap-4"
+					data-id={pageObject.id}
+					data-next={tpData.nextId}
+					data-previous={tpData.previousId}
+					use:scrollToVerse={$targetVerse}
+				>
+					{#each pageColumns as column}
+						{#if !isEmptyColumn(column)}
+							<div class="column">{@html column}</div>
+						{/if}
+					{/each}
+				</div>
+				<hr class="!border-t-4" />
+			{:catch error}
+				{error.message}
+			{/await}
+		{/each}
+	{/if}
 </div>
 
 <style>
