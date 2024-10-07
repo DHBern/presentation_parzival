@@ -54,7 +54,7 @@ export async function load({ fetch, params }) {
 			if (selectedIndex > 0) {
 				returnObjects.push(data[witnes][selectedIndex - 1] ?? {});
 			}
-			returnObjects.push({ ...data[witnes][selectedIndex], active: true } ?? {});
+			returnObjects.push({ ...data[witnes][selectedIndex], active: true });
 			if (selectedIndex <= data[witnes].length - 1) {
 				returnObjects.push(data[witnes][selectedIndex + 1] ?? {});
 			}
@@ -72,13 +72,7 @@ export async function load({ fetch, params }) {
 				});
 			}
 			if (returnObject.id) {
-				returnObject.tpData = fetch(
-					`${teipb}/parts/${witnes}.xml/json?&view=page&id=${returnObject.id}&odd=parzival-verse.odd`
-				).then((r) => {
-					if (!r.ok) {
-						console.error('Failed to fetch tpData', r);
-						return false;
-					}
+				returnObject.tpData = fetch(`/textzeugen/data/${witnes}/${returnObject.id}`).then((r) => {
 					return r.json();
 				});
 			}
