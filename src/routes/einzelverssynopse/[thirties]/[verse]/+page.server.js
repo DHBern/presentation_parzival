@@ -20,7 +20,7 @@ export async function load({ fetch, params }) {
 	// Fetch fassungen
 	sigla.hyparchetypes.forEach((element) => {
 		publisherData[element.handle] = fetch(
-			`${teipb}/parts/syn${thirties}.xml/json?odd=parzival.odd&view=single&xpath=//text/body/div/div/l[@n=%27${element.handle}%20${thirties}.${verse}%27]`
+			`${teipb}/parts/syn${thirties}.xml/json?odd=parzival.odd&view=single&xpath=//l[@n=%27${element.handle}%20${thirties}.${verse}%27]`
 		);
 	});
 
