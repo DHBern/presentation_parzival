@@ -1,4 +1,5 @@
-import { api, teipb } from '$lib/constants';
+import { api } from '$lib/constants';
+import { base } from '$app/paths';
 
 /** @type {import('./$types').PageLoad} */
 export async function load({ fetch, params }) {
@@ -72,9 +73,11 @@ export async function load({ fetch, params }) {
 				});
 			}
 			if (returnObject.id) {
-				returnObject.tpData = fetch(`/textzeugen/data/${witnes}/${returnObject.id}`).then((r) => {
-					return r.json();
-				});
+				returnObject.tpData = fetch(`${base}/textzeugen/data/${witnes}/${returnObject.id}`).then(
+					(r) => {
+						return r.json();
+					}
+				);
 			}
 			return returnObject;
 		});
