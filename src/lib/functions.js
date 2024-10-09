@@ -6,28 +6,20 @@ import { api } from '$lib/constants';
  * @returns {Array<{ sigla?: string, thirties: string, verse?: string }>}
  */
 export async function generateEntries(sigla) {
-	const entryArray = [];
+	const { verses } = await fetch(`${api}/json/metadata-ms-verses.json`).then((r) => r.json());
 	if (sigla) {
-		const { codices } = await fetch(`${api}/json/metadata-nomenclature.json`).then((r) => r.json());
-		const siglaArray = codices.map((codex) => codex.handle);
-		for (/** @type string */ let sigla of siglaArray) {
-			for (let thirties = 1; thirties <= 827; thirties++) {
-				entryArray.push({
-					sigla: sigla,
-					thirties: `${thirties}`
-				});
-			}
-		}
+		return verses;
 	} else {
-		for (let thirties = 1; thirties <= 827; thirties++) {
-			for (let verse = 1; verse <= 30; verse++) {
-				entryArray.push({
-					thirties: `${thirties}`,
-					verse: `${verse}`
-				});
+		/** @type {{thirties: string, verse: string}[]} */
+		let returnArray = [];
+		let uniqueVerses = new Set();
+		verses.forEach(({ thirties, verse }) => {
+			const key = `${thirties}-${verse}`;
+			if (!uniqueVerses.has(key)) {
+				uniqueVerses.add(key);
+				returnArray.push({ thirties, verse });
 			}
-		}
+		});
+		return returnArray;
 	}
-
-	return entryArray;
 }
