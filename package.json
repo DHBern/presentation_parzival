@@ -4,7 +4,7 @@
 	"private": true,
 	"scripts": {
 		"docker:start": "docker pull existdb/existdb:6.2.0 && docker run -d -p 8081:8080 -p 8444:8443 --name teipublisher existdb/existdb:6.2.0",
-		"installXar": "wget https://dhbern.github.io/data_parzival/parzival-0.2.xar -O parzival-0.2.xar && xst package install parzival-0.2.xar && rm parzival-0.2.xar",
+		"installXar": "wget https://dhbern.github.io/parzival-static-api/parzival-0.2.xar -O parzival-0.2.xar && xst package install parzival-0.2.xar && rm parzival-0.2.xar",
 		"docker:stop": "docker stop teipublisher && docker rm teipublisher",
 		"dev": "vite dev",
 		"build": "vite build",
