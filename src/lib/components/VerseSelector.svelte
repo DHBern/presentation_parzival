@@ -19,6 +19,8 @@
 
 	let additional = '';
 
+	let thirtiesVal = Number(coordinates[0]);
+
 	function handleInput(/** @type {Event} */ e) {
 		if (e.target instanceof HTMLInputElement) {
 			validateMinMax(e.target);
@@ -41,6 +43,11 @@
 			}
 		}
 	};
+	$: if (thirtiesVal === 257) {
+		verse.max = '32';
+	} else if (verse?.max) {
+		verse.max = '30';
+	}
 </script>
 
 <form
@@ -63,7 +70,7 @@
 			max="827"
 			on:input={handleInput}
 			bind:this={thirties}
-			value={Number(coordinates[0])}
+			bind:value={thirtiesVal}
 		/>.<input
 			type="number"
 			placeholder="Vers"
