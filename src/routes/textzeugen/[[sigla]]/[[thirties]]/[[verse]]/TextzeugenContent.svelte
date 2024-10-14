@@ -146,7 +146,7 @@
 			{:then tpData}
 				{@const pageColumns = tpData.content.split('<br class="tei-cb">')}
 				<div
-					class="page grid grid-cols-[repeat(auto-fit,minmax(12rem,1fr))] gap-4"
+					class="page"
 					data-id={pageObject.id}
 					data-next={tpData.nextId}
 					data-previous={tpData.previousId}
