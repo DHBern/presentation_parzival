@@ -67,6 +67,7 @@
 	let currentIiif = Array(data.content?.length).fill({});
 
 	afterNavigate(() => {
+		console.log('navigated');
 		//fill the data from the load-function into the localPages array
 		data.content?.forEach((c, i) => {
 			if (typeof c.meta === 'object') {
@@ -77,6 +78,7 @@
 						.find((m) => m.active)
 						// @ts-ignore
 						?.iiif.then((iiif) => {
+							console.log('setting iiif', iiif);
 							currentIiif[i] = iiif;
 						});
 				});
@@ -98,9 +100,7 @@
 		const createObject = (/** @type {string} */ id) => {
 			return {
 				id: id,
-				tpData: fetch(
-					`${teipb}/parts/${sigla}.xml/json?&view=page&id=${id}&odd=parzival-verse.odd`
-				).then((r) => r.json()),
+				tpData: fetch(`/textzeugen/data/${sigla}/${id}`).then((r) => r.json()),
 				iiif: fetch(`${iiif}/${id}.jpf/info.json`).then((r) => r.json())
 			};
 		};
