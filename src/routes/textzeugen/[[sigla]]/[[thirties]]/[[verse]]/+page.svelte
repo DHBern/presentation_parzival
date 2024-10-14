@@ -44,20 +44,19 @@
 	const generateIiifLink = (
 		/** @type {URL} */ url,
 		/** @type {Number} */ i,
-		/** @type {boolean} */ close
+		/** @type {boolean} */ open
 	) => {
 		let link = new URL(url.toString());
 		const currentParam = url.searchParams.get('iiif')?.split('-') ?? [];
-		if (close) {
-			currentParam[i] = String(close);
-			link.searchParams.set('iiif', currentParam.join('-'));
-		} else {
-			currentParam[i] = '';
-			if (currentParam.some((e) => e === 'true')) {
+		currentParam[i] = String(open);
+		if (open) {
+			if (currentParam.some((e) => e === 'false')) {
 				link.searchParams.set('iiif', currentParam.join('-'));
 			} else {
 				link.searchParams.delete('iiif');
 			}
+		} else {
+			link.searchParams.set('iiif', currentParam.join('-'));
 		}
 		return link.toString();
 	};
@@ -70,14 +69,18 @@
 	afterNavigate(() => {
 		//fill the data from the load-function into the localPages array
 		data.content?.forEach((c, i) => {
-			c.meta.then((meta) => {
-				localPages[i] = [...meta];
-				meta
-					.find((m) => m.active)
-					?.iiif.then((iiif) => {
-						currentIiif[i] = iiif;
-					});
-			});
+			if (typeof c.meta === 'object') {
+				c.meta.then((meta) => {
+					localPages[i] = [...meta];
+					meta
+						// @ts-ignore
+						.find((m) => m.active)
+						// @ts-ignore
+						?.iiif.then((iiif) => {
+							currentIiif[i] = iiif;
+						});
+				});
+			}
 		});
 	});
 
@@ -86,8 +89,10 @@
 		/** @type {number} */ i,
 		/** @type {string} */ sigla
 	) => {
-		const indexCurrent = localPages[i].findIndex((p) => p.id === e.detail.id);
-		localPages[i][indexCurrent]?.iiif.then((iiif) => {
+		const indexCurrent = localPages[i].findIndex(
+			(/** @type {{ id: string; }} */ p) => p.id === e.detail.id
+		);
+		localPages[i][indexCurrent]?.iiif.then((/** @type {any} */ iiif) => {
 			currentIiif[i] = iiif;
 		});
 		const createObject = (/** @type {string} */ id) => {
@@ -149,12 +154,12 @@
 							Vers: {localVerses[i]}
 						</p>
 						<div class="absolute top-0 right-0">
-							{#if !($page.url.searchParams.get('iiif')?.split('-')[i] === 'true')}
-								<a class="btn btn-icon" href={generateIiifLink($page.url, i, true)}>
+							{#if !($page.url.searchParams.get('iiif')?.split('-')[i] === 'false')}
+								<a class="btn btn-icon" href={generateIiifLink($page.url, i, false)}>
 									<i class="fa-solid fa-eye-slash"></i>
 								</a>
 							{:else}
-								<a class="btn btn-icon" href={generateIiifLink($page.url, i, false)}>
+								<a class="btn btn-icon" href={generateIiifLink($page.url, i, true)}>
 									<i class="fa-solid fa-eye"></i>
 								</a>
 							{/if}
@@ -168,14 +173,14 @@
 						on:localVerseChange={(e) => {
 							localVerses[i] = e.detail;
 							replaceState(
-								`${base}/textzeugen/${$page.params.sigla}/${e.detail.replace('.', '/')}`,
+								`${base}/textzeugen/${$page.params.sigla}/${e.detail.replace('.', '/')}?${$page.url.searchParams.toString()}`,
 								{}
 							);
 						}}
 						on:localPageChange={(e) => checklocalPages(e, i, content.sigla)}
 					/>
 				</section>
-				{#if !($page.url.searchParams.get('iiif')?.split('-')[i] === 'true')}
+				{#if !($page.url.searchParams.get('iiif')?.split('-')[i] === 'false')}
 					<section class="min-h-[40vh]">
 						{#if typeof currentIiif[i] === 'object' && Object.keys(currentIiif[i]).length}
 							<IIIFViewer iiif={currentIiif[i]} />

@@ -11,14 +11,14 @@ export async function load({ fetch, params }) {
 
 	const sigla = await fetch(`${api}/json/metadata-nomenclature.json`).then((res) => res.json());
 	// Fetch the textzeugen
-	sigla.codices.forEach((element) => {
+	sigla.codices.forEach((/** @type {{ handle: string | number; }} */ element) => {
 		publisherData[element.handle] = fetch(
 			`${teipb}/parts/${element.handle}.xml/json?odd=parzival.odd&view=page&id=${element.handle}_${thirties}.${verse}`
 		);
 	});
 
 	// Fetch fassungen
-	sigla.hyparchetypes.forEach((element) => {
+	sigla.hyparchetypes.forEach((/** @type {{ handle: string | number; }} */ element) => {
 		publisherData[element.handle] = fetch(
 			`${teipb}/parts/syn${thirties}.xml/json?odd=parzival.odd&view=single&xpath=//l[@n=%27${element.handle}%20${thirties}.${verse}%27]`
 		);
