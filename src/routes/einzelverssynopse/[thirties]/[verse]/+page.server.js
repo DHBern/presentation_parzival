@@ -56,3 +56,5 @@ export async function load({ fetch, params }) {
 export function entries() {
 	return generateEntries(false);
 }
+
+export const prerender = true;
