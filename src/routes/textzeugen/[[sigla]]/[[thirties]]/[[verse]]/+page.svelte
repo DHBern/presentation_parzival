@@ -5,7 +5,7 @@
 	import { base } from '$app/paths';
 	import { page } from '$app/stores';
 	import { afterNavigate, replaceState } from '$app/navigation';
-	import { iiif, teipb } from '$lib/constants';
+	import { iiif } from '$lib/constants';
 
 	/** @type {import('./$types').PageData} */
 	export let data;
@@ -94,9 +94,10 @@
 		const indexCurrent = localPages[i].findIndex(
 			(/** @type {{ id: string; }} */ p) => p.id === e.detail.id
 		);
-		localPages[i][indexCurrent]?.iiif.then((/** @type {any} */ iiif) => {
-			currentIiif[i] = iiif;
-		});
+		// Don't switch the iiif viewer on page change, just on click
+		// localPages[i][indexCurrent]?.iiif.then((/** @type {any} */ iiif) => {
+		// 	currentIiif[i] = iiif;
+		// });
 		const createObject = (/** @type {string} */ id) => {
 			return {
 				id: id,
