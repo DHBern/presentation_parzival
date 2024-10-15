@@ -144,7 +144,6 @@
 			{#await pageObject.tpData}
 				Lade Seite...
 			{:then tpData}
-				{@const pageColumns = tpData.content.split('<br class="tei-cb">')}
 				<div
 					class="page"
 					data-id={pageObject.id}
@@ -152,11 +151,7 @@
 					data-previous={tpData.previousId}
 					use:scrollToVerse={$targetVerse}
 				>
-					{#each pageColumns as column}
-						{#if !isEmptyColumn(column)}
-							<div class="column">{@html column}</div>
-						{/if}
-					{/each}
+					{@html tpData.content}
 				</div>
 				<hr class="!border-t-4" />
 			{:catch error}
@@ -167,14 +162,14 @@
 </div>
 
 <style>
-	.column :global(.line) {
+	.page :global(.line) {
 		@apply snap-start;
 		display: flex;
 		gap: 1em;
 		margin: 0.5em 0;
 	}
 
-	.column :global(.once) {
+	.page :global(.once) {
 		-webkit-animation-iteration-count: 4;
 		animation-iteration-count: 4;
 	}
