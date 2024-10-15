@@ -179,6 +179,9 @@
 							);
 						}}
 						on:localPageChange={(e) => checklocalPages(e, i, content.sigla)}
+						on:localIiifChange={(e) => {
+							currentIiif[i] = e.detail;
+						}}
 					/>
 				</section>
 				{#if !($page.url.searchParams.get('iiif')?.split('-')[i] === 'false')}

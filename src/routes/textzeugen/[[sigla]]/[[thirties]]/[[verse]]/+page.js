@@ -3,7 +3,6 @@ import { base } from '$app/paths';
 
 /** @type {import('./$types').PageLoad} */
 export async function load({ fetch, params }) {
-	console.log('running load');
 	const { codices, fragments } = await fetch(`${api}/json/metadata-nomenclature.json`).then((r) =>
 		r.json()
 	);

@@ -9,6 +9,7 @@
 
 <script>
 	import { createEventDispatcher, onMount } from 'svelte';
+	import { page } from '$app/stores';
 	export let pages;
 
 	let localVerse = $targetVerse;
@@ -87,16 +88,16 @@
 			const verse = node.parentElement?.querySelector(`[data-verse="${target}"]`);
 			if (!verse) return;
 			programmaticScroll = true;
-			// verse.scrollIntoView({ behavior: 'instant', block: 'start' });
-			scrollContainer?.scrollTo({
-				top:
-					scrollContainer?.scrollTop +
-					Number(verse.parentElement?.getBoundingClientRect().top) -
-					scrollContainer?.getBoundingClientRect().top,
-				behavior: 'instant'
-			});
+			verse.scrollIntoView({ behavior: 'instant', block: 'start' });
+			// scrollContainer?.scrollTo({
+			// 	top:
+			// 		scrollContainer?.scrollTop +
+			// 		Number(verse.parentElement?.getBoundingClientRect().top) -
+			// 		scrollContainer?.getBoundingClientRect().top,
+			// 	behavior: 'instant'
+			// });
 			dispatch('localVerseChange', target);
-			verse.parentElement?.classList.add('animate-bounce', 'once');
+			verse.parentElement?.classList.add('animate-pulse', 'once');
 		};
 		scroll(targetVerse);
 
@@ -151,6 +152,20 @@
 					data-previous={tpData.previousId}
 					use:scrollToVerse={$targetVerse}
 				>
+					{#await pageObject.iiif then iiif}
+						<button
+							on:click={() => {
+								dispatch('localIiifChange', iiif);
+							}}
+							class="float-right"
+						>
+							<img
+								src="{iiif.id}/full/!250,120/0/default.jpg"
+								alt="thumbnail der Seite {pageObject.id}"
+							/>
+							{pageObject.id}
+						</button>
+					{/await}
 					{@html tpData.content}
 				</div>
 				<hr class="!border-t-4" />
