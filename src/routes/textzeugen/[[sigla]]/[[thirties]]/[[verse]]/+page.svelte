@@ -101,7 +101,7 @@
 		const createObject = (/** @type {string} */ id) => {
 			return {
 				id: id,
-				tpData: fetch(`/textzeugen/data/${sigla}/${id}`).then((r) => r.json()),
+				tpData: fetch(`${base}/textzeugen/data/${sigla}/${id}`).then((r) => r.json()),
 				iiif: fetch(`${iiif}/${id}.jpf/info.json`).then((r) => r.json())
 			};
 		};
