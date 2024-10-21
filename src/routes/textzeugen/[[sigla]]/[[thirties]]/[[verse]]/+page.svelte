@@ -7,10 +7,10 @@
 	import { afterNavigate, replaceState } from '$app/navigation';
 	import { iiif } from '$lib/constants';
 
-	/** @type {import('./$types').PageData} */
-	export let data;
+	/** @type {{data: import('./$types').PageData}} */
+	let { data } = $props();
 
-	$: selectedSigla = data.content ? data.content.map((c) => c.sigla) : [];
+	let selectedSigla = $derived(data.content ? data.content.map((c) => c.sigla) : []);
 
 	const generateLabel = (/** @type {String[]} */ sigla) => {
 		const info = [...data.codices, ...data.fragments];
@@ -62,9 +62,9 @@
 	};
 
 	setTarget(`${data.thirties}.${data.verse}`);
-	let localVerses = Array(data.content?.length).fill(`${data.thirties}.${data.verse}`);
-	let localPages = Array(data.content?.length).fill([]);
-	let currentIiif = Array(data.content?.length).fill({});
+	let localVerses = $state(Array(data.content?.length).fill(`${data.thirties}.${data.verse}`));
+	let localPages = $state(Array(data.content?.length).fill([]));
+	let currentIiif = $state(Array(data.content?.length).fill({}));
 
 	afterNavigate(() => {
 		console.log('navigated');
@@ -180,6 +180,7 @@
 						}}
 						on:localPageChange={(e) => checklocalPages(e, i, content.sigla)}
 						on:localIiifChange={(e) => {
+							console.log('setting iiif');
 							currentIiif[i] = e.detail;
 						}}
 					/>

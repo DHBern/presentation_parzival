@@ -3,11 +3,11 @@
 	import VerseSelector from '$lib/components/VerseSelector.svelte';
 	import { base } from '$app/paths';
 
-	/** @type {import('./$types').PageData} */
-	export let data;
+	/** @type {{data: import('./$types').PageData}} */
+	let { data } = $props();
 
-	$: ({ thirties, verse, sigla, publisherData, loss } = data);
-	let hyparchetypesSlider = false;
+	let { thirties, verse, sigla, publisherData, loss } = $derived(data);
+	let hyparchetypesSlider = $state(false);
 </script>
 
 <div class="container mx-auto p-4 flex flex-wrap justify-between gap-9">
@@ -30,18 +30,14 @@
 					{/await}
 				{/if}
 				{#each archetype.witnesses as witness}
-					{#await publisherData[witness] then value}
-						{#if value?.content}
-							<dt class="pr-4 pt-2 {hyparchetypesSlider ? 'ml-5' : ''}">
-								{sigla.codices.find((c) => c.handle === witness)?.sigil}
-							</dt>
-							<dd class="border-l-2 border-current {hyparchetypesSlider ? 'ml-5' : ''} pl-4 py-1">
-								{@html value.content}
-							</dd>
-						{/if}
-					{:catch error}
-						<p>error: {error.message}</p>
-					{/await}
+					{#if publisherData[witness]?.content}
+						<dt class="pr-4 pt-2 {hyparchetypesSlider ? 'ml-5' : ''}">
+							{sigla.codices.find((c) => c.handle === witness)?.sigil}
+						</dt>
+						<dd class="border-l-2 border-current {hyparchetypesSlider ? 'ml-5' : ''} pl-4 py-1">
+							{@html publisherData[witness]?.content}
+						</dd>
+					{/if}
 				{/each}
 			{/each}
 		</dl>

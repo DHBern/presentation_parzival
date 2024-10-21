@@ -1,13 +1,12 @@
 <script>
 	import VerseSelector from '$lib/components/VerseSelector.svelte';
 
-	/** @type {{sigil: String, loc: String, aka: String, cod: String, handle: String}[]}*/
-	export let sigla = [];
+	
 
-	export let selectedSigla = ['d'];
 
-	/** @type {[String | boolean, String | boolean]} */
-	export let coordinates = ['', ''];
+	
+	/** @type {{sigla?: {sigil: String, loc: String, aka: String, cod: String, handle: String}[], selectedSigla?: any, coordinates?: [String | boolean, String | boolean]}} */
+	let { sigla = [], selectedSigla = $bindable(['d']), coordinates = ['', ''] } = $props();
 </script>
 
 <div>

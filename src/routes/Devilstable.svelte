@@ -1,45 +1,44 @@
 <script>
+	import { run } from 'svelte/legacy';
+
 	import Brush from './Brush.svelte';
 	import Detail from './Detail.svelte';
 
 	const DATA_MAX = 827;
 
-	export let codices;
-	export let width = 400;
-	export let height = 400;
-
-	$: mobile = width < 800;
-
 	const brushDimension = 200;
 
-	let selection = { start: 1, end: 100 };
+	let selection = $state({ start: 1, end: 100 });
 
-	/**
-	 * @type {{values: number[][], label: string}[]}
-	 */
-	export let data = [
-		{
-			label: 'D',
-			values: [
-				[1, 3],
-				[15, 20]
-			]
-		},
-		{
-			label: 'n',
-			values: [
-				[1, 16],
-				[18, 25]
-			]
-		}
-	];
+	/** @type {{codices: any, width?: number, height?: number, data?: {values: number[][], label: string}[]}} */
+	let {
+		codices,
+		width = 400,
+		height = 400,
+		data = [
+			{
+				label: 'D',
+				values: [
+					[1, 3],
+					[15, 20]
+				]
+			},
+			{
+				label: 'n',
+				values: [
+					[1, 16],
+					[18, 25]
+				]
+			}
+		]
+	} = $props();
 
 	/**
 	 * @type {{values: boolean[], label: string}[]}
 	 */
-	let boolData = [];
-	$: {
-		const [fractions, noFractions] = data.reduce(
+	let mobile = $derived(width < 800);
+	let [fractions, noFractions] = $derived(
+		data.reduce(
 			/**
 			 *
 			 * @param {[{values: number[][], label: string}[],{values: number[][], label: string}[]]} acc
@@ -50,11 +49,12 @@
 				item.label.includes('fr') ? acc[0].push(item) : acc[1].push(item);
 				return acc;
 			},
-			[[], []]
-		); // Initial accumulator value is two empty arrays.
-
+			[[], []] // Initial accumulator value is two empty arrays.
+		)
+	);
+	let fractionData = $derived.by(() => {
 		//combine all the fractions into one Object with the label 'fr'
-		const fractionData = {
+		let fractionData = {
 			label: 'fr',
 			values: new Array(DATA_MAX).fill(false)
 		};
@@ -73,26 +73,26 @@
 				}
 			}
 		}
+		return fractionData;
+	});
+	let boolData = $derived([
+		...noFractions.map((d) => {
+			/** @type {boolean[]} */ const values = new Array(DATA_MAX).fill(false);
 
-		boolData = [
-			...noFractions.map((d) => {
-				/** @type {boolean[]} */ const values = new Array(DATA_MAX).fill(false);
+			d.values.forEach(([start, end]) => {
+				for (let i = start; i <= end; i++) {
+					// Adjust for 0-indexed array
+					values[i - 1] = true;
+				}
+			});
 
-				d.values.forEach(([start, end]) => {
-					for (let i = start; i <= end; i++) {
-						// Adjust for 0-indexed array
-						values[i - 1] = true;
-					}
-				});
-
-				return {
-					label: d.label,
-					values
-				};
-			}),
-			fractionData
-		];
-	}
+			return {
+				label: d.label,
+				values
+			};
+		}),
+		fractionData
+	]);
 </script>
 
 <Brush

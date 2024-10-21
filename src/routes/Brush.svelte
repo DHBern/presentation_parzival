@@ -1,37 +1,38 @@
 <script>
+	import { run } from 'svelte/legacy';
+
 	import * as d3 from 'd3';
 	import { createEventDispatcher } from 'svelte';
 
 	const dispatch = createEventDispatcher();
 
-	export let width = 400;
-	export let height = 150;
 	let marginTop = 20;
 	let marginRight = 0;
 	let marginBottom = 20;
-	$: marginLeft = mobile ? 30 : 35;
 	const optimalChunkWidth = 18;
-	export let DATA_MIN = 1;
-	export let DATA_MAX = 827;
 
 	/**
 	 * @type {SVGGElement}
 	 */
-	let gx;
+	let gx = $state();
 	/**
 	 * @type {SVGGElement}
 	 */
-	let gy;
+	let gy = $state();
 
 	/**
 	 * @type {SVGGElement}
 	 */
-	let gBrush;
+	let gBrush = $state();
 
-	/**
-	 * @type {{values: boolean[], label: string}[]}
-	 */
-	export let data = [
+	
+	/** @type {{width?: number, height?: number, DATA_MIN?: number, DATA_MAX?: number, data?: {values: boolean[], label: string}[]}} */
+	let {
+		width = 400,
+		height = 150,
+		DATA_MIN = 1,
+		DATA_MAX = 827,
+		data = [
 		{
 			label: 'D',
 			values: []
@@ -40,29 +41,35 @@
 			label: 'n',
 			values: []
 		}
-	];
-	$: mobile = width > height;
-	$: availableWidth = width - marginLeft - marginRight;
-	$: numChunks = mobile
+	]
+	} = $props();
+
+	/** @type any */
+	let x = $state(), /** @type any */ y = $state();
+	/**
+	 * @type {d3.brushX | d3.brushY}
+	 */
+	let brush = $state();
+	let mobile = $derived(width > height);
+	let marginLeft = $derived(mobile ? 30 : 35);
+	let availableWidth = $derived(width - marginLeft - marginRight);
+	let numChunks = $derived(mobile
 		? Math.max(Math.floor(availableWidth / optimalChunkWidth), 1)
-		: Math.max(Math.floor((height - marginTop - marginBottom) / optimalChunkWidth), 1);
-	$: colorScale = d3
+		: Math.max(Math.floor((height - marginTop - marginBottom) / optimalChunkWidth), 1));
+	let colorScale = $derived(d3
 		.scaleThreshold()
 		.domain([0.001, 1 / 4, 2 / 4, 3 / 4, 0.9999])
-		.range(['900', '600', '500', '400', '200', '50']);
+		.range(['900', '600', '500', '400', '200', '50']));
 	// $: colorScale = d3.scaleQuantize([0, 1], ['50', '200', '400', '500', '600', '900']);
 
 	// create chunks: each chunk is a number counting the number of true values in the chunk
-	$: sourcesDim = d3.scaleBand().domain(data.map((d) => d.label));
-	$: xChunk = d3
+	let sourcesDim = $derived(d3.scaleBand().domain(data.map((d) => d.label)));
+	let xChunk = $derived(d3
 		.scaleLinear()
 		.domain([0, numChunks])
-		.range(mobile ? [marginLeft, width - marginRight] : [marginBottom, height - marginTop]);
-
-	$: valuesDim = d3.scaleLinear().domain([DATA_MIN, DATA_MAX]);
-	/** @type any */
-	let x, /** @type any */ y;
-	$: {
+		.range(mobile ? [marginLeft, width - marginRight] : [marginBottom, height - marginTop]));
+	let valuesDim = $derived(d3.scaleLinear().domain([DATA_MIN, DATA_MAX]));
+	run(() => {
 		if (mobile) {
 			x = valuesDim.range([marginLeft, width - marginRight]);
 			y = sourcesDim.range([height - marginTop, marginBottom]);
@@ -70,8 +77,8 @@
 			x = sourcesDim.range([marginLeft, width - marginRight]);
 			y = valuesDim.range([height - marginTop, marginBottom]);
 		}
-	}
-	$: chunkedData = data.map((dataObject) => {
+	});
+	let chunkedData = $derived(data.map((dataObject) => {
 		const chunked = new Array(numChunks).fill(0);
 		const chunkedPresent = new Array(numChunks).fill(0);
 		for (let i = 0; i < numChunks; i++) {
@@ -96,14 +103,14 @@
 				return chunkedPresent[i] / val;
 			})
 		};
+	}));
+	run(() => {
+		d3.select(gy).call(d3.axisLeft(y));
 	});
-	$: d3.select(gy).call(d3.axisLeft(y));
-	$: mobile ? d3.select(gx).call(d3.axisBottom(x)) : d3.select(gx).call(d3.axisTop(x));
-	/**
-	 * @type {d3.brushX | d3.brushY}
-	 */
-	let brush;
-	$: {
+	run(() => {
+		mobile ? d3.select(gx).call(d3.axisBottom(x)) : d3.select(gx).call(d3.axisTop(x));
+	});
+	run(() => {
 		brush = mobile
 			? d3.brushX().extent([
 					[marginLeft, 0],
@@ -134,13 +141,15 @@
 					dispatch('brush', { start, end });
 				}
 			});
-	}
-	$: d3.select(gBrush)
-		.call(brush)
-		.call(
-			brush.move,
-			mobile ? [valuesDim(DATA_MIN), valuesDim(100)] : [valuesDim(100), valuesDim(DATA_MIN)]
-		);
+	});
+	run(() => {
+		d3.select(gBrush)
+			.call(brush)
+			.call(
+				brush.move,
+				mobile ? [valuesDim(DATA_MIN), valuesDim(100)] : [valuesDim(100), valuesDim(DATA_MIN)]
+			);
+	});
 </script>
 
 <svg {width} {height} class="float-left" shape-rendering="crispEdges">

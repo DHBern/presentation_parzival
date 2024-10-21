@@ -1,4 +1,4 @@
-<script context="module">
+<script module>
 	import { writable } from 'svelte/store';
 	let targetVerse = writable('');
 
@@ -10,7 +10,8 @@
 <script>
 	import { createEventDispatcher, onMount } from 'svelte';
 	import { page } from '$app/stores';
-	export let pages;
+	/** @type {{pages: any}} */
+	let { pages } = $props();
 
 	let localVerse = $targetVerse;
 	/**
@@ -20,7 +21,7 @@
 
 	const dispatch = createEventDispatcher();
 
-	let scrollContainer, observer;
+	let scrollContainer = $state(), observer;
 
 	onMount(() => {
 		observer = new IntersectionObserver(
@@ -137,7 +138,7 @@
 
 <div
 	class="max-h-[70vh] overflow-y-auto snap-y"
-	on:scrollend={onScrollEnd}
+	onscrollend={onScrollEnd}
 	bind:this={scrollContainer}
 >
 	{#if pages}
@@ -154,7 +155,7 @@
 				>
 					{#await pageObject.iiif then iiif}
 						<button
-							on:click={() => {
+							onclick={() => {
 								dispatch('localIiifChange', iiif);
 							}}
 							class="float-right"
