@@ -1,4 +1,4 @@
-<script context="module">
+<script module>
 	import { assets } from '$app/paths';
 	/**
 	 * @type {import('openseadragon')}
@@ -7,9 +7,8 @@
 </script>
 
 <script>
-	/** @type { Object } */
-	export let iiif;
-
+	/** @type {{iiif:  Object }} */
+	let { iiif } = $props();
 	const uuid = crypto.randomUUID();
 	/**
 	 * @type {import('openseadragon').Viewer}
@@ -119,4 +118,4 @@
 	};
 </script>
 
-<div id="viewer-{uuid}" class="w-full h-full" use:generateViewer={iiif}></div>
+<div id="viewer-{uuid}" class="w-full h-full" use:generateViewer={$state.snapshot(iiif)}></div>

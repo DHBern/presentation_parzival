@@ -3,40 +3,8 @@
 	import { computePosition, shift, flip, offset } from '@floating-ui/dom';
 	import { base } from '$app/paths';
 
-	export let codices;
-	export let width = 400;
-	export let height = 400;
-	export let data_start = 1;
-	/**
-	 * @type {{values: boolean[], label: string}[]}
-	 */
-	export let data = [];
-	$: contigousData = data.map((d) => {
-		if (d.label === 'fr') {
-			return d;
-		}
-		let contiguousRanges = [];
-		let start = 0;
-		for (let i = 0; i < d.values.length; i++) {
-			if (d.values[i]) {
-				if (start === 0) {
-					start = i + data_start;
-				}
-			} else {
-				if (start !== 0) {
-					contiguousRanges.push([start, i - 1 + data_start]);
-					start = 0;
-				}
-			}
-		}
-		if (start !== 0) {
-			contiguousRanges.push([start, d.values.length - 1 + data_start]);
-		}
-		return {
-			label: d.label,
-			values: contiguousRanges
-		};
-	});
+	/** @type {{codices: any, width?: number, height?: number, data_start?: number, data?: {values: boolean[], label: string}[]}} */
+	let { codices, width = 400, height = 400, data_start = 1, data = [] } = $props();
 	let marginTop = 30;
 	let marginRight = 0;
 	let marginBottom = 20;
@@ -45,29 +13,29 @@
 	/**
 	 * @type {SVGGElement}
 	 */
-	let gx;
+	let gx = $state();
 	/**
 	 * @type {SVGGElement}
 	 */
-	let gy;
+	let gy = $state();
 	/**
 	 * @type {number[]}
 	 */
-	let mousePos = [0, 1];
+	let mousePos = $state([0, 1]);
 
 	/**
 	 * @type {HTMLElement}
 	 */
-	let floating;
+	let floating = $state();
 	/**
 	 * @type {HTMLElement}
 	 */
-	let hoverLine;
+	let hoverLine = $state();
 
 	/**
 	 * @type {SVGElement}
 	 */
-	let svgElement;
+	let svgElement = $state();
 
 	const handleMouseMove = (/** @type {{ clientX: any; clientY: any; }} */ event) => {
 		mousePos = d3.pointer(event, svgElement);
@@ -126,85 +94,12 @@
 			return domain[Math.max(0, Math.min(index, domain.length - 1))];
 		};
 	}
-	$: x = d3
-		.scaleBand(
-			data.map((d) => d.label),
-			[marginLeft, width - marginRight]
-		)
-		.round(true)
-		.paddingOuter(0.1)
-		.paddingInner(0.2);
 
-	$: y = d3.scaleLinear(
-		[data_start, data_start + data[0]?.values.length],
-		[height - marginBottom, marginTop]
-	);
-	$: manuscript =
-		scaleBandInvert(x)(mousePos[0]) === 'fr'
-			? data.find((d) => d.label === 'fr')?.values[verse - data_start] || 'fr'
-			: scaleBandInvert(x)(mousePos[0]);
-
-	$: d3.select(gy)
-		.call(
-			d3
-				.axisRight(y)
-				.ticks(20)
-				.tickSize(width - marginLeft - marginRight)
-		)
-		.call((/** @type import('d3-selection').Selection<SVGGElement, any, null, undefined> */ g) => {
-			g.selectAll('.tick text').attr('x', -25);
-		});
-	$: d3.select(gx)
-		.call(
-			d3.axisTop(
-				d3
-					.scaleBand(
-						data.map((d) => codices.find((i) => i.handle === d.label)?.sigil || d.label),
-						[marginLeft, width - marginRight]
-					)
-					.round(true)
-					.paddingOuter(0.1)
-					.paddingInner(0.2)
-			)
-		)
-		.selectAll('.tick text')
-		.call((g) => {
-			g.attr('role', 'button');
-			g.attr('tabindex', '0');
-		})
-		.on('click', (e) => {
-			const reference = e.currentTarget;
-			const popup =
-				popupLabels[
-					codices.find((i) => i.sigil === reference.textContent)?.handle || reference.textContent
-				];
-			if (popup && reference) {
-				computePosition(reference, popup, {
-					placement: 'top'
-				}).then(({ x, y }) => {
-					Object.assign(popup.style, {
-						top: `${y}px`,
-						left: `${x}px`,
-						opacity: '1'
-					});
-				});
-			}
-		})
-		.on('blur', (e) => {
-			const reference = e.currentTarget;
-			const popup =
-				popupLabels[
-					codices.find((i) => i.sigil === reference.textContent)?.handle || reference.textContent
-				];
-			if (popup) {
-				popup.style.opacity = '0';
-			}
-		});
-
-	$: verse = Math.floor(y.invert(mousePos[1]));
-	const popupFractions = {};
-	const popupLabels = {};
+	const popupFractions = $state({});
+	const popupLabels = $state({});
 	const openPopupFractions = (e, verseNumber) => {
+		e.preventDefault();
+		e.stopPropagation();
 		const reference = e.currentTarget;
 		const popup = popupFractions[verseNumber];
 		if (popup && reference) {
@@ -219,6 +114,118 @@
 			});
 		}
 	};
+	let contigousData = $derived(
+		data.map((d) => {
+			if (d.label === 'fr') {
+				return d;
+			}
+			let contiguousRanges = [];
+			let start = 0;
+			for (let i = 0; i < d.values.length; i++) {
+				if (d.values[i]) {
+					if (start === 0) {
+						start = i + data_start;
+					}
+				} else {
+					if (start !== 0) {
+						contiguousRanges.push([start, i - 1 + data_start]);
+						start = 0;
+					}
+				}
+			}
+			if (start !== 0) {
+				contiguousRanges.push([start, d.values.length - 1 + data_start]);
+			}
+			return {
+				label: d.label,
+				values: contiguousRanges
+			};
+		})
+	);
+	let x = $derived(
+		d3
+			.scaleBand(
+				data.map((d) => d.label),
+				[marginLeft, width - marginRight]
+			)
+			.round(true)
+			.paddingOuter(0.1)
+			.paddingInner(0.2)
+	);
+	let y = $derived(
+		d3.scaleLinear(
+			[data_start, data_start + data[0]?.values.length],
+			[height - marginBottom, marginTop]
+		)
+	);
+	let verse = $derived(Math.floor(y.invert(mousePos[1])));
+	let manuscript = $derived(
+		scaleBandInvert(x)(mousePos[0]) === 'fr'
+			? data.find((d) => d.label === 'fr')?.values[verse - data_start] || 'fr'
+			: scaleBandInvert(x)(mousePos[0])
+	);
+	$effect(() => {
+		d3.select(gy)
+			.call(
+				d3
+					.axisRight(y)
+					.ticks(20)
+					.tickSize(width - marginLeft - marginRight)
+			)
+			.call(
+				(/** @type import('d3-selection').Selection<SVGGElement, any, null, undefined> */ g) => {
+					g.selectAll('.tick text').attr('x', -25);
+				}
+			);
+	});
+	$effect(() => {
+		d3.select(gx)
+			.call(
+				d3.axisTop(
+					d3
+						.scaleBand(
+							data.map((d) => codices.find((i) => i.handle === d.label)?.sigil || d.label),
+							[marginLeft, width - marginRight]
+						)
+						.round(true)
+						.paddingOuter(0.1)
+						.paddingInner(0.2)
+				)
+			)
+			.selectAll('.tick text')
+			.call((g) => {
+				g.attr('role', 'button');
+				g.attr('tabindex', '0');
+			})
+			.on('click', (e) => {
+				const reference = e.currentTarget;
+				const popup =
+					popupLabels[
+						codices.find((i) => i.sigil === reference.textContent)?.handle || reference.textContent
+					];
+				if (popup && reference) {
+					computePosition(reference, popup, {
+						placement: 'top'
+					}).then(({ x, y }) => {
+						Object.assign(popup.style, {
+							top: `${y}px`,
+							left: `${x}px`,
+							opacity: '1'
+						});
+					});
+				}
+			})
+			.on('blur', (e) => {
+				const reference = e.currentTarget;
+				const popup =
+					popupLabels[
+						codices.find((i) => i.sigil === reference.textContent)?.handle || reference.textContent
+					];
+				if (popup) {
+					popup.style.opacity = '0';
+				}
+			});
+	});
 </script>
 
 <div
@@ -270,8 +277,8 @@
 	{/if}
 {/each}
 <div
-	on:mousemove={handleMouseMove}
-	on:mouseleave={(_e) => {
+	onmousemove={handleMouseMove}
+	onmouseleave={(_e) => {
 		floating.style.display = 'none';
 		floating.style.opacity = '0';
 		hoverLine.style.opacity = '0';
@@ -290,7 +297,10 @@
 						{@const verseNumber = i + data_start}
 						{#if isNaN(values[0])}
 							{#if values.length === 1}
-								<a href={`${base}/textzeugen/${values[0]}/${verseNumber}`}>
+								<a
+									href={`${base}/textzeugen/${values[0]}/${verseNumber}`}
+									aria-label={`${values[0]}.${verseNumber}`}
+								>
 									<rect
 										x={x(sigla.label)}
 										y={y(verseNumber + 1)}
@@ -301,15 +311,17 @@
 									/>
 								</a>
 							{:else}
-								<!-- svelte-ignore a11y-invalid-attribute -->
+								<!-- svelte-ignore a11y_invalid_attribute -->
 								<a
 									role="button"
 									tabindex="0"
 									href="#"
-									on:keydown={(e) => openPopupFractions(e, verseNumber)}
-									on:click|preventDefault|stopPropagation={(e) =>
-										openPopupFractions(e, verseNumber)}
-									on:blur={() => {
+									onkeydown={(e) => openPopupFractions(e, verseNumber)}
+									onclick={(e) => {
+										openPopupFractions(e, verseNumber);
+									}}
+									aria-label={`Mehrere Fr in Vers ${verseNumber}`}
+									onblur={() => {
 										popupFractions[verseNumber].style.opacity = '0';
 									}}
 								>
@@ -324,7 +336,7 @@
 								</a>
 							{/if}
 						{:else if sigla.label === 'Fassung'}
-							<a href={`${base}/fassungen/${verse}`}>
+							<a href={`${base}/fassungen/${verse}`} aria-label={`Fassung ${verse}`}>
 								<rect
 									x={x(sigla.label)}
 									y={y(values[1] + 1)}
@@ -335,7 +347,10 @@
 								/>
 							</a>
 						{:else}
-							<a href={`${base}/textzeugen/${sigla.label}/${verse}`}>
+							<a
+								href={`${base}/textzeugen/${sigla.label}/${verse}`}
+								aria-label={`${sigla.label}.${verse}`}
+							>
 								<rect
 									x={x(sigla.label)}
 									y={y(values[1] + 1)}

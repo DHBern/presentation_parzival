@@ -1,7 +1,8 @@
 <script>
-	/** @type {import('./$types').PageData} */
-	export let data;
-	$: ({ sigla } = data);
+	
+	/** @type {{data: import('./$types').PageData}} */
+	let { data } = $props();
+	let { sigla } = $derived(data);
 </script>
 
 <div class="container mx-auto typography">

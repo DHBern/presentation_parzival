@@ -9,12 +9,12 @@
 	};
 
 	/** @type {HTMLSpanElement} */
-	let popupContent;
+	let popupContent = $state();
 </script>
 
 <div class="card m-8 p-4 variant-filled-primary" data-popup="popupClick">
 	<span bind:this={popupContent}>content</span>
-	<div class="arrow variant-filled-primary" />
+	<div class="arrow variant-filled-primary"></div>
 </div>
 <div class="container mx-auto typography">
 	<h1 class="h1 mb-4">
@@ -59,7 +59,7 @@
 		(<button
 			class="anchor"
 			use:popup={popupClick}
-			on:focus={(e) => (popupContent.innerHTML = e.target.querySelector('.hidden').innerHTML)}
+			onfocus={(e) => (popupContent.innerHTML = e.target.querySelector('.hidden').innerHTML)}
 			>J. Bumke <span class="hidden">
 				Vgl. Joachim Bumke, Wolfram von Eschenbach, (8., völlig neu bearbeitete Auflage) Stuttgart/
 				Weimar 2004 (Sammlung Metzler 36), S. 254.
@@ -84,7 +84,7 @@
 		<button
 			class="anchor"
 			use:popup={popupClick}
-			on:focus={(e) => (popupContent.innerHTML = e.target.querySelector('.hidden').innerHTML)}
+			onfocus={(e) => (popupContent.innerHTML = e.target.querySelector('.hidden').innerHTML)}
 			><i>New Philology</i>
 			<span class="hidden">
 				Vgl. zur Diskussion in der Altgermanistik z.B. Karl Stackmann, Neue Philologie?, (Nachdruck
@@ -108,7 +108,7 @@
 		<button
 			class="anchor"
 			use:popup={popupClick}
-			on:focus={(e) => (popupContent.innerHTML = e.target.querySelector('.hidden').innerHTML)}
+			onfocus={(e) => (popupContent.innerHTML = e.target.querySelector('.hidden').innerHTML)}
 			>Chaucer-Forschung <span class="hidden">
 				Vgl. Adrian C. Barbrook/ Christopher J. Howe/ Norman Blake/ Peter Robinson, The phylogeny of
 				’The Canterbury Tales’, in: Nature, vol. 394, issue 6696, 27-8-1998, S. 839; Christopher J.
@@ -129,7 +129,7 @@
 		<button
 			class="anchor"
 			use:popup={popupClick}
-			on:focus={(e) => (popupContent.innerHTML = e.target.querySelector('.hidden').innerHTML)}
+			onfocus={(e) => (popupContent.innerHTML = e.target.querySelector('.hidden').innerHTML)}
 			>E. Nellmann <span class="hidden">
 				Eberhard Nellmann, Zur handschriftlichen Überlieferung des Parzival, in: Kolloquium über
 				Probleme altgermanistischer Editionen. Marbach am Neckar, 26. und 27. April 1966. Referate
@@ -155,7 +155,7 @@
 		<button
 			class="anchor"
 			use:popup={popupClick}
-			on:focus={(e) => (popupContent.innerHTML = e.target.querySelector('.hidden').innerHTML)}
+			onfocus={(e) => (popupContent.innerHTML = e.target.querySelector('.hidden').innerHTML)}
 			>Fassungsbegriff <span class="hidden">
 				Ein Ansatz, der in der Erforschung mittelhochdeutscher Epik zunehmend favorisiert wird und
 				die Annahme eines einzelnen Autororiginals verdrängt. Vgl. Joachim Bumke, Der unfeste Text.
@@ -178,7 +178,7 @@
 		<button
 			class="anchor"
 			use:popup={popupClick}
-			on:focus={(e) => (popupContent.innerHTML = e.target.querySelector('.hidden').innerHTML)}
+			onfocus={(e) => (popupContent.innerHTML = e.target.querySelector('.hidden').innerHTML)}
 			>Anthonij Dees <span class="hidden">
 				Vgl. Anthonij Dees, Sur une constellation de quatre manuscrits, in: Mélanges de linguistique
 				et de littérature offerts à Lein Geschiere par ses amis, collègues et élèves, hrsg. v. A.
@@ -215,7 +215,7 @@
 		<button
 			class="anchor"
 			use:popup={popupClick}
-			on:focus={(e) => (popupContent.innerHTML = e.target.querySelector('.hidden').innerHTML)}
+			onfocus={(e) => (popupContent.innerHTML = e.target.querySelector('.hidden').innerHTML)}
 			>Fassungsedition <span class="hidden">
 				Die Beispiele zeigen ein Editionskonzept nach den vier Fassungen *D *G *m und *T auf: Ein
 				Mausklick auf die links neben einer Versangabe befindliche Fassungssigle (z.B. *D) bringt
@@ -247,7 +247,7 @@
 		<button
 			class="anchor"
 			use:popup={popupClick}
-			on:focus={(e) => (popupContent.innerHTML = e.target.querySelector('.hidden').innerHTML)}
+			onfocus={(e) => (popupContent.innerHTML = e.target.querySelector('.hidden').innerHTML)}
 			>Eintextedition <span class="hidden">
 				Neben der synoptischen Mehrtextedition wird auch eine Eintextedition (Lesetext) angeboten,
 				in welcher die wichtigsten editorischen Informationen gebündelt präsentiert werden. Der

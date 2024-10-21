@@ -14,6 +14,8 @@
 	import { base } from '$app/paths';
 	import { computePosition, autoUpdate, offset, shift, flip, arrow } from '@floating-ui/dom';
 	import { storePopup } from '@skeletonlabs/skeleton';
+	/** @type {{children?: import('svelte').Snippet}} */
+	let { children } = $props();
 	storePopup.set({ computePosition, autoUpdate, offset, shift, flip, arrow });
 
 	// Scroll to top on page change (is needed because of skeleton app shell)
@@ -28,10 +30,10 @@
 	initializeStores();
 	const drawerStore = getDrawerStore();
 
-	$: classesActive = (/** @type {string} */ href) =>
+	let classesActive = $derived((/** @type {string} */ href) =>
 		base + href === `/${$page.url.pathname.split('/')[1]}`
 			? 'bg-primary-500 hover:text-primary-400 text-secondary-500'
-			: 'hover:text-primary-500';
+			: 'hover:text-primary-500');
 
 	function drawerOpen() {
 		const /** @type {import('@skeletonlabs/skeleton').DrawerSettings} */ s = {
@@ -69,28 +71,34 @@
 </Drawer>
 
 <AppShell>
-	<svelte:fragment slot="header">
-		<AppBar>
-			<svelte:fragment slot="lead">
-				<a class="text-xl uppercase font-bold" href={`${base}/`}>Parzival</a>
-			</svelte:fragment>
-			<nav class="flex-none items-center h-full hidden lg:flex">
-				{#each pages as page}
-					<a
-						href={`${base}${page.path}`}
-						class="list-nav-item h-full p-4 {classesActive(page.path)}">{page.slug}</a
-					>
-				{/each}
-			</nav>
-			<svelte:fragment slot="trail">
-				<button class="lg:!hidden btn-icon" on:click={drawerOpen}>
-					<i class="fa-solid fa-bars"></i>
-				</button>
-			</svelte:fragment>
-		</AppBar>
-	</svelte:fragment>
+	{#snippet header()}
+	
+			<AppBar>
+				{#snippet lead()}
+					
+						<a class="text-xl uppercase font-bold" href={`${base}/`}>Parzival</a>
+					
+					{/snippet}
+				<nav class="flex-none items-center h-full hidden lg:flex">
+					{#each pages as page}
+						<a
+							href={`${base}${page.path}`}
+							class="list-nav-item h-full p-4 {classesActive(page.path)}">{page.slug}</a
+						>
+					{/each}
+				</nav>
+				{#snippet trail()}
+					
+						<button class="lg:!hidden btn-icon" onclick={drawerOpen}>
+							<i class="fa-solid fa-bars"></i>
+						</button>
+					
+					{/snippet}
+			</AppBar>
+		
+	{/snippet}
 	<!-- Page Route Content -->
 	<div class="px-4">
-		<slot />
+		{@render children?.()}
 	</div>
 </AppShell>

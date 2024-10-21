@@ -2,24 +2,23 @@
 	import { goto, preloadData } from '$app/navigation';
 	import { base } from '$app/paths';
 
-	export let targetPath = '/einzelverssynopse';
-	/** @type {[String | boolean, String | boolean]} */
-	export let coordinates = ['1', '1'];
+	/** @type {{targetPath?: string, coordinates?: [String | boolean, String | boolean]}} */
+	let { targetPath = '/einzelverssynopse', coordinates = ['1', '1'] } = $props();
 
 	//TODO: use preloadData as soon as valid data is entered
 
 	/**
 	 * @type {HTMLInputElement}
 	 */
-	let thirties;
+	let thirties = $state();
 	/**
 	 * @type {HTMLInputElement}
 	 */
-	let verse;
+	let verse = $state();
 
-	let additional = '';
+	let additional = $state('');
 
-	let thirtiesVal = Number(coordinates[0]);
+	let thirtiesVal = $state(Number(coordinates[0]));
 
 	function handleInput(/** @type {Event} */ e) {
 		if (e.target instanceof HTMLInputElement) {
@@ -43,16 +42,12 @@
 			}
 		}
 	};
-	$: if (thirtiesVal === 257) {
-		verse.max = '32';
-	} else if (verse?.max) {
-		verse.max = '30';
-	}
 </script>
 
 <form
 	class="flex max-w-full items-baseline gap-1 my-3"
-	on:submit|preventDefault={(e) => {
+	onsubmit={(e) => {
+		e.preventDefault();
 		if (validateMinMax(thirties) && validateMinMax(verse)) {
 			goto(
 				`${base}${targetPath}/${thirties.value}/${verse.value}${additional ? '-' + additional : ''}`
@@ -68,7 +63,7 @@
 			class="input inline max-w-28"
 			min="1"
 			max="827"
-			on:input={handleInput}
+			oninput={handleInput}
 			bind:this={thirties}
 			bind:value={thirtiesVal}
 		/>.<input
@@ -76,8 +71,8 @@
 			placeholder="Vers"
 			class="input max-w-20"
 			min="1"
-			max="30"
-			on:input={handleInput}
+			max={thirtiesVal === 257 ? 32 : 30}
+			oninput={handleInput}
 			bind:this={verse}
 			value={Number(coordinates[1])}
 		/>-<input type="text" placeholder="Zusatz" class="input max-w-20" bind:value={additional} />

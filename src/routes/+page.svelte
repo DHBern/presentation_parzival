@@ -4,11 +4,12 @@
 	import Devilstable from './Devilstable.svelte';
 	import { base } from '$app/paths';
 
-	/** @type {import('./$types').PageData} */
-	export let data;
-	$: ({ tableData } = data);
-	let tableWidth = 0;
-	let tableHeight = 0;
+	
+	/** @type {{data: import('./$types').PageData}} */
+	let { data } = $props();
+	let { tableData } = $derived(data);
+	let tableWidth = $state(0);
+	let tableHeight = $state(0);
 </script>
 
 <div class="container mx-auto grid grid-cols-[repeat(auto-fit,minmax(366px,1fr))] gap-6">

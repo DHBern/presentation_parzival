@@ -1,6 +1,7 @@
 <script>
-	/** @type {import('./$types').PageData} */
-	export let data;
+	
+	/** @type {{data: import('./$types').PageData}} */
+	let { data } = $props();
 </script>
 
 <h1>Fassung eines bestimmten Dreissigers</h1>
