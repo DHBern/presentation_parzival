@@ -1,6 +1,4 @@
 <script>
-	import { run } from 'svelte/legacy';
-
 	import Brush from './Brush.svelte';
 	import Detail from './Detail.svelte';
 

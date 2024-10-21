@@ -1,19 +1,10 @@
 <script>
-	import { run, preventDefault, stopPropagation } from 'svelte/legacy';
-
 	import * as d3 from 'd3';
 	import { computePosition, shift, flip, offset } from '@floating-ui/dom';
 	import { base } from '$app/paths';
 
-	
 	/** @type {{codices: any, width?: number, height?: number, data_start?: number, data?: {values: boolean[], label: string}[]}} */
-	let {
-		codices,
-		width = 400,
-		height = 400,
-		data_start = 1,
-		data = []
-	} = $props();
+	let { codices, width = 400, height = 400, data_start = 1, data = [] } = $props();
 	let marginTop = 30;
 	let marginRight = 0;
 	let marginBottom = 20;
@@ -104,11 +95,11 @@
 		};
 	}
 
-
-
 	const popupFractions = $state({});
 	const popupLabels = $state({});
 	const openPopupFractions = (e, verseNumber) => {
+		e.preventDefault();
+		e.stopPropagation();
 		const reference = e.currentTarget;
 		const popup = popupFractions[verseNumber];
 		if (popup && reference) {
@@ -123,50 +114,57 @@
 			});
 		}
 	};
-	let contigousData = $derived(data.map((d) => {
-		if (d.label === 'fr') {
-			return d;
-		}
-		let contiguousRanges = [];
-		let start = 0;
-		for (let i = 0; i < d.values.length; i++) {
-			if (d.values[i]) {
-				if (start === 0) {
-					start = i + data_start;
-				}
-			} else {
-				if (start !== 0) {
-					contiguousRanges.push([start, i - 1 + data_start]);
-					start = 0;
+	let contigousData = $derived(
+		data.map((d) => {
+			if (d.label === 'fr') {
+				return d;
+			}
+			let contiguousRanges = [];
+			let start = 0;
+			for (let i = 0; i < d.values.length; i++) {
+				if (d.values[i]) {
+					if (start === 0) {
+						start = i + data_start;
+					}
+				} else {
+					if (start !== 0) {
+						contiguousRanges.push([start, i - 1 + data_start]);
+						start = 0;
+					}
 				}
 			}
-		}
-		if (start !== 0) {
-			contiguousRanges.push([start, d.values.length - 1 + data_start]);
-		}
-		return {
-			label: d.label,
-			values: contiguousRanges
-		};
-	}));
-	let x = $derived(d3
-		.scaleBand(
-			data.map((d) => d.label),
-			[marginLeft, width - marginRight]
+			if (start !== 0) {
+				contiguousRanges.push([start, d.values.length - 1 + data_start]);
+			}
+			return {
+				label: d.label,
+				values: contiguousRanges
+			};
+		})
+	);
+	let x = $derived(
+		d3
+			.scaleBand(
+				data.map((d) => d.label),
+				[marginLeft, width - marginRight]
+			)
+			.round(true)
+			.paddingOuter(0.1)
+			.paddingInner(0.2)
+	);
+	let y = $derived(
+		d3.scaleLinear(
+			[data_start, data_start + data[0]?.values.length],
+			[height - marginBottom, marginTop]
 		)
-		.round(true)
-		.paddingOuter(0.1)
-		.paddingInner(0.2));
-	let y = $derived(d3.scaleLinear(
-		[data_start, data_start + data[0]?.values.length],
-		[height - marginBottom, marginTop]
-	));
+	);
 	let verse = $derived(Math.floor(y.invert(mousePos[1])));
-	let manuscript =
-		$derived(scaleBandInvert(x)(mousePos[0]) === 'fr'
+	let manuscript = $derived(
+		scaleBandInvert(x)(mousePos[0]) === 'fr'
 			? data.find((d) => d.label === 'fr')?.values[verse - data_start] || 'fr'
-			: scaleBandInvert(x)(mousePos[0]));
-	run(() => {
+			: scaleBandInvert(x)(mousePos[0])
+	);
+	$effect(() => {
 		d3.select(gy)
 			.call(
 				d3
@@ -174,11 +172,13 @@
 					.ticks(20)
 					.tickSize(width - marginLeft - marginRight)
 			)
-			.call((/** @type import('d3-selection').Selection<SVGGElement, any, null, undefined> */ g) => {
-				g.selectAll('.tick text').attr('x', -25);
-			});
+			.call(
+				(/** @type import('d3-selection').Selection<SVGGElement, any, null, undefined> */ g) => {
+					g.selectAll('.tick text').attr('x', -25);
+				}
+			);
 	});
-	run(() => {
+	$effect(() => {
 		d3.select(gx)
 			.call(
 				d3.axisTop(
@@ -297,7 +297,10 @@
 						{@const verseNumber = i + data_start}
 						{#if isNaN(values[0])}
 							{#if values.length === 1}
-								<a href={`${base}/textzeugen/${values[0]}/${verseNumber}`}>
+								<a
+									href={`${base}/textzeugen/${values[0]}/${verseNumber}`}
+									aria-label={`${values[0]}.${verseNumber}`}
+								>
 									<rect
 										x={x(sigla.label)}
 										y={y(verseNumber + 1)}
@@ -314,8 +317,10 @@
 									tabindex="0"
 									href="#"
 									onkeydown={(e) => openPopupFractions(e, verseNumber)}
-									onclick={stopPropagation(preventDefault((e) =>
-										openPopupFractions(e, verseNumber)))}
+									onclick={(e) => {
+										openPopupFractions(e, verseNumber);
+									}}
+									aria-label={`Mehrere Fr in Vers ${verseNumber}`}
 									onblur={() => {
 										popupFractions[verseNumber].style.opacity = '0';
 									}}
@@ -331,7 +336,7 @@
 								</a>
 							{/if}
 						{:else if sigla.label === 'Fassung'}
-							<a href={`${base}/fassungen/${verse}`}>
+							<a href={`${base}/fassungen/${verse}`} aria-label={`Fassung ${verse}`}>
 								<rect
 									x={x(sigla.label)}
 									y={y(values[1] + 1)}
@@ -342,7 +347,10 @@
 								/>
 							</a>
 						{:else}
-							<a href={`${base}/textzeugen/${sigla.label}/${verse}`}>
+							<a
+								href={`${base}/textzeugen/${sigla.label}/${verse}`}
+								aria-label={`${sigla.label}.${verse}`}
+							>
 								<rect
 									x={x(sigla.label)}
 									y={y(values[1] + 1)}
