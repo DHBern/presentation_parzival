@@ -9,11 +9,10 @@
 
 <script>
 	import { createEventDispatcher, onMount } from 'svelte';
-	import { page } from '$app/stores';
 	/** @type {{pages: any}} */
 	let { pages } = $props();
 
-	let localVerse = $targetVerse;
+	let localVerse = 0;
 	/**
 	 * @type {number | undefined}
 	 */
@@ -21,7 +20,11 @@
 
 	const dispatch = createEventDispatcher();
 
-	let scrollContainer = $state(), observer;
+	let scrollContainer = $state();
+	/**
+	 * @type {IntersectionObserver}
+	 */
+	let observer;
 
 	onMount(() => {
 		observer = new IntersectionObserver(
@@ -42,15 +45,16 @@
 	});
 
 	let programmaticScroll = false;
+	let oldHeight = 0;
 
 	const onScrollEnd = (/** @type { Event & { target: HTMLElement}} } */ e) => {
-		if (programmaticScroll) {
+		if (programmaticScroll || scrollContainer.scrollHeight > oldHeight) {
 			programmaticScroll = false;
+			oldHeight = scrollContainer.scrollHeight;
 		} else {
 			clearTimeout(timer);
 			timer = setTimeout(() => {
 				const positive = (/** @type {string} */ verse) => {
-					localVerse = verse;
 					$targetVerse = verse;
 					dispatch('localVerseChange', verse);
 				};
@@ -84,36 +88,41 @@
 		}
 	};
 
-	const scrollToVerse = (/** @type {HTMLDivElement} */ node, /** @type {String} */ targetVerse) => {
-		const scroll = (/** @type {String} */ target) => {
-			const verse = node.parentElement?.querySelector(`[data-verse="${target}"]`);
-			if (!verse) return;
-			programmaticScroll = true;
-			verse.scrollIntoView({ behavior: 'instant', block: 'start' });
-			// scrollContainer?.scrollTo({
-			// 	top:
-			// 		scrollContainer?.scrollTop +
-			// 		Number(verse.parentElement?.getBoundingClientRect().top) -
-			// 		scrollContainer?.getBoundingClientRect().top,
-			// 	behavior: 'instant'
-			// });
-			dispatch('localVerseChange', target);
-			verse.parentElement?.classList.add('animate-pulse', 'once');
-		};
-		scroll(targetVerse);
-
-		observer.observe(node);
-
-		return {
-			/**
-			 * @param {String} targetVerse
-			 */
-			update(targetVerse) {
-				if (targetVerse === localVerse) return;
-				scroll(targetVerse);
-			},
-			destroy() {}
-		};
+	const scroll = async (/** @type {String} */ target) => {
+		localVerse = Number(target);
+		programmaticScroll = true;
+		//wait for promises in pages to resolve before scrolling
+		await Promise.all(
+			pages.map((/** @type {{ tpData: any; }} */ page) => {
+				return page.tpData;
+			})
+		);
+		const verse = scrollContainer.querySelector(`[data-verse="${target}"]`);
+		if (!verse) return;
+		// verse.scrollIntoView({ behavior: 'instant', block: 'start' });
+		scrollContainer?.scrollTo({
+			top:
+				scrollContainer?.scrollTop +
+				Number(verse.parentElement?.getBoundingClientRect().top) -
+				scrollContainer?.getBoundingClientRect().top,
+			behavior: 'instant'
+		});
+		dispatch('localVerseChange', target);
+		verse.parentElement?.classList.add('animate-pulse', 'once');
+		programmaticScroll = false;
+	};
+	$effect(() => {
+		if (!programmaticScroll && localVerse !== Number($targetVerse)) {
+			scroll($targetVerse);
+		}
+	});
+	const addToObserver = (/** @type {HTMLDivElement} */ node) => {
+		$effect(() => {
+			observer.observe(node);
+			return () => {
+				observer.unobserve(node);
+			};
+		});
 	};
 	// returns true when the column is empty or when it contains only children that are empty or themselves have empty children (recursively)
 	const isEmptyColumn = (/** @type {String} */ column) => {
@@ -151,7 +160,7 @@
 					data-id={pageObject.id}
 					data-next={tpData.nextId}
 					data-previous={tpData.previousId}
-					use:scrollToVerse={$targetVerse}
+					use:addToObserver
 				>
 					{#await pageObject.iiif then iiif}
 						<button

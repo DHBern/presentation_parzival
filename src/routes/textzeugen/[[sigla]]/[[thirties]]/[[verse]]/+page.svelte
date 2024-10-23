@@ -4,7 +4,7 @@
 	import TextzeugenContent, { setTarget } from './TextzeugenContent.svelte';
 	import { base } from '$app/paths';
 	import { page } from '$app/stores';
-	import { afterNavigate, replaceState } from '$app/navigation';
+	import { replaceState } from '$app/navigation';
 	import { iiif } from '$lib/constants';
 
 	/** @type {{data: import('./$types').PageData}} */
@@ -60,38 +60,41 @@
 		}
 		return link.toString();
 	};
-
 	setTarget(`${data.thirties}.${data.verse}`);
 	let localVerses = $state(Array(data.content?.length).fill(`${data.thirties}.${data.verse}`));
-	let localPages = $state(Array(data.content?.length).fill([]));
-	let currentIiif = $state(Array(data.content?.length).fill({}));
-
-	afterNavigate(() => {
-		console.log('navigated');
-		//fill the data from the load-function into the localPages array
-		data.content?.forEach((c, i) => {
+	const generateLocalPagesFromData = (d) => {
+		return d?.map((c) => {
 			if (typeof c.meta === 'object') {
-				c.meta.then((meta) => {
-					localPages[i] = [...meta];
-					meta
-						// @ts-ignore
-						.find((m) => m.active)
-						// @ts-ignore
-						?.iiif.then((iiif) => {
-							console.log('setting iiif', iiif);
-							currentIiif[i] = iiif;
-						});
+				return c.meta.then((meta) => {
+					return meta;
 				});
 			}
+			return [];
 		});
+	};
+
+	let localPages = $state(generateLocalPagesFromData(data.content));
+	const generateIiifFromData = (d) => {
+		return d?.map(async (c) => {
+			if (typeof c.meta === 'object') {
+				let meta = await c.meta;
+				let active = meta.find((m) => m.active);
+				return await active.iiif;
+			}
+		});
+	};
+	let currentIiif = $state(generateIiifFromData(data.content));
+	$effect(() => {
+		localPages = generateLocalPagesFromData(data.content);
+		currentIiif = generateIiifFromData(data.content);
 	});
 
-	const checklocalPages = (
+	const checklocalPages = async (
 		/** @type {CustomEvent<any>} */ e,
 		/** @type {number} */ i,
 		/** @type {string} */ sigla
 	) => {
-		const indexCurrent = localPages[i].findIndex(
+		const indexCurrent = (await localPages[i]).findIndex(
 			(/** @type {{ id: string; }} */ p) => p.id === e.detail.id
 		);
 		// Don't switch the iiif viewer on page change, just on click
@@ -113,14 +116,12 @@
 				break;
 			case 0:
 				if (e.detail.previous) {
-					console.log('fetching previous', e.detail.previous);
-					localPages[i] = [createObject(e.detail.previous), ...localPages[i]];
+					localPages[i] = [createObject(e.detail.previous), ...(await localPages[i])];
 				}
 				break;
 			case localPages[i].length - 1:
 				if (e.detail.next) {
-					console.log('fetching next', e.detail.next);
-					localPages[i] = [...localPages[i], createObject(e.detail.next)];
+					localPages[i] = [...(await localPages[i]), createObject(e.detail.next)];
 				}
 				break;
 		}
@@ -156,40 +157,57 @@
 						</p>
 						<div class="absolute top-0 right-0">
 							{#if !($page.url.searchParams.get('iiif')?.split('-')[i] === 'false')}
-								<a class="btn btn-icon" href={generateIiifLink($page.url, i, false)}>
+								<a
+									class="btn btn-icon"
+									href={generateIiifLink($page.url, i, false)}
+									aria-label="Faksimile verstecken"
+								>
 									<i class="fa-solid fa-eye-slash"></i>
 								</a>
 							{:else}
-								<a class="btn btn-icon" href={generateIiifLink($page.url, i, true)}>
+								<a
+									class="btn btn-icon"
+									href={generateIiifLink($page.url, i, true)}
+									aria-label="Faksimile anzeigen"
+								>
 									<i class="fa-solid fa-eye"></i>
 								</a>
 							{/if}
-							<a class="btn btn-icon" href={generateCloseLink(content.sigla)}>
+							<a
+								class="btn btn-icon"
+								href={generateCloseLink(content.sigla)}
+								aria-label="Ansicht schliessen"
+							>
 								<i class="fa-solid fa-x"></i>
 							</a>
 						</div>
 					</div>
-					<TextzeugenContent
-						pages={localPages[i]}
-						on:localVerseChange={(e) => {
-							localVerses[i] = e.detail;
-							replaceState(
-								`${base}/textzeugen/${$page.params.sigla}/${e.detail.replace('.', '/')}?${$page.url.searchParams.toString()}`,
-								{}
-							);
-						}}
-						on:localPageChange={(e) => checklocalPages(e, i, content.sigla)}
-						on:localIiifChange={(e) => {
-							console.log('setting iiif');
-							currentIiif[i] = e.detail;
-						}}
-					/>
+					{#await localPages[i]}
+						Lade Text...
+					{:then pages}
+						<TextzeugenContent
+							{pages}
+							on:localVerseChange={(e) => {
+								localVerses[i] = e.detail;
+								replaceState(
+									`${base}/textzeugen/${$page.params.sigla}/${e.detail.replace('.', '/')}?${$page.url.searchParams.toString()}`,
+									{}
+								);
+							}}
+							on:localPageChange={(e) => checklocalPages(e, i, content.sigla)}
+							on:localIiifChange={(e) => {
+								currentIiif[i] = e.detail;
+							}}
+						/>
+					{/await}
 				</section>
 				{#if !($page.url.searchParams.get('iiif')?.split('-')[i] === 'false')}
 					<section class="min-h-[40vh]">
-						{#if typeof currentIiif[i] === 'object' && Object.keys(currentIiif[i]).length}
-							<IIIFViewer iiif={currentIiif[i]} />
-						{/if}
+						{#await currentIiif[i] then current}
+							{#if typeof current === 'object' && Object.keys(current).length}
+								<IIIFViewer iiif={current} />
+							{/if}
+						{/await}
 					</section>
 				{/if}
 			</article>
