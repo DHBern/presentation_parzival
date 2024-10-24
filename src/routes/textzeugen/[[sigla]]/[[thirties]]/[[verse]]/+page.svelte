@@ -95,7 +95,7 @@
 		/** @type {string} */ sigla
 	) => {
 		const indexCurrent = (await localPages[i]).findIndex(
-			(/** @type {{ id: string; }} */ p) => p.id === e.detail.id
+			(/** @type {{ id: string; }} */ p) => p.id === e.id
 		);
 		// Don't switch the iiif viewer on page change, just on click
 		// localPages[i][indexCurrent]?.iiif.then((/** @type {any} */ iiif) => {
@@ -112,16 +112,16 @@
 		//switch statement for the cases -1, 0, localPages[i].length
 		switch (indexCurrent) {
 			case -1:
-				console.error('current page not found in localPages', e.detail.id);
+				console.error('current page not found in localPages', e.id);
 				break;
 			case 0:
-				if (e.detail.previous) {
-					localPages[i] = [createObject(e.detail.previous), ...(await localPages[i])];
+				if (e.previous) {
+					localPages[i] = [createObject(e.previous), ...(await localPages[i])];
 				}
 				break;
 			case localPages[i].length - 1:
-				if (e.detail.next) {
-					localPages[i] = [...(await localPages[i]), createObject(e.detail.next)];
+				if (e.next) {
+					localPages[i] = [...(await localPages[i]), createObject(e.next)];
 				}
 				break;
 		}
@@ -187,17 +187,15 @@
 					{:then pages}
 						<TextzeugenContent
 							{pages}
-							on:localVerseChange={(e) => {
-								localVerses[i] = e.detail;
+							localVerseChange={(e) => {
+								localVerses[i] = e;
 								replaceState(
-									`${base}/textzeugen/${$page.params.sigla}/${e.detail.replace('.', '/')}?${$page.url.searchParams.toString()}`,
+									`${base}/textzeugen/${$page.params.sigla}/${e.replace('.', '/')}?${$page.url.searchParams.toString()}`,
 									{}
 								);
 							}}
-							on:localPageChange={(e) => checklocalPages(e, i, content.sigla)}
-							on:localIiifChange={(e) => {
-								currentIiif[i] = e.detail;
-							}}
+							localPageChange={(e) => checklocalPages(e, i, content.sigla)}
+							localIiifChange={(e) => (currentIiif[i] = e)}
 						/>
 					{/await}
 				</section>

@@ -8,17 +8,15 @@
 </script>
 
 <script>
-	import { createEventDispatcher, onMount } from 'svelte';
+	import { onMount } from 'svelte';
 	/** @type {{pages: any}} */
-	let { pages } = $props();
+	let { pages, localPageChange, localIiifChange, localVerseChange } = $props();
 
 	let localVerse = 0;
 	/**
 	 * @type {number | undefined}
 	 */
 	let timer;
-
-	const dispatch = createEventDispatcher();
 
 	let scrollContainer = $state();
 	/**
@@ -32,7 +30,7 @@
 				if (programmaticScroll) return;
 				entries.forEach((entry) => {
 					if (entry.isIntersecting) {
-						dispatch('localPageChange', entry.target.dataset);
+						localPageChange(entry.target.dataset);
 					}
 				});
 			},
@@ -56,7 +54,7 @@
 			timer = setTimeout(() => {
 				const positive = (/** @type {string} */ verse) => {
 					$targetVerse = verse;
-					dispatch('localVerseChange', verse);
+					localVerseChange(verse);
 				};
 				const /** @type { NodeListOf<HTMLElement> } */ verses =
 						e.target?.querySelectorAll('.verse');
@@ -107,7 +105,7 @@
 				scrollContainer?.getBoundingClientRect().top,
 			behavior: 'instant'
 		});
-		dispatch('localVerseChange', target);
+		localVerseChange(target);
 		verse.parentElement?.classList.add('animate-pulse', 'once');
 		programmaticScroll = false;
 	};
@@ -165,7 +163,7 @@
 					{#await pageObject.iiif then iiif}
 						<button
 							onclick={() => {
-								dispatch('localIiifChange', iiif);
+								localIiifChange(iiif);
 							}}
 							class="float-right"
 						>

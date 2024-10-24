@@ -1,8 +1,5 @@
 <script>
 	import * as d3 from 'd3';
-	import { createEventDispatcher } from 'svelte';
-
-	const dispatch = createEventDispatcher();
 
 	let marginTop = 20;
 	let marginRight = 0;
@@ -38,7 +35,8 @@
 				label: 'n',
 				values: []
 			}
-		]
+		],
+		brushE
 	} = $props();
 
 	let mobile = $derived(width > height);
@@ -101,7 +99,7 @@
 					const start = Math.round(valuesDim.invert(from));
 					const end = Math.round(valuesDim.invert(to));
 
-					dispatch('brush', { start, end });
+					brushE({ start, end });
 				}
 			})
 			.on('end', (/** @type {{ selection: [number, number]; }} */ e) => {
@@ -111,7 +109,7 @@
 					const start = Math.round(valuesDim.invert(from));
 					const end = Math.round(valuesDim.invert(to));
 
-					dispatch('brush', { start, end });
+					brushE({ start, end });
 				}
 			});
 	});

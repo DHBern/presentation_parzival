@@ -31,9 +31,6 @@
 		]
 	} = $props();
 
-	/**
-	 * @type {{values: boolean[], label: string}[]}
-	 */
 	let mobile = $derived(width < 800);
 	let [fractions, noFractions] = $derived(
 		data.reduce(
@@ -97,7 +94,7 @@
 	height={mobile ? brushDimension : height}
 	width={mobile ? width : brushDimension}
 	data={boolData}
-	on:brush={(e) => (selection = e.detail)}
+	brushE={(e) => (selection = e)}
 />
 <Detail
 	{codices}
