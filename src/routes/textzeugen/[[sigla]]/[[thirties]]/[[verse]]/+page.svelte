@@ -90,12 +90,12 @@
 	});
 
 	const checklocalPages = async (
-		/** @type {CustomEvent<any>} */ e,
+		/** @type {{id:string, previous:string, next:string}} */ pageInfo,
 		/** @type {number} */ i,
 		/** @type {string} */ sigla
 	) => {
 		const indexCurrent = (await localPages[i]).findIndex(
-			(/** @type {{ id: string; }} */ p) => p.id === e.id
+			(/** @type {{ id: string; }} */ p) => p.id === pageInfo.id
 		);
 		// Don't switch the iiif viewer on page change, just on click
 		// localPages[i][indexCurrent]?.iiif.then((/** @type {any} */ iiif) => {
@@ -112,16 +112,16 @@
 		//switch statement for the cases -1, 0, localPages[i].length
 		switch (indexCurrent) {
 			case -1:
-				console.error('current page not found in localPages', e.id);
+				console.error('current page not found in localPages', pageInfo.id);
 				break;
 			case 0:
-				if (e.previous) {
-					localPages[i] = [createObject(e.previous), ...(await localPages[i])];
+				if (pageInfo.previous) {
+					localPages[i] = [createObject(pageInfo.previous), ...(await localPages[i])];
 				}
 				break;
 			case localPages[i].length - 1:
-				if (e.next) {
-					localPages[i] = [...(await localPages[i]), createObject(e.next)];
+				if (pageInfo.next) {
+					localPages[i] = [...(await localPages[i]), createObject(pageInfo.next)];
 				}
 				break;
 		}
@@ -187,15 +187,17 @@
 					{:then pages}
 						<TextzeugenContent
 							{pages}
-							localVerseChange={(e) => {
-								localVerses[i] = e;
+							localVerseChange={(verse) => {
+								localVerses[i] = verse;
 								replaceState(
-									`${base}/textzeugen/${$page.params.sigla}/${e.replace('.', '/')}?${$page.url.searchParams.toString()}`,
+									`${base}/textzeugen/${$page.params.sigla}/${verse.replace('.', '/')}?${$page.url.searchParams.toString()}`,
 									{}
 								);
 							}}
-							localPageChange={(e) => checklocalPages(e, i, content.sigla)}
-							localIiifChange={(e) => (currentIiif[i] = e)}
+							localPageChange={(
+								/** @type {{ id: string; previous: string; next: string; }} */ pageinfo
+							) => checklocalPages(pageinfo, i, content.sigla)}
+							localIiifChange={(/** @type {Object} */ e) => (currentIiif[i] = e)}
 						/>
 					{/await}
 				</section>

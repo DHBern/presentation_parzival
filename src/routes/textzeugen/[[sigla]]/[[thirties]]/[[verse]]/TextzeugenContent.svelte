@@ -12,11 +12,11 @@
 	/** @type {{pages: any}} */
 	let { pages, localPageChange, localIiifChange, localVerseChange } = $props();
 
-	let localVerse = 0;
+	let localVerse = $state(0);
 	/**
-	 * @type {number | undefined}
+	 * @type {number | null}
 	 */
-	let timer;
+	let timer = $state(null);
 
 	let scrollContainer = $state();
 	/**
@@ -27,7 +27,7 @@
 	onMount(() => {
 		observer = new IntersectionObserver(
 			(entries) => {
-				if (programmaticScroll) return;
+				// if (programmaticScroll) return;
 				entries.forEach((entry) => {
 					if (entry.isIntersecting) {
 						localPageChange(entry.target.dataset);
@@ -42,8 +42,8 @@
 		);
 	});
 
-	let programmaticScroll = false;
-	let oldHeight = 0;
+	let programmaticScroll = $state(false);
+	let oldHeight = $state(0);
 
 	const onScrollEnd = (/** @type { Event & { target: HTMLElement}} } */ e) => {
 		if (programmaticScroll || scrollContainer.scrollHeight > oldHeight) {
@@ -53,6 +53,7 @@
 			clearTimeout(timer);
 			timer = setTimeout(() => {
 				const positive = (/** @type {string} */ verse) => {
+					console.log('updating target!');
 					$targetVerse = verse;
 					localVerseChange(verse);
 				};
@@ -82,7 +83,8 @@
 						}
 					}
 				}
-			}, 100);
+				timer = null;
+			}, 200);
 		}
 	};
 
@@ -110,8 +112,10 @@
 		programmaticScroll = false;
 	};
 	$effect(() => {
-		if (!programmaticScroll && localVerse !== Number($targetVerse)) {
+		if (!programmaticScroll && localVerse !== Number($targetVerse) && !timer) {
 			scroll($targetVerse);
+		} else {
+			console.log(scrollContainer, !programmaticScroll, localVerse, Number($targetVerse), !timer);
 		}
 	});
 	const addToObserver = (/** @type {HTMLDivElement} */ node) => {
