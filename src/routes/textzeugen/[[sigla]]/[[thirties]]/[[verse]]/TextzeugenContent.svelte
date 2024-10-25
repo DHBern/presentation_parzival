@@ -12,7 +12,7 @@
 	/** @type {{pages: any}} */
 	let { pages, localPageChange, localIiifChange, localVerseChange } = $props();
 
-	let localVerse = $state(0);
+	let localVerse = $state('');
 	/**
 	 * @type {number | null}
 	 */
@@ -53,7 +53,6 @@
 			clearTimeout(timer);
 			timer = setTimeout(() => {
 				const positive = (/** @type {string} */ verse) => {
-					console.log('updating target!');
 					$targetVerse = verse;
 					localVerseChange(verse);
 				};
@@ -89,7 +88,7 @@
 	};
 
 	const scroll = async (/** @type {String} */ target) => {
-		localVerse = Number(target);
+		localVerse = target;
 		programmaticScroll = true;
 		//wait for promises in pages to resolve before scrolling
 		await Promise.all(
@@ -112,10 +111,9 @@
 		programmaticScroll = false;
 	};
 	$effect(() => {
-		if (!programmaticScroll && localVerse !== Number($targetVerse) && !timer) {
+		if (!programmaticScroll && localVerse !== $targetVerse && !timer) {
+			console.log(scrollContainer, !programmaticScroll, localVerse, $targetVerse, !timer);
 			scroll($targetVerse);
-		} else {
-			console.log(scrollContainer, !programmaticScroll, localVerse, Number($targetVerse), !timer);
 		}
 	});
 	const addToObserver = (/** @type {HTMLDivElement} */ node) => {
