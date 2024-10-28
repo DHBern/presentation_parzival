@@ -1,7 +1,7 @@
 <script>
 	import TextzeugenSelector from '$lib/components/TextzeugenSelector.svelte';
 	import IIIFViewer from '$lib/components/IIIFViewer.svelte';
-	import TextzeugenContent, { setTarget } from './TextzeugenContent.svelte';
+	import TextzeugenContent from './TextzeugenContent.svelte';
 	import { base } from '$app/paths';
 	import { page } from '$app/stores';
 	import { replaceState } from '$app/navigation';
@@ -60,8 +60,8 @@
 		}
 		return link.toString();
 	};
-	setTarget(`${data.thirties}.${data.verse}`);
 	let localVerses = $state(Array(data.content?.length).fill(`${data.thirties}.${data.verse}`));
+	let targetVerses = $state(localVerses);
 	const generateLocalPagesFromData = (d) => {
 		return d?.map((c) => {
 			if (typeof c.meta === 'object') {
@@ -187,6 +187,7 @@
 					{:then pages}
 						<TextzeugenContent
 							{pages}
+							targetverse={targetVerses[i]}
 							localVerseChange={(verse) => {
 								localVerses[i] = verse;
 								replaceState(

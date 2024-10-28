@@ -1,18 +1,8 @@
-<script module>
-	import { writable } from 'svelte/store';
-	let targetVerse = writable('');
-
-	export function setTarget(/** @type {string} */ verse) {
-		targetVerse = writable(verse);
-	}
-</script>
-
 <script>
 	import { onMount } from 'svelte';
 	/** @type {{pages: any}} */
-	let { pages, localPageChange, localIiifChange, localVerseChange } = $props();
+	let { pages, localPageChange, localIiifChange, localVerseChange, targetverse } = $props();
 
-	let localVerse = $state('');
 	/**
 	 * @type {number | null}
 	 */
@@ -53,7 +43,6 @@
 			clearTimeout(timer);
 			timer = setTimeout(() => {
 				const positive = (/** @type {string} */ verse) => {
-					$targetVerse = verse;
 					localVerseChange(verse);
 				};
 				const /** @type { NodeListOf<HTMLElement> } */ verses =
@@ -88,7 +77,6 @@
 	};
 
 	const scroll = async (/** @type {String} */ target) => {
-		localVerse = target;
 		programmaticScroll = true;
 		//wait for promises in pages to resolve before scrolling
 		await Promise.all(
@@ -106,14 +94,12 @@
 				scrollContainer?.getBoundingClientRect().top,
 			behavior: 'instant'
 		});
-		localVerseChange(target);
 		verse.parentElement?.classList.add('animate-pulse', 'once');
 		programmaticScroll = false;
 	};
 	$effect(() => {
-		if (!programmaticScroll && localVerse !== $targetVerse && !timer) {
-			console.log(scrollContainer, !programmaticScroll, localVerse, $targetVerse, !timer);
-			scroll($targetVerse);
+		if (targetverse) {
+			scroll(targetverse);
 		}
 	});
 	const addToObserver = (/** @type {HTMLDivElement} */ node) => {
