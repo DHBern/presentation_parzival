@@ -61,7 +61,8 @@
 		return link.toString();
 	};
 	let localVerses = $state(Array(data.content?.length).fill(`${data.thirties}.${data.verse}`));
-	let targetverse = $state(`${data.thirties}.${data.verse}`);
+	let targetverses = $state(Array(data.content?.length).fill(`${data.thirties}.${data.verse}`));
+	$inspect(targetverses);
 	const generateLocalPagesFromData = (d) => {
 		return d?.map((c) => {
 			if (typeof c.meta === 'object') {
@@ -187,11 +188,14 @@
 					{:then pages}
 						<TextzeugenContent
 							{pages}
-							{targetverse}
+							targetverse={targetverses[i]}
 							localVerseChange={(verse) => {
+								console.log('localVerseChange', verse);
 								localVerses[i] = verse;
-								if (localVerses.some((v) => v != verse)) {
-									targetverse = verse;
+								const indexOfOther = localVerses.findIndex((v) => v != verse);
+								if (indexOfOther != -1) {
+									localVerses[indexOfOther] = verse;
+									targetverses[indexOfOther] = verse;
 								}
 								replaceState(
 									`${base}/textzeugen/${$page.params.sigla}/${verse.replace('.', '/')}?${$page.url.searchParams.toString()}`,

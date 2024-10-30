@@ -17,7 +17,6 @@
 	onMount(() => {
 		observer = new IntersectionObserver(
 			(entries) => {
-				// if (programmaticScroll) return;
 				entries.forEach((entry) => {
 					if (entry.isIntersecting) {
 						localPageChange(entry.target.dataset);
@@ -43,6 +42,7 @@
 			clearTimeout(timer);
 			timer = setTimeout(() => {
 				const positive = (/** @type {string} */ verse) => {
+					console.log(verse, scrollContainer);
 					localVerseChange(verse);
 				};
 				const /** @type { NodeListOf<HTMLElement> } */ verses =
@@ -77,6 +77,7 @@
 	};
 
 	const scroll = async (/** @type {String} */ target) => {
+		console.log('scrolling to:', target, scrollContainer);
 		programmaticScroll = true;
 		//wait for promises in pages to resolve before scrolling
 		await Promise.all(
@@ -85,6 +86,7 @@
 			})
 		);
 		const verse = scrollContainer.querySelector(`[data-verse="${target}"]`);
+		if (!verse) console.log('Verse not found:', target);
 		if (!verse) return;
 		// verse.scrollIntoView({ behavior: 'instant', block: 'start' });
 		scrollContainer?.scrollTo({
@@ -95,13 +97,20 @@
 			behavior: 'instant'
 		});
 		verse.parentElement?.classList.add('animate-pulse', 'once');
-		programmaticScroll = false;
+		// check whether the verse is on the last page or first page in the scrollcontainer
+		if (
+			scrollContainer.scrollHeight - scrollContainer.clientHeight === scrollContainer.scrollTop ||
+			scrollContainer.scrollTop === 0
+		) {
+			const dataset = verse.parentElement?.dataset;
+			if (dataset) {
+				localPageChange(dataset);
+			}
+		}
 	};
 	$effect(() => {
-		if (targetverse) {
-			console.log('scrolling to', targetverse);
-			scroll(targetverse);
-		}
+		console.log('effect reruns');
+		scroll(targetverse);
 	});
 	const addToObserver = (/** @type {HTMLDivElement} */ node) => {
 		$effect(() => {
