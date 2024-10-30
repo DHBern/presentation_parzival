@@ -99,6 +99,7 @@
 	};
 	$effect(() => {
 		if (targetverse) {
+			console.log('scrolling to', targetverse);
 			scroll(targetverse);
 		}
 	});
