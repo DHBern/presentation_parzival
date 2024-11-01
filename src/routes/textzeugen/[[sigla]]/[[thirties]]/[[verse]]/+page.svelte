@@ -2,6 +2,7 @@
 	import TextzeugenSelector from '$lib/components/TextzeugenSelector.svelte';
 	import IIIFViewer from '$lib/components/IIIFViewer.svelte';
 	import TextzeugenContent from './TextzeugenContent.svelte';
+	import { SlideToggle } from '@skeletonlabs/skeleton';
 	import { base } from '$app/paths';
 	import { page } from '$app/stores';
 	import { replaceState } from '$app/navigation';
@@ -9,6 +10,7 @@
 
 	/** @type {{data: import('./$types').PageData}} */
 	let { data } = $props();
+	let synchro = $state(true);
 
 	let selectedSigla = $derived(data.content ? data.content.map((c) => c.sigla) : []);
 
@@ -62,7 +64,6 @@
 	};
 	let localVerses = $state(Array(data.content?.length).fill(`${data.thirties}.${data.verse}`));
 	let targetverses = $state(Array(data.content?.length).fill(`${data.thirties}.${data.verse}`));
-	$inspect(targetverses);
 	const generateLocalPagesFromData = (d) => {
 		return d?.map((c) => {
 			if (typeof c.meta === 'object') {
@@ -134,11 +135,16 @@
 <section class="w-full">
 	<h1 class="h1 my-4">Textzeugen</h1>
 	<div class="grid gap-6 md:grid-cols-2 md:my-8">
-		<p>
-			Dies ist die Textzeugenansicht. Derzeit {Number(data.content?.length) > 1 ? 'werden' : 'wird'}
-			{@html data?.content ? generateLabel(selectedSigla) : 'keine Textzeugen'} angezeigt. Mit dem Selektor
-			können Sie die Textzeugen wechseln.
-		</p>
+		<div>
+			<p>
+				Dies ist die Textzeugenansicht. Derzeit {Number(data.content?.length) > 1
+					? 'werden'
+					: 'wird'}
+				{@html data?.content ? generateLabel(selectedSigla) : 'keine Textzeugen'} angezeigt. Mit dem
+				Selektor können Sie die Textzeugen wechseln.
+			</p>
+			<SlideToggle name="synchro" bind:checked={synchro}>Synchrones scrollen</SlideToggle>
+		</div>
 		<TextzeugenSelector
 			sigla={[...data.codices, ...data.fragments]}
 			{selectedSigla}
@@ -192,12 +198,13 @@
 							{pages}
 							targetverse={targetverses[i]}
 							localVerseChange={(verse) => {
-								console.log('localVerseChange', verse);
 								localVerses[i] = verse;
-								const indexOfOther = localVerses.findIndex((v) => v != verse);
-								if (indexOfOther != -1) {
-									localVerses[indexOfOther] = verse;
-									targetverses[indexOfOther] = verse;
+								if (synchro) {
+									const indexOfOther = localVerses.findIndex((v) => v != verse);
+									if (indexOfOther != -1) {
+										localVerses[indexOfOther] = verse;
+										targetverses[indexOfOther] = verse;
+									}
 								}
 								replaceState(
 									`${base}/textzeugen/${$page.params.sigla}/${verse.replace('.', '/')}?${$page.url.searchParams.toString()}`,
