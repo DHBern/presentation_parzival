@@ -86,6 +86,8 @@
 	};
 	let currentIiif = $state(generateIiifFromData(data.content));
 	$effect(() => {
+		localVerses = Array(data.content?.length).fill(`${data.thirties}.${data.verse}`);
+		targetverses = Array(data.content?.length).fill(`${data.thirties}.${data.verse}`);
 		localPages = generateLocalPagesFromData(data.content);
 		currentIiif = generateIiifFromData(data.content);
 	});

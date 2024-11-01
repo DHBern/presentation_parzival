@@ -1,8 +1,11 @@
 <script>
+	import { goto } from '$app/navigation';
+	import { base } from '$app/paths';
 	import { onMount } from 'svelte';
+	import { page } from '$app/stores';
 	/** @type {{pages: any}} */
 	let { pages, localPageChange, localIiifChange, localVerseChange, targetverse } = $props();
-
+	let localTarget;
 	/**
 	 * @type {number | null}
 	 */
@@ -42,7 +45,6 @@
 			clearTimeout(timer);
 			timer = setTimeout(() => {
 				const positive = (/** @type {string} */ verse) => {
-					console.log(verse, scrollContainer);
 					localVerseChange(verse);
 				};
 				const /** @type { NodeListOf<HTMLElement> } */ verses =
@@ -77,7 +79,6 @@
 	};
 
 	const scroll = async (/** @type {String} */ target) => {
-		console.log('scrolling to:', target, scrollContainer);
 		programmaticScroll = true;
 		//wait for promises in pages to resolve before scrolling
 		await Promise.all(
@@ -85,9 +86,18 @@
 				return page.tpData;
 			})
 		);
-		const verse = scrollContainer.querySelector(`[data-verse="${target}"]`);
-		if (!verse) console.log('Verse not found:', target);
-		if (!verse) return;
+		const verse = scrollContainer?.querySelector(`[data-verse="${target}"]`);
+		if (!verse && scrollContainer) {
+			//check whether the verse should be there
+			// goto(
+			// 	`${base}/textzeugen/${$page.params.sigla}/${target.replace('.', '/')}?${$page.url.searchParams.toString()}`
+			// );
+			console.log('Verse not found.', target, scrollContainer);
+			return;
+		}
+		if (!scrollContainer) {
+			return;
+		}
 		// verse.scrollIntoView({ behavior: 'instant', block: 'start' });
 		scrollContainer?.scrollTo({
 			top:
@@ -106,8 +116,11 @@
 		}
 	};
 	$effect(() => {
-		console.log('effect reruns');
-		scroll(targetverse);
+		//this effect rerons more often than it should, sometimes the value of targetverse didn't even change this is why we need to keep track of the target ourselves
+		if (localTarget !== targetverse) {
+			localTarget = targetverse;
+			scroll(targetverse);
+		}
 	});
 	const addToObserver = (/** @type {HTMLDivElement} */ node) => {
 		$effect(() => {
