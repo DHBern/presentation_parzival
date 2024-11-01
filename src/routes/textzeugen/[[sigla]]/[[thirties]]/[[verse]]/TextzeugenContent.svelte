@@ -97,11 +97,8 @@
 			behavior: 'instant'
 		});
 		verse.parentElement?.classList.add('animate-pulse', 'once');
-		// check whether the verse is on the last page or first page in the scrollcontainer
-		if (
-			scrollContainer.scrollHeight - scrollContainer.clientHeight === scrollContainer.scrollTop ||
-			scrollContainer.scrollTop === 0
-		) {
+		// check whether the verse is on the last page in the scrollcontainer
+		if (scrollContainer.scrollHeight - scrollContainer.clientHeight === scrollContainer.scrollTop) {
 			const dataset = verse.parentElement?.dataset;
 			if (dataset) {
 				localPageChange(dataset);
@@ -141,11 +138,7 @@
 	};
 </script>
 
-<div
-	class="max-h-[70vh] overflow-y-auto snap-y"
-	onscrollend={onScrollEnd}
-	bind:this={scrollContainer}
->
+<div class="max-h-[70vh] overflow-y-auto" onscrollend={onScrollEnd} bind:this={scrollContainer}>
 	{#if pages}
 		{#each pages as pageObject (pageObject.id)}
 			{#await pageObject.tpData}
