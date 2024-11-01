@@ -143,11 +143,13 @@
 				{@html data?.content ? generateLabel(selectedSigla) : 'keine Textzeugen'} angezeigt. Mit dem
 				Selektor können Sie die Textzeugen wechseln.
 			</p>
-			<div>
-				<SlideToggle active="bg-primary-500" name="synchro" bind:checked={synchro}
-					>Synchrones scrollen</SlideToggle
-				>
-			</div>
+			{#if data.content?.length > 1}
+				<div>
+					<SlideToggle active="bg-primary-500" name="synchro" bind:checked={synchro}
+						>Synchrones scrollen</SlideToggle
+					>
+				</div>
+			{/if}
 		</div>
 		<TextzeugenSelector
 			sigla={[...data.codices, ...data.fragments]}

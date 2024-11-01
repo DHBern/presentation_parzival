@@ -1,8 +1,5 @@
 <script>
-	import { goto } from '$app/navigation';
-	import { base } from '$app/paths';
 	import { onMount } from 'svelte';
-	import { page } from '$app/stores';
 	/** @type {{pages: any}} */
 	let { pages, localPageChange, localIiifChange, localVerseChange, targetverse } = $props();
 	let localTarget;
