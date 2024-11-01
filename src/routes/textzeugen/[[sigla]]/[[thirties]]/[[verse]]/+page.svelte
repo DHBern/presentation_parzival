@@ -135,7 +135,7 @@
 <section class="w-full">
 	<h1 class="h1 my-4">Textzeugen</h1>
 	<div class="grid gap-6 md:grid-cols-2 md:my-8">
-		<div>
+		<div class="flex flex-col gap-6">
 			<p>
 				Dies ist die Textzeugenansicht. Derzeit {Number(data.content?.length) > 1
 					? 'werden'
@@ -143,7 +143,11 @@
 				{@html data?.content ? generateLabel(selectedSigla) : 'keine Textzeugen'} angezeigt. Mit dem
 				Selektor können Sie die Textzeugen wechseln.
 			</p>
-			<SlideToggle name="synchro" bind:checked={synchro}>Synchrones scrollen</SlideToggle>
+			<div>
+				<SlideToggle active="bg-primary-500" name="synchro" bind:checked={synchro}
+					>Synchrones scrollen</SlideToggle
+				>
+			</div>
 		</div>
 		<TextzeugenSelector
 			sigla={[...data.codices, ...data.fragments]}
