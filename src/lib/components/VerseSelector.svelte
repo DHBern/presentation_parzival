@@ -76,7 +76,10 @@
 			bind:this={verse}
 			value={Number(coordinates[1])}
 		/>-<input type="text" placeholder="Zusatz" class="input max-w-20" bind:value={additional} />
-		<button class="btn-icon variant-filled btn-icon-sm flex-shrink-0 flex-grow-0">
+		<button
+			aria-label="suchen"
+			class="btn-icon variant-filled btn-icon-sm flex-shrink-0 flex-grow-0"
+		>
 			<i class="fa-solid fa-magnifying-glass"></i></button
 		>
 	{/if}
