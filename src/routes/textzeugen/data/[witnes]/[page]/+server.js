@@ -3,9 +3,6 @@ import { api, teipb } from '$lib/constants';
 
 /** @type {import('./$types').RequestHandler} */
 export async function GET({ params, fetch }) {
-	console.log(
-		`${teipb}/parts/${params.witnes}.xml/json?&view=page&id=${params.page}&odd=parzival-verse.odd`
-	);
 	const teipbData = fetch(
 		`${teipb}/parts/${params.witnes}.xml/json?&view=page&id=${params.page}&odd=parzival-verse.odd`
 	).then((r) => {
