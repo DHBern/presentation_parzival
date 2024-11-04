@@ -32,7 +32,7 @@ export async function load({ fetch, params }) {
 			verse = false;
 			(await lowestPromises)[sigla[0]].some((/** @type {{id: String, l: String[]}} **/ page) => {
 				const newVerse = page.l
-					.find((/** @type {String} **/ l) => l.startsWith(String(thirties)))
+					.find((/** @type {String} **/ l) => l?.startsWith(String(thirties)))
 					?.split('.')[1];
 				if (newVerse) {
 					verse = newVerse;
