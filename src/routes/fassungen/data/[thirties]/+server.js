@@ -6,7 +6,7 @@ export async function GET({ params, fetch }) {
 	const { hyparchetypes } = await fetch(`${api}/json/metadata-nomenclature.json`).then((r) =>
 		r.json()
 	);
-	const teipbData = await hyparchetypes.map(async (h) => {
+	const teipbData = hyparchetypes.map(async (h) => {
 		const r = await fetch(
 			`${teipb}/parts/syn${params.thirties}.xml/json?&view=single&odd=parzival-verse.odd&xpath=//div[@subtype=%27${h.handle.replace('*', '')}%27]`
 		);
@@ -14,9 +14,9 @@ export async function GET({ params, fetch }) {
 			console.log('Failed to fetch tpData', r);
 			return false;
 		}
-		return r.json();
+		return (await r.json()).content;
 	});
-	return json(await teipbData);
+	return json(await Promise.all(teipbData));
 }
 
 /** @type {import('./$types').EntryGenerator} */
