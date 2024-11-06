@@ -74,7 +74,7 @@
 	let y = $derived(
 		mobile
 			? sourcesDim.range([height - marginTop, marginBottom])
-			: valuesDim.range([height - marginTop, marginBottom])
+			: valuesDim.range([marginBottom, height - marginTop])
 	);
 	/**
 	 * @type {d3.brushX | d3.brushY}
@@ -93,8 +93,8 @@
 	$effect(() => {
 		brush
 			.on('brush', (/** @type {{ selection: [number, number]; }} */ e) => {
-				const from = mobile ? e.selection[0] : e.selection[1];
-				const to = mobile ? e.selection[1] : e.selection[0];
+				const from = e.selection[0];
+				const to = e.selection[1];
 				if (Math.abs(from - to) <= 180) {
 					const start = Math.round(valuesDim.invert(from));
 					const end = Math.round(valuesDim.invert(to));
@@ -103,8 +103,8 @@
 				}
 			})
 			.on('end', (/** @type {{ selection: [number, number]; }} */ e) => {
-				const from = mobile ? e.selection[0] : e.selection[1];
-				const to = mobile ? e.selection[1] : e.selection[0];
+				const from = e.selection[0];
+				const to = e.selection[1];
 				if (Math.abs(from - to) > 180) {
 					const start = Math.round(valuesDim.invert(from));
 					const end = Math.round(valuesDim.invert(to));
@@ -116,10 +116,7 @@
 	$effect(() => {
 		d3.select(gBrush)
 			.call(brush)
-			.call(
-				brush.move,
-				mobile ? [valuesDim(DATA_MIN), valuesDim(100)] : [valuesDim(100), valuesDim(DATA_MIN)]
-			);
+			.call(brush.move, [valuesDim(DATA_MIN), valuesDim(100)]);
 	});
 	let chunkedData = $derived(
 		data.map((dataObject) => {
