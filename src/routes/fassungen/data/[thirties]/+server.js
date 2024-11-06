@@ -21,7 +21,7 @@ export async function GET({ params, fetch }) {
 
 /** @type {import('./$types').EntryGenerator} */
 export async function entries() {
-	const entriesArray = Array.from({ length: 827 }, (_, i) => ({ thirties: i + 1 }));
+	const entriesArray = Array.from({ length: 827 }, (_, i) => ({ thirties: String(i + 1) }));
 	return entriesArray;
 }
 
