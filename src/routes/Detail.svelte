@@ -129,7 +129,7 @@
 					}
 				} else {
 					if (start !== 0) {
-						contiguousRanges.push([start, i + data_start]);
+						contiguousRanges.push([start, i + data_start - 1]);
 						start = 0;
 					}
 				}
@@ -346,7 +346,7 @@
 									x={x(sigla.label)}
 									y={y(values[0])}
 									width={x.bandwidth()}
-									height={y(values[1]) - y(values[0])}
+									height={y(values[1] + 1) - y(values[0])}
 									fill="currentColor"
 									class="hover:text-primary-500"
 								/>
@@ -360,7 +360,7 @@
 									x={x(sigla.label)}
 									y={y(values[0])}
 									width={x.bandwidth()}
-									height={y(values[1]) - y(values[0])}
+									height={y(values[1] + 1) - y(values[0])}
 									fill="currentColor"
 									class="hover:text-primary-500"
 								/>
