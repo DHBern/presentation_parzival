@@ -124,16 +124,18 @@
 			for (let i = 0; i < d.values.length; i++) {
 				if (d.values[i]) {
 					if (start === 0) {
+						// console.log(d.label, i, data_start);
 						start = i + data_start;
 					}
 				} else {
 					if (start !== 0) {
-						contiguousRanges.push([start, i - 1 + data_start]);
+						contiguousRanges.push([start, i + data_start]);
 						start = 0;
 					}
 				}
 			}
 			if (start !== 0) {
+				// console.log(d.label, start, d.values.length - 1 + data_start);
 				contiguousRanges.push([start, d.values.length - 1 + data_start]);
 			}
 			return {
@@ -154,7 +156,8 @@
 	);
 	let y = $derived(
 		d3.scaleLinear(
-			[data_start, data_start + data[0]?.values.length],
+			// Domain: from bottom to top: at the bottom is the last selected verse, at the top is the first selected verse
+			[data_start + data[0]?.values.length, data_start],
 			[height - marginBottom, marginTop]
 		)
 	);
@@ -164,6 +167,7 @@
 			? data.find((d) => d.label === 'fr')?.values[verse - data_start] || 'fr'
 			: scaleBandInvert(x)(mousePos[0])
 	);
+	// $inspect(contigousData);
 	$effect(() => {
 		d3.select(gy)
 			.call(
@@ -226,6 +230,7 @@
 				}
 			});
 	});
+	$inspect(contigousData);
 </script>
 
 <div
@@ -294,8 +299,8 @@
 			<g data-manuscript={sigla.label}>
 				{#each sigla.values as values, i}
 					{#if values}
-						{@const verseNumber = i + data_start}
-						{#if isNaN(values[0])}
+						{#if isNaN(values[1])}
+							{@const verseNumber = i + data_start}
 							{#if values.length === 1}
 								<a
 									href={`${base}/textzeugen/${values[0]}/${verseNumber}`}
@@ -303,9 +308,9 @@
 								>
 									<rect
 										x={x(sigla.label)}
-										y={y(verseNumber + 1)}
+										y={y(verseNumber)}
 										width={x.bandwidth()}
-										height={y(verseNumber) - y(verseNumber + 1)}
+										height={y(verseNumber) - y(verseNumber - 1)}
 										fill="currentColor"
 										class="hover:text-primary-500"
 									/>
@@ -327,9 +332,9 @@
 								>
 									<rect
 										x={x(sigla.label)}
-										y={y(verseNumber + 1)}
+										y={y(verseNumber)}
 										width={x.bandwidth()}
-										height={y(verseNumber) - y(verseNumber + 1)}
+										height={y(verseNumber) - y(verseNumber - 1)}
 										fill="currentColor"
 										class="hover:text-primary-500"
 									/>
@@ -339,9 +344,9 @@
 							<a href={`${base}/fassungen/${verse}`} aria-label={`Fassung ${verse}`}>
 								<rect
 									x={x(sigla.label)}
-									y={y(values[1] + 1)}
+									y={y(values[0])}
 									width={x.bandwidth()}
-									height={y(values[0]) - y(values[1] + 1)}
+									height={y(values[1]) - y(values[0])}
 									fill="currentColor"
 									class="hover:text-primary-500"
 								/>
@@ -353,9 +358,9 @@
 							>
 								<rect
 									x={x(sigla.label)}
-									y={y(values[1] + 1)}
+									y={y(values[0])}
 									width={x.bandwidth()}
-									height={y(values[0]) - y(values[1] + 1)}
+									height={y(values[1]) - y(values[0])}
 									fill="currentColor"
 									class="hover:text-primary-500"
 								/>

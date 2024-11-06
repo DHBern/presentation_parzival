@@ -107,7 +107,7 @@
 		},
 		...boolData
 	].map((d) => {
-		return { label: d.label, values: d.values.slice(selection.start - 1, selection.end + 1) };
+		return { label: d.label, values: d.values.slice(selection.start - 1, selection.end) };
 	})}
 	data_start={selection.start}
 />
