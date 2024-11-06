@@ -33,7 +33,8 @@
 	let classesActive = $derived((/** @type {string} */ href) =>
 		base + href === `/${$page.url.pathname.split('/')[1]}`
 			? 'bg-primary-500 hover:text-primary-400 text-secondary-500'
-			: 'hover:text-primary-500');
+			: 'hover:text-primary-500'
+	);
 
 	function drawerOpen() {
 		const /** @type {import('@skeletonlabs/skeleton').DrawerSettings} */ s = {
@@ -72,30 +73,24 @@
 
 <AppShell>
 	{#snippet header()}
-	
-			<AppBar>
-				{#snippet lead()}
-					
-						<a class="text-xl uppercase font-bold" href={`${base}/`}>Parzival</a>
-					
-					{/snippet}
-				<nav class="flex-none items-center h-full hidden lg:flex">
-					{#each pages as page}
-						<a
-							href={`${base}${page.path}`}
-							class="list-nav-item h-full p-4 {classesActive(page.path)}">{page.slug}</a
-						>
-					{/each}
-				</nav>
-				{#snippet trail()}
-					
-						<button class="lg:!hidden btn-icon" onclick={drawerOpen}>
-							<i class="fa-solid fa-bars"></i>
-						</button>
-					
-					{/snippet}
-			</AppBar>
-		
+		<AppBar>
+			{#snippet lead()}
+				<a class="text-xl uppercase font-bold" href={`${base}/`}>Parzival</a>
+			{/snippet}
+			<nav class="flex-none items-center h-full hidden lg:flex">
+				{#each pages as page}
+					<a
+						href={`${base}${page.path}`}
+						class="list-nav-item h-full p-4 {classesActive(page.path)}">{page.slug}</a
+					>
+				{/each}
+			</nav>
+			{#snippet trail()}
+				<button aria-label="Menü" class="lg:!hidden btn-icon" onclick={drawerOpen}>
+					<i class="fa-solid fa-bars"></i>
+				</button>
+			{/snippet}
+		</AppBar>
 	{/snippet}
 	<!-- Page Route Content -->
 	<div class="px-4">
