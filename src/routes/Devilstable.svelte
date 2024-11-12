@@ -5,6 +5,7 @@
 	const DATA_MAX = 827;
 
 	const brushDimension = 200;
+	const brushDimensionWithSafetyPixel = brushDimension + 1; // fixes a glitch, where Brush and Detail don't fit next to each other on PageResize.
 
 	let selection = $state({ start: 1, end: 100 });
 
@@ -91,14 +92,14 @@
 </script>
 
 <Brush
-	height={mobile ? brushDimension : height}
 	width={mobile ? width : brushDimension}
+	height={mobile ? brushDimension : height}
 	data={boolData}
 	brushE={(e) => (selection = e)}
 />
 <Detail
 	{codices}
-	width={mobile ? width : width - brushDimension}
+	width={mobile ? width : width - brushDimensionWithSafetyPixel}
 	height={mobile ? height - brushDimension : height}
 	data={[
 		{
