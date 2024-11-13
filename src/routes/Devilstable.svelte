@@ -1,4 +1,5 @@
 <script>
+	import { InputChip } from '@skeletonlabs/skeleton';
 	import Brush from './Brush.svelte';
 	import Detail from './Detail.svelte';
 
@@ -6,8 +7,6 @@
 
 	const brushDimension = 200;
 	const brushDimensionWithSafetyPixel = brushDimension + 1; // fixes a glitch, where Brush and Detail don't fit next to each other on PageResize.
-
-	let selection = $state({ start: 1, end: 100 });
 
 	/** @type {{codices: any, width?: number, height?: number, data?: {values: number[][], label: string}[]}} */
 	let {
@@ -48,6 +47,7 @@
 			[[], []] // Initial accumulator value is two empty arrays.
 		)
 	);
+	$inspect(fractions);
 	let fractionData = $derived.by(() => {
 		//combine all the fractions into one Object with the label 'fr'
 		let fractionData = {
@@ -89,13 +89,29 @@
 		}),
 		fractionData
 	]);
+	const allowStringsWithoutFragments = ['Fassung', 'fr', ...codices.map((c) => c.sigil)];
+	let selection = $state({
+		start: 1,
+		end: 100,
+		dataEntries: allowStringsWithoutFragments
+	});
+	$inspect(selection);
 </script>
 
+<InputChip
+	whitelist={[...allowStringsWithoutFragments, ...fractions.map((f) => f.label)]}
+	bind:value={selection.dataEntries}
+	name="Inputchips"
+	allowUpperCase
+/>
 <Brush
 	width={mobile ? width : brushDimension}
 	height={mobile ? brushDimension : height}
 	data={boolData}
-	brushE={(e) => (selection = e)}
+	brushE={(/** @type {{ start: number; end: number; }} */ e) => {
+		selection.start = e.start;
+		selection.end = e.end;
+	}}
 />
 <Detail
 	{codices}
