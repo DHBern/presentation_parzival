@@ -230,7 +230,6 @@
 				}
 			});
 	});
-	$inspect(contigousData);
 </script>
 
 <div
