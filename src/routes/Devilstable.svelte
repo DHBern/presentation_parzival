@@ -32,6 +32,12 @@
 	} = $props();
 
 	let mobile = $derived(width < 800);
+	const allowStringsWithoutFragments = ['Fassung', ...codices.map((c) => c.sigil), 'fr'];
+	let inputChipValues = $state(allowStringsWithoutFragments);
+	let inputChipValueLabels = $derived(
+		inputChipValues.map((v) => codices.find((c) => c.sigil === v)?.handle ?? v)
+	);
+	$inspect(inputChipValueLabels);
 	let [fractions, noFractions] = $derived(
 		data.reduce(
 			/**
@@ -40,8 +46,10 @@
 			 * @param item
 			 */
 			(acc, item) => {
-				// Determine which sub-array to push the item into based on whether it includes the substring.
-				item.label.includes('fr') ? acc[0].push(item) : acc[1].push(item);
+				if (inputChipValueLabels.includes(item.label)) {
+					// Determine which sub-array to push the item into based on whether it includes the substring.
+					item.label.includes('fr') ? acc[0].push(item) : acc[1].push(item);
+				}
 				return acc;
 			},
 			[[], []] // Initial accumulator value is two empty arrays.
@@ -89,18 +97,16 @@
 		}),
 		fractionData
 	]);
-	const allowStringsWithoutFragments = ['Fassung', 'fr', ...codices.map((c) => c.sigil)];
 	let selection = $state({
 		start: 1,
-		end: 100,
-		dataEntries: allowStringsWithoutFragments
+		end: 100
 	});
-	$inspect(selection);
 </script>
 
 <InputChip
 	whitelist={[...allowStringsWithoutFragments, ...fractions.map((f) => f.label)]}
-	bind:value={selection.dataEntries}
+	bind:value={inputChipValues}
+	placeholder="Textzeuge / Fragment hinzufügen..."
 	name="Inputchips"
 	allowUpperCase
 />
