@@ -46,9 +46,12 @@
 			 * @param item
 			 */
 			(acc, item) => {
-				if (inputChipValueLabels.includes(item.label)) {
-					// Determine which sub-array to push the item into based on whether it includes the substring.
-					item.label.includes('fr') ? acc[0].push(item) : acc[1].push(item);
+				// Determine which sub-array to push the item into based on whether it includes the substring.
+				if (inputChipValueLabels.includes('fr') && item.label.includes('fr')) {
+					acc[0].push(item);
+				} else if (inputChipValueLabels.includes(item.label)) {
+					//only add the item if the label is in the inputChipValues
+					acc[1].push(item);
 				}
 				return acc;
 			},
@@ -57,6 +60,7 @@
 	);
 	$inspect(fractions);
 	let fractionData = $derived.by(() => {
+		if (!fractions.length) return {};
 		//combine all the fractions into one Object with the label 'fr'
 		let fractionData = {
 			label: 'fr',
@@ -95,7 +99,7 @@
 				values
 			};
 		}),
-		fractionData
+		...(inputChipValueLabels.includes('fr') ? [fractionData] : [])
 	]);
 	let selection = $state({
 		start: 1,
