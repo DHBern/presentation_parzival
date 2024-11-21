@@ -1,5 +1,5 @@
 <script>
-	import { InputChip } from '@skeletonlabs/skeleton';
+	import { InputChip, popup } from '@skeletonlabs/skeleton';
 	import Brush from './Brush.svelte';
 	import Detail from './Detail.svelte';
 
@@ -104,13 +104,29 @@
 	);
 </script>
 
-<InputChip
-	whitelist={[...allowStringsWithoutFragments, ...fractions.map((f) => f.label)]}
-	bind:value={inputChipValues}
-	placeholder="Textzeuge / Fragment hinzufügen..."
-	name="Inputchips"
-	allowUpperCase
-/>
+<div class="card p-4 variant-filled-primary max-w-lg" data-popup="popupClick">
+	<p>
+		Um Textzeugen und Fragmente zu entfernen, klicken sie bitte einfach auf die grau hinterlegten
+		Kasten.
+	</p>
+	<p>
+		Um einzelne Fragmente hinzuzufügen geben sie <i>fr</i> gefolgt vom Index des Fragments ein. Z.B.
+		<i>fr32</i>.
+	</p>
+	<div class="arrow variant-filled-primary" />
+</div>
+<div
+	class="container mx-auto mb-6"
+	use:popup={{ event: 'focus-click', placement: 'top', target: 'popupClick' }}
+>
+	<InputChip
+		whitelist={[...allowStringsWithoutFragments, ...fractions.map((f) => f.label)]}
+		bind:value={inputChipValues}
+		placeholder="Textzeuge / Fragment hinzufügen..."
+		name="Inputchips"
+		allowUpperCase
+	/>
+</div>
 <Brush
 	width={mobile ? width : brushDimension}
 	height={mobile ? brushDimension : height}
