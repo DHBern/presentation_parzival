@@ -37,31 +37,12 @@
 	let inputChipValueLabels = $derived(
 		inputChipValues.map((v) => codices.find((c) => c.sigil === v)?.handle ?? v)
 	);
-	$inspect(inputChipValueLabels);
-	let [fractions, noFractions] = $derived(
-		data.reduce(
-			/**
-			 *
-			 * @param {[{values: number[][], label: string}[],{values: number[][], label: string}[]]} acc
-			 * @param item
-			 */
-			(acc, item) => {
-				// Determine which sub-array to push the item into based on whether it includes the substring.
-				if (inputChipValueLabels.includes('fr') && item.label.includes('fr')) {
-					acc[0].push(item);
-				} else if (inputChipValueLabels.includes(item.label)) {
-					//only add the item if the label is in the inputChipValues
-					acc[1].push(item);
-				}
-				return acc;
-			},
-			[[], []] // Initial accumulator value is two empty arrays.
-		)
-	);
-	$inspect(fractions);
-	let fractionData = $derived.by(() => {
-		if (!fractions.length) return {};
+	let fractions = $derived(data.filter((d) => d.label.includes('fr')));
+	/** @type {{label: string, values: boolean[]}} */
+	let allFractionData = $derived.by(() => {
+		if (!inputChipValueLabels.includes('fr')) return {};
 		//combine all the fractions into one Object with the label 'fr'
+		/** @type {{label: string, values: boolean[]}} */
 		let fractionData = {
 			label: 'fr',
 			values: new Array(DATA_MAX).fill(false)
@@ -83,28 +64,44 @@
 		}
 		return fractionData;
 	});
+	/** @type {{label: string, values: boolean[]}[]} */
 	let boolData = $derived([
-		...noFractions.map((d) => {
-			/** @type {boolean[]} */ const values = new Array(DATA_MAX).fill(false);
+		...inputChipValueLabels.map((d) => {
+			const info = data.find((c) => c.label === d);
+			if (info) {
+				/** @type {boolean[]} */ const values = new Array(DATA_MAX).fill(false);
+				info?.values.forEach(([start, end]) => {
+					for (let i = start; i <= end; i++) {
+						// Adjust for 0-indexed array
+						values[i - 1] = true;
+					}
+				});
 
-			d.values.forEach(([start, end]) => {
-				for (let i = start; i <= end; i++) {
-					// Adjust for 0-indexed array
-					values[i - 1] = true;
+				return {
+					label: d,
+					values
+				};
+			} else {
+				if (d === 'fr') {
+					return allFractionData;
+				} else {
+					return {
+						label: d,
+						values: new Array(DATA_MAX).fill(true)
+					};
 				}
-			});
-
-			return {
-				label: d.label,
-				values
-			};
-		}),
-		...(inputChipValueLabels.includes('fr') ? [fractionData] : [])
+			}
+		})
 	]);
 	let selection = $state({
 		start: 1,
 		end: 100
 	});
+	let detailData = $derived(
+		boolData.map((d) => {
+			return { label: d.label, values: d.values.slice(selection.start - 1, selection.end) };
+		})
+	);
 </script>
 
 <InputChip
@@ -117,7 +114,7 @@
 <Brush
 	width={mobile ? width : brushDimension}
 	height={mobile ? brushDimension : height}
-	data={boolData}
+	data={boolData.filter((d) => d.label !== 'Fassung')}
 	brushE={(/** @type {{ start: number; end: number; }} */ e) => {
 		selection.start = e.start;
 		selection.end = e.end;
@@ -127,15 +124,7 @@
 	{codices}
 	width={mobile ? width : width - brushDimensionWithSafetyPixel}
 	height={mobile ? height - brushDimension : height}
-	data={[
-		{
-			label: 'Fassung',
-			values: new Array(DATA_MAX).fill(true)
-		},
-		...boolData
-	].map((d) => {
-		return { label: d.label, values: d.values.slice(selection.start - 1, selection.end) };
-	})}
+	data={detailData}
 	data_start={selection.start}
 />
 
