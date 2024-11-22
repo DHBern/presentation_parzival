@@ -1,6 +1,8 @@
 <script>
 	import { onMount } from 'svelte';
 	import { page } from '$app/stores';
+	import { goto } from '$app/navigation';
+	import { base } from '$app/paths';
 
 	/** @type {{pages: any}} */
 	let { pages } = $props();
@@ -15,7 +17,8 @@
 			(entries) => {
 				entries.forEach((entry) => {
 					if (entry.isIntersecting) {
-						console.log(entry.target);
+						const direction = entry.boundingClientRect.y < 0 ? -1 : 1;
+						goto(`${base}/fassungen/${Number($page.data.thirties) + direction}`);
 					}
 				});
 			},
