@@ -1,25 +1,21 @@
 <script>
 	import { onMount } from 'svelte';
+	import { page } from '$app/stores';
+
 	/** @type {{pages: any}} */
-	let { pages, localPageChange, localIiifChange, localVerseChange, targetverse } = $props();
-	let localTarget;
-	/**
-	 * @type {number | null}
-	 */
-	let timer = $state(null);
+	let { pages } = $props();
 
 	let scrollContainer = $state();
 	/**
 	 * @type {IntersectionObserver}
 	 */
 	let observer;
-
 	onMount(() => {
 		observer = new IntersectionObserver(
 			(entries) => {
 				entries.forEach((entry) => {
 					if (entry.isIntersecting) {
-						localPageChange(entry.target.dataset);
+						console.log(entry.target);
 					}
 				});
 			},
@@ -29,96 +25,20 @@
 				threshold: [0, 1]
 			}
 		);
-	});
-
-	let programmaticScroll = $state(false);
-	let oldHeight = $state(0);
-
-	const onScrollEnd = (/** @type { Event & { target: HTMLElement}} } */ e) => {
-		if (programmaticScroll || scrollContainer.scrollHeight > oldHeight) {
-			programmaticScroll = false;
-			oldHeight = scrollContainer.scrollHeight;
+		const verse = scrollContainer?.querySelector(`[data-verse="${$page.data.thirties}.01"]`);
+		if (verse) {
+			scrollContainer?.scrollTo({
+				top:
+					scrollContainer?.scrollTop +
+					Number(verse.parentElement?.getBoundingClientRect().top) -
+					scrollContainer?.getBoundingClientRect().top,
+				behavior: 'instant'
+			});
 		} else {
-			clearTimeout(timer);
-			timer = setTimeout(() => {
-				const positive = (/** @type {string} */ verse) => {
-					localVerseChange(verse);
-				};
-				const /** @type { NodeListOf<HTMLElement> } */ verses =
-						e.target?.querySelectorAll('.verse');
-				let found = false;
-				for (let i = 0; i < verses.length; i++) {
-					const verse = verses[i];
-					if (
-						verse.getBoundingClientRect().top === e.target.getBoundingClientRect().top &&
-						verse.dataset.verse
-					) {
-						positive(verse.dataset.verse);
-						found = true;
-						break;
-					}
-				}
-				if (!found) {
-					for (let i = 0; i < verses.length; i++) {
-						const verse = verses[i];
-						if (
-							verse.getBoundingClientRect().top >= e.target.getBoundingClientRect().top &&
-							verse.dataset.verse
-						) {
-							positive(verse.dataset.verse);
-							break;
-						}
-					}
-				}
-				timer = null;
-			}, 200);
-		}
-	};
-
-	const scroll = async (/** @type {String} */ target) => {
-		programmaticScroll = true;
-		//wait for promises in pages to resolve before scrolling
-		await Promise.all(
-			pages.map((/** @type {{ tpData: any; }} */ page) => {
-				return page.tpData;
-			})
-		);
-		const verse = scrollContainer?.querySelector(`[data-verse="${target}"]`);
-		if (!verse && scrollContainer) {
-			//check whether the verse should be there
-			// goto(
-			// 	`${base}/textzeugen/${$page.params.sigla}/${target.replace('.', '/')}?${$page.url.searchParams.toString()}`
-			// );
-			console.log('Verse not found.', target, scrollContainer);
-			return;
-		}
-		if (!scrollContainer) {
-			return;
-		}
-		// verse.scrollIntoView({ behavior: 'instant', block: 'start' });
-		scrollContainer?.scrollTo({
-			top:
-				scrollContainer?.scrollTop +
-				Number(verse.parentElement?.getBoundingClientRect().top) -
-				scrollContainer?.getBoundingClientRect().top,
-			behavior: 'instant'
-		});
-		verse.parentElement?.classList.add('animate-pulse', 'once');
-		// check whether the verse is on the last page in the scrollcontainer
-		if (scrollContainer.scrollHeight - scrollContainer.clientHeight === scrollContainer.scrollTop) {
-			const dataset = verse.parentElement?.dataset;
-			if (dataset) {
-				localPageChange(dataset);
-			}
-		}
-	};
-	$effect(() => {
-		//this effect rerons more often than it should, sometimes the value of targetverse didn't even change this is why we need to keep track of the target ourselves
-		if (localTarget !== targetverse) {
-			localTarget = targetverse;
-			scroll(targetverse);
+			console.log('no verse found');
 		}
 	});
+
 	const addToObserver = (/** @type {HTMLDivElement} */ node) => {
 		$effect(() => {
 			observer.observe(node);
@@ -130,12 +50,12 @@
 </script>
 
 <div class="max-h-[70vh] overflow-y-auto" bind:this={scrollContainer}>
-	{#if pages}
+	{#each pages as page}
 		<div class="thirty" use:addToObserver>
-			{@html pages}
+			{@html page}
 		</div>
 		<hr class="!border-t-4 !border-primary-500" />
-	{/if}
+	{/each}
 </div>
 
 <style>
