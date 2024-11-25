@@ -17,8 +17,13 @@
 			(entries) => {
 				entries.forEach((entry) => {
 					if (entry.isIntersecting) {
-						const direction = entry.boundingClientRect.y < 0 ? -1 : 1;
-						goto(`${base}/fassungen/${Number($page.data.thirties) + direction}`);
+						console.log('intersecting', entry.target);
+						let verse = entry.target
+							.querySelector(`[data-verse]`)
+							?.attributes['data-verse']?.value.split('.')[0];
+						if (entry.target && verse) {
+							goto(`${base}/fassungen/${verse}`, { noScroll: true, keepFocus: true });
+						}
 					}
 				});
 			},
@@ -30,6 +35,7 @@
 		);
 		const verse = scrollContainer?.querySelector(`[data-verse="${$page.data.thirties}.01"]`);
 		if (verse) {
+			console.log('scrolling to', verse);
 			scrollContainer?.scrollTo({
 				top:
 					scrollContainer?.scrollTop +
@@ -53,9 +59,9 @@
 </script>
 
 <div class="max-h-[70vh] overflow-y-auto" bind:this={scrollContainer}>
-	{#each pages as page}
+	{#each pages as page (page[0])}
 		<div class="thirty" use:addToObserver>
-			{@html page}
+			{@html page[1]}
 		</div>
 		<hr class="!border-t-4 !border-primary-500" />
 	{/each}

@@ -1,28 +1,74 @@
 <script>
 	import { base } from '$app/paths';
-	import { SvelteMap } from 'svelte/reactivity';
 	import FassungenContent from './FassungenContent.svelte';
 
 	/** @type {{data: import('./$types').PageData}} */
 	let { data } = $props();
+	class localPageClass {
+		/**
+		 * @type {[[number, string][],[number, string][],[number, string][],[number, string][]]}
+		 */
+		pages = $state([[], [], [], []]);
+		/**
+		 * @type {string[]}
+		 */
+		thirties = [];
 
-	let localPages = $state([new SvelteMap(), new SvelteMap(), new SvelteMap(), new SvelteMap()]);
+		fetchPage = async (/** @type {string} */ page) => {
+			// console.log('fetching', page);
+			// console.log(Number(page), !this.thirties.length);
+			if (!this.thirties.length) {
+				let [d, m, G, T] = await fetch(`${base}/fassungen/data/${Number(page) - 1}`).then((r) =>
+					r.json()
+				);
+				this.pages[0].push([Number(page) - 1, d]);
+				this.pages[1].push([Number(page) - 1, m]);
+				this.pages[2].push([Number(page) - 1, G]);
+				this.pages[3].push([Number(page) - 1, T]);
+				this.thirties.push(String(Number(page) - 1));
+				[d, m, G, T] = await fetch(`${base}/fassungen/data/${page}`).then((r) => r.json());
+				this.pages[0].push([Number(page), d]);
+				this.pages[1].push([Number(page), m]);
+				this.pages[2].push([Number(page), G]);
+				this.pages[3].push([Number(page), T]);
+				this.thirties.push(page);
+				[d, m, G, T] = await fetch(`${base}/fassungen/data/${Number(page) + 1}`).then((r) =>
+					r.json()
+				);
+				this.pages[0].push([Number(page) + 1, d]);
+				this.pages[1].push([Number(page) + 1, m]);
+				this.pages[2].push([Number(page) + 1, G]);
+				this.pages[3].push([Number(page) + 1, T]);
+				this.thirties.push(String(Number(page) + 1));
+			} else {
+				if (Number(page) < Number(this.thirties[0])) {
+					// console.log('fetching before');
+					let [d, m, G, T] = await fetch(`${base}/fassungen/data/${page}`).then((r) => r.json());
+					this.pages[0].unshift([Number(page), d]);
+					this.pages[1].unshift([Number(page), m]);
+					this.pages[2].unshift([Number(page), G]);
+					this.pages[3].unshift([Number(page), T]);
+					this.thirties.unshift(page);
+				} else if (Number(page) > Number(this.thirties[this.thirties.length - 1])) {
+					let [d, m, G, T] = await fetch(`${base}/fassungen/data/${page}`).then((r) => r.json());
+					this.pages[0].push([Number(page), d]);
+					this.pages[1].push([Number(page), m]);
+					this.pages[2].push([Number(page), G]);
+					this.pages[3].push([Number(page), T]);
+					this.thirties.push(page);
+				} else if (Number(page) === Number(this.thirties[0])) {
+					this.fetchPage(String(Number(page) - 1));
+				} else if (Number(page) === Number(this.thirties[this.thirties.length - 1])) {
+					this.fetchPage(String(Number(page) + 1));
+				}
+			}
+		};
+	}
 
-	const checkAndFetch = async (/** @type {string} */ page) => {
-		if (!localPages[0].has(page)) {
-			let [d, m, G, T] = await fetch(`${base}/fassungen/data/${page}`).then((r) => r.json());
-			localPages[0].set(page, d);
-			localPages[1].set(page, m);
-			localPages[2].set(page, G);
-			localPages[3].set(page, T);
-		}
-	};
+	let localPages = new localPageClass();
 
-	$effect(async () => {
-		// need to await the fetches because of race condition: random order of thirties
-		await checkAndFetch(String(Number(data.thirties) - 1));
-		await checkAndFetch(data.thirties);
-		await checkAndFetch(String(Number(data.thirties) + 1));
+	$effect(() => {
+		localPages.fetchPage(data.thirties);
 	});
 </script>
 
@@ -34,8 +80,8 @@
 	<div
 		class="grid grid-cols-[repeat(auto-fit,minmax(400px,1fr))] gap-4 bg-surface-active-token my-4 py-4 px-8 rounded-xl"
 	>
-		{#each localPages as pages}
-			{#if pages.size >= 3}
+		{#each localPages.pages as pages}
+			{#if pages.length >= 3}
 				<!-- when at least 3 pages are loaded, the one for the currect thirties should be loaded aswell  -->
 				<FassungenContent {pages} />
 			{/if}
