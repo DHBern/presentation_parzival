@@ -113,10 +113,10 @@
 		Um einzelne Fragmente hinzuzufügen geben sie <i>fr</i> gefolgt vom Index des Fragments ein. Z.B.
 		<i>fr32</i>.
 	</p>
-	<div class="arrow variant-filled-primary" />
+	<div class="arrow variant-filled-primary"></div>
 </div>
 <div
-	class="container mx-auto mb-6"
+	class="container mx-auto mb-6 flex flex-wrap md:flex-nowrap gap-4"
 	use:popup={{ event: 'focus-click', placement: 'top', target: 'popupClick' }}
 >
 	<InputChip
@@ -126,6 +126,24 @@
 		name="Inputchips"
 		allowUpperCase
 	/>
+	<div class="btn-group md:btn-group-vertical variant-filled h-min m-auto">
+		<button
+			class="btn variant-filled"
+			onclick={() => {
+				inputChipValues = allowStringsWithoutFragments;
+			}}
+		>
+			zurücksetzen
+		</button>
+		<button
+			class="btn variant-filled"
+			onclick={() => {
+				inputChipValues = [];
+			}}
+		>
+			leeren
+		</button>
+	</div>
 </div>
 <Brush
 	width={mobile ? width : brushDimension}
