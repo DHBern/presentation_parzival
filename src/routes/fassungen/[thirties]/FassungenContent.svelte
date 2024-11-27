@@ -4,8 +4,7 @@
 	import { goto } from '$app/navigation';
 	import { base } from '$app/paths';
 
-	/** @type {{pages: any}} */
-	let { pages } = $props();
+	let { pages, scrolltop = $bindable() } = $props();
 
 	let scrollContainer = $state();
 	/**
@@ -56,9 +55,24 @@
 			};
 		});
 	};
+
+	const setSyncedScroll = (/** @type {HTMLDivElement} */ node) => {
+		$effect(() => {
+			if (scrolltop) {
+				node.scrollTo({ top: scrolltop, behavior: 'auto' });
+			}
+		});
+	};
 </script>
 
-<div class="max-h-[70vh] overflow-y-auto" bind:this={scrollContainer}>
+<div
+	class="max-h-[70vh] overflow-y-auto"
+	bind:this={scrollContainer}
+	onscroll={(o) => {
+		scrolltop = o?.target?.scrollTop;
+	}}
+	use:setSyncedScroll
+>
 	{#each pages as page (page[0])}
 		<div class="thirty" use:addToObserver>
 			{@html page[1]}

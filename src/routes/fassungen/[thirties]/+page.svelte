@@ -1,6 +1,7 @@
 <script>
 	import { base } from '$app/paths';
 	import FassungenContent from './FassungenContent.svelte';
+	import { SlideToggle } from '@skeletonlabs/skeleton';
 
 	/** @type {{data: import('./$types').PageData}} */
 	let { data } = $props();
@@ -15,8 +16,6 @@
 		thirties = [];
 
 		fetchPage = async (/** @type {string} */ page) => {
-			// console.log('fetching', page);
-			// console.log(Number(page), !this.thirties.length);
 			if (!this.thirties.length) {
 				let [d, m, G, T] = await fetch(`${base}/fassungen/data/${Number(page) - 1}`).then((r) =>
 					r.json()
@@ -70,12 +69,17 @@
 	$effect(() => {
 		localPages.fetchPage(data.thirties);
 	});
+	let scrolltop = $state(0);
+	let synchro = $state(true);
 </script>
 
 <section class="w-full">
 	<h1 class="h1 my-4">Fassungsansicht</h1>
 	<div class="grid gap-6 md:grid-cols-2 md:my-8">
 		<p>Einstellungen und Links zu den Textzeugen.</p>
+		<SlideToggle active="bg-primary-500" name="synchro" bind:checked={synchro}>
+			Synchrones scrollen
+		</SlideToggle>
 	</div>
 	<div
 		class="grid grid-cols-[repeat(auto-fit,minmax(400px,1fr))] gap-4 bg-surface-active-token my-4 py-4 px-8 rounded-xl"
@@ -83,7 +87,11 @@
 		{#each localPages.pages as pages}
 			{#if pages.length >= 3}
 				<!-- when at least 3 pages are loaded, the one for the currect thirties should be loaded aswell  -->
-				<FassungenContent {pages} />
+				{#if synchro}
+					<FassungenContent {pages} bind:scrolltop />
+				{:else}
+					<FassungenContent {pages} />
+				{/if}
 			{/if}
 		{/each}
 	</div>
