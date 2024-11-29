@@ -163,17 +163,28 @@
 					use:addToObserver
 				>
 					{#await pageObject.iiif then iiif}
-						<button
-							onclick={() => {
-								localIiifChange(iiif);
-							}}
-							class="ml-2 float-right"
-						>
-							<img
-								src="{iiif.id}/full/!250,120/0/default.jpg"
-								alt="thumbnail der Seite {pageObject.id}"
-							/>
-						</button>
+						{#if iiif?.id}
+							<button
+								onclick={() => {
+									localIiifChange(iiif);
+								}}
+								class="ml-2 float-right"
+							>
+								<img
+									src="{iiif.id}/full/!250,120/0/default.jpg"
+									alt="thumbnail der Seite {pageObject.id}"
+								/>
+							</button>
+						{:else}
+							<button
+								onclick={() => {
+									localIiifChange(iiif);
+								}}
+								class="btn variant-filled ml-2 float-right"
+							>
+								Seite wechseln
+							</button>
+						{/if}
 					{/await}
 					{@html tpData.content}
 				</div>
