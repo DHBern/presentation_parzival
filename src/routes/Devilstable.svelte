@@ -52,10 +52,7 @@
 			if (entry) {
 				/** @type {boolean[]} */ const values = new Array(DATA_MAX).fill(false);
 				entry?.values.forEach(([start, end]) => {
-					for (let i = start; i <= end; i++) {
-						// Adjust for 0-indexed array
-						values[i - 1] = true;
-					}
+					values.fill(true, start - 1, end);
 				});
 
 				return {
