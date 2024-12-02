@@ -47,11 +47,11 @@
 	});
 	/** @type {{label: string, values: boolean[]}[]} */
 	let boolData = $derived(
-		inputChipValueLabels.map((d) => {
-			const info = data.find((c) => c.label === d);
-			if (info) {
+		inputChipValueLabels.map((c) => {
+			const entry = data.find((d) => d.label === c);
+			if (entry) {
 				/** @type {boolean[]} */ const values = new Array(DATA_MAX).fill(false);
-				info?.values.forEach(([start, end]) => {
+				entry?.values.forEach(([start, end]) => {
 					for (let i = start; i <= end; i++) {
 						// Adjust for 0-indexed array
 						values[i - 1] = true;
@@ -59,15 +59,15 @@
 				});
 
 				return {
-					label: d,
+					label: c,
 					values
 				};
 			} else {
-				if (d === 'fr') {
+				if (c === 'fr') {
 					return allFractionData;
 				} else {
 					return {
-						label: d,
+						label: c,
 						values: new Array(DATA_MAX).fill(true)
 					};
 				}
