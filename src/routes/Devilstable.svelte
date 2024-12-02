@@ -66,6 +66,7 @@
 				if (c === 'fr') {
 					return allFractionData;
 				} else {
+					//only for the summaryLabel ('Fassung')
 					return {
 						label: c,
 						values: new Array(DATA_MAX).fill(true)
