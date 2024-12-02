@@ -3,6 +3,7 @@
 	import Brush from './Brush.svelte';
 	import Detail from './Detail.svelte';
 	import { summaryLabel } from '$lib/constants';
+	import { flip } from 'svelte/animate';
 
 	const DATA_MAX = 827;
 
@@ -98,7 +99,12 @@
 </div>
 <div
 	class="container mx-auto mb-6 flex flex-wrap md:flex-nowrap gap-4"
-	use:popup={{ event: 'focus-click', placement: 'top', target: 'popupChips' }}
+	use:popup={{
+		event: 'focus-click',
+		placement: 'top',
+		target: 'popupChips',
+		middleware: { flip: { mainAxis: false } }
+	}}
 >
 	<InputChip
 		whitelist={[...allowStringsWithoutFragments, ...fractions.map((f) => f.label)]}
