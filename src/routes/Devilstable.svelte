@@ -85,7 +85,7 @@
 	);
 </script>
 
-<div class="card p-4 variant-filled-primary max-w-lg" data-popup="popupClick">
+<div class="card p-4 variant-filled-primary max-w-lg" data-popup="popupChips">
 	<p>
 		Um Textzeugen und Fragmente zu entfernen, klicken sie bitte einfach auf die grau hinterlegten
 		Kasten.
@@ -98,7 +98,7 @@
 </div>
 <div
 	class="container mx-auto mb-6 flex flex-wrap md:flex-nowrap gap-4"
-	use:popup={{ event: 'focus-click', placement: 'top', target: 'popupClick' }}
+	use:popup={{ event: 'focus-click', placement: 'top', target: 'popupChips' }}
 >
 	<InputChip
 		whitelist={[...allowStringsWithoutFragments, ...fractions.map((f) => f.label)]}
