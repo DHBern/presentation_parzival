@@ -88,12 +88,15 @@
 
 <div class="card p-4 variant-filled-primary max-w-lg" data-popup="popupChips">
 	<p>
-		Um Textzeugen und Fragmente zu entfernen, klicken sie bitte einfach auf die grau hinterlegten
-		Kasten.
+		Um Textzeugen und Fragmente zu entfernen, klicken Sie bitte auf die grau hinterlegten Kästchen.
 	</p>
 	<p>
-		Um einzelne Fragmente hinzuzufügen geben sie <i>fr</i> gefolgt vom Index des Fragments ein. Z.B.
-		<i>fr32</i>.
+		Um einen Textzeugen hinzuzufügen, geben Sie die SIgle des Textzeugen ein. Z. B. <i>D</i>.
+	</p>
+	<p>
+		Um einzelne Fragmente hinzuzufügen geben sie <i>fr</i> gefolgt vom Index des Fragments (1-72)
+		ein. Z. B.
+		<i>fr32</i>. Um alle Fragmente in einer Spalte hinzuzufügen, geben Sie <i>fr</i> (ohne index) ein.
 	</p>
 	<div class="arrow variant-filled-primary"></div>
 </div>
