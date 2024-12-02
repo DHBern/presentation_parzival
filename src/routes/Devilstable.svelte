@@ -3,7 +3,6 @@
 	import Brush from './Brush.svelte';
 	import Detail from './Detail.svelte';
 	import { summaryLabel } from '$lib/constants';
-	import { flip } from 'svelte/animate';
 
 	const DATA_MAX = 827;
 
@@ -47,8 +46,8 @@
 		return fractionData;
 	});
 	/** @type {{label: string, values: boolean[]}[]} */
-	let boolData = $derived([
-		...inputChipValueLabels.map((d) => {
+	let boolData = $derived(
+		inputChipValueLabels.map((d) => {
 			const info = data.find((c) => c.label === d);
 			if (info) {
 				/** @type {boolean[]} */ const values = new Array(DATA_MAX).fill(false);
@@ -74,7 +73,7 @@
 				}
 			}
 		})
-	]);
+	);
 	let selection = $state({
 		start: 1,
 		end: 100
