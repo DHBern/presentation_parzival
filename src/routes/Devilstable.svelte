@@ -48,8 +48,16 @@
 	/** @type {{label: string, values: boolean[]}[]} */
 	let boolData = $derived(
 		inputChipValueLabels.map((c) => {
-			const entry = data.find((d) => d.label === c);
-			if (entry) {
+			if (c === 'fr') {
+				return allFractionData;
+			} else if (c === summaryLabel) {
+				return {
+					label: c,
+					values: new Array(DATA_MAX).fill(true)
+				};
+			} else {
+				const entry = data.find((d) => d.label === c);
+				if (!entry) console.error(`Could not find data for ${c}`);
 				/** @type {boolean[]} */ const values = new Array(DATA_MAX).fill(false);
 				entry?.values.forEach(([start, end]) => {
 					values.fill(true, start - 1, end);
@@ -59,16 +67,6 @@
 					label: c,
 					values
 				};
-			} else {
-				if (c === 'fr') {
-					return allFractionData;
-				} else {
-					//only for the summaryLabel ('Fassung')
-					return {
-						label: c,
-						values: new Array(DATA_MAX).fill(true)
-					};
-				}
 			}
 		})
 	);
