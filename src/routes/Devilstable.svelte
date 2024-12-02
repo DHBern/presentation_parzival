@@ -9,27 +9,7 @@
 	const brushDimensionWithSafetyPixel = brushDimension + 1; // fixes a glitch, where Brush and Detail don't fit next to each other on PageResize.
 
 	/** @type {{codices: any, width?: number, height?: number, data?: {values: number[][], label: string}[]}} */
-	let {
-		codices,
-		width = 400,
-		height = 400,
-		data = [
-			{
-				label: 'D',
-				values: [
-					[1, 3],
-					[15, 20]
-				]
-			},
-			{
-				label: 'n',
-				values: [
-					[1, 16],
-					[18, 25]
-				]
-			}
-		]
-	} = $props();
+	let { codices, width = 400, height = 400, data = [] } = $props();
 
 	let mobile = $derived(width < 800);
 	const allowStringsWithoutFragments = ['Fassung', ...codices.map((c) => c.sigil), 'fr'];
