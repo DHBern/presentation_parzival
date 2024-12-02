@@ -2,6 +2,7 @@
 	import * as d3 from 'd3';
 	import { computePosition, shift, flip, offset } from '@floating-ui/dom';
 	import { base } from '$app/paths';
+	import { summaryLabel } from '$lib/constants';
 
 	/** @type {{codices: any, width?: number, height?: number, data_start?: number, data?: {values: boolean[], label: string}[]}} */
 	let { codices, width = 400, height = 400, data_start = 1, data = [] } = $props();
@@ -339,7 +340,7 @@
 									/>
 								</a>
 							{/if}
-						{:else if sigla.label === 'Fassung'}
+						{:else if sigla.label === summaryLabel}
 							<a href={`${base}/fassungen/${verse}`} aria-label={`Fassung ${verse}`}>
 								<rect
 									x={x(sigla.label)}

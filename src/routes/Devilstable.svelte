@@ -1,55 +1,29 @@
 <script>
+	import { InputChip, popup } from '@skeletonlabs/skeleton';
 	import Brush from './Brush.svelte';
 	import Detail from './Detail.svelte';
+	import { summaryLabel } from '$lib/constants';
 
 	const DATA_MAX = 827;
 
 	const brushDimension = 200;
 	const brushDimensionWithSafetyPixel = brushDimension + 1; // fixes a glitch, where Brush and Detail don't fit next to each other on PageResize.
 
-	let selection = $state({ start: 1, end: 100 });
-
 	/** @type {{codices: any, width?: number, height?: number, data?: {values: number[][], label: string}[]}} */
-	let {
-		codices,
-		width = 400,
-		height = 400,
-		data = [
-			{
-				label: 'D',
-				values: [
-					[1, 3],
-					[15, 20]
-				]
-			},
-			{
-				label: 'n',
-				values: [
-					[1, 16],
-					[18, 25]
-				]
-			}
-		]
-	} = $props();
+	let { codices, width = 400, height = 400, data = [] } = $props();
 
 	let mobile = $derived(width < 800);
-	let [fractions, noFractions] = $derived(
-		data.reduce(
-			/**
-			 *
-			 * @param {[{values: number[][], label: string}[],{values: number[][], label: string}[]]} acc
-			 * @param item
-			 */
-			(acc, item) => {
-				// Determine which sub-array to push the item into based on whether it includes the substring.
-				item.label.includes('fr') ? acc[0].push(item) : acc[1].push(item);
-				return acc;
-			},
-			[[], []] // Initial accumulator value is two empty arrays.
-		)
+	const defaultChips = [summaryLabel, ...codices.map((c) => c.sigil), 'fr'];
+	let inputChipValues = $state(defaultChips);
+	let inputChipValueLabels = $derived(
+		inputChipValues.map((v) => codices.find((c) => c.sigil === v)?.handle ?? v)
 	);
-	let fractionData = $derived.by(() => {
+	let fractions = $derived(data.filter((d) => d.label.includes('fr')));
+	/** @type {{label: string, values: boolean[]}} */
+	let allFractionData = $derived.by(() => {
+		if (!inputChipValueLabels.includes('fr')) return {};
 		//combine all the fractions into one Object with the label 'fr'
+		/** @type {{label: string, values: boolean[]}} */
 		let fractionData = {
 			label: 'fr',
 			values: new Array(DATA_MAX).fill(false)
@@ -71,45 +45,110 @@
 		}
 		return fractionData;
 	});
-	let boolData = $derived([
-		...noFractions.map((d) => {
-			/** @type {boolean[]} */ const values = new Array(DATA_MAX).fill(false);
+	/** @type {{label: string, values: boolean[]}[]} */
+	let boolData = $derived(
+		inputChipValueLabels.map((c) => {
+			if (c === 'fr') {
+				return allFractionData;
+			} else if (c === summaryLabel) {
+				return {
+					label: c,
+					values: new Array(DATA_MAX).fill(true)
+				};
+			} else {
+				const entry = data.find((d) => d.label === c);
+				if (!entry) console.error(`Could not find data for ${c}`);
+				/** @type {boolean[]} */ const values = new Array(DATA_MAX).fill(false);
+				entry?.values.forEach(([start, end]) => {
+					values.fill(true, start - 1, end);
+				});
 
-			d.values.forEach(([start, end]) => {
-				for (let i = start; i <= end; i++) {
-					// Adjust for 0-indexed array
-					values[i - 1] = true;
-				}
-			});
-
-			return {
-				label: d.label,
-				values
-			};
-		}),
-		fractionData
-	]);
+				return {
+					label: c,
+					values
+				};
+			}
+		})
+	);
+	let selection = $state({
+		start: 1,
+		end: 100
+	});
+	let detailData = $derived(
+		boolData.map((d) => {
+			return { label: d.label, values: d.values.slice(selection.start - 1, selection.end) };
+		})
+	);
 </script>
 
+<div class="card p-4 variant-filled-primary max-w-lg" data-popup="popupChips">
+	<p>
+		Um Textzeugen und Fragmente zu entfernen, klicken Sie bitte auf die grau hinterlegten Kästchen.
+	</p>
+	<p>
+		Um einen Textzeugen hinzuzufügen, geben Sie die SIgle des Textzeugen ein. Z. B. <i>D</i>.
+	</p>
+	<p>
+		Um einzelne Fragmente hinzuzufügen geben sie <i>fr</i> gefolgt vom Index des Fragments (1-72)
+		ein. Z. B.
+		<i>fr32</i>. Um alle Fragmente in einer Spalte hinzuzufügen, geben Sie <i>fr</i> (ohne index) ein.
+	</p>
+	<div class="arrow variant-filled-primary"></div>
+</div>
+<div
+	class="container mx-auto mb-6 flex flex-wrap md:flex-nowrap gap-4"
+	use:popup={{
+		event: 'focus-click',
+		placement: 'top',
+		target: 'popupChips',
+		middleware: { flip: { mainAxis: false } }
+	}}
+>
+	<InputChip
+		whitelist={[
+			summaryLabel,
+			'fr',
+			...codices.map((c) => c.sigil),
+			...fractions.map((f) => f.label)
+		]}
+		bind:value={inputChipValues}
+		placeholder="Textzeuge / Fragment hinzufügen..."
+		name="Inputchips"
+		allowUpperCase
+	/>
+	<div class="btn-group md:btn-group-vertical variant-filled h-min m-auto">
+		<button
+			class="btn variant-filled"
+			onclick={() => {
+				inputChipValues = defaultChips;
+			}}
+		>
+			zurücksetzen
+		</button>
+		<button
+			class="btn variant-filled"
+			onclick={() => {
+				inputChipValues = [];
+			}}
+		>
+			Alle entfernen
+		</button>
+	</div>
+</div>
 <Brush
 	width={mobile ? width : brushDimension}
 	height={mobile ? brushDimension : height}
-	data={boolData}
-	brushE={(e) => (selection = e)}
+	data={boolData.filter((d) => d.label !== summaryLabel)}
+	brushE={(/** @type {{ start: number; end: number; }} */ e) => {
+		selection.start = e.start;
+		selection.end = e.end;
+	}}
 />
 <Detail
 	{codices}
 	width={mobile ? width : width - brushDimensionWithSafetyPixel}
 	height={mobile ? height - brushDimension : height}
-	data={[
-		{
-			label: 'Fassung',
-			values: new Array(DATA_MAX).fill(true)
-		},
-		...boolData
-	].map((d) => {
-		return { label: d.label, values: d.values.slice(selection.start - 1, selection.end) };
-	})}
+	data={detailData}
 	data_start={selection.start}
 />
 

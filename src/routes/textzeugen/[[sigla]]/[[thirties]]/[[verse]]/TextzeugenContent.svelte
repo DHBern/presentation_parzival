@@ -115,7 +115,6 @@
 	$effect(() => {
 		//this effect rerons more often than it should, sometimes the value of targetverse didn't even change this is why we need to keep track of the target ourselves
 		if (localTarget !== targetverse) {
-			console.log('scrolling to', targetverse);
 			localTarget = targetverse;
 			scroll(targetverse);
 		}

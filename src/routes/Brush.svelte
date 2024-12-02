@@ -20,7 +20,7 @@
 	 */
 	let gBrush = $state();
 
-	/** @type {{width?: number, height?: number, DATA_MIN?: number, DATA_MAX?: number, data?: {values: boolean[], label: string}[]}} */
+	/** @type {{width?: number, height?: number, DATA_MIN?: number, DATA_MAX?: number, data?: {values: boolean[], label: string}[], brushE: function}} */
 	let {
 		width = 400,
 		height = 150,
