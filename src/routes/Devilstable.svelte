@@ -2,6 +2,7 @@
 	import { InputChip, popup } from '@skeletonlabs/skeleton';
 	import Brush from './Brush.svelte';
 	import Detail from './Detail.svelte';
+	import { summaryLabel } from '$lib/constants';
 
 	const DATA_MAX = 827;
 
@@ -12,7 +13,7 @@
 	let { codices, width = 400, height = 400, data = [] } = $props();
 
 	let mobile = $derived(width < 800);
-	const allowStringsWithoutFragments = ['Fassung', ...codices.map((c) => c.sigil), 'fr'];
+	const allowStringsWithoutFragments = [summaryLabel, ...codices.map((c) => c.sigil), 'fr'];
 	let inputChipValues = $state(allowStringsWithoutFragments);
 	let inputChipValueLabels = $derived(
 		inputChipValues.map((v) => codices.find((c) => c.sigil === v)?.handle ?? v)
@@ -128,7 +129,7 @@
 <Brush
 	width={mobile ? width : brushDimension}
 	height={mobile ? brushDimension : height}
-	data={boolData.filter((d) => d.label !== 'Fassung')}
+	data={boolData.filter((d) => d.label !== summaryLabel)}
 	brushE={(/** @type {{ start: number; end: number; }} */ e) => {
 		selection.start = e.start;
 		selection.end = e.end;
