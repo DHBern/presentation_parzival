@@ -13,8 +13,8 @@
 	let { codices, width = 400, height = 400, data = [] } = $props();
 
 	let mobile = $derived(width < 800);
-	const allowStringsWithoutFragments = [summaryLabel, ...codices.map((c) => c.sigil), 'fr'];
-	let inputChipValues = $state(allowStringsWithoutFragments);
+	const defaultChips = [summaryLabel, ...codices.map((c) => c.sigil), 'fr'];
+	let inputChipValues = $state(defaultChips);
 	let inputChipValueLabels = $derived(
 		inputChipValues.map((v) => codices.find((c) => c.sigil === v)?.handle ?? v)
 	);
@@ -105,7 +105,12 @@
 	}}
 >
 	<InputChip
-		whitelist={[...allowStringsWithoutFragments, ...fractions.map((f) => f.label)]}
+		whitelist={[
+			summaryLabel,
+			'fr',
+			...codices.map((c) => c.sigil),
+			...fractions.map((f) => f.label)
+		]}
 		bind:value={inputChipValues}
 		placeholder="Textzeuge / Fragment hinzufügen..."
 		name="Inputchips"
@@ -115,7 +120,7 @@
 		<button
 			class="btn variant-filled"
 			onclick={() => {
-				inputChipValues = allowStringsWithoutFragments;
+				inputChipValues = defaultChips;
 			}}
 		>
 			zurücksetzen
