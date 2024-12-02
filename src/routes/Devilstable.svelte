@@ -131,7 +131,7 @@
 				inputChipValues = [];
 			}}
 		>
-			leeren
+			Alle entfernen
 		</button>
 	</div>
 </div>
