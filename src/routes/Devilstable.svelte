@@ -113,7 +113,7 @@
 		]}
 		bind:value={inputChipValues}
 		placeholder="Textzeuge / Fragment hinzufügen..."
-		name="Inputchips"
+		name="inputChips"
 		allowUpperCase
 	/>
 	<div class="btn-group md:btn-group-vertical variant-filled h-min m-auto">
