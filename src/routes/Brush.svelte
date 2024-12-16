@@ -99,7 +99,7 @@
 			.on('brush', (/** @type {{ selection: [number, number]; }} */ e) => {
 				const from = e.selection[0];
 				const to = e.selection[1];
-				if (Math.abs(from - to) <= 180) {
+				if (Math.abs(from - to) <= DATA_MAX - DATA_MIN) {
 					const start = Math.round(valuesDim.invert(from));
 					const end = Math.round(valuesDim.invert(to));
 
@@ -109,7 +109,7 @@
 			.on('end', (/** @type {{ selection: [number, number]; }} */ e) => {
 				const from = e.selection[0];
 				const to = e.selection[1];
-				if (Math.abs(from - to) > 180) {
+				if (Math.abs(from - to) > DATA_MAX - DATA_MIN) {
 					const start = Math.round(valuesDim.invert(from));
 					const end = Math.round(valuesDim.invert(to));
 
