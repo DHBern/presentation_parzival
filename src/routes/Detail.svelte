@@ -134,27 +134,26 @@
 	};
 	let contigousData = $derived(
 		data.map((d) => {
-			if (d.label === 'fr') {
-				return d;
-			}
+			// skip for label 'fr'
+			if (d.label === 'fr') return d;
+
+			// init
 			let contiguousRanges = [];
-			let start = 0;
+			let start = null;
+
+			//
 			for (let i = 0; i < d.values.length; i++) {
-				if (d.values[i]) {
-					if (start === 0) {
-						// console.log(d.label, i, data_start);
-						start = i + data_start;
-					}
-				} else {
-					if (start !== 0) {
-						contiguousRanges.push([start, i + data_start - 1]);
-						start = 0;
-					}
+				if (d.values[i] && start === null) {
+					// start a new range
+					start = i + selection.start;
+				} else if (!d.values[i] && start !== null) {
+					contiguousRanges.push([start, i + selection.start - 1]);
+					start = null; // reset start
 				}
 			}
-			if (start !== 0) {
-				// console.log(d.label, start, d.values.length - 1 + data_start);
-				contiguousRanges.push([start, d.values.length - 1 + data_start]);
+			// if range is still open at the end
+			if (start !== null) {
+				contiguousRanges.push([start, d.values.length + selection.start - 1]);
 			}
 			return {
 				label: d.label,
