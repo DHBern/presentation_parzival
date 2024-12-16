@@ -75,9 +75,10 @@
 		end: 100
 	});
 	let detailData = $derived(
-		boolData.map((d) => {
-			return { label: d.label, values: d.values.slice(selection.start - 1, selection.end) };
-		})
+		boolData.map(({ values, ...rest }) => ({
+			values: values.slice(selection.start - 1, selection.end),
+			...rest
+		}))
 	);
 </script>
 
