@@ -26,6 +26,8 @@
 		height = 150,
 		DATA_MIN = 1,
 		DATA_MAX = 827,
+		BRUSH_WINDOW_DEFAULT_START = 1,
+		BRUSH_WINDOW_DEFAULT_END = 100,
 		data = [
 			{
 				label: 'D',
@@ -116,7 +118,10 @@
 	$effect(() => {
 		d3.select(gBrush)
 			.call(brush)
-			.call(brush.move, [valuesDim(DATA_MIN), valuesDim(100)]);
+			.call(brush.move, [
+				valuesDim(BRUSH_WINDOW_DEFAULT_START),
+				valuesDim(BRUSH_WINDOW_DEFAULT_END)
+			]);
 	});
 	let chunkedData = $derived(
 		data.map((dataObject) => {

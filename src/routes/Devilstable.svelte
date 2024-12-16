@@ -71,9 +71,10 @@
 		})
 	);
 	let selection = $state({
-		start: 1,
-		end: 100
+		start: undefined,
+		end: undefined
 	});
+	$inspect(selection);
 	let detailData = $derived(
 		boolData.map(({ values, ...rest }) => ({
 			values: values.slice(selection.start - 1, selection.end),
