@@ -76,13 +76,13 @@
 		start: BRUSH_WINDOW_DEFAULT_START,
 		end: BRUSH_WINDOW_DEFAULT_END
 	});
-	$inspect(selection);
 	let detailData = $derived(
 		boolData.map(({ values, ...rest }) => ({
 			values: values.slice(selection.start - 1, selection.end),
 			...rest
 		}))
 	);
+	$inspect(selection);
 </script>
 
 <div class="card p-4 variant-filled-primary max-w-lg" data-popup="popupChips">
@@ -143,17 +143,18 @@
 	width={mobile ? width : brushDimension}
 	height={mobile ? brushDimension : height}
 	data={boolData.filter((d) => d.label !== summaryLabel)}
-	brushE={(/** @type {{ start: number; end: number; }} */ e) => {
+	bind:selection
+/>
+<!-- brushE={(/** @type {{ start: number; end: number; }} */ e) => {
 		selection.start = e.start;
 		selection.end = e.end;
-	}}
-/>
+	}} -->
 <Detail
 	{codices}
 	width={mobile ? width : width - brushDimensionWithSafetyPixel}
 	height={mobile ? height - brushDimension : height}
 	data={detailData}
-	bind:data_start={selection.start}
+	bind:selection
 />
 
 <style>

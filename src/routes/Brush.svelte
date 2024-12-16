@@ -26,7 +26,7 @@
 	 */
 	let gBrush = $state();
 
-	/** @type {{width?: number, height?: number, data?: {values: boolean[], label: string}[], brushE: function}} */
+	/** @type {{width?: number, height?: number, data?: {values: boolean[], label: string}[], selection: {start: number, end: number}}} */
 	let {
 		width = 400,
 		height = 150,
@@ -40,7 +40,7 @@
 				values: []
 			}
 		],
-		brushE
+		selection = $bindable()
 	} = $props();
 
 	let mobile = $derived(width > height);
@@ -99,31 +99,28 @@
 			.on('brush', (/** @type {{ selection: [number, number]; }} */ e) => {
 				const from = e.selection[0];
 				const to = e.selection[1];
-				if (Math.abs(from - to) <= DATA_MAX - DATA_MIN) {
-					const start = Math.round(valuesDim.invert(from));
-					const end = Math.round(valuesDim.invert(to));
 
-					brushE({ start, end });
+				// Update range in Details
+				if (Math.abs(from - to) <= DATA_MAX - DATA_MIN) {
+					selection.start = Math.round(valuesDim.invert(from));
+					selection.end = Math.round(valuesDim.invert(to));
 				}
 			})
 			.on('end', (/** @type {{ selection: [number, number]; }} */ e) => {
 				const from = e.selection[0];
 				const to = e.selection[1];
-				if (Math.abs(from - to) > DATA_MAX - DATA_MIN) {
-					const start = Math.round(valuesDim.invert(from));
-					const end = Math.round(valuesDim.invert(to));
 
-					brushE({ start, end });
+				// Update range in Details
+				if (Math.abs(from - to) > DATA_MAX - DATA_MIN) {
+					selection.start = Math.round(valuesDim.invert(from));
+					selection.end = Math.round(valuesDim.invert(to));
 				}
 			});
 	});
 	$effect(() => {
 		d3.select(gBrush)
 			.call(brush)
-			.call(brush.move, [
-				valuesDim(BRUSH_WINDOW_DEFAULT_START),
-				valuesDim(BRUSH_WINDOW_DEFAULT_END)
-			]);
+			.call(brush.move, [valuesDim(selection.start), valuesDim(selection.end)]);
 	});
 	let chunkedData = $derived(
 		data.map((dataObject) => {
