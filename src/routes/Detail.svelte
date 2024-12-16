@@ -3,9 +3,15 @@
 	import { computePosition, shift, flip, offset } from '@floating-ui/dom';
 	import { base } from '$app/paths';
 	import { summaryLabel } from '$lib/constants';
+	import {
+		DATA_MIN,
+		DATA_MAX,
+		BRUSH_WINDOW_DEFAULT_START,
+		BRUSH_WINDOW_DEFAULT_END
+	} from './Devilstable_DEFAULTS.json';
 
-	/** @type {{codices: any, width?: number, height?: number, data_start?: number, data?: {values: boolean[], label: string}[]}} */
-	let { codices, width = 400, height = 400, data_start = 1, data = [] } = $props();
+	/** @type {{codices: any, width?: number, height?: number,data?: {values: boolean[], label: string}[],  data_start?: number}} */
+	let { codices, width = 400, height = 400, data = [], data_start = $bindable() } = $props();
 	let marginTop = 30;
 	let marginRight = 0;
 	let marginBottom = 20;

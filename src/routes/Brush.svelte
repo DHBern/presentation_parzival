@@ -1,5 +1,11 @@
 <script>
 	import * as d3 from 'd3';
+	import {
+		DATA_MIN,
+		DATA_MAX,
+		BRUSH_WINDOW_DEFAULT_START,
+		BRUSH_WINDOW_DEFAULT_END
+	} from './Devilstable_DEFAULTS.json';
 
 	let marginTop = 20;
 	let marginRight = 0;
@@ -20,14 +26,10 @@
 	 */
 	let gBrush = $state();
 
-	/** @type {{width?: number, height?: number, DATA_MIN?: number, DATA_MAX?: number, data?: {values: boolean[], label: string}[], brushE: function}} */
+	/** @type {{width?: number, height?: number, data?: {values: boolean[], label: string}[], brushE: function}} */
 	let {
 		width = 400,
 		height = 150,
-		DATA_MIN = 1,
-		DATA_MAX = 827,
-		BRUSH_WINDOW_DEFAULT_START = 1,
-		BRUSH_WINDOW_DEFAULT_END = 100,
 		data = [
 			{
 				label: 'D',
