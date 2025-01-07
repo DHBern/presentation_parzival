@@ -73,11 +73,11 @@
 			// Scroll
 			if (event.deltaY > 0) {
 				// Scroll down
-				selection.end = Math.min(DATA_MAX, (selection.end += SCROLL_SPEED));
+				selection.end = Math.min(DATA_MAX, selection.end + SCROLL_SPEED);
 				selection.start = selection.end - delta;
 			} else {
 				// Scroll up
-				selection.start = Math.max(DATA_MIN, (selection.start -= SCROLL_SPEED));
+				selection.start = Math.max(DATA_MIN, selection.start - SCROLL_SPEED);
 				selection.end = selection.start + delta;
 			}
 		}

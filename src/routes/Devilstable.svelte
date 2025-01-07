@@ -82,7 +82,6 @@
 			...rest
 		}))
 	);
-	$inspect(selection);
 </script>
 
 <div class="card p-4 variant-filled-primary max-w-lg" data-popup="popupChips">
@@ -145,10 +144,6 @@
 	data={boolData.filter((d) => d.label !== summaryLabel)}
 	bind:selection
 />
-<!-- brushE={(/** @type {{ start: number; end: number; }} */ e) => {
-		selection.start = e.start;
-		selection.end = e.end;
-	}} -->
 <Detail
 	{codices}
 	width={mobile ? width : width - brushDimensionWithSafetyPixel}
