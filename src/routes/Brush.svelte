@@ -1,5 +1,11 @@
 <script>
 	import * as d3 from 'd3';
+	import {
+		DATA_MIN,
+		DATA_MAX,
+		BRUSH_WINDOW_DEFAULT_START,
+		BRUSH_WINDOW_DEFAULT_END
+	} from './Devilstable_DEFAULTS.json';
 
 	let marginTop = 20;
 	let marginRight = 0;
@@ -20,12 +26,10 @@
 	 */
 	let gBrush = $state();
 
-	/** @type {{width?: number, height?: number, DATA_MIN?: number, DATA_MAX?: number, data?: {values: boolean[], label: string}[], brushE: function}} */
+	/** @type {{width?: number, height?: number, data?: {values: boolean[], label: string}[], selection: {start: number, end: number}}} */
 	let {
 		width = 400,
 		height = 150,
-		DATA_MIN = 1,
-		DATA_MAX = 827,
 		data = [
 			{
 				label: 'D',
@@ -36,7 +40,7 @@
 				values: []
 			}
 		],
-		brushE
+		selection = $bindable()
 	} = $props();
 
 	let mobile = $derived(width > height);
@@ -95,28 +99,28 @@
 			.on('brush', (/** @type {{ selection: [number, number]; }} */ e) => {
 				const from = e.selection[0];
 				const to = e.selection[1];
-				if (Math.abs(from - to) <= 180) {
-					const start = Math.round(valuesDim.invert(from));
-					const end = Math.round(valuesDim.invert(to));
 
-					brushE({ start, end });
+				// Update range in Details
+				if (Math.abs(from - to) <= DATA_MAX - DATA_MIN) {
+					selection.start = Math.round(valuesDim.invert(from));
+					selection.end = Math.round(valuesDim.invert(to));
 				}
 			})
 			.on('end', (/** @type {{ selection: [number, number]; }} */ e) => {
 				const from = e.selection[0];
 				const to = e.selection[1];
-				if (Math.abs(from - to) > 180) {
-					const start = Math.round(valuesDim.invert(from));
-					const end = Math.round(valuesDim.invert(to));
 
-					brushE({ start, end });
+				// Update range in Details
+				if (Math.abs(from - to) > DATA_MAX - DATA_MIN) {
+					selection.start = Math.round(valuesDim.invert(from));
+					selection.end = Math.round(valuesDim.invert(to));
 				}
 			});
 	});
 	$effect(() => {
 		d3.select(gBrush)
 			.call(brush)
-			.call(brush.move, [valuesDim(DATA_MIN), valuesDim(100)]);
+			.call(brush.move, [valuesDim(selection.start), valuesDim(selection.end)]);
 	});
 	let chunkedData = $derived(
 		data.map((dataObject) => {

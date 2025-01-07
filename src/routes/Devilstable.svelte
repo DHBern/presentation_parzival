@@ -3,9 +3,11 @@
 	import Brush from './Brush.svelte';
 	import Detail from './Detail.svelte';
 	import { summaryLabel } from '$lib/constants';
-
-	const DATA_MAX = 827;
-
+	import {
+		DATA_MAX,
+		BRUSH_WINDOW_DEFAULT_START,
+		BRUSH_WINDOW_DEFAULT_END
+	} from './Devilstable_DEFAULTS.json';
 	const brushDimension = 200;
 	const brushDimensionWithSafetyPixel = brushDimension + 1; // fixes a glitch, where Brush and Detail don't fit next to each other on PageResize.
 
@@ -71,13 +73,14 @@
 		})
 	);
 	let selection = $state({
-		start: 1,
-		end: 100
+		start: BRUSH_WINDOW_DEFAULT_START,
+		end: BRUSH_WINDOW_DEFAULT_END
 	});
 	let detailData = $derived(
-		boolData.map((d) => {
-			return { label: d.label, values: d.values.slice(selection.start - 1, selection.end) };
-		})
+		boolData.map(({ values, ...rest }) => ({
+			values: values.slice(selection.start - 1, selection.end),
+			...rest
+		}))
 	);
 </script>
 
@@ -139,17 +142,14 @@
 	width={mobile ? width : brushDimension}
 	height={mobile ? brushDimension : height}
 	data={boolData.filter((d) => d.label !== summaryLabel)}
-	brushE={(/** @type {{ start: number; end: number; }} */ e) => {
-		selection.start = e.start;
-		selection.end = e.end;
-	}}
+	bind:selection
 />
 <Detail
 	{codices}
 	width={mobile ? width : width - brushDimensionWithSafetyPixel}
 	height={mobile ? height - brushDimension : height}
 	data={detailData}
-	data_start={selection.start}
+	bind:selection
 />
 
 <style>

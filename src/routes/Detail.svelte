@@ -3,9 +3,16 @@
 	import { computePosition, shift, flip, offset } from '@floating-ui/dom';
 	import { base } from '$app/paths';
 	import { summaryLabel } from '$lib/constants';
+	import {
+		DATA_MIN,
+		DATA_MAX,
+		SCROLL_SPEED,
+		ZOOM_INCREMENT,
+		ZOOM_MINIMUM_WINDOW_SIZE
+	} from './Devilstable_DEFAULTS.json';
 
-	/** @type {{codices: any, width?: number, height?: number, data_start?: number, data?: {values: boolean[], label: string}[]}} */
-	let { codices, width = 400, height = 400, data_start = 1, data = [] } = $props();
+	/** @type {{codices: any, width?: number, height?: number,data?: {values: boolean[], label: string}[],  selection: {start: number, end: number}}} */
+	let { codices, width = 400, height = 400, data = [], selection = $bindable() } = $props();
 	let marginTop = 30;
 	let marginRight = 0;
 	let marginBottom = 20;
@@ -37,6 +44,44 @@
 	 * @type {SVGElement}
 	 */
 	let svgElement = $state();
+
+	const handleWheel = (/** @type {{ deltaY: any; }} */ event) => {
+		event.preventDefault();
+
+		// Check if the CTRL key is held down during the scroll
+		const isZooming = event.ctrlKey;
+
+		let delta = selection.end - selection.start;
+
+		if (isZooming) {
+			// Zoom in
+			if (event.deltaY > 0) {
+				// Zoom out
+				selection.start = Math.max(DATA_MIN, selection.start - ZOOM_INCREMENT);
+				selection.end = Math.min(DATA_MAX, selection.end + ZOOM_INCREMENT);
+			} else {
+				// Zoom in
+				if (delta > ZOOM_MINIMUM_WINDOW_SIZE) {
+					selection.start = Math.max(DATA_MIN, selection.start + ZOOM_INCREMENT);
+					selection.end = Math.max(
+						selection.start + ZOOM_MINIMUM_WINDOW_SIZE,
+						Math.min(DATA_MAX, selection.end - ZOOM_INCREMENT)
+					);
+				}
+			}
+		} else {
+			// Scroll
+			if (event.deltaY > 0) {
+				// Scroll down
+				selection.end = Math.min(DATA_MAX, selection.end + SCROLL_SPEED);
+				selection.start = selection.end - delta;
+			} else {
+				// Scroll up
+				selection.start = Math.max(DATA_MIN, selection.start - SCROLL_SPEED);
+				selection.end = selection.start + delta;
+			}
+		}
+	};
 
 	const handleMouseMove = (/** @type {{ clientX: any; clientY: any; }} */ event) => {
 		mousePos = d3.pointer(event, svgElement);
@@ -117,27 +162,26 @@
 	};
 	let contigousData = $derived(
 		data.map((d) => {
-			if (d.label === 'fr') {
-				return d;
-			}
+			// skip for label 'fr'
+			if (d.label === 'fr') return d;
+
+			// init
 			let contiguousRanges = [];
-			let start = 0;
+			let start = null;
+
+			//
 			for (let i = 0; i < d.values.length; i++) {
-				if (d.values[i]) {
-					if (start === 0) {
-						// console.log(d.label, i, data_start);
-						start = i + data_start;
-					}
-				} else {
-					if (start !== 0) {
-						contiguousRanges.push([start, i + data_start - 1]);
-						start = 0;
-					}
+				if (d.values[i] && start === null) {
+					// start a new range
+					start = i + selection.start;
+				} else if (!d.values[i] && start !== null) {
+					contiguousRanges.push([start, i + selection.start - 1]);
+					start = null; // reset start
 				}
 			}
-			if (start !== 0) {
-				// console.log(d.label, start, d.values.length - 1 + data_start);
-				contiguousRanges.push([start, d.values.length - 1 + data_start]);
+			// if range is still open at the end
+			if (start !== null) {
+				contiguousRanges.push([start, d.values.length + selection.start - 1]);
 			}
 			return {
 				label: d.label,
@@ -158,14 +202,14 @@
 	let y = $derived(
 		d3.scaleLinear(
 			// Domain: from bottom to top: at the bottom is the last selected verse, at the top is the first selected verse
-			[data_start + data[0]?.values.length, data_start],
+			[selection.start + data[0]?.values.length, selection.start],
 			[height - marginBottom, marginTop]
 		)
 	);
 	let verse = $derived(Math.floor(y.invert(mousePos[1])));
 	let manuscript = $derived(
 		scaleBandInvert(x)(mousePos[0]) === 'fr'
-			? data.find((d) => d.label === 'fr')?.values[verse - data_start] || 'fr'
+			? data.find((d) => d.label === 'fr')?.values[verse - selection.start] || 'fr'
 			: scaleBandInvert(x)(mousePos[0])
 	);
 	// $inspect(contigousData);
@@ -220,6 +264,7 @@
 					});
 				}
 			})
+
 			.on('blur', (e) => {
 				const reference = e.currentTarget;
 				const popup =
@@ -263,7 +308,7 @@
 {/each}
 {#each data.find((d) => d.label === 'fr')?.values || [] as fraction, i}
 	{#if Array.isArray(fraction)}
-		{@const verse = i + data_start}
+		{@const verse = i + selection.start}
 		<div
 			class="card p-1 variant-filled-primary top-0 left-0 w-max absolute opacity-0"
 			bind:this={popupFractions[verse]}
@@ -282,6 +327,7 @@
 	{/if}
 {/each}
 <div
+	onwheel={handleWheel}
 	onmousemove={handleMouseMove}
 	onmouseleave={(_e) => {
 		floating.style.display = 'none';
@@ -300,7 +346,7 @@
 				{#each sigla.values as values, i}
 					{#if values}
 						{#if isNaN(values[1])}
-							{@const verseNumber = i + data_start}
+							{@const verseNumber = i + selection.start}
 							{#if values.length === 1}
 								<a
 									href={`${base}/textzeugen/${values[0]}/${verseNumber}`}
