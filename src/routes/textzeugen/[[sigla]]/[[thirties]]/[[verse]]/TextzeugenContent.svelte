@@ -155,7 +155,7 @@
 				Lade Seite...
 			{:then tpData}
 				<div
-					class="page"
+					class="page tei-content"
 					data-id={pageObject.id}
 					data-next={tpData.nextId}
 					data-previous={tpData.previousId}
@@ -195,7 +195,7 @@
 	{/if}
 </div>
 
-<style>
+<style lang="postcss">
 	.page {
 		:global(.once) {
 			-webkit-animation-iteration-count: 4;

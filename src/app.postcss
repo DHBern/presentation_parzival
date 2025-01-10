@@ -83,3 +83,63 @@ body {
 		}
 	}
 }
+
+.tei-content {
+	.sr {
+		color: green;
+	}
+	.del_sr {
+		color: #666;
+		@apply line-through;
+	}
+	.subst, .subst_sr {
+		.deleted {
+			color: #666;
+		}
+		color: green;
+	}
+	.subst_ls {
+		color: #8CFFF4;
+		.deleted {
+			color: #666;
+		}
+		.rasure {
+			@apply bg-[#666];
+		}
+	}
+	.red {
+		color: #F60;
+		@apply decoration-red-500;
+	}
+	.underline {
+		text-decoration: underline;
+	}
+	.marginalia {
+		@apply italic;
+		@apply ml-4;
+	}
+	.corr {
+		@apply italic;
+	}
+	.gap {
+		color: green;
+		@apply bg-[#9f9f9f];
+	}
+	.initial, .glory-initial {
+		@apply font-bold;
+		@apply text-2xl;
+		@apply text-red-500;
+	}
+	.glory-initial {
+		@apply bg-[gold];
+	}
+
+	.content:has(.versechange) {
+		&::after {
+			content: "\2195";
+			@apply inline;
+			@apply h-4;
+			@apply ml-2;
+		}
+	}
+}

@@ -74,14 +74,14 @@
 	use:setSyncedScroll
 >
 	{#each pages as page (page[0])}
-		<div class="thirty" use:addToObserver>
+		<div class="thirty tei-content" use:addToObserver>
 			{@html page[1]}
 		</div>
 		<hr class="!border-t-4 !border-primary-500" />
 	{/each}
 </div>
 
-<style>
+<style lang="postcss">
 	.thirty {
 		:global(.once) {
 			-webkit-animation-iteration-count: 4;

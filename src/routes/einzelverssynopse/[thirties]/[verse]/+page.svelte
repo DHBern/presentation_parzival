@@ -12,7 +12,7 @@
 
 <div class="container mx-auto p-4 flex flex-wrap justify-between gap-9">
 	<h1 class="h1 w-full">Verssynopse zu {thirties}.{verse}</h1>
-	<div>
+	<div class="tei-content">
 		<dl class="grid grid-cols-[auto_1fr] justify-between h-fit mb-4 w-fit font-mono">
 			<dt class="font-bold font-heading-token pr-4">Handschrift</dt>
 			<dd class="font-bold font-heading-token border-l-2 border-current pl-4">Wortlaut</dd>
