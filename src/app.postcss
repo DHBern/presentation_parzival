@@ -125,13 +125,13 @@ body {
 		color: green;
 		@apply bg-[#9f9f9f];
 	}
-	.initial, .glory-initial {
+	.initial, .glory-initial, .capital-initial {
 		@apply font-bold;
 		@apply text-2xl;
 		@apply text-red-500;
 	}
 
-	.majuscule {
+	.majuscule, .large-variant {
 		@apply font-bold;
 	}
 
@@ -145,6 +145,22 @@ body {
 			@apply inline;
 			@apply h-4;
 			@apply ml-2;
+		}
+	}
+
+	.not-executed {
+		@apply text-red-500;
+		&::before {
+			content: "\005B";
+			@apply text-on-surface-token;
+			@apply inline;
+			@apply h-4;
+		}
+		&::after {
+			content: "\005D";
+			@apply text-on-surface-token;
+			@apply inline;
+			@apply h-4;
 		}
 	}
 }
