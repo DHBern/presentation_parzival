@@ -6,15 +6,21 @@
 	import Datatable from './Datatable.svelte';
 	let docsAdded = $state(!!minisearch.documentCount);
 	let searchtext = $state('');
-	let searchResults = $derived.by(() => {
+	const asyncSearch = (
+		/** @type {import("minisearch").Query} */ query,
+		/** @type {import("minisearch").SearchOptions | undefined} */ config = {}
+	) => {
+		return new Promise((resolve) => {
+			const searchresults = minisearch.search(query, config);
+			resolve(searchresults);
+		});
+	};
+	let searchResults = $derived.by(async () => {
 		if (searchtext && docsAdded) {
 			console.log('searching');
 			const minisearchResults = minisearch.search(searchtext);
-			// derive sigla, thirties, verse from id
-			return minisearchResults.map((r) => {
-				const [, sigla, thirties, verse] = r.id.match(/([^_]+)_([^\.]+)\.(.+)/);
-				return { sigla, thirties, verse, content: r.content };
-			});
+			console.log(minisearchResults);
+			return await asyncSearch(searchtext);
 		}
 		console.log('no search results');
 		return [];
@@ -46,5 +52,9 @@
 	</label>
 </section>
 <section>
-	<Datatable {searchResults} />
+	{#await searchResults}
+		<p>Suche läuft...</p>
+	{:then r}
+		<Datatable searchResults={r} />
+	{/await}
 </section>
