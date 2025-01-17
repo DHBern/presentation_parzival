@@ -1,5 +1,6 @@
 <script>
 	import { TableHandler, Datatable, ThSort, ThFilter } from '@vincjo/datatables';
+	import { base } from '$app/paths';
 	let { searchResults } = $props();
 	const table = new TableHandler(searchResults, { rowsPerPage: 100 });
 	$effect(() => {
@@ -29,7 +30,10 @@
 					<td>{row?.sigla}</td>
 					<td>{row?.d}</td>
 					<td>{row?.verse}</td>
-					<td>{row?.content}</td>
+					<td
+						><a href={`${base}/textzeugen/${row.sigla}/${row.d}/${row.verse}`}>{row?.content}</a
+						></td
+					>
 				</tr>
 			{/each}
 		</tbody>
