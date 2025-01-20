@@ -35,7 +35,7 @@
 			</tr>
 		</thead>
 		<tbody>
-			{#each table?.rows as row}
+			{#each table?.rows as row (row.id)}
 				<tr>
 					<td class="table-cell-fit">{row?.humanReadableSigil}</td>
 					<td class="table-cell-fit">{row?.d}</td>

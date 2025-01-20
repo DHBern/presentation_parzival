@@ -24,6 +24,7 @@
 
 	const search = async (/** @type {import("minisearch").Query} */ query) => {
 		let results = minisearch.search(query, { prefix: true });
+		console.log(results);
 		results = await Promise.all(
 			results.map(async (r) => {
 				r.humanReadableSigil = await siglaToHandle(r.sigla);
