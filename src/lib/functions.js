@@ -23,3 +23,17 @@ export async function generateEntries(sigla) {
 		return returnArray;
 	}
 }
+
+/**
+ * @param {string} handle
+ */
+export async function siglaToHandle(handle) {
+	const { fragments, codices } = await fetch(`${api}/json/metadata-nomenclature.json`).then((r) =>
+		r.json()
+	);
+	if (handle.includes('fr')) {
+		return fragments.find(({ handle: s }) => s === handle).sigil;
+	} else {
+		return codices.find(({ handle: s }) => s === handle).sigil;
+	}
+}
