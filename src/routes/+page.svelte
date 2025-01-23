@@ -4,7 +4,6 @@
 	import Devilstable from './Devilstable.svelte';
 	import { base } from '$app/paths';
 
-	
 	/** @type {{data: import('./$types').PageData}} */
 	let { data } = $props();
 	let { tableData } = $derived(data);
@@ -12,7 +11,7 @@
 	let tableHeight = $state(0);
 </script>
 
-<div class="container mx-auto grid grid-cols-[repeat(auto-fit,minmax(366px,1fr))] gap-6">
+<div class="container mx-auto grid grid-cols-[repeat(auto-fit,minmax(400px,1fr))] gap-6">
 	<section class="col-span-full">
 		<div class="mt-20 mb-4">
 			<h1 class="h1">Wolfram von Eschenbach, ›Parzival‹: Digitale Edition</h1>
@@ -137,11 +136,6 @@
 		<div>
 			<TextzeugenSelector sigla={[...data.codices, ...data.fragments]} />
 		</div>
-	</section>
-	<section>
-		<h2 class="h2 my-10" id="suche">Suche</h2>
-		<p class="my-5">Geben Sie einen Suchbegriff ein, um in der digitalen Edition zu suchen.</p>
-		<input type="text" placeholder="Suchbegriff" class="input" />
 	</section>
 	<section class="col-span-full">
 		<h2 class="h2 my-10" id="tabelle">Edition nach Dreißigern</h2>
