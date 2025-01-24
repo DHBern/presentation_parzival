@@ -6,7 +6,7 @@
 	import Datatable from './Datatable.svelte';
 	import { searchIndexFassung, searchIndexWitness } from '$lib/data.svelte';
 	import { RadioGroup, RadioItem, SlideToggle } from '@skeletonlabs/skeleton';
-	let docsAdded = $state(!!minisearch.documentCount);
+	let hasDocs = $state(!!minisearch.documentCount);
 	let searchtext = $state('');
 	let exact = $state(true);
 	let korpus = $state('fassungen');
@@ -18,10 +18,10 @@
 	 */
 	let searchResults = $state(new Promise((resolve) => resolve([])));
 	onMount(() => {
-		if (!minisearch.documentCount) {
+		if (!hasDocs) {
 			docs.then((d) => {
 				minisearch.addAllAsync(d, { chunkSize: 50000 }).then(() => {
-					docsAdded = true;
+					hasDocs = true;
 				});
 			});
 		}
@@ -29,15 +29,15 @@
 
 	const changeKorpus = () => {
 		minisearch.removeAll();
-		docsAdded = false;
+		hasDocs = false;
 		docs.then((d) => {
 			minisearch.addAllAsync(d, { chunkSize: 50000 }).then(() => {
-				docsAdded = true;
+				hasDocs = true;
 			});
 		});
 	};
 
-	const search = async (/** @type {import("minisearch").Query} */ query) => {
+	const handleSearch = async (/** @type {import("minisearch").Query} */ query) => {
 		let results = minisearch.search(query, { fuzzy: exact ? 0 : 0.3 });
 		results = await Promise.all(
 			results.map(async (r) => {
@@ -113,7 +113,7 @@
 	<form
 		class="grid grid-cols-[4fr,1fr] gap-1 max-w-screen-md"
 		onsubmit={() => {
-			searchResults = search(searchtext);
+			searchResults = handleSearch(searchtext);
 		}}
 	>
 		<label transition:slide>
@@ -124,7 +124,7 @@
 				bind:value={searchtext}
 			/>
 		</label>
-		{#if docsAdded}
+		{#if hasDocs}
 			<button class="btn variant-filled">Suchen</button>
 		{:else}
 			<button class="btn variant-filled-warning" disabled

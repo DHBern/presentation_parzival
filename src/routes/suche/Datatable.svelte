@@ -1,5 +1,5 @@
 <script>
-	import { TableHandler, Datatable, ThSort, ThFilter } from '@vincjo/datatables';
+	import { TableHandler, ThSort } from '@vincjo/datatables';
 	import { base } from '$app/paths';
 	let { searchResults } = $props();
 	const table = new TableHandler(searchResults, { rowsPerPage: 100 });
