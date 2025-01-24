@@ -1,10 +1,9 @@
 import { api } from '$lib/constants';
+import { metadata } from '$lib/data.svelte.js';
 
 /** @type {import('./$types').PageLoad} */
 export async function load({ fetch }) {
-	const { codices, fragments } = await fetch(`${api}/json/metadata-nomenclature.json`).then((r) =>
-		r.json()
-	);
+	const { codices, fragments } = await metadata;
 	return {
 		tableData: await fetch(`${api}/json/contiguous_ranges.json`).then((res) => res.json()),
 		codices,

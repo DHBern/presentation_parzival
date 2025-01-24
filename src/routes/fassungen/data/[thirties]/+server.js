@@ -1,11 +1,10 @@
 import { json } from '@sveltejs/kit';
-import { api, teipb } from '$lib/constants';
+import { teipb } from '$lib/constants';
+import { metadata } from '$lib/data.svelte';
 
 /** @type {import('./$types').RequestHandler} */
 export async function GET({ params, fetch }) {
-	const { hyparchetypes } = await fetch(`${api}/json/metadata-nomenclature.json`).then((r) =>
-		r.json()
-	);
+	const { hyparchetypes } = await metadata;
 	const teipbData = hyparchetypes.map(async (h) => {
 		const r = await fetch(
 			`${teipb}/parts/syn${params.thirties}.xml/json?&view=single&odd=parzival-verse.odd&xpath=//div[@subtype=%27${h.handle.replace('*', '')}%27 and @type=%27Textteil%27]`

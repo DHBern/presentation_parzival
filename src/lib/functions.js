@@ -1,4 +1,4 @@
-import { api } from '$lib/constants';
+import { metadata } from './data.svelte.js';
 
 /**
  * Generate all 827 Dreissiger with 1-30 verses for all sigla
@@ -28,9 +28,7 @@ export async function generateEntries(sigla) {
  * @param {string} handle
  */
 export async function siglaToHandle(handle) {
-	const { fragments, codices } = await fetch(`${api}/json/metadata-nomenclature.json`).then((r) =>
-		r.json()
-	);
+	const { fragments, codices } = await metadata;
 	if (handle.includes('fr')) {
 		return fragments.find(({ handle: s }) => s === handle).sigil;
 	} else {
