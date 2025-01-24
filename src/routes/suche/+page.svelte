@@ -4,23 +4,38 @@
 	import { slide } from 'svelte/transition';
 	import { processTerm, siglaToHandle } from '$lib/functions';
 	import Datatable from './Datatable.svelte';
-	import { searchIndex } from '$lib/data.svelte';
-	import { SlideToggle } from '@skeletonlabs/skeleton';
+	import { searchIndexFassung, searchIndexWitness } from '$lib/data.svelte';
+	import { RadioGroup, RadioItem, SlideToggle } from '@skeletonlabs/skeleton';
 	let docsAdded = $state(!!minisearch.documentCount);
 	let searchtext = $state('');
 	let exact = $state(true);
+	let korpus = $state('fassungen');
+	let docs = $derived.by(async () =>
+		korpus === 'fassungen' ? (await searchIndexFassung).docs : (await searchIndexWitness).docs
+	);
 	/**
 	 * @type {Promise<import("minisearch").SearchResult[]>}
 	 */
 	let searchResults = $state([]);
-	onMount(async () => {
+	onMount(() => {
 		if (!minisearch.documentCount) {
-			const { docs } = await searchIndex;
-			minisearch.addAllAsync(docs, { chunkSize: 50000 }).then(() => {
-				docsAdded = true;
+			docs.then((d) => {
+				minisearch.addAllAsync(d, { chunkSize: 50000 }).then(() => {
+					docsAdded = true;
+				});
 			});
 		}
 	});
+
+	const changeKorpus = () => {
+		minisearch.removeAll();
+		docsAdded = false;
+		docs.then((d) => {
+			minisearch.addAllAsync(d, { chunkSize: 50000 }).then(() => {
+				docsAdded = true;
+			});
+		});
+	};
 
 	const search = async (/** @type {import("minisearch").Query} */ query) => {
 		let results = minisearch.search(query, { fuzzy: exact ? 0 : 0.3 });
@@ -46,14 +61,14 @@
 	};
 
 	export const snapshot = {
-		capture: () => ({ searchtext, exact, searchResults }),
+		capture: () => ({ searchtext, exact, searchResults, korpus }),
 		restore: (v) => {
 			searchtext = v.searchtext;
 			exact = v.exact;
 			searchResults = v.searchResults;
+			korpus = v.korpus;
 		}
 	};
-	$inspect(searchtext);
 </script>
 
 <section class="container mx-auto typography">
@@ -66,6 +81,25 @@
 		<SlideToggle active="bg-primary-500" name="exact" bind:checked={exact}
 			>{exact ? 'exakte' : 'fuzzy'} Suche</SlideToggle
 		>
+		Korpus:
+		<RadioGroup active="variant-filled-secondary">
+			<RadioItem
+				bind:group={korpus}
+				name="korpus"
+				value={'fassungen'}
+				onchange={() => changeKorpus()}
+			>
+				Fassungen
+			</RadioItem>
+			<RadioItem
+				bind:group={korpus}
+				name="korpus"
+				value={'textzeugen'}
+				onchange={() => changeKorpus()}
+			>
+				Textzeugen
+			</RadioItem>
+		</RadioGroup>
 	</div>
 </section>
 <section class="container mx-auto">
