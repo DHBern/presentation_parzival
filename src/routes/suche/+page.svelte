@@ -1,15 +1,16 @@
 <script>
 	import { onMount } from 'svelte';
 	import { minisearch } from '$lib/minisearch.svelte';
-	import { api } from '$lib/constants';
 	import { slide } from 'svelte/transition';
-	import { siglaToHandle } from '$lib/functions';
+	import { processTerm, siglaToHandle } from '$lib/functions';
 	import Datatable from './Datatable.svelte';
 	import { searchIndex } from '$lib/data.svelte';
+	import { SlideToggle } from '@skeletonlabs/skeleton';
 	let docsAdded = $state(!!minisearch.documentCount);
 	let searchtext = $state('');
+	let exact = $state(true);
 	/**
-	 * @type {import("minisearch").SearchResult[]}
+	 * @type {Promise<import("minisearch").SearchResult[]>}
 	 */
 	let searchResults = $state([]);
 	onMount(async () => {
@@ -22,7 +23,7 @@
 	});
 
 	const search = async (/** @type {import("minisearch").Query} */ query) => {
-		let results = minisearch.search(query, { prefix: true });
+		let results = minisearch.search(query, { fuzzy: exact ? 0 : 0.3 });
 		results = await Promise.all(
 			results.map(async (r) => {
 				r.humanReadableSigil = await siglaToHandle(r.sigla);
@@ -31,7 +32,7 @@
 				r.content = r.content
 					.split(' ')
 					.map((c) => {
-						if (matches.includes(c.toLowerCase())) {
+						if (matches.includes(processTerm(c))) {
 							return `<strong>${c}</strong>`;
 						}
 						return c;
@@ -46,8 +47,16 @@
 </script>
 
 <section class="container mx-auto typography">
-	<h1>Suche</h1>
-	<p>Ein einleitender Text zur Suche</p>
+	<div>
+		<h1>Suche</h1>
+		<p>Ein einleitender Text zur Suche</p>
+	</div>
+	<div>
+		<h2>Suchoptionen</h2>
+		<SlideToggle active="bg-primary-500" name="exact" bind:checked={exact}
+			>{exact ? 'exakte' : 'fuzzy'} Suche</SlideToggle
+		>
+	</div>
 </section>
 <section class="container mx-auto">
 	<form
@@ -79,6 +88,8 @@
 	{:then r}
 		{#if r.length != 0}
 			<Datatable searchResults={r} />
+		{:else}
+			<p>Keine Ergebnisse</p>
 		{/if}
 	{/await}
 </section>
