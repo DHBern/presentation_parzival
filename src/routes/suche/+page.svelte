@@ -28,6 +28,15 @@
 		results = await Promise.all(
 			results.map(async (r) => {
 				r.humanReadableSigil = await siglaToHandle(r.sigla);
+				const matches = Object.keys(r.match);
+				const pos = r.content.toLowerCase().indexOf(matches[0]);
+				//split content at pos and join with bold match
+				r.content =
+					r.content.slice(0, pos) +
+					'<b>' +
+					r.content.slice(pos, pos + matches[0].length) +
+					'</b>' +
+					r.content.slice(pos + matches[0].length);
 				return r;
 			})
 		);
