@@ -2,7 +2,7 @@
 	import { onMount } from 'svelte';
 	import { minisearch } from '$lib/minisearch.svelte';
 	import { slide } from 'svelte/transition';
-	import { processTerm, siglaToHandle } from '$lib/functions';
+	import { processTerm, siglaFromHandle } from '$lib/functions';
 	import Datatable from './Datatable.svelte';
 	import { searchIndexFassung, searchIndexWitness } from '$lib/data.svelte';
 	import { RadioGroup, RadioItem, SlideToggle } from '@skeletonlabs/skeleton';
@@ -41,7 +41,7 @@
 		let results = minisearch.search(query, { fuzzy: exact ? 0 : 0.3 });
 		results = await Promise.all(
 			results.map(async (r) => {
-				r.humanReadableSigil = await siglaToHandle(r.sigla);
+				r.humanReadableSigil = await siglaFromHandle(r.sigla);
 				const matches = Object.keys(r.match);
 				//Mark all matches in the content
 				r.content = r.content

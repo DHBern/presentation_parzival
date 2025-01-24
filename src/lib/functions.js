@@ -27,7 +27,7 @@ export async function generateEntries(sigla) {
 /**
  * @param {string} handle
  */
-export async function siglaToHandle(handle) {
+export async function siglaFromHandle(handle) {
 	const { fragments, codices } = await metadata;
 	if (handle.includes('fr')) {
 		return fragments.find(({ handle: s }) => s === handle).sigil;
