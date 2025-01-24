@@ -1,11 +1,13 @@
 import { metadata } from './data.svelte.js';
+import { api } from './constants.js';
 
 /**
  * Generate all 827 Dreissiger with 1-30 verses for all sigla
  * @param {boolean} sigla
- * @returns {Array<{ sigla?: string, thirties: string, verse?: string }>}
+ * @returns {Promise<Array<{ sigla?: string, thirties: string, verse?: string }>>}
  */
 export async function generateEntries(sigla) {
+	/** @type {{verses: {thirties: string, verse: string}[]}} */
 	const { verses } = await fetch(`${api}/json/metadata-ms-verses.json`).then((r) => r.json());
 	if (sigla) {
 		return verses;
@@ -28,11 +30,12 @@ export async function generateEntries(sigla) {
  * @param {string} handle
  */
 export async function siglaFromHandle(handle) {
+	/**@type {{fragments: {handle: String, sigil: String}[], codices: {handle: String, sigil: String}[]}} */
 	const { fragments, codices } = await metadata;
 	if (handle.includes('fr')) {
-		return fragments.find(({ handle: s }) => s === handle).sigil;
+		return fragments.find(({ handle: s }) => s === handle)?.sigil;
 	} else {
-		return codices.find(({ handle: s }) => s === handle).sigil;
+		return codices.find(({ handle: s }) => s === handle)?.sigil;
 	}
 }
 
