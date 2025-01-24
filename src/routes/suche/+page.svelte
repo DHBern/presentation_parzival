@@ -44,6 +44,16 @@
 		);
 		return results;
 	};
+
+	export const snapshot = {
+		capture: () => ({ searchtext, exact, searchResults }),
+		restore: (v) => {
+			searchtext = v.searchtext;
+			exact = v.exact;
+			searchResults = v.searchResults;
+		}
+	};
+	$inspect(searchtext);
 </script>
 
 <section class="container mx-auto typography">
