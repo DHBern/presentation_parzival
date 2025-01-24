@@ -5,6 +5,7 @@
 	import { slide } from 'svelte/transition';
 	import { siglaToHandle } from '$lib/functions';
 	import Datatable from './Datatable.svelte';
+	import { searchIndex } from '$lib/data.svelte';
 	let docsAdded = $state(!!minisearch.documentCount);
 	let searchtext = $state('');
 	/**
@@ -13,10 +14,8 @@
 	let searchResults = $state([]);
 	onMount(async () => {
 		if (!minisearch.documentCount) {
-			console.log('fetching and adding docs');
-			const { docs } = await fetch(`${api}/json/search-index.json`).then((r) => r.json());
+			const { docs } = await searchIndex;
 			minisearch.addAllAsync(docs, { chunkSize: 50000 }).then(() => {
-				console.log('all documents added');
 				docsAdded = true;
 			});
 		}
@@ -24,19 +23,21 @@
 
 	const search = async (/** @type {import("minisearch").Query} */ query) => {
 		let results = minisearch.search(query, { prefix: true });
-		console.log(results);
 		results = await Promise.all(
 			results.map(async (r) => {
 				r.humanReadableSigil = await siglaToHandle(r.sigla);
 				const matches = Object.keys(r.match);
-				const pos = r.content.toLowerCase().indexOf(matches[0]);
-				//split content at pos and join with bold match
-				r.content =
-					r.content.slice(0, pos) +
-					'<b>' +
-					r.content.slice(pos, pos + matches[0].length) +
-					'</b>' +
-					r.content.slice(pos + matches[0].length);
+				//Mark all matches in the content
+				r.content = r.content
+					.split(' ')
+					.map((c) => {
+						if (matches.includes(c.toLowerCase())) {
+							return `<strong>${c}</strong>`;
+						}
+						return c;
+					})
+					.join(' ');
+
 				return r;
 			})
 		);

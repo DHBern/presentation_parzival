@@ -41,9 +41,9 @@
 					<td class="table-cell-fit">{row?.d}</td>
 					<td class="table-cell-fit">{row?.verse}</td>
 					<td>
-						<a href={`${base}/textzeugen/${row.sigla}/${row.d}/${row.verse}`}
-							>{@html row?.content}</a
-						>
+						<a href={`${base}/textzeugen/${row.sigla}/${row.d}/${row.verse}`}>
+							{@html row?.content}
+						</a>
 					</td>
 				</tr>
 			{/each}
