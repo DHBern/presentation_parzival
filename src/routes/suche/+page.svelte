@@ -16,7 +16,7 @@
 	/**
 	 * @type {Promise<import("minisearch").SearchResult[]>}
 	 */
-	let searchResults = $state([]);
+	let searchResults = $state(new Promise((resolve) => resolve([])));
 	onMount(() => {
 		if (!minisearch.documentCount) {
 			docs.then((d) => {
@@ -46,7 +46,7 @@
 				//Mark all matches in the content
 				r.content = r.content
 					.split(' ')
-					.map((c) => {
+					.map((/** @type {string} */ c) => {
 						if (matches.includes(processTerm(c))) {
 							return `<strong>${c}</strong>`;
 						}
@@ -71,35 +71,42 @@
 	};
 </script>
 
-<section class="container mx-auto typography">
+<section class="container mx-auto typography grid grid-cols-2 my-4 gap-8">
 	<div>
 		<h1>Suche</h1>
-		<p>Ein einleitender Text zur Suche</p>
+		<p>
+			Durchsuchen Sie hier den kompletten Textkopus des Parzival. Standardmässig durchsuchen Sie die
+			Fassungsverse und Ihnen werden nur genaue Treffer gezeigt. Dabei wurden einige
+			Normalisierungen durchgeführt, so dass Ligaturen und andere Sonderformen auch in den Suchen
+			gefunden werden. Die Suche nach Spigel enthält so zum Beispiel auch Treffer mit Schaft-S
+			(ſpigel).
+		</p>
 	</div>
 	<div>
-		<h2>Suchoptionen</h2>
-		<SlideToggle active="bg-primary-500" name="exact" bind:checked={exact}
-			>{exact ? 'exakte' : 'fuzzy'} Suche</SlideToggle
-		>
-		Korpus:
-		<RadioGroup active="variant-filled-secondary">
-			<RadioItem
-				bind:group={korpus}
-				name="korpus"
-				value={'fassungen'}
-				onchange={() => changeKorpus()}
+		<h2 class="h2">Suchoptionen</h2>
+		<div class="flex gap-2 items-center">
+			<SlideToggle active="bg-primary-500" name="exact" bind:checked={exact}
+				>{exact ? 'exakte' : 'fuzzy'} Suche</SlideToggle
 			>
-				Fassungen
-			</RadioItem>
-			<RadioItem
-				bind:group={korpus}
-				name="korpus"
-				value={'textzeugen'}
-				onchange={() => changeKorpus()}
-			>
-				Textzeugen
-			</RadioItem>
-		</RadioGroup>
+			<RadioGroup active="variant-filled-primary">
+				<RadioItem
+					bind:group={korpus}
+					name="korpus"
+					value={'fassungen'}
+					onchange={() => changeKorpus()}
+				>
+					Fassungen
+				</RadioItem>
+				<RadioItem
+					bind:group={korpus}
+					name="korpus"
+					value={'textzeugen'}
+					onchange={() => changeKorpus()}
+				>
+					Textzeugen
+				</RadioItem>
+			</RadioGroup>
+		</div>
 	</div>
 </section>
 <section class="container mx-auto">
