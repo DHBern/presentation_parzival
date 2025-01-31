@@ -1,4 +1,4 @@
-import { api } from '$lib/constants';
+import { metadata } from './data.svelte.js';
 
 /**
  * Generate all 827 Dreissiger with 1-30 verses for all sigla
