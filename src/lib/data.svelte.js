@@ -5,8 +5,8 @@ export const metadata = $state(
 );
 
 export const searchIndexWitness = $state(
-	fetch(`${api}/json/search-index.json`).then((r) => r.json())
+	fetch(`${api}/json/search-index-transkript.json`).then((r) => r.json())
 );
 export const searchIndexFassung = $state(
-	fetch(`${api}/json/search-index.json`).then((r) => r.json())
+	fetch(`${api}/json/search-index-fassung.json`).then((r) => r.json())
 );
