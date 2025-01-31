@@ -1,7 +1,7 @@
 <script>
 	import { TableHandler, ThSort } from '@vincjo/datatables';
 	import { base } from '$app/paths';
-	let { searchResults } = $props();
+	let { searchResults, korpus } = $props();
 	const table = new TableHandler(searchResults, { rowsPerPage: 100 });
 	let filter = [
 		table.createFilter('humanReadableSigil'),
@@ -41,9 +41,15 @@
 					<td class="table-cell-fit">{row?.d}</td>
 					<td class="table-cell-fit">{row?.verse}</td>
 					<td>
-						<a href={`${base}/textzeugen/${row.sigla}/${row.d}/${row.verse}`}>
-							{@html row?.content}
-						</a>
+						{#if korpus === 'textzeugen'}
+							<a href={`${base}/textzeugen/${row.sigla}/${row.d}/${row.verse}`}>
+								{@html row?.content}
+							</a>
+						{:else}
+							<a href={`${base}/fassungen/${row.d}`}>
+								{@html row?.content}
+							</a>
+						{/if}
 					</td>
 				</tr>
 			{/each}

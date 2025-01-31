@@ -41,7 +41,7 @@
 		let results = minisearch.search(query, { fuzzy: exact ? 0 : 0.3 });
 		results = await Promise.all(
 			results.map(async (r) => {
-				r.humanReadableSigil = await siglaFromHandle(r.sigla);
+				r.humanReadableSigil = r.sigla.includes('*') ? r.sigla : await siglaFromHandle(r.sigla);
 				const matches = Object.keys(r.match);
 				//Mark all matches in the content
 				r.content = r.content
@@ -138,7 +138,7 @@
 		<p>Suche läuft...</p>
 	{:then r}
 		{#if r.length != 0}
-			<Datatable searchResults={r} />
+			<Datatable searchResults={r} {korpus} />
 		{:else}
 			<p>Keine Ergebnisse</p>
 		{/if}
