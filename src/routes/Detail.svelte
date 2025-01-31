@@ -11,6 +11,8 @@
 		ZOOM_MINIMUM_WINDOW_SIZE
 	} from './Devilstable_DEFAULTS.json';
 
+	import { siglaFromHandle } from '$lib/functions';
+
 	/** @type {{codices: any, width?: number, height?: number,data?: {values: boolean[], label: string}[],  selection: {start: number, end: number}}} */
 	let { codices, width = 400, height = 400, data = [], selection = $bindable() } = $props();
 	let marginTop = 30;
@@ -212,7 +214,6 @@
 			? data.find((d) => d.label === 'fr')?.values[verse - selection.start] || 'fr'
 			: scaleBandInvert(x)(mousePos[0])
 	);
-	// $inspect(contigousData);
 	$effect(() => {
 		d3.select(gy)
 			.call(
@@ -285,17 +286,24 @@
 >
 	{#if Array.isArray(manuscript)}
 		<ul>
-			{#each manuscript as sigla}
+			{#each manuscript as handle}
 				<li>
-					<a href={`${base}/textzeugen/${sigla}/${verse}`} class="hover:text-secondary-900">
-						{sigla}
-						{verse}
-					</a>
+					{#await siglaFromHandle(String(handle)) then sigla}
+						<a href={`${base}/textzeugen/${handle}/${verse}`} class="hover:text-secondary-900">
+							{sigla}: {verse}
+						</a>
+					{/await}
 				</li>
 			{/each}
 		</ul>
+	{:else if manuscript === 'Fassungen'}
+		<p>Dreißiger {verse}</p>
+	{:else if manuscript === 'fr'}
+		<p>fr: {verse}</p>
 	{:else}
-		<p>{manuscript} {verse}</p>
+		{#await siglaFromHandle(String(manuscript)) then sigla}
+			<p>{sigla}: {verse}</p>
+		{/await}
 	{/if}
 </div>
 {#each data.map((d) => d.label) as label}

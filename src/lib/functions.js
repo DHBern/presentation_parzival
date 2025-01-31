@@ -1,4 +1,5 @@
 import { metadata } from './data.svelte.js';
+import { api } from './constants.js';
 
 /**
  * Generate all 827 Dreissiger with 1-30 verses for all sigla
@@ -30,8 +31,8 @@ export async function generateEntries(sigla) {
 export async function siglaFromHandle(handle) {
 	const { fragments, codices } = await metadata;
 	if (handle.includes('fr')) {
-		return fragments.find(({ handle: s }) => s === handle).sigil;
+		return fragments.find(({ handle: s }) => s === handle)?.sigil;
 	} else {
-		return codices.find(({ handle: s }) => s === handle).sigil;
+		return codices.find(({ handle: s }) => s === handle)?.sigil;
 	}
 }
