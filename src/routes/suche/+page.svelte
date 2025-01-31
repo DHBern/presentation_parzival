@@ -65,7 +65,9 @@
 		restore: (v) => {
 			searchtext = v.searchtext;
 			exact = v.exact;
-			searchResults = v.searchResults;
+			searchResults = Array.isArray(v.searchResults)
+				? v.searchResults
+				: new Promise((resolve) => resolve([]));
 			korpus = v.korpus;
 		}
 	};
