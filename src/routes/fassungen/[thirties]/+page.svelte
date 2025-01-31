@@ -11,54 +11,54 @@
 		 */
 		pages = $state([[], [], [], []]);
 		/**
-		 * @type {string[]}
+		 * @type {Number[]}
 		 */
 		thirties = [];
 
-		fetchPage = async (/** @type {string} */ page) => {
+		fetchPage = async (/** @type {Number} */ page) => {
 			if (!this.thirties.length) {
-				let [d, m, G, T] = await fetch(`${base}/fassungen/data/${Number(page) - 1}`).then((r) =>
-					r.json()
-				);
-				this.pages[0].push([Number(page) - 1, d]);
-				this.pages[1].push([Number(page) - 1, m]);
-				this.pages[2].push([Number(page) - 1, G]);
-				this.pages[3].push([Number(page) - 1, T]);
-				this.thirties.push(String(Number(page) - 1));
+				let d, m, G, T;
+				if (page - 1 !== 0) {
+					[d, m, G, T] = await fetch(`${base}/fassungen/data/${page - 1}`).then((r) => r.json());
+					this.pages[0].push([page - 1, d]);
+					this.pages[1].push([page - 1, m]);
+					this.pages[2].push([page - 1, G]);
+					this.pages[3].push([page - 1, T]);
+					this.thirties.push(page - 1);
+				}
 				[d, m, G, T] = await fetch(`${base}/fassungen/data/${page}`).then((r) => r.json());
-				this.pages[0].push([Number(page), d]);
-				this.pages[1].push([Number(page), m]);
-				this.pages[2].push([Number(page), G]);
-				this.pages[3].push([Number(page), T]);
+				this.pages[0].push([page, d]);
+				this.pages[1].push([page, m]);
+				this.pages[2].push([page, G]);
+				this.pages[3].push([page, T]);
 				this.thirties.push(page);
-				[d, m, G, T] = await fetch(`${base}/fassungen/data/${Number(page) + 1}`).then((r) =>
-					r.json()
-				);
-				this.pages[0].push([Number(page) + 1, d]);
-				this.pages[1].push([Number(page) + 1, m]);
-				this.pages[2].push([Number(page) + 1, G]);
-				this.pages[3].push([Number(page) + 1, T]);
-				this.thirties.push(String(Number(page) + 1));
+				if (page !== 827) {
+					[d, m, G, T] = await fetch(`${base}/fassungen/data/${page + 1}`).then((r) => r.json());
+					this.pages[0].push([page + 1, d]);
+					this.pages[1].push([page + 1, m]);
+					this.pages[2].push([page + 1, G]);
+					this.pages[3].push([page + 1, T]);
+					this.thirties.push(page + 1);
+				}
 			} else {
-				if (Number(page) < Number(this.thirties[0])) {
-					// console.log('fetching before');
+				if (page < Number(this.thirties[0])) {
 					let [d, m, G, T] = await fetch(`${base}/fassungen/data/${page}`).then((r) => r.json());
-					this.pages[0].unshift([Number(page), d]);
-					this.pages[1].unshift([Number(page), m]);
-					this.pages[2].unshift([Number(page), G]);
-					this.pages[3].unshift([Number(page), T]);
+					this.pages[0].unshift([page, d]);
+					this.pages[1].unshift([page, m]);
+					this.pages[2].unshift([page, G]);
+					this.pages[3].unshift([page, T]);
 					this.thirties.unshift(page);
-				} else if (Number(page) > Number(this.thirties[this.thirties.length - 1])) {
+				} else if (page > Number(this.thirties[this.thirties.length - 1])) {
 					let [d, m, G, T] = await fetch(`${base}/fassungen/data/${page}`).then((r) => r.json());
-					this.pages[0].push([Number(page), d]);
-					this.pages[1].push([Number(page), m]);
-					this.pages[2].push([Number(page), G]);
-					this.pages[3].push([Number(page), T]);
+					this.pages[0].push([page, d]);
+					this.pages[1].push([page, m]);
+					this.pages[2].push([page, G]);
+					this.pages[3].push([page, T]);
 					this.thirties.push(page);
-				} else if (Number(page) === Number(this.thirties[0])) {
-					this.fetchPage(String(Number(page) - 1));
-				} else if (Number(page) === Number(this.thirties[this.thirties.length - 1])) {
-					this.fetchPage(String(Number(page) + 1));
+				} else if (page === Number(this.thirties[0]) && page !== 1) {
+					this.fetchPage(page - 1);
+				} else if (page === Number(this.thirties[this.thirties.length - 1]) && page !== 827) {
+					this.fetchPage(page + 1);
 				}
 			}
 		};
@@ -67,7 +67,7 @@
 	let localPages = new localPageClass();
 
 	$effect(() => {
-		localPages.fetchPage(data.thirties);
+		localPages.fetchPage(Number(data.thirties));
 	});
 	let scrolltop = $state(0);
 	let synchro = $state(true);
@@ -85,8 +85,8 @@
 		class="grid grid-cols-[repeat(auto-fit,minmax(400px,1fr))] gap-4 bg-surface-active-token my-4 py-4 px-8 rounded-xl"
 	>
 		{#each localPages.pages as pages, i}
-			{#if pages.length >= 3}
-				<!-- when at least 3 pages are loaded, the one for the currect thirties should be loaded aswell  -->
+			{#if pages.length >= 2}
+				<!-- when at least 2 pages are loaded, the one for the currect thirties should be loaded aswell  -->
 				{#if synchro}
 					<FassungenContent {pages} bind:scrolltop synchro={i === 0} />
 				{:else}
