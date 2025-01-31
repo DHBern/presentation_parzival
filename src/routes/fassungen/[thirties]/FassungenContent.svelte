@@ -1,10 +1,10 @@
 <script>
 	import { onMount } from 'svelte';
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	import { goto } from '$app/navigation';
 	import { base } from '$app/paths';
 
-	let { pages, scrolltop = $bindable() } = $props();
+	let { pages, synchro, scrolltop = $bindable() } = $props();
 
 	let scrollContainer = $state();
 	/**
@@ -20,8 +20,12 @@
 						let verse = entry.target
 							.querySelector(`[data-verse]`)
 							?.attributes['data-verse']?.value.split('.')[0];
-						if (entry.target && verse) {
-							goto(`${base}/fassungen/${verse}`, { noScroll: true, keepFocus: true });
+						if (entry.target && verse && verse !== page.data.thirties) {
+							goto(`${base}/fassungen/${verse}`, {
+								noScroll: true,
+								keepFocus: true,
+								replaceState: true
+							});
 						}
 					}
 				});
@@ -32,7 +36,7 @@
 				threshold: [0, 1]
 			}
 		);
-		const verse = scrollContainer?.querySelector(`[data-verse="${$page.data.thirties}.01"]`);
+		const verse = scrollContainer?.querySelector(`[data-verse="${page.data.thirties}.01"]`);
 		if (verse) {
 			console.log('scrolling to', verse);
 			scrollContainer?.scrollTo({
@@ -68,15 +72,21 @@
 <div
 	class="max-h-[70vh] overflow-y-auto"
 	bind:this={scrollContainer}
-	onscroll={(o) => {
+	onscroll={(/** @type {{ target: { scrollTop: any; }; }} */ o) => {
 		scrolltop = o?.target?.scrollTop;
 	}}
 	use:setSyncedScroll
 >
 	{#each pages as page (page[0])}
-		<div class="thirty tei-content" use:addToObserver>
-			{@html page[1]}
-		</div>
+		{#if synchro}
+			<div class="thirty tei-content" use:addToObserver>
+				{@html page[1]}
+			</div>
+		{:else}
+			<div class="thirty tei-content">
+				{@html page[1]}
+			</div>
+		{/if}
 		<hr class="!border-t-4 !border-primary-500" />
 	{/each}
 </div>

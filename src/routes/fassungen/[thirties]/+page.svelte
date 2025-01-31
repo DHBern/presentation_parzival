@@ -84,13 +84,13 @@
 	<div
 		class="grid grid-cols-[repeat(auto-fit,minmax(400px,1fr))] gap-4 bg-surface-active-token my-4 py-4 px-8 rounded-xl"
 	>
-		{#each localPages.pages as pages}
+		{#each localPages.pages as pages, i}
 			{#if pages.length >= 3}
 				<!-- when at least 3 pages are loaded, the one for the currect thirties should be loaded aswell  -->
 				{#if synchro}
-					<FassungenContent {pages} bind:scrolltop />
+					<FassungenContent {pages} bind:scrolltop synchro={i === 0} />
 				{:else}
-					<FassungenContent {pages} />
+					<FassungenContent {pages} synchro={true} />
 				{/if}
 			{/if}
 		{/each}
