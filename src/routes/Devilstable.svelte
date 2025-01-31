@@ -6,7 +6,8 @@
 	import {
 		DATA_MAX,
 		BRUSH_WINDOW_DEFAULT_START,
-		BRUSH_WINDOW_DEFAULT_END
+		BRUSH_WINDOW_DEFAULT_END,
+		SIGLA_ORDER
 	} from './Devilstable_DEFAULTS.json';
 	const brushDimension = 200;
 	const brushDimensionWithSafetyPixel = brushDimension + 1; // fixes a glitch, where Brush and Detail don't fit next to each other on PageResize.
@@ -15,7 +16,7 @@
 	let { codices, width = 400, height = 400, data = [] } = $props();
 
 	let mobile = $derived(width < 800);
-	const defaultChips = [summaryLabel, ...codices.map((c) => c.sigil), 'fr'];
+	const defaultChips = [summaryLabel, ...SIGLA_ORDER, 'fr'];
 	let inputChipValues = $state(defaultChips);
 	let inputChipValueLabels = $derived(
 		inputChipValues.map((v) => codices.find((c) => c.sigil === v)?.handle ?? v)
@@ -111,7 +112,7 @@
 		whitelist={[
 			summaryLabel,
 			'fr',
-			...codices.map((c) => c.sigil),
+			...codices.map((/** @type {{ sigil: any; }} */ c) => c.sigil),
 			...fractions.map((f) => f.label)
 		]}
 		bind:value={inputChipValues}

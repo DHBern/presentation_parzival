@@ -5,5 +5,24 @@
 	"BRUSH_WINDOW_DEFAULT_END": 100,
 	"SCROLL_SPEED": 50,
 	"ZOOM_INCREMENT": 40,
-	"ZOOM_MINIMUM_WINDOW_SIZE": 50
+	"ZOOM_MINIMUM_WINDOW_SIZE": 50,
+	"SIGLA_ORDER": [
+		"D",
+		"m",
+		"n",
+		"o",
+		"G",
+		"I",
+		"O",
+		"L",
+		"M",
+		"Q",
+		"R",
+		"T",
+		"U",
+		"V",
+		"V'",
+		"W",
+		"Z"
+	]
 }
