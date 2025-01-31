@@ -306,12 +306,12 @@
 		{/await}
 	{/if}
 </div>
-{#each data.map((d) => d.label) as label}
+{#each data.map((d) => d.label) as handle}
 	<div
 		class="card p-1 variant-filled-primary absolute opacity-0 top-0 left-0 w-max"
-		bind:this={popupLabels[label]}
+		bind:this={popupLabels[handle]}
 	>
-		<p>Hier stehen Erläuterungen zu {label}</p>
+		<p>Hier stehen Erläuterungen zu {handle}</p>
 	</div>
 {/each}
 {#each data.find((d) => d.label === 'fr')?.values || [] as fraction, i}
