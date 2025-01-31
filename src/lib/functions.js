@@ -23,3 +23,15 @@ export async function generateEntries(sigla) {
 		return returnArray;
 	}
 }
+
+/**
+ * @param {string} handle
+ */
+export async function siglaFromHandle(handle) {
+	const { fragments, codices } = await metadata;
+	if (handle.includes('fr')) {
+		return fragments.find(({ handle: s }) => s === handle).sigil;
+	} else {
+		return codices.find(({ handle: s }) => s === handle).sigil;
+	}
+}
