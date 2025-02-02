@@ -1,5 +1,6 @@
-import { api, teipb } from '$lib/constants';
+import { teipb } from '$lib/constants';
 import { generateEntries } from '$lib/functions';
+import { metadata } from '$lib/data.svelte.js';
 
 /** @type {import('./$types').PageServerLoad} */
 export async function load({ fetch, params }) {
@@ -9,16 +10,15 @@ export async function load({ fetch, params }) {
 	const thirties = params.thirties ?? '1';
 	const verse = params.verse?.padStart(2, '0') ?? '01';
 
-	const sigla = await fetch(`${api}/json/metadata-nomenclature.json`).then((res) => res.json());
 	// Fetch the textzeugen
-	sigla.codices.forEach((/** @type {{ handle: string | number; }} */ element) => {
+	(await metadata).codices.forEach((/** @type {{ handle: string | number; }} */ element) => {
 		publisherData[element.handle] = fetch(
 			`${teipb}/parts/${element.handle}.xml/json?odd=parzival.odd&view=page&id=${element.handle}_${thirties}.${verse}`
 		);
 	});
 
 	// Fetch fassungen
-	sigla.hyparchetypes.forEach((/** @type {{ handle: string | number; }} */ element) => {
+	(await metadata).hyparchetypes.forEach((/** @type {{ handle: string | number; }} */ element) => {
 		publisherData[element.handle] = fetch(
 			`${teipb}/parts/syn${thirties}.xml/json?odd=parzival.odd&view=single&xpath=//l[@n=%27${element.handle}%20${thirties}.${verse}%27]`
 		);
@@ -46,7 +46,7 @@ export async function load({ fetch, params }) {
 	return {
 		thirties,
 		verse,
-		sigla,
+		sigla: metadata,
 		publisherData: resolvedPublisherDataObject,
 		loss
 	};

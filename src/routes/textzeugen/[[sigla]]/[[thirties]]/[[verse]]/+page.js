@@ -1,11 +1,10 @@
 import { api } from '$lib/constants';
 import { base } from '$app/paths';
+import { metadata } from '$lib/data.svelte.js';
 
 /** @type {import('./$types').PageLoad} */
 export async function load({ fetch, params }) {
-	const { codices, fragments } = await fetch(`${api}/json/metadata-nomenclature.json`).then((r) =>
-		r.json()
-	);
+	const { codices, fragments } = await metadata;
 	const sigla = params.sigla?.split('-');
 
 	/** @type string | boolean */
