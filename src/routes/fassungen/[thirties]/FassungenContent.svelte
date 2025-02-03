@@ -12,6 +12,7 @@
 	 */
 	let observer;
 	onMount(() => {
+		// update the current page when a new verse comes into view
 		observer = new IntersectionObserver(
 			(entries) => {
 				entries.forEach((entry) => {
@@ -62,15 +63,15 @@
 
 	const setSyncedScroll = (/** @type {HTMLDivElement} */ node) => {
 		$effect(() => {
-			if (scrolltop) {
-				node.scrollTo({ top: scrolltop, behavior: 'auto' });
+			if (scrolltop && node.scrollTop !== scrolltop) {
+				node.scrollTo({ top: scrolltop, behavior: 'instant' });
 			}
 		});
 	};
 </script>
 
 <div
-	class="max-h-[70vh] overflow-y-auto"
+	class="max-h-[70vh] overflow-y-auto bg-surface-active-token rounded-xl p-4"
 	bind:this={scrollContainer}
 	onscroll={(/** @type {{ target: { scrollTop: any; }; }} */ o) => {
 		scrolltop = o?.target?.scrollTop;

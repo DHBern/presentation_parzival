@@ -8,6 +8,7 @@
 	let { data } = $props();
 	class localPageClass {
 		/**
+		 * for the Fassungen *d, *m, *G and *T
 		 * @type {[[number, string][],[number, string][],[number, string][],[number, string][]]}
 		 */
 		pages = $state([[], [], [], []]);
@@ -16,9 +17,16 @@
 		 */
 		thirties = [];
 
+		/**
+		 * Fetches data for the specified page number.
+		 * @param {Number} page - The page number to fetch data for.
+		 * @returns {Promise<void>} - A promise that resolves when the data is fetched.
+		 */
 		fetchPage = async (/** @type {Number} */ page) => {
+			// if the page is not already loaded
 			if (!this.thirties.length) {
 				let d, m, G, T;
+				// fetch the page before the current one if the current one is not the first
 				if (page - 1 > 0) {
 					[d, m, G, T] = await fetch(`${base}/fassungen/data/${page - 1}`).then((r) => r.json());
 					this.pages[0].push([page - 1, d]);
@@ -27,6 +35,7 @@
 					this.pages[3].push([page - 1, T]);
 					this.thirties.push(page - 1);
 				}
+				// fetch the current page
 				if (page <= NUMBER_OF_PAGES) {
 					[d, m, G, T] = await fetch(`${base}/fassungen/data/${page}`).then((r) => r.json());
 					this.pages[0].push([page, d]);
@@ -35,6 +44,7 @@
 					this.pages[3].push([page, T]);
 					this.thirties.push(page);
 				}
+				// fetch the page after the current one if the current one is not the last
 				if (page !== NUMBER_OF_PAGES) {
 					[d, m, G, T] = await fetch(`${base}/fassungen/data/${page + 1}`).then((r) => r.json());
 					this.pages[0].push([page + 1, d]);
@@ -90,9 +100,7 @@
 			Synchrones scrollen
 		</SlideToggle>
 	</div>
-	<div
-		class="grid grid-cols-[repeat(auto-fit,minmax(400px,1fr))] gap-4 bg-surface-active-token my-4 py-4 px-8 rounded-xl"
-	>
+	<div class="grid grid-cols-[repeat(auto-fit,minmax(400px,1fr))] gap-4 my-4 pl-4">
 		{#each localPages.pages as pages, i}
 			{#if pages.length >= 2}
 				<!-- when at least 2 pages are loaded, the one for the currect thirties should be loaded aswell  -->
