@@ -6,7 +6,7 @@
 	/** @type {{data: import('./$types').PageData}} */
 	let { data } = $props();
 
-	let { thirties, verse, sigla, publisherData, loss } = $derived(data);
+	let { thirties, verse, metadata, publisherData, loss } = $derived(data);
 	let hyparchetypesSlider = $state(false);
 </script>
 
@@ -16,7 +16,7 @@
 		<dl class="grid grid-cols-[auto_1fr] justify-between h-fit mb-4 w-fit font-mono">
 			<dt class="font-bold font-heading-token pr-4">Handschrift</dt>
 			<dd class="font-bold font-heading-token border-l-2 border-current pl-4">Wortlaut</dd>
-			{#each sigla.hyparchetypes as archetype (archetype.handle)}
+			{#each metadata.hyparchetypes as archetype (archetype.handle)}
 				{#if hyparchetypesSlider}
 					<dt class="pr-4 py-1 font-sans">{archetype.sigil}</dt>
 					{#await publisherData[archetype.handle]}
@@ -32,7 +32,7 @@
 				{#each archetype.witnesses as witness}
 					{#if publisherData[witness]?.content}
 						<dt class="pr-4 pt-2 {hyparchetypesSlider ? 'ml-5' : ''}">
-							{sigla.codices.find((c) => c.handle === witness)?.sigil}
+							{metadata.codices.find((c) => c.handle === witness)?.sigil}
 						</dt>
 						<dd class="border-l-2 border-current {hyparchetypesSlider ? 'ml-5' : ''} pl-4 py-1">
 							{@html publisherData[witness]?.content}

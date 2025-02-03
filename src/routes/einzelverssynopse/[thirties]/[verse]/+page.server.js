@@ -46,7 +46,7 @@ export async function load({ fetch, params }) {
 	return {
 		thirties,
 		verse,
-		sigla: metadata,
+		metadata: await metadata,
 		publisherData: resolvedPublisherDataObject,
 		loss
 	};
