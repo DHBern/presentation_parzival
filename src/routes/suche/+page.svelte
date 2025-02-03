@@ -1,8 +1,8 @@
 <script>
 	import { onMount } from 'svelte';
-	import { minisearch } from '$lib/minisearch.svelte';
+	import { minisearch, processTerm } from '$lib/minisearch.svelte';
 	import { slide } from 'svelte/transition';
-	import { processTerm, siglaFromHandle } from '$lib/functions';
+	import { siglaFromHandle } from '$lib/functions';
 	import Datatable from './Datatable.svelte';
 	import { RadioGroup, RadioItem, SlideToggle } from '@skeletonlabs/skeleton';
 	import { api } from '$lib/constants';

@@ -38,10 +38,3 @@ export async function siglaFromHandle(handle) {
 		return codices.find(({ handle: s }) => s === handle)?.sigil;
 	}
 }
-
-/**
- * @param {string} term
- */
-export function processTerm(term) {
-	return term.normalize('NFKD').toLowerCase();
-}
