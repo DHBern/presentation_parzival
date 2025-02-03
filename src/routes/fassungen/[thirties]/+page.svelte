@@ -27,12 +27,14 @@
 					this.pages[3].push([page - 1, T]);
 					this.thirties.push(page - 1);
 				}
-				[d, m, G, T] = await fetch(`${base}/fassungen/data/${page}`).then((r) => r.json());
-				this.pages[0].push([page, d]);
-				this.pages[1].push([page, m]);
-				this.pages[2].push([page, G]);
-				this.pages[3].push([page, T]);
-				this.thirties.push(page);
+				if (page <= NUMBER_OF_PAGES) {
+					[d, m, G, T] = await fetch(`${base}/fassungen/data/${page}`).then((r) => r.json());
+					this.pages[0].push([page, d]);
+					this.pages[1].push([page, m]);
+					this.pages[2].push([page, G]);
+					this.pages[3].push([page, T]);
+					this.thirties.push(page);
+				}
 				if (page !== NUMBER_OF_PAGES) {
 					[d, m, G, T] = await fetch(`${base}/fassungen/data/${page + 1}`).then((r) => r.json());
 					this.pages[0].push([page + 1, d]);
@@ -40,6 +42,9 @@
 					this.pages[2].push([page + 1, G]);
 					this.pages[3].push([page + 1, T]);
 					this.thirties.push(page + 1);
+				}
+				if (page > NUMBER_OF_PAGES) {
+					console.error('Page out of bounds');
 				}
 			} else {
 				if (page < Number(this.thirties[0])) {
