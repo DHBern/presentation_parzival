@@ -19,7 +19,7 @@
 		fetchPage = async (/** @type {Number} */ page) => {
 			if (!this.thirties.length) {
 				let d, m, G, T;
-				if (page - 1 !== 0) {
+				if (page - 1 > 0) {
 					[d, m, G, T] = await fetch(`${base}/fassungen/data/${page - 1}`).then((r) => r.json());
 					this.pages[0].push([page - 1, d]);
 					this.pages[1].push([page - 1, m]);
@@ -56,7 +56,7 @@
 					this.pages[2].push([page, G]);
 					this.pages[3].push([page, T]);
 					this.thirties.push(page);
-				} else if (page === Number(this.thirties[0]) && page !== 1) {
+				} else if (page === Number(this.thirties[0]) && page > 1) {
 					this.fetchPage(page - 1);
 				} else if (
 					page === Number(this.thirties[this.thirties.length - 1]) &&
