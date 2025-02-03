@@ -4,7 +4,7 @@
 	import { goto } from '$app/navigation';
 	import { base } from '$app/paths';
 
-	let { pages, synchro, scrolltop = $bindable() } = $props();
+	let { pages, observe, scrolltop = $bindable() } = $props();
 
 	let scrollContainer = $state();
 	/**
@@ -79,7 +79,7 @@
 	use:setSyncedScroll
 >
 	{#each pages as page (page[0])}
-		{#if synchro}
+		{#if observe}
 			<div class="thirty tei-content" use:addToObserver>
 				{@html page[1]}
 			</div>

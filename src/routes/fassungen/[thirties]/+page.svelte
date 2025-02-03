@@ -105,9 +105,9 @@
 			{#if pages.length >= 2}
 				<!-- when at least 2 pages are loaded, the one for the currect thirties should be loaded aswell  -->
 				{#if synchro}
-					<FassungenContent {pages} bind:scrolltop synchro={i === 0} />
+					<FassungenContent {pages} bind:scrolltop observe={i === 0} />
 				{:else}
-					<FassungenContent {pages} synchro={true} />
+					<FassungenContent {pages} observe={true} />
 				{/if}
 			{/if}
 		{/each}
