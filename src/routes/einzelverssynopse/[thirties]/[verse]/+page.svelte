@@ -2,6 +2,7 @@
 	import { SlideToggle } from '@skeletonlabs/skeleton';
 	import VerseSelector from '$lib/components/VerseSelector.svelte';
 	import { base } from '$app/paths';
+	import { NUMBER_OF_PAGES } from '$lib/constants';
 
 	/** @type {{data: import('./$types').PageData}} */
 	let { data } = $props();
@@ -70,7 +71,7 @@
 					vorheriger Vers
 				</a>
 			{/if}
-			{#if !(parseInt(thirties) === 827 && parseInt(verse) >= 30)}
+			{#if !(parseInt(thirties) === NUMBER_OF_PAGES && parseInt(verse) >= 30)}
 				<a
 					class="anchor"
 					href="{base}/einzelverssynopse/{parseInt(verse) >= 30

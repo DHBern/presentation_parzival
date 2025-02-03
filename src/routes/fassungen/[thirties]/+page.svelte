@@ -1,5 +1,6 @@
 <script>
 	import { base } from '$app/paths';
+	import { NUMBER_OF_PAGES } from '$lib/constants';
 	import FassungenContent from './FassungenContent.svelte';
 	import { SlideToggle } from '@skeletonlabs/skeleton';
 
@@ -32,7 +33,7 @@
 				this.pages[2].push([page, G]);
 				this.pages[3].push([page, T]);
 				this.thirties.push(page);
-				if (page !== 827) {
+				if (page !== NUMBER_OF_PAGES) {
 					[d, m, G, T] = await fetch(`${base}/fassungen/data/${page + 1}`).then((r) => r.json());
 					this.pages[0].push([page + 1, d]);
 					this.pages[1].push([page + 1, m]);
@@ -57,7 +58,10 @@
 					this.thirties.push(page);
 				} else if (page === Number(this.thirties[0]) && page !== 1) {
 					this.fetchPage(page - 1);
-				} else if (page === Number(this.thirties[this.thirties.length - 1]) && page !== 827) {
+				} else if (
+					page === Number(this.thirties[this.thirties.length - 1]) &&
+					page !== NUMBER_OF_PAGES
+				) {
 					this.fetchPage(page + 1);
 				}
 			}
