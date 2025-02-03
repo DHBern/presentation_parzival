@@ -1,5 +1,5 @@
 import { api } from '$lib/constants';
-import { metadata } from '$lib/data.svelte.js';
+import { metadata } from '$lib/data';
 
 /** @type {import('./$types').PageLoad} */
 export async function load({ fetch }) {

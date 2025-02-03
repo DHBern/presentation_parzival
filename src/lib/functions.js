@@ -1,4 +1,4 @@
-import { metadata } from './data.svelte.js';
+import { metadata } from './data';
 import { api } from './constants.js';
 
 /**
