@@ -57,34 +57,31 @@
 					console.error('Page out of bounds');
 				}
 			} else {
-				if (page < Number(this.thirties[0])) {
+				if (page < this.thirties[0] && !this.thirties.includes(page)) {
 					let [d, m, G, T] = await fetch(`${base}/fassungen/data/${page}`).then((r) => r.json());
 					this.pages[0].unshift([page, d]);
 					this.pages[1].unshift([page, m]);
 					this.pages[2].unshift([page, G]);
 					this.pages[3].unshift([page, T]);
 					this.thirties.unshift(page);
-				} else if (page > Number(this.thirties[this.thirties.length - 1])) {
+				} else if (page > this.thirties[this.thirties.length - 1]) {
 					let [d, m, G, T] = await fetch(`${base}/fassungen/data/${page}`).then((r) => r.json());
 					this.pages[0].push([page, d]);
 					this.pages[1].push([page, m]);
 					this.pages[2].push([page, G]);
 					this.pages[3].push([page, T]);
 					this.thirties.push(page);
-				} else if (page === Number(this.thirties[0]) && page > 1) {
+				} else if (page === this.thirties[0] && page > 1) {
 					this.fetchPage(page - 1);
-				} else if (
-					page === Number(this.thirties[this.thirties.length - 1]) &&
-					page !== NUMBER_OF_PAGES
-				) {
+				} else if (page === this.thirties[this.thirties.length - 1] && page !== NUMBER_OF_PAGES) {
 					this.fetchPage(page + 1);
 				}
 			}
+			return Promise.resolve();
 		};
 	}
 
 	let localPages = new localPageClass();
-
 	$effect(() => {
 		localPages.fetchPage(Number(data.thirties));
 	});

@@ -3,6 +3,7 @@
 	import { page } from '$app/state';
 	import { goto } from '$app/navigation';
 	import { base } from '$app/paths';
+	import { NUMBER_OF_PAGES } from '$lib/constants';
 
 	let { pages, observe, scrolltop = $bindable() } = $props();
 
@@ -13,27 +14,31 @@
 	let observer;
 	onMount(() => {
 		// update the current page when a new verse comes into view
+		let debounceTimeout;
 		observer = new IntersectionObserver(
 			(entries) => {
-				entries.forEach((entry) => {
-					if (entry.isIntersecting) {
-						console.log('intersecting', entry.target);
-						let verse = entry.target
-							.querySelector(`[data-verse]`)
-							?.attributes['data-verse']?.value.split('.')[0];
-						if (entry.target && verse && verse !== page.data.thirties) {
-							goto(`${base}/fassungen/${verse}`, {
-								noScroll: true,
-								keepFocus: true,
-								replaceState: true
-							});
+				clearTimeout(debounceTimeout);
+				debounceTimeout = setTimeout(() => {
+					entries.forEach((entry) => {
+						if (entry.isIntersecting) {
+							console.log('intersecting', entry.target);
+							let verse = entry.target
+								.querySelector(`[data-verse]`)
+								?.attributes['data-verse']?.value.split('.')[0];
+							if (entry.target && verse && verse !== page.data.thirties) {
+								goto(`${base}/fassungen/${verse}`, {
+									noScroll: true,
+									keepFocus: true,
+									replaceState: true
+								});
+							}
 						}
-					}
-				});
+					});
+				}, 100); // Adjust the debounce delay as needed
 			},
 			{
 				root: scrollContainer,
-				rootMargin: '0px',
+				rootMargin: '-60px',
 				threshold: [0, 1]
 			}
 		);
@@ -78,6 +83,17 @@
 	}}
 	use:setSyncedScroll
 >
+	{#if pages[0][0] > 1}
+		<button
+			class="btn variant-filled-primary w-full mb-4"
+			onclick={() =>
+				goto(`${base}/fassungen/${pages[0][0] - 1}`, {
+					noScroll: true,
+					keepFocus: true,
+					replaceState: true
+				})}>lade vorherigen Dreißiger</button
+		>
+	{/if}
 	{#each pages as page (page[0])}
 		{#if observe}
 			<div class="thirty tei-content" use:addToObserver>
@@ -90,6 +106,17 @@
 		{/if}
 		<hr class="!border-t-4 !border-primary-500" />
 	{/each}
+	{#if pages[pages.length - 1][0] < NUMBER_OF_PAGES}
+		<button
+			class="btn variant-filled-primary w-full mt-4"
+			onclick={() =>
+				goto(`${base}/fassungen/${pages[pages.length - 1][0] + 1}`, {
+					noScroll: true,
+					keepFocus: true,
+					replaceState: true
+				})}>lade nächsten Dreißiger</button
+		>
+	{/if}
 </div>
 
 <style lang="postcss">
