@@ -24,8 +24,10 @@
 			switch (corpus) {
 				case 'fassungen':
 					docs = import('$lib/data/searchIndexFassung');
+					break;
 				case 'textzeugen':
 					docs = import('$lib/data/searchIndexWitness');
+					break;
 				default:
 					docs = import('$lib/data/searchIndexFassung');
 			}
