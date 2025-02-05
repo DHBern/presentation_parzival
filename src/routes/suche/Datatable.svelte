@@ -3,8 +3,15 @@
 	import { base } from '$app/paths';
 	let { searchResults, korpus } = $props();
 	const table = new TableHandler(searchResults, { rowsPerPage: 100 });
+
+	/**
+	 * @type {import('@vincjo/datatables').Check}
+	 */
+	const caseSensitiveCheck = (entry, value) => {
+		return String(entry).startsWith(String(value));
+	};
 	let filter = [
-		table.createFilter('humanReadableSigil'),
+		table.createFilter('humanReadableSigil', caseSensitiveCheck),
 		table.createFilter('d'),
 		table.createFilter('verse'),
 		table.createFilter('content')
