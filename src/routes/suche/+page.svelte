@@ -62,7 +62,7 @@
 					.split(' ')
 					.map((/** @type {string} */ c) => {
 						if (matches.includes(processTerm(c))) {
-							return `<strong>${c}</strong>`;
+							return `<mark>${c}</mark>`;
 						}
 						return c;
 					})
@@ -150,3 +150,11 @@
 		{/if}
 	{/await}
 </section>
+
+<style lang="postcss">
+	:global(mark) {
+		@apply bg-inherit;
+		@apply font-bold;
+		@apply text-inherit;
+	}
+</style>
