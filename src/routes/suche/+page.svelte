@@ -1,5 +1,4 @@
 <script>
-	import { onMount } from 'svelte';
 	import { minisearches, processTerm } from '$lib/minisearch.svelte';
 	import siglaFromHandle from '$lib/functions/siglaFromHandle';
 	import Datatable from './Datatable.svelte';
@@ -8,16 +7,6 @@
 	let searchtext = $state('');
 	let useExactSearch = $state(true);
 	let corpus = $state('fassungen');
-	let docs = $derived.by(async () => {
-		switch (corpus) {
-			case 'fassungen':
-				return (await import('$lib/data/searchIndexFassung')).default;
-			case 'textzeugen':
-				return (await import('$lib/data/searchIndexWitness')).default;
-			default:
-				return [];
-		}
-	});
 	let activeMinisearch = $derived.by(() => {
 		switch (corpus) {
 			case 'fassungen':
@@ -28,31 +17,32 @@
 				return minisearches[0];
 		}
 	});
+	$effect(() => {
+		if (!activeMinisearch.documentCount) {
+			hasDocuments = false;
+			let docs;
+			switch (corpus) {
+				case 'fassungen':
+					docs = import('$lib/data/searchIndexFassung');
+				case 'textzeugen':
+					docs = import('$lib/data/searchIndexWitness');
+				default:
+					docs = import('$lib/data/searchIndexFassung');
+			}
+			docs
+				.then((o) => o.default)
+				.then((d) => {
+					activeMinisearch.addAllAsync(d, { chunkSize: 50000 }).then(() => {
+						hasDocuments = true;
+					});
+				});
+		}
+	});
 
 	/**
 	 * @type {Promise<import("minisearch").SearchResult[]>}
 	 */
 	let searchResults = $state(new Promise((resolve) => resolve([])));
-	onMount(() => {
-		if (!hasDocuments) {
-			docs.then((d) => {
-				activeMinisearch.addAllAsync(d, { chunkSize: 50000 }).then(() => {
-					hasDocuments = true;
-				});
-			});
-		}
-	});
-
-	const changeKorpus = () => {
-		if (!activeMinisearch.documentCount) {
-			hasDocuments = false;
-			docs.then((d) => {
-				activeMinisearch.addAllAsync(d, { chunkSize: 50000 }).then(() => {
-					hasDocuments = true;
-				});
-			});
-		}
-	};
 
 	const handleSearch = async (/** @type {import("minisearch").Query} */ query) => {
 		let results = activeMinisearch.search(query, { fuzzy: useExactSearch ? 0 : 0.3 });
@@ -108,22 +98,10 @@
 				>{useExactSearch ? 'exakte' : 'fuzzy'} Suche</SlideToggle
 			>
 			<RadioGroup active="variant-filled-primary">
-				<RadioItem
-					bind:group={corpus}
-					name="korpus"
-					value={'fassungen'}
-					onchange={() => changeKorpus()}
-					disabled={!hasDocuments}
-				>
+				<RadioItem bind:group={corpus} name="korpus" value={'fassungen'} disabled={!hasDocuments}>
 					Fassungen
 				</RadioItem>
-				<RadioItem
-					bind:group={corpus}
-					name="korpus"
-					value={'textzeugen'}
-					onchange={() => changeKorpus()}
-					disabled={!hasDocuments}
-				>
+				<RadioItem bind:group={corpus} name="korpus" value={'textzeugen'} disabled={!hasDocuments}>
 					Textzeugen
 				</RadioItem>
 			</RadioGroup>
