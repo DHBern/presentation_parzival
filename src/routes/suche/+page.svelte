@@ -1,31 +1,35 @@
 <script>
 	import { onMount } from 'svelte';
 	import { minisearch, processTerm } from '$lib/minisearch.svelte';
-	import { slide } from 'svelte/transition';
 	import siglaFromHandle from '$lib/functions/siglaFromHandle';
 	import Datatable from './Datatable.svelte';
 	import { RadioGroup, RadioItem, SlideToggle } from '@skeletonlabs/skeleton';
 	let { data } = $props();
 	let { searchIndexWitness, searchIndexFassung } = data;
-	let hasDocs = $state(!!minisearch.documentCount);
+	let hasDocuments = $state(!!minisearch.documentCount);
 	let searchtext = $state('');
-	let exact = $state(true);
-	let korpus = $state('fassungen');
-	let docs = $derived.by(async () =>
-		korpus === 'fassungen'
-			? (await searchIndexFassung.value).docs
-			: (await searchIndexWitness.value).docs
-	);
+	let useExactSearch = $state(true);
+	let corpus = $state('fassungen');
+	let docs = $derived.by(async () => {
+		switch (corpus) {
+			case 'fassungen':
+				return (await searchIndexFassung.value).docs;
+			case 'textzeugen':
+				return (await searchIndexWitness.value).docs;
+			default:
+				return [];
+		}
+	});
 
 	/**
 	 * @type {Promise<import("minisearch").SearchResult[]>}
 	 */
 	let searchResults = $state(new Promise((resolve) => resolve([])));
 	onMount(() => {
-		if (!hasDocs) {
+		if (!hasDocuments) {
 			docs.then((d) => {
 				minisearch.addAllAsync(d, { chunkSize: 50000 }).then(() => {
-					hasDocs = true;
+					hasDocuments = true;
 				});
 			});
 		}
@@ -33,16 +37,16 @@
 
 	const changeKorpus = () => {
 		minisearch.removeAll();
-		hasDocs = false;
+		hasDocuments = false;
 		docs.then((d) => {
 			minisearch.addAllAsync(d, { chunkSize: 50000 }).then(() => {
-				hasDocs = true;
+				hasDocuments = true;
 			});
 		});
 	};
 
 	const handleSearch = async (/** @type {import("minisearch").Query} */ query) => {
-		let results = minisearch.search(query, { fuzzy: exact ? 0 : 0.3 });
+		let results = minisearch.search(query, { fuzzy: useExactSearch ? 0 : 0.3 });
 		results = await Promise.all(
 			results.map(async (r) => {
 				r.humanReadableSigil = r.sigla.includes('*') ? r.sigla : await siglaFromHandle(r.sigla);
@@ -65,14 +69,14 @@
 	};
 
 	export const snapshot = {
-		capture: () => ({ searchtext, exact, searchResults, korpus }),
+		capture: () => ({ searchtext, exact: useExactSearch, searchResults, korpus: corpus }),
 		restore: (v) => {
 			searchtext = v.searchtext;
-			exact = v.exact;
+			useExactSearch = v.exact;
 			searchResults = Array.isArray(v.searchResults)
 				? v.searchResults
 				: new Promise((resolve) => resolve([]));
-			korpus = v.korpus;
+			corpus = v.korpus;
 		}
 	};
 </script>
@@ -91,25 +95,25 @@
 	<div>
 		<h2 class="h2">Suchoptionen</h2>
 		<div class="flex gap-2 items-center">
-			<SlideToggle active="bg-primary-500" name="exact" bind:checked={exact}
-				>{exact ? 'exakte' : 'fuzzy'} Suche</SlideToggle
+			<SlideToggle active="bg-primary-500" name="exact" bind:checked={useExactSearch}
+				>{useExactSearch ? 'exakte' : 'fuzzy'} Suche</SlideToggle
 			>
 			<RadioGroup active="variant-filled-primary">
 				<RadioItem
-					bind:group={korpus}
+					bind:group={corpus}
 					name="korpus"
 					value={'fassungen'}
 					onchange={() => changeKorpus()}
-					disabled={!hasDocs}
+					disabled={!hasDocuments}
 				>
 					Fassungen
 				</RadioItem>
 				<RadioItem
-					bind:group={korpus}
+					bind:group={corpus}
 					name="korpus"
 					value={'textzeugen'}
 					onchange={() => changeKorpus()}
-					disabled={!hasDocs}
+					disabled={!hasDocuments}
 				>
 					Textzeugen
 				</RadioItem>
@@ -124,7 +128,7 @@
 			searchResults = handleSearch(searchtext);
 		}}
 	>
-		<label transition:slide>
+		<label>
 			<input
 				class="input p-6 placeholder-primary-600"
 				type="text"
@@ -132,7 +136,7 @@
 				bind:value={searchtext}
 			/>
 		</label>
-		{#if hasDocs}
+		{#if hasDocuments}
 			<button class="btn variant-filled">Suchen</button>
 		{:else}
 			<button class="btn variant-filled-warning" disabled
@@ -146,7 +150,7 @@
 		<p>Suche läuft...</p>
 	{:then r}
 		{#if r.length != 0}
-			<Datatable searchResults={r} {korpus} />
+			<Datatable searchResults={r} korpus={corpus} />
 		{:else}
 			<p>Keine Ergebnisse</p>
 		{/if}
