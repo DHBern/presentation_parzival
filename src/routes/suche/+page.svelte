@@ -2,36 +2,15 @@
 	import { onMount } from 'svelte';
 	import { minisearch, processTerm } from '$lib/minisearch.svelte';
 	import { slide } from 'svelte/transition';
-	import { siglaFromHandle } from '$lib/functions';
+	import siglaFromHandle from '$lib/functions/siglaFromHandle';
 	import Datatable from './Datatable.svelte';
 	import { RadioGroup, RadioItem, SlideToggle } from '@skeletonlabs/skeleton';
-	import { api } from '$lib/constants';
+	let { data } = $props();
+	let { searchIndexWitness, searchIndexFassung } = data;
 	let hasDocs = $state(!!minisearch.documentCount);
 	let searchtext = $state('');
 	let exact = $state(true);
 	let korpus = $state('fassungen');
-	class Index {
-		/** @type {Promise<any>|boolean} */
-		#data = false;
-		/**
-		 * @param {string} path
-		 */
-		constructor(path) {
-			this.path = path;
-		}
-		async fetch() {
-			return fetch(this.path).then((r) => r.json());
-		}
-
-		get value() {
-			if (!this.#data) {
-				this.#data = this.fetch();
-			}
-			return this.#data;
-		}
-	}
-	const searchIndexWitness = new Index(`${api}/json/search-index-transkript.json`);
-	const searchIndexFassung = new Index(`${api}/json/search-index-fassung.json`);
 	let docs = $derived.by(async () =>
 		korpus === 'fassungen'
 			? (await searchIndexFassung.value).docs
