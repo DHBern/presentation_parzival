@@ -1,4 +1,4 @@
-import { metadata } from '../data';
+import { metadata } from '../data/metadata';
 
 /**
  * @param {string} handle

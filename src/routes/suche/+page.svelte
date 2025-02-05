@@ -4,8 +4,6 @@
 	import siglaFromHandle from '$lib/functions/siglaFromHandle';
 	import Datatable from './Datatable.svelte';
 	import { RadioGroup, RadioItem, SlideToggle } from '@skeletonlabs/skeleton';
-	let { data } = $props();
-	let { searchIndexWitness, searchIndexFassung } = data;
 	let hasDocuments = $state(!!minisearch.documentCount);
 	let searchtext = $state('');
 	let useExactSearch = $state(true);
@@ -13,9 +11,9 @@
 	let docs = $derived.by(async () => {
 		switch (corpus) {
 			case 'fassungen':
-				return (await searchIndexFassung.value).docs;
+				return (await import('$lib/data/searchIndexFassung')).default;
 			case 'textzeugen':
-				return (await searchIndexWitness.value).docs;
+				return (await import('$lib/data/searchIndexWitness')).default;
 			default:
 				return [];
 		}

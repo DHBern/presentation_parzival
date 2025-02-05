@@ -1,6 +1,6 @@
 import { json } from '@sveltejs/kit';
 import { NUMBER_OF_PAGES, teipb } from '$lib/constants';
-import { metadata } from '$lib/data';
+import { metadata } from '$lib/data/metadata';
 
 /** @type {import('./$types').RequestHandler} */
 export async function GET({ params, fetch }) {

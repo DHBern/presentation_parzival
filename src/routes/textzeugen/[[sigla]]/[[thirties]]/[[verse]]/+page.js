@@ -1,6 +1,6 @@
 import { api } from '$lib/constants';
 import { base } from '$app/paths';
-import { metadata } from '$lib/data';
+import { metadata } from '$lib/data/metadata';
 
 /** @type {import('./$types').PageLoad} */
 export async function load({ fetch, params }) {

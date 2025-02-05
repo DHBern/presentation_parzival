@@ -1,6 +1,6 @@
 import { teipb } from '$lib/constants';
 import { generateEntries } from '$lib/functions';
-import { metadata } from '$lib/data';
+import { metadata } from '$lib/data/metadata';
 
 /** @type {import('./$types').PageServerLoad} */
 export async function load({ fetch, params }) {
