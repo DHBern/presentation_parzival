@@ -49,6 +49,11 @@
 	const handleSearch = async (/** @type {import("minisearch").Query} */ query) => {
 		let results = activeMinisearch.search(query, { fuzzy: useExactSearch ? 0 : 0.3 });
 		results = await Promise.all(
+			/*
+				Processes an array of search results, enriching each result with additional information:
+				- Adds a human-readable sigil to each result based on its 'sigla' property.
+				- Marks all matches in the content by wrapping them in <strong> tags.
+			*/
 			results.map(async (r) => {
 				r.humanReadableSigil = r.sigla.includes('*') ? r.sigla : await siglaFromHandle(r.sigla);
 				const matches = Object.keys(r.match);
