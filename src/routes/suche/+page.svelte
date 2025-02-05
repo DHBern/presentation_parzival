@@ -1,10 +1,10 @@
 <script>
 	import { onMount } from 'svelte';
-	import { minisearch, processTerm } from '$lib/minisearch.svelte';
+	import { minisearches, processTerm } from '$lib/minisearch.svelte';
 	import siglaFromHandle from '$lib/functions/siglaFromHandle';
 	import Datatable from './Datatable.svelte';
 	import { RadioGroup, RadioItem, SlideToggle } from '@skeletonlabs/skeleton';
-	let hasDocuments = $state(!!minisearch.documentCount);
+	let hasDocuments = $state(!!minisearches[0].documentCount);
 	let searchtext = $state('');
 	let useExactSearch = $state(true);
 	let corpus = $state('fassungen');
@@ -18,6 +18,16 @@
 				return [];
 		}
 	});
+	let activeMinisearch = $derived.by(() => {
+		switch (corpus) {
+			case 'fassungen':
+				return minisearches[0];
+			case 'textzeugen':
+				return minisearches[1];
+			default:
+				return minisearches[0];
+		}
+	});
 
 	/**
 	 * @type {Promise<import("minisearch").SearchResult[]>}
@@ -26,7 +36,7 @@
 	onMount(() => {
 		if (!hasDocuments) {
 			docs.then((d) => {
-				minisearch.addAllAsync(d, { chunkSize: 50000 }).then(() => {
+				activeMinisearch.addAllAsync(d, { chunkSize: 50000 }).then(() => {
 					hasDocuments = true;
 				});
 			});
@@ -34,17 +44,18 @@
 	});
 
 	const changeKorpus = () => {
-		minisearch.removeAll();
-		hasDocuments = false;
-		docs.then((d) => {
-			minisearch.addAllAsync(d, { chunkSize: 50000 }).then(() => {
-				hasDocuments = true;
+		if (!activeMinisearch.documentCount) {
+			hasDocuments = false;
+			docs.then((d) => {
+				activeMinisearch.addAllAsync(d, { chunkSize: 50000 }).then(() => {
+					hasDocuments = true;
+				});
 			});
-		});
+		}
 	};
 
 	const handleSearch = async (/** @type {import("minisearch").Query} */ query) => {
-		let results = minisearch.search(query, { fuzzy: useExactSearch ? 0 : 0.3 });
+		let results = activeMinisearch.search(query, { fuzzy: useExactSearch ? 0 : 0.3 });
 		results = await Promise.all(
 			results.map(async (r) => {
 				r.humanReadableSigil = r.sigla.includes('*') ? r.sigla : await siglaFromHandle(r.sigla);

@@ -7,8 +7,13 @@ export function processTerm(term) {
 	return term.normalize('NFKD').toLowerCase();
 }
 
-export const minisearch = new MiniSearch({
+const miniSearchConfig = {
 	fields: ['content_all', 'content', 'terms'],
 	storeFields: ['content', 'verse', 'd', 'sigla'],
 	processTerm
-});
+};
+
+// Create two instances of MiniSearch because there are two different indices
+export const minisearches = Array(2)
+	.fill('')
+	.map(() => new MiniSearch(miniSearchConfig));
