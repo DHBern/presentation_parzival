@@ -21,7 +21,6 @@
 				debounceTimeout = setTimeout(() => {
 					entries.forEach((entry) => {
 						if (entry.isIntersecting) {
-							console.log('intersecting', entry.target);
 							let verse = entry.target
 								.querySelector(`[data-verse]`)
 								?.attributes['data-verse']?.value.split('.')[0];
@@ -44,7 +43,6 @@
 		);
 		const verse = scrollContainer?.querySelector(`[data-verse="${page.data.thirties}.01"]`);
 		if (verse) {
-			console.log('scrolling to', verse);
 			scrollContainer?.scrollTo({
 				top:
 					scrollContainer?.scrollTop +
