@@ -66,13 +66,17 @@
 
 <div class="flex space-x-1 my-4">
 	{#each table.pagesWithEllipsis as page}
-		<button
-			type="button"
-			class:variant-filled-primary={page === table.currentPage}
-			class="btn variant-filled"
-			onclick={() => table.setPage(page)}
-		>
-			{page ?? '...'}
-		</button>
+		{#if page}
+			<button
+				type="button"
+				class:variant-filled-primary={page === table.currentPage}
+				class="btn variant-filled"
+				onclick={() => table.setPage(page)}
+			>
+				{page}
+			</button>
+		{:else}
+			<button class="btn variant-filled" disabled> ... </button>
+		{/if}
 	{/each}
 </div>
