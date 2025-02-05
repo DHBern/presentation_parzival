@@ -61,7 +61,8 @@
 				r.content = r.content
 					.split(' ')
 					.map((/** @type {string} */ c) => {
-						if (matches.includes(processTerm(c))) {
+						//if the matches include the processed term without punctuation, mark it
+						if (matches.includes(processTerm(c.replaceAll(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, '')))) {
 							return `<mark>${c}</mark>`;
 						}
 						return c;
