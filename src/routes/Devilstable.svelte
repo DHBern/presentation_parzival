@@ -112,8 +112,8 @@
 		whitelist={[
 			summaryLabel,
 			'fr',
-			...codices.map((/** @type {{ sigil: any; }} */ c) => c.sigil),
-			...fractions.map((f) => f.label)
+			...codices.map((/** @type {{ sigil: string; }} */ c) => c.sigil),
+			...fractions.map((/** @type {{ label: string; }} */ f) => f.label)
 		]}
 		bind:value={inputChipValues}
 		placeholder="Textzeuge / Fragment hinzufügen..."
