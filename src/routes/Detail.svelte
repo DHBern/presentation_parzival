@@ -143,13 +143,13 @@
 		};
 	}
 
-	const popupFractions = $state({});
+	const popupFragments = $state({});
 	const popupLabels = $state({});
-	const openPopupFractions = (e, verseNumber) => {
+	const openPopupFragments = (e, verseNumber) => {
 		e.preventDefault();
 		e.stopPropagation();
 		const reference = e.currentTarget;
-		const popup = popupFractions[verseNumber];
+		const popup = popupFragments[verseNumber];
 		if (popup && reference) {
 			computePosition(reference, popup, {
 				placement: 'top'
@@ -209,9 +209,10 @@
 		)
 	);
 	let verse = $derived(Math.floor(y.invert(mousePos[1])));
+	let frValues = $derived(data.find((d) => d.label === 'fr')?.values);
 	let manuscriptHandles = $derived(
 		scaleBandInvert(x)(mousePos[0]) === 'fr'
-			? data.find((d) => d.label === 'fr')?.values[verse - selection.start] || 'fr'
+			? frValues?.[verse - selection.start] || 'fr'
 			: scaleBandInvert(x)(mousePos[0])
 	);
 	$effect(() => {
@@ -294,7 +295,7 @@
 				</li>
 			{/each}
 		</ul>
-	{:else if manuscriptHandles === 'Fassungen'}
+	{:else if manuscriptHandles === summaryLabel}
 		<p>Dreißiger {verse}</p>
 	{:else if manuscriptHandles === 'fr'}
 		<p>Fragment {verse}</p>
@@ -302,6 +303,7 @@
 		<p>{@html siglaFromHandle(String(manuscriptHandles))}: {verse}</p>
 	{/if}
 </div>
+<!-- clickable popups on column labels -->
 {#each data.map((d) => d.label) as handle}
 	{@const metadata = metadataFromHandle(handle)}
 	<div
@@ -313,15 +315,16 @@
 		{@html metadata?.info}
 	</div>
 {/each}
-{#each data.find((d) => d.label === 'fr')?.values || [] as fraction, i}
-	{#if Array.isArray(fraction)}
+<!-- popups for fragments -->
+{#each frValues || [] as fragment, i}
+	{#if Array.isArray(fragment)}
 		{@const verse = i + selection.start}
 		<div
 			class="card p-1 variant-filled-primary top-0 left-0 w-max absolute opacity-0"
-			bind:this={popupFractions[verse]}
+			bind:this={popupFragments[verse]}
 		>
 			<ul>
-				{#each fraction as handle}
+				{#each fragment as handle}
 					<li>
 						<a href={`${base}/textzeugen/${handle}/${verse}`} class="hover:text-secondary-900">
 							{@html siglaFromHandle(handle)}
@@ -374,13 +377,13 @@
 									role="button"
 									tabindex="0"
 									href="#"
-									onkeydown={(e) => openPopupFractions(e, verseNumber)}
+									onkeydown={(e) => openPopupFragments(e, verseNumber)}
 									onclick={(e) => {
-										openPopupFractions(e, verseNumber);
+										openPopupFragments(e, verseNumber);
 									}}
 									aria-label={`Mehrere Fr in Vers ${verseNumber}`}
 									onblur={() => {
-										popupFractions[verseNumber].style.opacity = '0';
+										popupFragments[verseNumber].style.opacity = '0';
 									}}
 								>
 									<rect
