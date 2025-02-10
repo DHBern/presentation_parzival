@@ -76,7 +76,7 @@
 				{page}
 			</button>
 		{:else}
-			<button class="btn variant-filled" disabled> ... </button>
+			<div class="btn variant-filled-surface">...</div>
 		{/if}
 	{/each}
 </div>
