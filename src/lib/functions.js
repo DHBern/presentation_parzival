@@ -25,11 +25,13 @@ export async function generateEntries(sigla) {
 	}
 }
 
+/**@type {{fragments: {handle: String, sigil: String}[], codices: {handle: String, sigil: String}[]}} */
+const { fragments, codices } = await metadata;
+
 /**
  * @param {string} handle
  */
-export async function siglaFromHandle(handle) {
-	const { fragments, codices } = await metadata;
+export function siglaFromHandle(handle) {
 	if (handle.includes('fr')) {
 		return fragments.find(({ handle: s }) => s === handle)?.sigil;
 	} else {

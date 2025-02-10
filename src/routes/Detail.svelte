@@ -288,11 +288,9 @@
 		<ul>
 			{#each manuscript as handle}
 				<li>
-					{#await siglaFromHandle(String(handle)) then sigla}
-						<a href={`${base}/textzeugen/${handle}/${verse}`} class="hover:text-secondary-900">
-							{sigla}: {verse}
-						</a>
-					{/await}
+					<a href={`${base}/textzeugen/${handle}/${verse}`} class="hover:text-secondary-900">
+						{siglaFromHandle(String(handle))}: {verse}
+					</a>
 				</li>
 			{/each}
 		</ul>
@@ -301,9 +299,7 @@
 	{:else if manuscript === 'fr'}
 		<p>fr: {verse}</p>
 	{:else}
-		{#await siglaFromHandle(String(manuscript)) then sigla}
-			<p>{sigla}: {verse}</p>
-		{/await}
+		<p>{siglaFromHandle(String(manuscript))}: {verse}</p>
 	{/if}
 </div>
 {#each data.map((d) => d.label) as handle}
