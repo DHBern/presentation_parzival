@@ -55,7 +55,7 @@
 				- Marks all matches in the content by wrapping them in <strong> tags.
 			*/
 			results.map((r) => {
-				r.humanReadableSigil = r.sigla.includes('*') ? r.sigla : siglaFromHandle(r.sigla);
+				r.humanReadableSigil = siglaFromHandle(r.sigla);
 				const matches = Object.keys(r.match);
 				//Mark all matches in the content
 				r.content = r.content
