@@ -54,8 +54,8 @@
 				- Adds a human-readable sigil to each result based on its 'sigla' property.
 				- Marks all matches in the content by wrapping them in <strong> tags.
 			*/
-			results.map(async (r) => {
-				r.humanReadableSigil = r.sigla.includes('*') ? r.sigla : await siglaFromHandle(r.sigla);
+			results.map((r) => {
+				r.humanReadableSigil = r.sigla.includes('*') ? r.sigla : siglaFromHandle(r.sigla);
 				const matches = Object.keys(r.match);
 				//Mark all matches in the content
 				r.content = r.content
@@ -107,10 +107,10 @@
 			>
 			<RadioGroup active="variant-filled-primary">
 				<RadioItem bind:group={corpus} name="korpus" value={'fassungen'} disabled={!hasDocuments}>
-					Fassungen
+					Fassungen (1.67MB)
 				</RadioItem>
 				<RadioItem bind:group={corpus} name="korpus" value={'textzeugen'} disabled={!hasDocuments}>
-					Textzeugen
+					Textzeugen (9.96MB)
 				</RadioItem>
 			</RadioGroup>
 		</div>

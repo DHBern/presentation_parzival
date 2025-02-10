@@ -1,12 +1,12 @@
 import { metadata } from '../data/metadata';
 
+const { fragments, codices } = await metadata;
 /**
  * @param {string} handle
- * @returns {Promise<string>}
+ * @returns {string}
  */
-export default async function siglaFromHandle(handle) {
+export default function siglaFromHandle(handle) {
 	/**@type {{fragments: {handle: String, sigil: String}[], codices: {handle: String, sigil: String}[]}} */
-	const { fragments, codices } = await metadata;
 	if (handle.includes('fr')) {
 		return fragments.find(({ handle: s }) => s === handle)?.sigil ?? '';
 	} else {
