@@ -11,7 +11,7 @@
 		ZOOM_MINIMUM_WINDOW_SIZE
 	} from './Devilstable_DEFAULTS.json';
 
-	import { siglaFromHandle } from '$lib/functions';
+	import { siglaFromHandle, metadataFromHandle } from '$lib/functions';
 
 	/** @type {{codices: any, width?: number, height?: number,data?: {values: boolean[], label: string}[],  selection: {start: number, end: number}}} */
 	let { codices, width = 400, height = 400, data = [], selection = $bindable() } = $props();
@@ -289,7 +289,7 @@
 			{#each manuscriptHandles as mHandle}
 				<li>
 					<a href={`${base}/textzeugen/${mHandle}/${verse}`} class="hover:text-secondary-900">
-						{@html siglaFromHandle(String(mHandle))}: {verse}
+						{@html siglaFromHandle(mHandle)}: {verse}
 					</a>
 				</li>
 			{/each}
@@ -303,11 +303,14 @@
 	{/if}
 </div>
 {#each data.map((d) => d.label) as handle}
+	{@const metadata = metadataFromHandle(handle)}
 	<div
-		class="card p-1 variant-filled-primary absolute opacity-0 top-0 left-0 w-max"
+		class="card p-1 variant-filled-primary absolute opacity-0 top-0 left-0 max-w-prose prose"
 		bind:this={popupLabels[handle]}
 	>
-		<p>Hier stehen Erläuterungen zu {@html siglaFromHandle(String(handle))}</p>
+		<strong class="">{@html metadata?.['info-h1']}</strong>
+		{@html metadata?.['info-h2']}
+		{@html metadata?.info}
 	</div>
 {/each}
 {#each data.find((d) => d.label === 'fr')?.values || [] as fraction, i}
@@ -321,7 +324,7 @@
 				{#each fraction as handle}
 					<li>
 						<a href={`${base}/textzeugen/${handle}/${verse}`} class="hover:text-secondary-900">
-							{@html siglaFromHandle(String(handle))}
+							{@html siglaFromHandle(handle)}
 							{verse}
 						</a>
 					</li>

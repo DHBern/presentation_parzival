@@ -38,3 +38,14 @@ export function siglaFromHandle(handle) {
 		return codices.find(({ handle: s }) => s === handle)?.sigil;
 	}
 }
+
+/**
+ * @param {string} handle
+ */
+export function metadataFromHandle(handle) {
+	if (handle.includes('fr')) {
+		return fragments.find(({ handle: s }) => s === handle);
+	} else {
+		return codices.find(({ handle: s }) => s === handle);
+	}
+}
