@@ -74,16 +74,18 @@
 		);
 		return results;
 	};
+	/**
+	 * @type {import("minisearch").SearchResult[]}
+	 */
+	let searchResultArray = [];
 
 	export const snapshot = {
-		capture: () => ({ searchtext, exact: useExactSearch, searchResults, korpus: corpus }),
+		capture: () => ({ searchtext, useExactSearch, searchResultArray, corpus }),
 		restore: (v) => {
 			searchtext = v.searchtext;
-			useExactSearch = v.exact;
-			searchResults = Array.isArray(v.searchResults)
-				? v.searchResults
-				: new Promise((resolve) => resolve([]));
-			corpus = v.korpus;
+			useExactSearch = v.useExactSearch;
+			searchResults = new Promise((resolve) => resolve(v.searchResultArray));
+			corpus = v.corpus;
 		}
 	};
 </script>
@@ -121,6 +123,9 @@
 		class="grid grid-cols-[4fr,1fr] gap-1 max-w-screen-md"
 		onsubmit={() => {
 			searchResults = handleSearch(searchtext);
+			searchResults.then((r) => {
+				searchResultArray = r;
+			});
 		}}
 	>
 		<label>
