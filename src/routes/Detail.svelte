@@ -209,7 +209,7 @@
 		)
 	);
 	let verse = $derived(Math.floor(y.invert(mousePos[1])));
-	let manuscript = $derived(
+	let manuscriptHandles = $derived(
 		scaleBandInvert(x)(mousePos[0]) === 'fr'
 			? data.find((d) => d.label === 'fr')?.values[verse - selection.start] || 'fr'
 			: scaleBandInvert(x)(mousePos[0])
@@ -284,22 +284,22 @@
 	data-popup="popupVerse"
 	bind:this={floating}
 >
-	{#if Array.isArray(manuscript)}
+	{#if Array.isArray(manuscriptHandles)}
 		<ul>
-			{#each manuscript as handle}
+			{#each manuscriptHandles as mHandle}
 				<li>
-					<a href={`${base}/textzeugen/${handle}/${verse}`} class="hover:text-secondary-900">
-						{siglaFromHandle(String(handle))}: {verse}
+					<a href={`${base}/textzeugen/${mHandle}/${verse}`} class="hover:text-secondary-900">
+						{@html siglaFromHandle(String(mHandle))}: {verse}
 					</a>
 				</li>
 			{/each}
 		</ul>
-	{:else if manuscript === 'Fassungen'}
+	{:else if manuscriptHandles === 'Fassungen'}
 		<p>Dreißiger {verse}</p>
-	{:else if manuscript === 'fr'}
-		<p>fr: {verse}</p>
+	{:else if manuscriptHandles === 'fr'}
+		<p>Fragment {verse}</p>
 	{:else}
-		<p>{siglaFromHandle(String(manuscript))}: {verse}</p>
+		<p>{@html siglaFromHandle(String(manuscriptHandles))}: {verse}</p>
 	{/if}
 </div>
 {#each data.map((d) => d.label) as handle}
@@ -307,7 +307,7 @@
 		class="card p-1 variant-filled-primary absolute opacity-0 top-0 left-0 w-max"
 		bind:this={popupLabels[handle]}
 	>
-		<p>Hier stehen Erläuterungen zu {handle}</p>
+		<p>Hier stehen Erläuterungen zu {@html siglaFromHandle(String(handle))}</p>
 	</div>
 {/each}
 {#each data.find((d) => d.label === 'fr')?.values || [] as fraction, i}
@@ -318,10 +318,10 @@
 			bind:this={popupFractions[verse]}
 		>
 			<ul>
-				{#each fraction as sigla}
+				{#each fraction as handle}
 					<li>
-						<a href={`${base}/textzeugen/${sigla}/${verse}`} class="hover:text-secondary-900">
-							{sigla}
+						<a href={`${base}/textzeugen/${handle}/${verse}`} class="hover:text-secondary-900">
+							{@html siglaFromHandle(String(handle))}
 							{verse}
 						</a>
 					</li>
