@@ -20,23 +20,31 @@
 	$effect(() => {
 		if (!activeMinisearch.documentCount) {
 			hasDocuments = false;
+			// we don't use activeMinisearch here, because we want 100% certainty not to add docs to the wrong minisearch
+			let miniSearchToAdd;
 			let docs;
 			switch (corpus) {
 				case 'fassungen':
 					docs = import('$lib/data/searchIndexFassung');
+					miniSearchToAdd = minisearches[0];
 					break;
 				case 'textzeugen':
 					docs = import('$lib/data/searchIndexWitness');
+					miniSearchToAdd = minisearches[1];
 					break;
 				default:
 					docs = import('$lib/data/searchIndexFassung');
+					miniSearchToAdd = minisearches[0];
 			}
 			docs
 				.then((o) => o.default)
 				.then((d) => {
-					activeMinisearch.addAllAsync(d, { chunkSize: 50000 }).then(() => {
-						hasDocuments = true;
-					});
+					// due to the async nature of the import, the document count might have changed in the meantime, so we have to check again
+					if (!miniSearchToAdd.documentCount) {
+						miniSearchToAdd.addAllAsync(d, { chunkSize: 50000 }).then(() => {
+							hasDocuments = true;
+						});
+					}
 				});
 		}
 	});
