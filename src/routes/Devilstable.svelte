@@ -6,7 +6,8 @@
 	import {
 		DATA_MAX,
 		BRUSH_WINDOW_DEFAULT_START,
-		BRUSH_WINDOW_DEFAULT_END
+		BRUSH_WINDOW_DEFAULT_END,
+		SIGLA_ORDER
 	} from './Devilstable_DEFAULTS.json';
 	const brushDimension = 200;
 	const brushDimensionWithSafetyPixel = brushDimension + 1; // fixes a glitch, where Brush and Detail don't fit next to each other on PageResize.
@@ -15,43 +16,43 @@
 	let { codices, width = 400, height = 400, data = [] } = $props();
 
 	let mobile = $derived(width < 800);
-	const defaultChips = [summaryLabel, ...codices.map((c) => c.sigil), 'fr'];
+	const defaultChips = [summaryLabel, ...SIGLA_ORDER, 'fr'];
 	let inputChipValues = $state(defaultChips);
 	let inputChipValueLabels = $derived(
 		inputChipValues.map((v) => codices.find((c) => c.sigil === v)?.handle ?? v)
 	);
-	let fractions = $derived(data.filter((d) => d.label.includes('fr')));
+	let fragments = $derived(data.filter((d) => d.label.includes('fr')));
 	/** @type {{label: string, values: boolean[]}} */
-	let allFractionData = $derived.by(() => {
+	let allFragmentData = $derived.by(() => {
 		if (!inputChipValueLabels.includes('fr')) return {};
-		//combine all the fractions into one Object with the label 'fr'
+		//combine all the fragments into one Object with the label 'fr'
 		/** @type {{label: string, values: boolean[]}} */
-		let fractionData = {
+		let fragmentData = {
 			label: 'fr',
 			values: new Array(DATA_MAX).fill(false)
 		};
-		//loop DATA_MAX times and check if the value is in any of the fractions
+		//loop DATA_MAX times and check if the value is in any of the fragments
 		for (let i = 0; i < DATA_MAX; i++) {
-			//check if the value is in any of the fractions
-			for (let j = 0; j < fractions.length; j++) {
-				//check if the value is in the range of the fraction
-				if (fractions[j].values.some(([start, end]) => i + 1 >= start && i + 1 <= end)) {
-					//if the value is in the range of the fraction, add the label to the array
-					if (Array.isArray(fractionData.values[i])) {
-						fractionData.values[i] = [...fractionData.values[i], fractions[j].label];
+			//check if the value is in any of the fragments
+			for (let j = 0; j < fragments.length; j++) {
+				//check if the value is in the range of the fragment
+				if (fragments[j].values.some(([start, end]) => i + 1 >= start && i + 1 <= end)) {
+					//if the value is in the range of the fragment, add the label to the array
+					if (Array.isArray(fragmentData.values[i])) {
+						fragmentData.values[i] = [...fragmentData.values[i], fragments[j].label];
 					} else {
-						fractionData.values[i] = [fractions[j].label];
+						fragmentData.values[i] = [fragments[j].label];
 					}
 				}
 			}
 		}
-		return fractionData;
+		return fragmentData;
 	});
 	/** @type {{label: string, values: boolean[]}[]} */
 	let boolData = $derived(
 		inputChipValueLabels.map((c) => {
 			if (c === 'fr') {
-				return allFractionData;
+				return allFragmentData;
 			} else if (c === summaryLabel) {
 				return {
 					label: c,
@@ -111,8 +112,8 @@
 		whitelist={[
 			summaryLabel,
 			'fr',
-			...codices.map((c) => c.sigil),
-			...fractions.map((f) => f.label)
+			...codices.map((/** @type {{ sigil: string; }} */ c) => c.sigil),
+			...fragments.map((/** @type {{ label: string; }} */ f) => f.label)
 		]}
 		bind:value={inputChipValues}
 		placeholder="Textzeuge / Fragment hinzufügen..."
