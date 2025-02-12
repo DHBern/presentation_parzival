@@ -2,15 +2,8 @@
 	import '../app.postcss';
 	import '@fortawesome/fontawesome-free/css/solid.min.css';
 	import '@fortawesome/fontawesome-free/css/fontawesome.min.css';
-	import {
-		AppShell,
-		AppBar,
-		getDrawerStore,
-		Drawer,
-		initializeStores
-	} from '@skeletonlabs/skeleton';
-	import { afterNavigate } from '$app/navigation';
-	import { page } from '$app/stores';
+	import { AppBar, getDrawerStore, Drawer, initializeStores } from '@skeletonlabs/skeleton';
+	import { page } from '$app/state';
 	import { base } from '$app/paths';
 	import { computePosition, autoUpdate, offset, shift, flip, arrow } from '@floating-ui/dom';
 	import { storePopup } from '@skeletonlabs/skeleton';
@@ -18,20 +11,11 @@
 	let { children } = $props();
 	storePopup.set({ computePosition, autoUpdate, offset, shift, flip, arrow });
 
-	// Scroll to top on page change (is needed because of skeleton app shell)
-	afterNavigate((/** @type import('@sveltejs/kit').AfterNavigate */ params) => {
-		const isNewPage = params.from?.url.pathname !== params.to?.url.pathname;
-		const elemPage = document.querySelector('#page');
-		if (isNewPage && elemPage !== null) {
-			elemPage.scrollTop = 0;
-		}
-	});
-
 	initializeStores();
 	const drawerStore = getDrawerStore();
 
 	let classesActive = $derived((/** @type {string} */ href) =>
-		base + href === `/${$page.url.pathname.split('/')[1]}`
+		base + href === `/${page.url.pathname.split('/')[1]}`
 			? 'bg-primary-500 hover:text-primary-400 text-secondary-500'
 			: 'hover:text-primary-500'
 	);
@@ -71,29 +55,24 @@
 	</nav>
 </Drawer>
 
-<AppShell>
-	{#snippet header()}
-		<AppBar>
-			{#snippet lead()}
-				<a class="text-xl uppercase font-bold" href={`${base}/`}>Parzival</a>
-			{/snippet}
-			<nav class="flex-none items-center h-full hidden lg:flex">
-				{#each pages as page}
-					<a
-						href={`${base}${page.path}`}
-						class="list-nav-item h-full p-4 {classesActive(page.path)}">{page.slug}</a
-					>
-				{/each}
-			</nav>
-			{#snippet trail()}
-				<button aria-label="Menü" class="lg:!hidden btn-icon" onclick={drawerOpen}>
-					<i class="fa-solid fa-bars"></i>
-				</button>
-			{/snippet}
-		</AppBar>
+<AppBar>
+	{#snippet lead()}
+		<a class="text-xl uppercase font-bold" href={`${base}/`}>Parzival</a>
 	{/snippet}
-	<!-- Page Route Content -->
-	<div class="px-4">
-		{@render children?.()}
-	</div>
-</AppShell>
+	<nav class="flex-none items-center h-full hidden lg:flex">
+		{#each pages as page}
+			<a href={`${base}${page.path}`} class="list-nav-item h-full p-4 {classesActive(page.path)}"
+				>{page.slug}</a
+			>
+		{/each}
+	</nav>
+	{#snippet trail()}
+		<button aria-label="Menü" class="lg:!hidden btn-icon" onclick={drawerOpen}>
+			<i class="fa-solid fa-bars"></i>
+		</button>
+	{/snippet}
+</AppBar>
+
+<main id="page-content" class="flex-auto px-4">
+	{@render children?.()}
+</main>
