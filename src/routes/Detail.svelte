@@ -285,10 +285,12 @@
 	data-popup="popupVerse"
 	bind:this={floating}
 >
+	<!-- if manuscriptHandles is an array, we create a list of Links, if it if either Fassungen or fr, we just create a paragraph that informs about the verse.-->
 	{#if Array.isArray(manuscriptHandles)}
 		<ul>
 			{#each manuscriptHandles as mHandle}
 				<li>
+					<!-- These links are not clickable since it's not possible to put the cursor over it, but it might be possible to access the links with ARIA means. -->
 					<a href={`${base}/textzeugen/${mHandle}/${verse}`} class="hover:text-secondary-900">
 						{@html siglaFromHandle(mHandle)}: {verse}
 					</a>
@@ -357,7 +359,7 @@
 					{#if values}
 						{#if isNaN(values[1])}
 							{@const verseNumber = i + selection.start}
-							{#if values.length === 1}
+							{#if values?.lenth === 1}
 								<a
 									href={`${base}/textzeugen/${values[0]}/${verseNumber}`}
 									aria-label={`${values[0]}.${verseNumber}`}
