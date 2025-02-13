@@ -1,5 +1,5 @@
 import { teipb } from '$lib/constants';
-import { generateEntries } from '$lib/functions';
+import { generateEntries } from '$lib/functions/generateEntries';
 import { metadata } from '$lib/data/metadata';
 
 /** @type {import('./$types').PageServerLoad} */
