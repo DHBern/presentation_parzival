@@ -1,10 +1,11 @@
 <script>
 	import { onMount } from 'svelte';
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	import { goto } from '$app/navigation';
 	import { base } from '$app/paths';
+	import { NUMBER_OF_PAGES } from '$lib/constants';
 
-	let { pages, scrolltop = $bindable() } = $props();
+	let { pages, observe, scrolltop = $bindable() } = $props();
 
 	let scrollContainer = $state();
 	/**
@@ -12,29 +13,36 @@
 	 */
 	let observer;
 	onMount(() => {
+		// update the current page when a new verse comes into view
+		let debounceTimeout;
 		observer = new IntersectionObserver(
 			(entries) => {
-				entries.forEach((entry) => {
-					if (entry.isIntersecting) {
-						console.log('intersecting', entry.target);
-						let verse = entry.target
-							.querySelector(`[data-verse]`)
-							?.attributes['data-verse']?.value.split('.')[0];
-						if (entry.target && verse) {
-							goto(`${base}/fassungen/${verse}`, { noScroll: true, keepFocus: true });
+				clearTimeout(debounceTimeout);
+				debounceTimeout = setTimeout(() => {
+					entries.forEach((entry) => {
+						if (entry.isIntersecting) {
+							let verse = entry.target
+								.querySelector(`[data-verse]`)
+								?.attributes['data-verse']?.value.split('.')[0];
+							if (entry.target && verse && verse !== page.data.thirties) {
+								goto(`${base}/fassungen/${verse}`, {
+									noScroll: true,
+									keepFocus: true,
+									replaceState: true
+								});
+							}
 						}
-					}
-				});
+					});
+				}, 100); // Adjust the debounce delay as needed
 			},
 			{
 				root: scrollContainer,
-				rootMargin: '0px',
+				rootMargin: '-60px',
 				threshold: [0, 1]
 			}
 		);
-		const verse = scrollContainer?.querySelector(`[data-verse="${$page.data.thirties}.01"]`);
+		const verse = scrollContainer?.querySelector(`[data-verse="${page.data.thirties}.01"]`);
 		if (verse) {
-			console.log('scrolling to', verse);
 			scrollContainer?.scrollTo({
 				top:
 					scrollContainer?.scrollTop +
@@ -58,27 +66,55 @@
 
 	const setSyncedScroll = (/** @type {HTMLDivElement} */ node) => {
 		$effect(() => {
-			if (scrolltop) {
-				node.scrollTo({ top: scrolltop, behavior: 'auto' });
+			if (scrolltop && node.scrollTop !== scrolltop) {
+				node.scrollTo({ top: scrolltop, behavior: 'instant' });
 			}
 		});
 	};
 </script>
 
 <div
-	class="max-h-[70vh] overflow-y-auto"
+	class="max-h-[70vh] overflow-y-auto bg-surface-active-token rounded-xl p-4"
 	bind:this={scrollContainer}
-	onscroll={(o) => {
+	onscroll={(/** @type {{ target: { scrollTop: any; }; }} */ o) => {
 		scrolltop = o?.target?.scrollTop;
 	}}
 	use:setSyncedScroll
 >
+	{#if pages[0][0] > 1}
+		<button
+			class="btn variant-filled-primary w-full mb-4"
+			onclick={() =>
+				goto(`${base}/fassungen/${pages[0][0] - 1}`, {
+					noScroll: true,
+					keepFocus: true,
+					replaceState: true
+				})}>lade vorherigen Dreißiger</button
+		>
+	{/if}
 	{#each pages as page (page[0])}
-		<div class="thirty tei-content" use:addToObserver>
-			{@html page[1]}
-		</div>
+		{#if observe}
+			<div class="thirty tei-content" use:addToObserver>
+				{@html page[1]}
+			</div>
+		{:else}
+			<div class="thirty tei-content">
+				{@html page[1]}
+			</div>
+		{/if}
 		<hr class="!border-t-4 !border-primary-500" />
 	{/each}
+	{#if pages[pages.length - 1][0] < NUMBER_OF_PAGES}
+		<button
+			class="btn variant-filled-primary w-full mt-4"
+			onclick={() =>
+				goto(`${base}/fassungen/${pages[pages.length - 1][0] + 1}`, {
+					noScroll: true,
+					keepFocus: true,
+					replaceState: true
+				})}>lade nächsten Dreißiger</button
+		>
+	{/if}
 </div>
 
 <style lang="postcss">

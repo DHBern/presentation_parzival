@@ -1,6 +1,6 @@
 import { json } from '@sveltejs/kit';
-import { teipb } from '$lib/constants';
-import { metadata } from '$lib/data.svelte';
+import { NUMBER_OF_PAGES, teipb } from '$lib/constants';
+import { metadata } from '$lib/data/metadata';
 
 /** @type {import('./$types').RequestHandler} */
 export async function GET({ params, fetch }) {
@@ -20,7 +20,9 @@ export async function GET({ params, fetch }) {
 
 /** @type {import('./$types').EntryGenerator} */
 export async function entries() {
-	const entriesArray = Array.from({ length: 827 }, (_, i) => ({ thirties: String(i + 1) }));
+	const entriesArray = Array.from({ length: NUMBER_OF_PAGES }, (_, i) => ({
+		thirties: String(i + 1)
+	}));
 	return entriesArray;
 }
 

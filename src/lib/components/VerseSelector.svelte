@@ -1,6 +1,7 @@
 <script>
 	import { goto, preloadData } from '$app/navigation';
 	import { base } from '$app/paths';
+	import { NUMBER_OF_PAGES } from '$lib/constants';
 
 	/** @type {{targetPath?: string, coordinates?: [String | boolean, String | boolean]}} */
 	let { targetPath = '/einzelverssynopse', coordinates = ['1', '1'] } = $props();
@@ -62,7 +63,7 @@
 			placeholder="Dreißiger"
 			class="input inline max-w-28"
 			min="1"
-			max="827"
+			max={NUMBER_OF_PAGES}
 			oninput={handleInput}
 			bind:this={thirties}
 			bind:value={thirtiesVal}

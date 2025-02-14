@@ -1,6 +1,6 @@
 import { teipb } from '$lib/constants';
-import { generateEntries } from '$lib/functions';
-import { metadata } from '$lib/data.svelte.js';
+import { generateEntries } from '$lib/functions/generateEntries';
+import { metadata } from '$lib/data/metadata';
 
 /** @type {import('./$types').PageServerLoad} */
 export async function load({ fetch, params }) {
@@ -46,7 +46,7 @@ export async function load({ fetch, params }) {
 	return {
 		thirties,
 		verse,
-		metadata,
+		metadata: await metadata,
 		publisherData: resolvedPublisherDataObject,
 		loss
 	};

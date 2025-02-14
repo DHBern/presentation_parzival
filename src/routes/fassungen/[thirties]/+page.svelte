@@ -1,5 +1,6 @@
 <script>
 	import { base } from '$app/paths';
+	import { NUMBER_OF_PAGES } from '$lib/constants';
 	import FassungenContent from './FassungenContent.svelte';
 	import { SlideToggle } from '@skeletonlabs/skeleton';
 
@@ -7,67 +8,82 @@
 	let { data } = $props();
 	class localPageClass {
 		/**
+		 * for the Fassungen *d, *m, *G and *T
 		 * @type {[[number, string][],[number, string][],[number, string][],[number, string][]]}
 		 */
 		pages = $state([[], [], [], []]);
 		/**
-		 * @type {string[]}
+		 * @type {Number[]}
 		 */
 		thirties = [];
 
-		fetchPage = async (/** @type {string} */ page) => {
+		/**
+		 * Fetches data for the specified page number.
+		 * @param {Number} page - The page number to fetch data for.
+		 * @returns {Promise<void>} - A promise that resolves when the data is fetched.
+		 */
+		fetchPage = async (/** @type {Number} */ page) => {
+			// if the page is not already loaded
 			if (!this.thirties.length) {
-				let [d, m, G, T] = await fetch(`${base}/fassungen/data/${Number(page) - 1}`).then((r) =>
-					r.json()
-				);
-				this.pages[0].push([Number(page) - 1, d]);
-				this.pages[1].push([Number(page) - 1, m]);
-				this.pages[2].push([Number(page) - 1, G]);
-				this.pages[3].push([Number(page) - 1, T]);
-				this.thirties.push(String(Number(page) - 1));
-				[d, m, G, T] = await fetch(`${base}/fassungen/data/${page}`).then((r) => r.json());
-				this.pages[0].push([Number(page), d]);
-				this.pages[1].push([Number(page), m]);
-				this.pages[2].push([Number(page), G]);
-				this.pages[3].push([Number(page), T]);
-				this.thirties.push(page);
-				[d, m, G, T] = await fetch(`${base}/fassungen/data/${Number(page) + 1}`).then((r) =>
-					r.json()
-				);
-				this.pages[0].push([Number(page) + 1, d]);
-				this.pages[1].push([Number(page) + 1, m]);
-				this.pages[2].push([Number(page) + 1, G]);
-				this.pages[3].push([Number(page) + 1, T]);
-				this.thirties.push(String(Number(page) + 1));
-			} else {
-				if (Number(page) < Number(this.thirties[0])) {
-					// console.log('fetching before');
-					let [d, m, G, T] = await fetch(`${base}/fassungen/data/${page}`).then((r) => r.json());
-					this.pages[0].unshift([Number(page), d]);
-					this.pages[1].unshift([Number(page), m]);
-					this.pages[2].unshift([Number(page), G]);
-					this.pages[3].unshift([Number(page), T]);
-					this.thirties.unshift(page);
-				} else if (Number(page) > Number(this.thirties[this.thirties.length - 1])) {
-					let [d, m, G, T] = await fetch(`${base}/fassungen/data/${page}`).then((r) => r.json());
-					this.pages[0].push([Number(page), d]);
-					this.pages[1].push([Number(page), m]);
-					this.pages[2].push([Number(page), G]);
-					this.pages[3].push([Number(page), T]);
+				let d, m, G, T;
+				// fetch the page before the current one if the current one is not the first
+				if (page - 1 > 0) {
+					[d, m, G, T] = await fetch(`${base}/fassungen/data/${page - 1}`).then((r) => r.json());
+					this.pages[0].push([page - 1, d]);
+					this.pages[1].push([page - 1, m]);
+					this.pages[2].push([page - 1, G]);
+					this.pages[3].push([page - 1, T]);
+					this.thirties.push(page - 1);
+				}
+				// fetch the current page
+				if (page <= NUMBER_OF_PAGES) {
+					[d, m, G, T] = await fetch(`${base}/fassungen/data/${page}`).then((r) => r.json());
+					this.pages[0].push([page, d]);
+					this.pages[1].push([page, m]);
+					this.pages[2].push([page, G]);
+					this.pages[3].push([page, T]);
 					this.thirties.push(page);
-				} else if (Number(page) === Number(this.thirties[0])) {
-					this.fetchPage(String(Number(page) - 1));
-				} else if (Number(page) === Number(this.thirties[this.thirties.length - 1])) {
-					this.fetchPage(String(Number(page) + 1));
+				}
+				// fetch the page after the current one if the current one is not the last
+				if (page !== NUMBER_OF_PAGES) {
+					[d, m, G, T] = await fetch(`${base}/fassungen/data/${page + 1}`).then((r) => r.json());
+					this.pages[0].push([page + 1, d]);
+					this.pages[1].push([page + 1, m]);
+					this.pages[2].push([page + 1, G]);
+					this.pages[3].push([page + 1, T]);
+					this.thirties.push(page + 1);
+				}
+				if (page > NUMBER_OF_PAGES) {
+					console.error('Page out of bounds');
+				}
+			} else {
+				if (page < this.thirties[0] && !this.thirties.includes(page)) {
+					let [d, m, G, T] = await fetch(`${base}/fassungen/data/${page}`).then((r) => r.json());
+					this.pages[0].unshift([page, d]);
+					this.pages[1].unshift([page, m]);
+					this.pages[2].unshift([page, G]);
+					this.pages[3].unshift([page, T]);
+					this.thirties.unshift(page);
+				} else if (page > this.thirties[this.thirties.length - 1]) {
+					let [d, m, G, T] = await fetch(`${base}/fassungen/data/${page}`).then((r) => r.json());
+					this.pages[0].push([page, d]);
+					this.pages[1].push([page, m]);
+					this.pages[2].push([page, G]);
+					this.pages[3].push([page, T]);
+					this.thirties.push(page);
+				} else if (page === this.thirties[0] && page > 1) {
+					this.fetchPage(page - 1);
+				} else if (page === this.thirties[this.thirties.length - 1] && page !== NUMBER_OF_PAGES) {
+					this.fetchPage(page + 1);
 				}
 			}
+			return Promise.resolve();
 		};
 	}
 
 	let localPages = new localPageClass();
-
 	$effect(() => {
-		localPages.fetchPage(data.thirties);
+		localPages.fetchPage(Number(data.thirties));
 	});
 	let scrolltop = $state(0);
 	let synchro = $state(true);
@@ -81,16 +97,14 @@
 			Synchrones scrollen
 		</SlideToggle>
 	</div>
-	<div
-		class="grid grid-cols-[repeat(auto-fit,minmax(400px,1fr))] gap-4 bg-surface-active-token my-4 py-4 px-8 rounded-xl"
-	>
-		{#each localPages.pages as pages}
-			{#if pages.length >= 3}
-				<!-- when at least 3 pages are loaded, the one for the currect thirties should be loaded aswell  -->
+	<div class="grid grid-cols-[repeat(auto-fit,minmax(400px,1fr))] gap-4 my-4 pl-4">
+		{#each localPages.pages as pages, i}
+			{#if pages.length >= 2}
+				<!-- when at least 2 pages are loaded, the one for the currect thirties should be loaded aswell  -->
 				{#if synchro}
-					<FassungenContent {pages} bind:scrolltop />
+					<FassungenContent {pages} bind:scrolltop observe={i === 0} />
 				{:else}
-					<FassungenContent {pages} />
+					<FassungenContent {pages} observe={true} />
 				{/if}
 			{/if}
 		{/each}

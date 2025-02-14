@@ -11,7 +11,8 @@
 		ZOOM_MINIMUM_WINDOW_SIZE
 	} from './Devilstable_DEFAULTS.json';
 
-	import { siglaFromHandle, metadataFromHandle } from '$lib/functions';
+	import siglaFromHandle from '$lib/functions/siglaFromHandle';
+	import metadataFromHandle from '$lib/functions/metadataFromHandle';
 
 	/** @type {{codices: any, width?: number, height?: number,data?: {values: boolean[], label: string}[],  selection: {start: number, end: number}}} */
 	let { codices, width = 400, height = 400, data = [], selection = $bindable() } = $props();
