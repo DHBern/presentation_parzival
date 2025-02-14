@@ -9,10 +9,9 @@
 	let corpus = $state('fassungen');
 	let activeMinisearch = $derived.by(() => {
 		switch (corpus) {
-			case 'fassungen':
-				return minisearches[0];
 			case 'textzeugen':
 				return minisearches[1];
+			case 'fassungen':
 			default:
 				return minisearches[0];
 		}
@@ -24,14 +23,11 @@
 			let miniSearchToAdd;
 			let docs;
 			switch (corpus) {
-				case 'fassungen':
-					docs = import('$lib/data/searchIndexFassung');
-					miniSearchToAdd = minisearches[0];
-					break;
 				case 'textzeugen':
 					docs = import('$lib/data/searchIndexWitness');
 					miniSearchToAdd = minisearches[1];
 					break;
+				case 'fassungen':
 				default:
 					docs = import('$lib/data/searchIndexFassung');
 					miniSearchToAdd = minisearches[0];
