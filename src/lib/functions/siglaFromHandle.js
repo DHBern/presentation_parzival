@@ -1,4 +1,4 @@
-import { metadata } from '../data/metadata';
+import { metadata } from '$lib/data/metadata';
 
 const { fragments, codices, hyparchetypes } = await metadata;
 /**

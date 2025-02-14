@@ -15,7 +15,7 @@ export async function generateEntries(sigla) {
 		/** @type {{thirties: string, verse: string}[]} */
 		let returnArray = [];
 		let uniqueVerses = new Set();
-		verses.forEach(({ thirties, verse }) => {
+		verses.forEach((/** @type {{thirties: string, verse: string}} */ { thirties, verse }) => {
 			const key = `${thirties}-${verse}`;
 			if (!uniqueVerses.has(key)) {
 				uniqueVerses.add(key);

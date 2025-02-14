@@ -11,6 +11,9 @@
 		ZOOM_MINIMUM_WINDOW_SIZE
 	} from './Devilstable_DEFAULTS.json';
 
+	import siglaFromHandle from '$lib/functions/siglaFromHandle';
+	import metadataFromHandle from '$lib/functions/metadataFromHandle';
+
 	/** @type {{codices: any, width?: number, height?: number,data?: {values: boolean[], label: string}[],  selection: {start: number, end: number}}} */
 	let { codices, width = 400, height = 400, data = [], selection = $bindable() } = $props();
 	let marginTop = 30;
@@ -141,13 +144,13 @@
 		};
 	}
 
-	const popupFractions = $state({});
+	const popupFragments = $state({});
 	const popupLabels = $state({});
-	const openPopupFractions = (e, verseNumber) => {
+	const openPopupFragments = (e, verseNumber) => {
 		e.preventDefault();
 		e.stopPropagation();
 		const reference = e.currentTarget;
-		const popup = popupFractions[verseNumber];
+		const popup = popupFragments[verseNumber];
 		if (popup && reference) {
 			computePosition(reference, popup, {
 				placement: 'top'
@@ -207,12 +210,12 @@
 		)
 	);
 	let verse = $derived(Math.floor(y.invert(mousePos[1])));
-	let manuscript = $derived(
+	let frValues = $derived(data.find((d) => d.label === 'fr')?.values);
+	let manuscriptHandles = $derived(
 		scaleBandInvert(x)(mousePos[0]) === 'fr'
-			? data.find((d) => d.label === 'fr')?.values[verse - selection.start] || 'fr'
+			? frValues?.[verse - selection.start] || 'fr'
 			: scaleBandInvert(x)(mousePos[0])
 	);
-	// $inspect(contigousData);
 	$effect(() => {
 		d3.select(gy)
 			.call(
@@ -283,41 +286,51 @@
 	data-popup="popupVerse"
 	bind:this={floating}
 >
-	{#if Array.isArray(manuscript)}
+	<!-- if manuscriptHandles is an array, we create a list of Links, if it if either Fassungen or fr, we just create a paragraph that informs about the verse.-->
+	{#if Array.isArray(manuscriptHandles)}
 		<ul>
-			{#each manuscript as sigla}
+			{#each manuscriptHandles as mHandle}
 				<li>
-					<a href={`${base}/textzeugen/${sigla}/${verse}`} class="hover:text-secondary-900">
-						{sigla}
-						{verse}
+					<!-- These links are not clickable since it's not possible to put the cursor over it, but it might be possible to access the links with ARIA means. -->
+					<a href={`${base}/textzeugen/${mHandle}/${verse}`} class="hover:text-secondary-900">
+						{@html siglaFromHandle(mHandle)}: {verse}
 					</a>
 				</li>
 			{/each}
 		</ul>
+	{:else if manuscriptHandles === summaryLabel}
+		<p>Dreißiger {verse}</p>
+	{:else if manuscriptHandles === 'fr'}
+		<p>Fragment {verse}</p>
 	{:else}
-		<p>{manuscript} {verse}</p>
+		<p>{@html siglaFromHandle(String(manuscriptHandles))}: {verse}</p>
 	{/if}
 </div>
-{#each data.map((d) => d.label) as label}
+<!-- clickable popups on column labels -->
+{#each data.map((d) => d.label) as handle}
+	{@const metadata = metadataFromHandle(handle)}
 	<div
-		class="card p-1 variant-filled-primary absolute opacity-0 top-0 left-0 w-max"
-		bind:this={popupLabels[label]}
+		class="card p-1 variant-filled-primary absolute opacity-0 top-0 left-0 max-w-prose prose"
+		bind:this={popupLabels[handle]}
 	>
-		<p>Hier stehen Erläuterungen zu {label}</p>
+		<strong class="">{@html metadata?.['info-h1']}</strong>
+		{@html metadata?.['info-h2']}
+		{@html metadata?.info}
 	</div>
 {/each}
-{#each data.find((d) => d.label === 'fr')?.values || [] as fraction, i}
-	{#if Array.isArray(fraction)}
+<!-- popups for fragments -->
+{#each frValues || [] as fragment, i}
+	{#if Array.isArray(fragment)}
 		{@const verse = i + selection.start}
 		<div
 			class="card p-1 variant-filled-primary top-0 left-0 w-max absolute opacity-0"
-			bind:this={popupFractions[verse]}
+			bind:this={popupFragments[verse]}
 		>
 			<ul>
-				{#each fraction as sigla}
+				{#each fragment as handle}
 					<li>
-						<a href={`${base}/textzeugen/${sigla}/${verse}`} class="hover:text-secondary-900">
-							{sigla}
+						<a href={`${base}/textzeugen/${handle}/${verse}`} class="hover:text-secondary-900">
+							{@html siglaFromHandle(handle)}
 							{verse}
 						</a>
 					</li>
@@ -347,7 +360,7 @@
 					{#if values}
 						{#if isNaN(values[1])}
 							{@const verseNumber = i + selection.start}
-							{#if values.length === 1}
+							{#if values?.lenth === 1}
 								<a
 									href={`${base}/textzeugen/${values[0]}/${verseNumber}`}
 									aria-label={`${values[0]}.${verseNumber}`}
@@ -367,13 +380,13 @@
 									role="button"
 									tabindex="0"
 									href="#"
-									onkeydown={(e) => openPopupFractions(e, verseNumber)}
+									onkeydown={(e) => openPopupFragments(e, verseNumber)}
 									onclick={(e) => {
-										openPopupFractions(e, verseNumber);
+										openPopupFragments(e, verseNumber);
 									}}
 									aria-label={`Mehrere Fr in Vers ${verseNumber}`}
 									onblur={() => {
-										popupFractions[verseNumber].style.opacity = '0';
+										popupFragments[verseNumber].style.opacity = '0';
 									}}
 								>
 									<rect
