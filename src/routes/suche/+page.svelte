@@ -154,6 +154,9 @@
 				>Lade Suche <i class="ml-1 fa-solid fa-spinner fa-spin"></i></button
 			>
 		{/if}
+		{#await searchResults then r}
+			<p>{r.length} Ergebnisse</p>
+		{/await}
 	</form>
 </section>
 <section class="container mx-auto mt-4">
