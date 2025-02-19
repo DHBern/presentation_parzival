@@ -9,7 +9,7 @@ export function processTerm(term) {
 
 const miniSearchConfig = {
 	fields: ['content_all', 'content', 'terms'],
-	storeFields: ['content', 'verse', 'd', 'sigla'],
+	storeFields: ['content', 'content_all', 'verse', 'd', 'sigla'],
 	processTerm
 };
 

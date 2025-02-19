@@ -2,7 +2,7 @@
 	import { minisearches, processTerm } from '$lib/minisearch.svelte';
 	import siglaFromHandle from '$lib/functions/siglaFromHandle';
 	import Datatable from './Datatable.svelte';
-	import { RadioGroup, RadioItem, SlideToggle } from '@skeletonlabs/skeleton';
+	import { RadioGroup, RadioItem } from '@skeletonlabs/skeleton';
 	let hasDocuments = $state(!!minisearches[0].documentCount);
 	let searchtext = $state('');
 	let useExactSearch = $state(true);
@@ -50,6 +50,28 @@
 	 */
 	let searchResults = $state(new Promise((resolve) => resolve([])));
 
+	/**
+	 * @param {string} base
+	 * @param {string} compareTo
+	 */
+	function highlightDifferences(base, compareTo) {
+		let result = '';
+		let i = 0,
+			j = 0;
+
+		while (i < base.length) {
+			if (j < compareTo.length && base[i] === compareTo[j]) {
+				result += base[i];
+				j++; // Move both pointers when characters match
+			} else {
+				result += `<span>${base[i]}</span>`; // Highlight extra characters
+			}
+			i++; // Always move pointer for base
+		}
+
+		return result;
+	}
+
 	const handleSearch = async (/** @type {import("minisearch").Query} */ query) => {
 		let results = activeMinisearch.search(query, { fuzzy: useExactSearch ? 0 : 0.3 });
 		results = await Promise.all(
@@ -61,12 +83,24 @@
 			results.map((r) => {
 				r.humanReadableSigil = siglaFromHandle(r.sigla);
 				const matches = Object.keys(r.match);
+				if (r.content_all !== r.content) {
+					r.content_all = highlightDifferences(r.content_all, r.content);
+				}
 				//Mark all matches in the content
-				r.content = r.content
+				r.content_all = r.content_all
 					.split(' ')
 					.map((/** @type {string} */ c) => {
 						//if the matches include the processed term without punctuation, mark it
-						if (matches.includes(processTerm(c.replaceAll(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, '')))) {
+						if (
+							matches.includes(
+								processTerm(
+									c
+										.replaceAll('<span>', '')
+										.replaceAll('</span>', '')
+										.replaceAll(/[<>.,\/#!$%\^&\*;:{}=\-_`~()]/g, '')
+								)
+							)
+						) {
 							return `<mark>${c}</mark>`;
 						}
 						return c;
