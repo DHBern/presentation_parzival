@@ -191,7 +191,7 @@
 							<a
 								class="btn btn-icon"
 								href={generateCloseLink(content.sigla)}
-								aria-label="Ansicht schliessen"
+								aria-label="Ansicht schließen"
 							>
 								<i class="fa-solid fa-x"></i>
 							</a>

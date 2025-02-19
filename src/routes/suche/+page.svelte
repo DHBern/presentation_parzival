@@ -98,8 +98,8 @@
 	<div>
 		<h1>Suche</h1>
 		<p>
-			Durchsuchen Sie hier das komplette Textkorpus des ›Parzival‹. Standardmässig durchsuchen Sie
-			die Fassungsverse, und Ihnen werden nur genaue Treffer gezeigt.Dabei werden einige
+			Durchsuchen Sie hier das komplette Textkorpus des ›Parzival‹. Standardmäßig durchsuchen Sie
+			die Fassungsverse, und Ihnen werden nur genaue Treffer gezeigt. Dabei werden einige
 			Normalisierungen berücksichtigt, so dass Ligaturen und andere Sonderformen auch gefunden
 			werden. Die Suche nach <i>spigel</i> enthält so zum Beispiel auch Treffer mit Schaft-<i>s</i>
 			(<i>ſpigel</i>). Für die Textzeugensuche empfiehlt sich eine unscharfe Suche.
