@@ -94,7 +94,7 @@
 	};
 </script>
 
-<section class="container mx-auto typography grid grid-cols-2 my-4 gap-8">
+<section class="container mx-auto typography grid sm:grid-cols-2 my-4 gap-8">
 	<div>
 		<h1>Suche</h1>
 		<p>
@@ -107,19 +107,22 @@
 	</div>
 	<div>
 		<h2 class="h2">Suchoptionen</h2>
-		<div class="flex gap-2 items-center">
-			<SlideToggle active="bg-primary-500" name="exact" bind:checked={useExactSearch}
-				>{useExactSearch ? 'exakte' : 'fuzzy'} Suche</SlideToggle
+		<RadioGroup active="variant-filled-primary">
+			<RadioItem bind:group={useExactSearch} name="Suchvariante" value={true}
+				>exakte Suche</RadioItem
 			>
-			<RadioGroup active="variant-filled-primary">
-				<RadioItem bind:group={corpus} name="korpus" value={'fassungen'} disabled={!hasDocuments}>
-					Fassungen (1.67MB)
-				</RadioItem>
-				<RadioItem bind:group={corpus} name="korpus" value={'textzeugen'} disabled={!hasDocuments}>
-					Textzeugen (9.96MB)
-				</RadioItem>
-			</RadioGroup>
-		</div>
+			<RadioItem bind:group={useExactSearch} name="Suchvariante" value={false}>
+				unscharfe Suche
+			</RadioItem>
+		</RadioGroup>
+		<RadioGroup active="variant-filled-primary">
+			<RadioItem bind:group={corpus} name="korpus" value={'fassungen'} disabled={!hasDocuments}>
+				Fassungen (1.67MB)
+			</RadioItem>
+			<RadioItem bind:group={corpus} name="korpus" value={'textzeugen'} disabled={!hasDocuments}>
+				Textzeugen (9.96MB)
+			</RadioItem>
+		</RadioGroup>
 	</div>
 </section>
 <section class="container mx-auto">
