@@ -44,17 +44,17 @@
 		<tbody>
 			{#each table?.rows as row (row.id)}
 				<tr>
-					<td class="table-cell-fit">{row?.humanReadableSigil}</td>
+					<td class="table-cell-fit">{@html row?.humanReadableSigil}</td>
 					<td class="table-cell-fit">{row?.d}</td>
 					<td class="table-cell-fit">{row?.verse}</td>
-					<td>
+					<td class="content">
 						{#if korpus === 'textzeugen'}
 							<a href={`${base}/textzeugen/${row.sigla}/${row.d}/${row.verse}`}>
-								{@html row?.content}
+								{@html row?.content_all}
 							</a>
 						{:else}
 							<a href={`${base}/fassungen/${row.d}`}>
-								{@html row?.content}
+								{@html row?.content_all}
 							</a>
 						{/if}
 					</td>
@@ -80,3 +80,9 @@
 		{/if}
 	{/each}
 </div>
+
+<style lang="postcss">
+	.content :global(span) {
+		@apply text-surface-400;
+	}
+</style>

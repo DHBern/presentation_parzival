@@ -14,7 +14,7 @@
 		>. Profile der Parzival–Überlieferung am Beispiel von fünf Handschriften des 13. bis 15.
 		Jahrhunderts. Mit einem Beitrag von Richard F. Fasching, Basel 2020 [419 S.] [<a
 			href="/4086_8_Titelflyer_Stolz_Parzival.pdf"
-			title="Flyer Parzival im Mansukript"
+			title="Flyer Parzival im Manuskript"
 			target="_blank">Flyer</a
 		>]
 	</p>

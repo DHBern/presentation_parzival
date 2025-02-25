@@ -2,7 +2,7 @@
 	import { minisearches, processTerm } from '$lib/minisearch.svelte';
 	import siglaFromHandle from '$lib/functions/siglaFromHandle';
 	import Datatable from './Datatable.svelte';
-	import { RadioGroup, RadioItem, SlideToggle } from '@skeletonlabs/skeleton';
+	import { RadioGroup, RadioItem } from '@skeletonlabs/skeleton';
 	let hasDocuments = $state(!!minisearches[0].documentCount);
 	let searchtext = $state('');
 	let useExactSearch = $state(true);
@@ -50,6 +50,28 @@
 	 */
 	let searchResults = $state(new Promise((resolve) => resolve([])));
 
+	/**
+	 * @param {string} base
+	 * @param {string} compareTo
+	 */
+	function highlightDifferences(base, compareTo) {
+		let result = '';
+		let i = 0,
+			j = 0;
+
+		while (i < base.length) {
+			if (j < compareTo.length && base[i] === compareTo[j]) {
+				result += base[i];
+				j++; // Move both pointers when characters match
+			} else {
+				result += `<span>${base[i]}</span>`; // Highlight extra characters
+			}
+			i++; // Always move pointer for base
+		}
+
+		return result;
+	}
+
 	const handleSearch = async (/** @type {import("minisearch").Query} */ query) => {
 		let results = activeMinisearch.search(query, { fuzzy: useExactSearch ? 0 : 0.3 });
 		results = await Promise.all(
@@ -61,12 +83,24 @@
 			results.map((r) => {
 				r.humanReadableSigil = siglaFromHandle(r.sigla);
 				const matches = Object.keys(r.match);
+				if (r.content_all !== r.content) {
+					r.content_all = highlightDifferences(r.content_all, r.content);
+				}
 				//Mark all matches in the content
-				r.content = r.content
+				r.content_all = r.content_all
 					.split(' ')
 					.map((/** @type {string} */ c) => {
 						//if the matches include the processed term without punctuation, mark it
-						if (matches.includes(processTerm(c.replaceAll(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, '')))) {
+						if (
+							matches.includes(
+								processTerm(
+									c
+										.replaceAll('<span>', '')
+										.replaceAll('</span>', '')
+										.replaceAll(/[<>.,\/#!$%\^&\*;:{}=\-_`~()]/g, '')
+								)
+							)
+						) {
 							return `<mark>${c}</mark>`;
 						}
 						return c;
@@ -94,23 +128,32 @@
 	};
 </script>
 
-<section class="container mx-auto typography grid grid-cols-2 my-4 gap-8">
+<section class="container mx-auto typography grid sm:grid-cols-2 my-4 gap-8">
 	<div>
 		<h1>Suche</h1>
 		<p>
-			Durchsuchen Sie hier den kompletten Textkopus des Parzival. Standardmässig durchsuchen Sie die
-			Fassungsverse und Ihnen werden nur genaue Treffer gezeigt. Dabei wurden einige
-			Normalisierungen durchgeführt, so dass Ligaturen und andere Sonderformen auch in den Suchen
-			gefunden werden. Die Suche nach Spigel enthält so zum Beispiel auch Treffer mit Schaft-S
-			(ſpigel).
+			Durchsuchen Sie hier das komplette Textkorpus des ›Parzival‹. Standardmäßig durchsuchen Sie
+			die Fassungsverse, und Ihnen werden nur genaue Treffer gezeigt. Dabei werden einige
+			Normalisierungen berücksichtigt, so dass Ligaturen und andere Sonderformen auch gefunden
+			werden. Die Suche nach <i>spigel</i> enthält so zum Beispiel auch Treffer mit Schaft-<i>s</i>
+			(<i>ſpigel</i>). Für die Textzeugensuche empfiehlt sich eine unscharfe Suche.
+		</p>
+		<p>
+			Klicken Sie auf das jeweilige Ergebnis, um direkt in die Transkription zu gelangen (aus
+			technischen Gründen kann das Suchresultat mitunter von der Transkription leicht abweichen).
 		</p>
 	</div>
 	<div>
 		<h2 class="h2">Suchoptionen</h2>
-		<div class="flex gap-2 items-center">
-			<SlideToggle active="bg-primary-500" name="exact" bind:checked={useExactSearch}
-				>{useExactSearch ? 'exakte' : 'fuzzy'} Suche</SlideToggle
-			>
+		<div class="flex flex-col w-fit gap-2">
+			<RadioGroup active="variant-filled-primary">
+				<RadioItem bind:group={useExactSearch} name="Suchvariante" value={true}
+					>exakte Suche</RadioItem
+				>
+				<RadioItem bind:group={useExactSearch} name="Suchvariante" value={false}>
+					unscharfe Suche
+				</RadioItem>
+			</RadioGroup>
 			<RadioGroup active="variant-filled-primary">
 				<RadioItem bind:group={corpus} name="korpus" value={'fassungen'} disabled={!hasDocuments}>
 					Fassungen (1.67MB)
@@ -147,6 +190,9 @@
 				>Lade Suche <i class="ml-1 fa-solid fa-spinner fa-spin"></i></button
 			>
 		{/if}
+		{#await searchResults then r}
+			<p>{r.length === 1 ? '1 Ergebnis' : `${r.length} Ergebnisse`}</p>
+		{/await}
 	</form>
 </section>
 <section class="container mx-auto mt-4">
