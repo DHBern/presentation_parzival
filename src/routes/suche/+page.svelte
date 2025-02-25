@@ -145,22 +145,24 @@
 	</div>
 	<div>
 		<h2 class="h2">Suchoptionen</h2>
-		<RadioGroup active="variant-filled-primary">
-			<RadioItem bind:group={useExactSearch} name="Suchvariante" value={true}
-				>exakte Suche</RadioItem
-			>
-			<RadioItem bind:group={useExactSearch} name="Suchvariante" value={false}>
-				unscharfe Suche
-			</RadioItem>
-		</RadioGroup>
-		<RadioGroup active="variant-filled-primary">
-			<RadioItem bind:group={corpus} name="korpus" value={'fassungen'} disabled={!hasDocuments}>
-				Fassungen (1.67MB)
-			</RadioItem>
-			<RadioItem bind:group={corpus} name="korpus" value={'textzeugen'} disabled={!hasDocuments}>
-				Textzeugen (9.96MB)
-			</RadioItem>
-		</RadioGroup>
+		<div class="flex flex-col w-fit gap-2">
+			<RadioGroup active="variant-filled-primary">
+				<RadioItem bind:group={useExactSearch} name="Suchvariante" value={true}
+					>exakte Suche</RadioItem
+				>
+				<RadioItem bind:group={useExactSearch} name="Suchvariante" value={false}>
+					unscharfe Suche
+				</RadioItem>
+			</RadioGroup>
+			<RadioGroup active="variant-filled-primary">
+				<RadioItem bind:group={corpus} name="korpus" value={'fassungen'} disabled={!hasDocuments}>
+					Fassungen (1.67MB)
+				</RadioItem>
+				<RadioItem bind:group={corpus} name="korpus" value={'textzeugen'} disabled={!hasDocuments}>
+					Textzeugen (9.96MB)
+				</RadioItem>
+			</RadioGroup>
+		</div>
 	</div>
 </section>
 <section class="container mx-auto">
