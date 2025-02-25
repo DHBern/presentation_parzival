@@ -191,7 +191,7 @@
 			>
 		{/if}
 		{#await searchResults then r}
-			<p>{r.length} Ergebnisse</p>
+			<p>{r.length === 1 ? '1 Ergebnis' : `${r.length} Ergebnisse`}</p>
 		{/await}
 	</form>
 </section>
