@@ -12,24 +12,5 @@ export default {
 		'./src/**/*.{html,js,svelte,ts}',
 		join(require.resolve('@skeletonlabs/skeleton'), '../**/*.{html,js,svelte,ts}')
 	],
-	plugins: [
-		typography,
-		containerQueries,
-		forms,
-		skeleton({
-			themes: {
-				custom: parzival,
-				preset: [
-					{
-						name: 'skeleton',
-						enhancements: true
-					},
-					{
-						name: 'vintage',
-						enhancements: true
-					}
-				]
-			}
-		})
-	]
+	plugins: [typography, containerQueries, forms]
 };
