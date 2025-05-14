@@ -1,5 +1,5 @@
 <script>
-	import '../app.postcss';
+	import '../app.css';
 	import '@fortawesome/fontawesome-free/css/solid.min.css';
 	import '@fortawesome/fontawesome-free/css/fontawesome.min.css';
 	import { AppBar } from '@skeletonlabs/skeleton-svelte';
