@@ -4,11 +4,10 @@
 @import '@skeletonlabs/skeleton/optional/presets';
 
 @source "../node_modules/@skeletonlabs/skeleton-svelte/dist";
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-@tailwind variants;
 
+@tailwind utilities;
+
+@import '@skeletonlabs/skeleton/themes/vintage';
 @import '../parzival.css';
 
 @font-face {
