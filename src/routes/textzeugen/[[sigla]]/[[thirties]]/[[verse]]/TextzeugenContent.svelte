@@ -179,7 +179,7 @@
 								onclick={() => {
 									localIiifChange(iiif);
 								}}
-								class="btn variant-filled ml-2 float-right"
+								class="btn preset-filled ml-2 float-right"
 							>
 								Seite wechseln
 							</button>

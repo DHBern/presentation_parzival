@@ -171,7 +171,7 @@
 	<p>
 		Michael Stolz/ Friedrich Michael Dimpel: Computergestütztes Kollationieren und dynamische
 		Textpräsentation – Ein Werkstattbericht aus dem Parzival-Projekt (Stand Dezember 2006) [<a
-			href="http://edoc.bbaw.de/frontdoor.php?source_opus=516&amp;la=de"
+			href="http://edoc.bbaw.de/frontdoor.php?source_opus=516&la=de"
 			target="_blank">Text</a
 		>]
 	</p>
@@ -545,7 +545,7 @@
 		</li>
 
 		<li>
-			Universität Freiburg/Schweiz, Tagung der Wolfram von Eschenbach-Gesellschaft, "TexT &amp; TexT
+			Universität Freiburg/Schweiz, Tagung der Wolfram von Eschenbach-Gesellschaft, "TexT & TexT
 			in lateinischer und volkssprachiger Überlieferung des Mittelalters", 1. Oktober 2004 (Vortrag
 			zu Überschriften in der Parzival-Überlieferung von Gabriel Viehhauser)
 		</li>
@@ -611,7 +611,7 @@
 			2002
 		</li>
 
-		<li>Universität Bamberg, Tagung "Mediävistik &amp; neue Medien", 7. Dezember 2001</li>
+		<li>Universität Bamberg, Tagung "Mediävistik & neue Medien", 7. Dezember 2001</li>
 
 		<li>
 			Western Michigan University, Kalamazoo (USA), International Congress on Medieval Studies, 6.

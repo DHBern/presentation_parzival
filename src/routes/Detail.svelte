@@ -282,7 +282,7 @@
 </script>
 
 <div
-	class="card p-1 variant-filled-primary fixed top-0 left-0 w-max"
+	class="card p-1 preset-filled-primary-500 fixed top-0 left-0 w-max"
 	data-popup="popupVerse"
 	bind:this={floating}
 >
@@ -310,7 +310,7 @@
 {#each data.map((d) => d.label) as handle}
 	{@const metadata = metadataFromHandle(handle)}
 	<div
-		class="card p-1 variant-filled-primary absolute opacity-0 top-0 left-0 max-w-prose prose"
+		class="card p-1 preset-filled-primary-500 absolute opacity-0 top-0 left-0 max-w-prose prose"
 		bind:this={popupLabels[handle]}
 	>
 		<strong class="">{@html metadata?.['info-h1']}</strong>
@@ -323,7 +323,7 @@
 	{#if Array.isArray(fragment)}
 		{@const verse = i + selection.start}
 		<div
-			class="card p-1 variant-filled-primary top-0 left-0 w-max absolute opacity-0"
+			class="card p-1 preset-filled-primary-500 top-0 left-0 w-max absolute opacity-0"
 			bind:this={popupFragments[verse]}
 		>
 			<ul>

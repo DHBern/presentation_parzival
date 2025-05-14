@@ -1,5 +1,5 @@
 <script>
-	import { InputChip, popup } from '@skeletonlabs/skeleton';
+	import { InputChip } from '@skeletonlabs/skeleton-svelte';
 	import Brush from './Brush.svelte';
 	import Detail from './Detail.svelte';
 	import { summaryLabel } from '$lib/constants';
@@ -85,7 +85,7 @@
 	);
 </script>
 
-<div class="card p-4 variant-filled-primary max-w-lg" data-popup="popupChips">
+<div class="card p-4 preset-filled-primary-500 max-w-lg" data-popup="popupChips">
 	<p>
 		Um Textzeugen und Fragmente zu entfernen, klicken Sie bitte auf die grau hinterlegten Kästchen.
 	</p>
@@ -97,7 +97,7 @@
 		ein. Z. B.
 		<i>fr32</i>. Um alle Fragmente in einer Spalte hinzuzufügen, geben Sie <i>fr</i> (ohne index) ein.
 	</p>
-	<div class="arrow variant-filled-primary"></div>
+	<div class="arrow preset-filled-primary-500"></div>
 </div>
 <div
 	class="container mx-auto mb-6 flex flex-wrap md:flex-nowrap gap-4"
@@ -120,9 +120,9 @@
 		name="inputChips"
 		allowUpperCase
 	/>
-	<div class="btn-group md:btn-group-vertical variant-filled h-min m-auto">
+	<div class=" md:-vertical preset-filled h-min m-auto">
 		<button
-			class="btn variant-filled"
+			class="btn preset-filled"
 			onclick={() => {
 				inputChipValues = defaultChips;
 			}}
@@ -130,7 +130,7 @@
 			zurücksetzen
 		</button>
 		<button
-			class="btn variant-filled"
+			class="btn preset-filled"
 			onclick={() => {
 				inputChipValues = [];
 			}}

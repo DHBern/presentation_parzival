@@ -1,7 +1,22 @@
+@import '@skeletonlabs/skeleton';
+
+@import '@skeletonlabs/skeleton/optional/presets';
+
+@import '@skeletonlabs/skeleton/themes/cerberus';
+
+@import '@skeletonlabs/skeleton';
+
+@import '@skeletonlabs/skeleton/optional/presets';
+
+@import '@skeletonlabs/skeleton/themes/vintage';
+
+@source "../node_modules/@skeletonlabs/skeleton-svelte/dist";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 @tailwind variants;
+
+@import '../parzival.css';
 
 @font-face {
 	/* Reference name */
@@ -144,18 +159,18 @@
 		@apply text-red-500;
 		&::before {
 			content: '\005B';
-			@apply text-on-surface-token;
+			@apply text-surface-contrast-500;
 			@apply inline;
 			@apply h-4;
 		}
 		&::after {
 			content: '\005D';
-			@apply text-on-surface-token;
+			@apply text-surface-contrast-500;
 			@apply inline;
 			@apply h-4;
 		}
 	}
 	.deleted + .added::before {
-        content: ' ';
-    }
+		content: ' ';
+	}
 }

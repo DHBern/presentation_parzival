@@ -2,7 +2,7 @@
 	import { base } from '$app/paths';
 	import { NUMBER_OF_PAGES } from '$lib/constants';
 	import FassungenContent from './FassungenContent.svelte';
-	import { SlideToggle } from '@skeletonlabs/skeleton';
+	import { Switch } from '@skeletonlabs/skeleton-svelte';
 
 	/** @type {{data: import('./$types').PageData}} */
 	let { data } = $props();
@@ -93,9 +93,9 @@
 	<h1 class="h1 my-4">Fassungsansicht</h1>
 	<div class="grid gap-6 md:grid-cols-2 md:my-8">
 		<p>Einstellungen und Links zu den Textzeugen.</p>
-		<SlideToggle active="bg-primary-500" name="synchro" bind:checked={synchro}>
+		<Switch active="bg-primary-500" name="synchro" bind:checked={synchro}>
 			Synchrones scrollen
-		</SlideToggle>
+		</Switch>
 	</div>
 	<div class="grid grid-cols-[repeat(auto-fit,minmax(400px,1fr))] gap-4 my-4 pl-4">
 		{#each localPages.pages as pages, i}

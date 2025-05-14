@@ -1,7 +1,5 @@
 <script>
-	import { popup } from '@skeletonlabs/skeleton';
-
-	/** @type {import('@skeletonlabs/skeleton').PopupSettings}*/
+		/** @type {import('@skeletonlabs/skeleton').PopupSettings}*/
 	const popupClick = {
 		event: 'focus-click',
 		target: 'popupClick',
@@ -12,9 +10,9 @@
 	let popupContent = $state();
 </script>
 
-<div class="card m-8 p-4 variant-filled-primary" data-popup="popupClick">
+<div class="card m-8 p-4 preset-filled-primary-500" data-popup="popupClick">
 	<span bind:this={popupContent}>content</span>
-	<div class="arrow variant-filled-primary"></div>
+	<div class="arrow preset-filled-primary-500"></div>
 </div>
 <div class="container mx-auto typography">
 	<h1 class="h1 mb-4">
@@ -280,7 +278,7 @@
 				von Ricarda Bauschke-Hartung, Berlin 2020 (Wolfram-Studien 26), S. 471–493 (im Druck)
 			</span>
 		</button>
-		(basierend auf&nbsp;<a href="/hsverz" target="_self">Codex 857</a> der Stiftsbibliothek St.
+		(basierend auf <a href="/hsverz" target="_self">Codex 857</a> der Stiftsbibliothek St.
 		Gallen aus der Mitte des 13. Jahrhunderts, Hs. D) erläutert.<br />
 
 		Zweifellos kann in einer Digitaledition die von der <i>New Philology</i> postulierte Varianz

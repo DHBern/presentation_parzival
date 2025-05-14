@@ -114,7 +114,7 @@
 		</li>
 		<li>
 			<a
-				href="https://www.uni-due.de/zim/services/suchdienste/mitarbeiter.php?id=58239&amp;vcard="
+				href="https://www.uni-due.de/zim/services/suchdienste/mitarbeiter.php?id=58239&vcard="
 				target="_blank">Prof. Dr. Martin Schubert</a
 			> (Berlin-Brandenburgische Akademie der Wissenschaften, jetzt Professor für Germanistische Mediävistik,
 			Universität Duisburg-Essen)

@@ -2,11 +2,10 @@
 	import '../app.postcss';
 	import '@fortawesome/fontawesome-free/css/solid.min.css';
 	import '@fortawesome/fontawesome-free/css/fontawesome.min.css';
-	import { AppBar, getDrawerStore, Drawer, initializeStores } from '@skeletonlabs/skeleton';
+	import { AppBar } from '@skeletonlabs/skeleton-svelte';
 	import { page } from '$app/state';
 	import { base } from '$app/paths';
 	import { computePosition, autoUpdate, offset, shift, flip, arrow } from '@floating-ui/dom';
-	import { storePopup } from '@skeletonlabs/skeleton';
 	/** @type {{children?: import('svelte').Snippet}} */
 	let { children } = $props();
 	storePopup.set({ computePosition, autoUpdate, offset, shift, flip, arrow });
