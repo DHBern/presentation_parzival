@@ -1,5 +1,5 @@
 <script>
-	import { InputChip } from '@skeletonlabs/skeleton-svelte';
+	import { TagsInput } from '@skeletonlabs/skeleton-svelte';
 	import Brush from './Brush.svelte';
 	import Detail from './Detail.svelte';
 	import { summaryLabel } from '$lib/constants';
@@ -108,17 +108,25 @@
 		middleware: { flip: { mainAxis: false } }
 	}}
 >
-	<InputChip
-		whitelist={[
-			summaryLabel,
-			'fr',
-			...codices.map((/** @type {{ sigil: string; }} */ c) => c.sigil),
-			...fragments.map((/** @type {{ label: string; }} */ f) => f.label)
-		]}
-		bind:value={inputChipValues}
+	<TagsInput
+		validate={(input) => {
+			console.log('validating!');
+			if (
+				[
+					summaryLabel,
+					'fr',
+					...codices.map((/** @type {{ sigil: string; }} */ c) => c.sigil),
+					...fragments.map((/** @type {{ label: string; }} */ f) => f.label)
+				].includes(input.inputValue)
+			) {
+				return true;
+			}
+			return false;
+		}}
+		value={inputChipValues}
+		onValueChange={(e) => (inputChipValues = e.value)}
 		placeholder="Textzeuge / Fragment hinzufügen..."
 		name="inputChips"
-		allowUpperCase
 	/>
 	<div class=" md:-vertical preset-filled h-min m-auto">
 		<button
