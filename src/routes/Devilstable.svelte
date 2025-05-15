@@ -28,7 +28,7 @@
 	let allFragmentData = $derived.by(() => {
 		if (!inputChipValueLabels.includes('fr')) return {};
 		//combine all the fragments into one Object with the label 'fr'
-		/** @type {{label: string, values: boolean[]}} */
+		/** @type {{label: string, values: boolean[]|[boolean[],string]}} */
 		let fragmentData = {
 			label: 'fr',
 			values: new Array(DATA_MAX).fill(false)
@@ -91,7 +91,7 @@
 		popup.style.display = 'block';
 		computePosition(base, popup, {
 			placement: 'top',
-			middleware: [flip(), shift()],
+			middleware: [flip(), shift(), offset(6)],
 			strategy: 'absolute'
 		}).then(({ x, y }) => {
 			Object.assign(popup.style, {

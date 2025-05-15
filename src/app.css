@@ -17,6 +17,12 @@
 	font-display: swap;
 }
 
+[data-theme='vintage'] {
+	--heading-font-family: 'Abril Fatface', serif;
+	--base-font-family: 'Inter', sans-serif;
+	/* =~= Theme On-X Colors =~= */
+}
+
 .typography {
 	h1 {
 		@apply h1 mb-4;
