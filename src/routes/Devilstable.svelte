@@ -9,6 +9,8 @@
 		BRUSH_WINDOW_DEFAULT_END,
 		SIGLA_ORDER
 	} from './Devilstable_DEFAULTS.json';
+	import { offset, flip, shift, computePosition } from '@floating-ui/dom';
+
 	const brushDimension = 200;
 	const brushDimensionWithSafetyPixel = brushDimension + 1; // fixes a glitch, where Brush and Detail don't fit next to each other on PageResize.
 
@@ -83,9 +85,27 @@
 			...rest
 		}))
 	);
+	let popupChips = $state();
+
+	const updatePos = (base, popup) => {
+		popup.style.display = 'block';
+		computePosition(base, popup, {
+			placement: 'top',
+			middleware: [flip(), shift()],
+			strategy: 'absolute'
+		}).then(({ x, y }) => {
+			Object.assign(popup.style, {
+				left: `${x}px`,
+				top: `${y}px`
+			});
+		});
+	};
 </script>
 
-<div class="card p-4 preset-filled-primary-500 max-w-lg" data-popup="popupChips">
+<div
+	class="card p-4 preset-filled-primary-500 max-w-lg hidden absolute top-0 left-0"
+	bind:this={popupChips}
+>
 	<p>
 		Um Textzeugen und Fragmente zu entfernen, klicken Sie bitte auf die grau hinterlegten Kästchen.
 	</p>
@@ -101,16 +121,13 @@
 </div>
 <div
 	class="container mx-auto mb-6 flex flex-wrap md:flex-nowrap gap-4"
-	use:popup={{
-		event: 'focus-click',
-		placement: 'top',
-		target: 'popupChips',
-		middleware: { flip: { mainAxis: false } }
+	onfocusin={(e) => updatePos(e.currentTarget, popupChips)}
+	onfocusout={(e) => {
+		popupChips.style.display = 'none';
 	}}
 >
 	<TagsInput
 		validate={(input) => {
-			console.log('validating!');
 			if (
 				[
 					summaryLabel,
