@@ -19,7 +19,7 @@
 </script>
 
 <div class="table-container">
-	<table class="table ">
+	<table class="table">
 		<thead>
 			<tr>
 				<ThSort {table} field="humanReadableSigil">Sigle</ThSort>
@@ -82,6 +82,8 @@
 </div>
 
 <style lang="postcss">
+	@reference "tailwindcss";
+	@reference "@skeletonlabs/skeleton";
 	.content :global(span) {
 		@apply text-surface-400;
 	}

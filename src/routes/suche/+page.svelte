@@ -155,10 +155,20 @@
 				</Segment.Item>
 			</Segment>
 			<Segment active="preset-filled-primary-500">
-				<Segment.Item bind:group={corpus} name="korpus" value={'fassungen'} disabled={!hasDocuments}>
+				<Segment.Item
+					bind:group={corpus}
+					name="korpus"
+					value={'fassungen'}
+					disabled={!hasDocuments}
+				>
 					Fassungen (1.67MB)
 				</Segment.Item>
-				<Segment.Item bind:group={corpus} name="korpus" value={'textzeugen'} disabled={!hasDocuments}>
+				<Segment.Item
+					bind:group={corpus}
+					name="korpus"
+					value={'textzeugen'}
+					disabled={!hasDocuments}
+				>
 					Textzeugen (9.96MB)
 				</Segment.Item>
 			</Segment>
@@ -208,6 +218,8 @@
 </section>
 
 <style lang="postcss">
+	@reference "tailwindcss";
+	@reference "@skeletonlabs/skeleton";
 	:global(mark) {
 		@apply bg-inherit;
 		@apply font-bold;

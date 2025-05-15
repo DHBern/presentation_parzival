@@ -118,6 +118,8 @@
 </div>
 
 <style lang="postcss">
+	@reference "tailwindcss";
+	@reference "@skeletonlabs/skeleton";
 	.thirty {
 		:global(.once) {
 			-webkit-animation-iteration-count: 4;
