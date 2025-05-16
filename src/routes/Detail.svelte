@@ -282,7 +282,7 @@
 </script>
 
 <div
-	class="card p-1 preset-filled-primary-500 fixed top-0 left-0 w-max"
+	class="card opacity-0 p-1 preset-filled-primary-500 fixed top-0 left-0 w-max"
 	data-popup="popupVerse"
 	bind:this={floating}
 >
