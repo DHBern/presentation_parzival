@@ -64,9 +64,18 @@
 			backdropClasses="backdrop-blur-sm"
 		>
 			{#snippet trigger()}
-				<button aria-label="Menü" class="lg:!hidden btn-icon" onclick={drawerOpen}>
+				<!-- this is an anchor tag because of node_invalid_placement warning -->
+				<!-- svelte-ignore a11y_missing_attribute -->
+				<!-- svelte-ignore a11y_click_events_have_key_events -->
+				<a
+					tabindex="0"
+					role="button"
+					aria-label="Menü"
+					class="lg:!hidden btn-icon"
+					onclick={drawerOpen}
+				>
 					<i class="fa-solid fa-bars"></i>
-				</button>
+				</a>
 			{/snippet}
 			{#snippet content()}
 				<nav class="list-nav">
