@@ -7,8 +7,8 @@
 
 @tailwind utilities;
 
-@import '@skeletonlabs/skeleton/themes/vintage';
-@import '../parzival.css';
+/* @import '@skeletonlabs/skeleton/themes/vintage'; */
+/* @import '../parzival.css'; */
 @import '../oldvintage.css';
 
 @font-face {
@@ -18,10 +18,10 @@
 	font-display: swap;
 }
 
-[data-theme='vintage'] {
+/* [data-theme='vintage'] {
 	--heading-font-family: 'Abril Fatface', serif;
 	--base-font-family: 'Inter', sans-serif;
-}
+} */
 
 .typography {
 	h1 {
