@@ -9,6 +9,7 @@
 
 @import '@skeletonlabs/skeleton/themes/vintage';
 @import '../parzival.css';
+@import '../oldvintage.css';
 
 @font-face {
 	/* Reference name */
@@ -20,7 +21,6 @@
 [data-theme='vintage'] {
 	--heading-font-family: 'Abril Fatface', serif;
 	--base-font-family: 'Inter', sans-serif;
-	/* =~= Theme On-X Colors =~= */
 }
 
 .typography {
