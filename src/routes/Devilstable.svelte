@@ -1,5 +1,5 @@
 <script>
-	import { TagsInput } from '@skeletonlabs/skeleton-svelte';
+	import { Popover, TagsInput } from '@skeletonlabs/skeleton-svelte';
 	import Brush from './Brush.svelte';
 	import Detail from './Detail.svelte';
 	import { summaryLabel } from '$lib/constants';
@@ -119,6 +119,7 @@
 	</p>
 	<div class="arrow preset-filled-primary-500"></div>
 </div>
+
 <div
 	class="container mx-auto mb-6 flex flex-wrap md:flex-nowrap gap-4"
 	onfocusin={(e) => updatePos(e.currentTarget, popupChips)}
@@ -145,7 +146,7 @@
 		placeholder="Textzeuge / Fragment hinzufügen..."
 		name="inputChips"
 	/>
-	<div class=" md:-vertical preset-filled h-min m-auto">
+	<div class="btn-group flex-col md:-vertical preset-filled h-min m-auto">
 		<button
 			class="btn preset-filled"
 			onclick={() => {
