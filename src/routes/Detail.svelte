@@ -151,6 +151,7 @@
 		e.stopPropagation();
 		const reference = e.currentTarget;
 		const popup = popupFragments[verseNumber];
+		popup.style.display = 'block';
 		if (popup && reference) {
 			computePosition(reference, popup, {
 				placement: 'top'
@@ -256,6 +257,7 @@
 						codices.find((i) => i.sigil === reference.textContent)?.handle || reference.textContent
 					];
 				if (popup && reference) {
+					popup.style.display = 'block';
 					computePosition(reference, popup, {
 						placement: 'top'
 					}).then(({ x, y }) => {
@@ -275,6 +277,7 @@
 						codices.find((i) => i.sigil === reference.textContent)?.handle || reference.textContent
 					];
 				if (popup) {
+					popup.style.display = 'none';
 					popup.style.opacity = '0';
 				}
 			});
@@ -282,7 +285,7 @@
 </script>
 
 <div
-	class="card opacity-0 p-1 preset-filled-primary-500 fixed top-0 left-0 w-max"
+	class="card hidden opacity-0 p-1 preset-filled-primary-500 fixed top-0 left-0 w-max"
 	data-popup="popupVerse"
 	bind:this={floating}
 >
@@ -310,7 +313,7 @@
 {#each data.map((d) => d.label) as handle}
 	{@const metadata = metadataFromHandle(handle)}
 	<div
-		class="card p-1 preset-filled-primary-500 absolute opacity-0 top-0 left-0 max-w-prose prose"
+		class="card p-1 preset-filled-primary-500 absolute hidden opacity-0 top-0 left-0 max-w-prose prose"
 		bind:this={popupLabels[handle]}
 	>
 		<strong class="">{@html metadata?.['info-h1']}</strong>
@@ -323,7 +326,7 @@
 	{#if Array.isArray(fragment)}
 		{@const verse = i + selection.start}
 		<div
-			class="card p-1 preset-filled-primary-500 top-0 left-0 w-max absolute opacity-0"
+			class="card p-1 preset-filled-primary-500 top-0 left-0 w-max absolute opacity-0 hidden"
 			bind:this={popupFragments[verse]}
 		>
 			<ul>
@@ -386,6 +389,7 @@
 									}}
 									aria-label={`Mehrere Fr in Vers ${verseNumber}`}
 									onblur={() => {
+										popupFragments[verseNumber].style.display = 'none';
 										popupFragments[verseNumber].style.opacity = '0';
 									}}
 								>
