@@ -223,12 +223,3 @@
 [data-theme='oldvintage'] h6 {
 	letter-spacing: 1px;
 }
-[data-theme='oldvintage'] {
-	background-image:
-		radial-gradient(at 100% 0%, hsla(135, 34%, 70%, 0.2) 0px, transparent 50%),
-		radial-gradient(at 85% 100%, hsla(31, 83%, 50%, 0.2) 0px, transparent 50%);
-	background-attachment: fixed;
-	background-position: center;
-	background-repeat: no-repeat;
-	background-size: cover;
-}
