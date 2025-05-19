@@ -8,10 +8,10 @@ const { fragments, codices, hyparchetypes } = await metadata;
 export default function siglaFromHandle(handle) {
 	/**@type {{fragments: {handle: String, sigil: String}[], codices: {handle: String, sigil: String}[]}} */
 	if (handle.includes('fr')) {
-		return fragments.find(({ handle: s }) => s === handle)?.sigil ?? '';
+		return fragments.find(({ handle: s }) => s === handle)?.sigil ?? handle;
 	} else if (handle.includes('*')) {
-		return hyparchetypes.find(({ handle: s }) => s === handle)?.sigil ?? '';
+		return hyparchetypes.find(({ handle: s }) => s === handle)?.sigil ?? handle;
 	} else {
-		return codices.find(({ handle: s }) => s === handle)?.sigil ?? '';
+		return codices.find(({ handle: s }) => s === handle)?.sigil ?? handle;
 	}
 }
