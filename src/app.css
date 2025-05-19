@@ -9,7 +9,7 @@
 
 @import '@skeletonlabs/skeleton/themes/vintage';
 /* @import '../parzival.css'; */
-/* @import '../oldvintage.css'; */
+@import '../oldvintage.css';
 
 @font-face {
 	/* Reference name */
