@@ -1,19 +1,11 @@
 <script>
-		/** @type {import('@skeletonlabs/skeleton').PopupSettings}*/
-	const popupClick = {
-		event: 'focus-click',
-		target: 'popupClick',
-		placement: 'top'
-	};
-
-	/** @type {HTMLSpanElement} */
-	let popupContent = $state();
+	import Popover from '$lib/components/Popover.svelte';
 </script>
 
-<div class="card m-8 p-4 preset-filled-primary-500" data-popup="popupClick">
+<!-- <div class="card m-8 p-4 preset-filled-primary-500" data-popup="popupClick">
 	<span bind:this={popupContent}>content</span>
 	<div class="arrow preset-filled-primary-500"></div>
-</div>
+</div> -->
 <div class="container mx-auto typography">
 	<h1 class="h1 mb-4">
 		Wolfram von Eschenbach, ›Parzival‹.<br />Eine überlieferungskritische Ausgabe in digitaler Form
@@ -54,15 +46,17 @@
 		Neuausgaben die Vielzahl der inzwischen bekannt gewordenen Überlieferungsträger nicht
 		hinreichend berücksichtigen. Aus diesen Defiziten ist das Desiderat einer neuen kritischen
 		Textausgabe erwachsen, die auf der Grundlage der gesamten heute bekannten Überlieferung basiert
-		(<button
-			class="anchor"
-			use:popup={popupClick}
-			onfocus={(e) => (popupContent.innerHTML = e.target.querySelector('.hidden').innerHTML)}
-			>J. Bumke <span class="hidden">
-				Vgl. Joachim Bumke, Wolfram von Eschenbach, (8., völlig neu bearbeitete Auflage) Stuttgart/
-				Weimar 2004 (Sammlung Metzler 36), S. 254.
-			</span>
-		</button>
+		(<Popover>
+			{#snippet trigger()}
+				J. Bumke
+			{/snippet}
+			{#snippet content()}
+				<p>
+					Vgl. Joachim Bumke, Wolfram von Eschenbach, (8., völlig neu bearbeitete Auflage)
+					Stuttgart/ Weimar 2004 (Sammlung Metzler 36), S. 254.
+				</p>
+			{/snippet}
+		</Popover>
 		).
 	</p>
 
@@ -79,12 +73,9 @@
 		<i>New Philology</i> geprägten Neologismus): <br />
 
 		Die
-		<button
-			class="anchor"
-			use:popup={popupClick}
-			onfocus={(e) => (popupContent.innerHTML = e.target.querySelector('.hidden').innerHTML)}
-			><i>New Philology</i>
-			<span class="hidden">
+		<Popover>
+			{#snippet trigger()}<i>New Philology</i>{/snippet}
+			{#snippet content()}
 				Vgl. zur Diskussion in der Altgermanistik z.B. Karl Stackmann, Neue Philologie?, (Nachdruck
 				aus: Modernes Mittelalter. Neue Bilder einer populären Epoche, hrsg. v. Joachim Heinzle,
 				Frankfurt am Main/ Leipzig 1994, S. 398-427) in: Karl Stackmann, Philologie und
@@ -92,8 +83,8 @@
 				Autor - Überlieferung - Editor, in: Das Mittelalter und die Germanisten. Zur neueren
 				Methodengeschichte der Germanischen Philologie. Freiburger Colloquium 1997, hrsg. v. Eckart
 				Conrad Lutz, Freiburg i. Ü. 1998 (Scrinium Friburgense 11), S. 11-32, bes. S. 24-32.
-			</span>
-		</button>
+			{/snippet}
+		</Popover>
 		betont die handschriftliche Vielfalt und die daraus resultierende Unfestigkeit der mittelalterlichen
 		Texte. Sie tendiert dazu, die Hierarchie der einzelnen Überlieferungszeugen zugunsten eines prinzipiell
 		variablen, unfesten Status der mittelalterlichen Handschriftenkultur preiszugeben.<br />
@@ -103,17 +94,15 @@
 		Begriff <i>Phylogeny</i> (deutsch: ‚Phylogenese‘) bezeichnet die stammesgeschichtliche
 		Verwandtschaft der Arten und wird im angelsächsischen Raum derzeit auf Fragen handschriftlicher
 		Beziehungen angewandt, so etwa in der
-		<button
-			class="anchor"
-			use:popup={popupClick}
-			onfocus={(e) => (popupContent.innerHTML = e.target.querySelector('.hidden').innerHTML)}
-			>Chaucer-Forschung <span class="hidden">
+		<Popover>
+			{#snippet trigger()}Chaucer-Forschung{/snippet}
+			{#snippet content()}
 				Vgl. Adrian C. Barbrook/ Christopher J. Howe/ Norman Blake/ Peter Robinson, The phylogeny of
 				’The Canterbury Tales’, in: Nature, vol. 394, issue 6696, 27-8-1998, S. 839; Christopher J.
 				Howe/ Adrian C. Barbrook/ Matthew Spencer/ Peter Robinson/ Barbara Bordalejo/ Linne R.
 				Mooney, Manuscript Evolution, in: Endeavour 25/3 (2001), S. 121–126.
-			</span>
-		</button>
+			{/snippet}
+		</Popover>
 		.<br />
 
 		Eine kritische Neuausgabe des ›Parzival‹ muss der zu verarbeitenden Lesartenfülle und den nicht
@@ -124,17 +113,16 @@
 		sechziger Jahre erhobene Forderung aktueller denn je, nämlich „vor der Klärung der
 		Hss.-Verzweigung das gesamte Material, das zur textkritischen Auswertung gesammelt wurde, [...]
 		zu publizieren“ (
-		<button
-			class="anchor"
-			use:popup={popupClick}
-			onfocus={(e) => (popupContent.innerHTML = e.target.querySelector('.hidden').innerHTML)}
-			>E. Nellmann <span class="hidden">
+		<Popover>
+			{#snippet trigger()}E. Nellmann
+			{/snippet}
+			{#snippet content()}
 				Eberhard Nellmann, Zur handschriftlichen Überlieferung des Parzival, in: Kolloquium über
 				Probleme altgermanistischer Editionen. Marbach am Neckar, 26. und 27. April 1966. Referate
 				und Diskussionsbeiträge, hrsg. v. Hugo Kuhn/ Karl Stackmann/ Dieter Wuttke, Wiesbaden 1968
 				(Deutsche Forschungsgemeinschaft. Forschungsberichte 13), S. 13-21, hier S. 20.
-			</span>
-		</button>
+			{/snippet}
+		</Popover>
 		).<br />
 
 		Der Gedanke mag, als er 1968 vorgebracht worden ist, utopisch erschienen sein. Er lässt sich
@@ -150,11 +138,10 @@
 		geleitetes Forschungsteam an der Universität Bern eine solche digitale Ausgabe. Dabei wird eine
 		Edition nach Fassungen erstellt, die auf Volltranskriptionen aller Textzeugen beruht und in
 		Anlehnung an den von Joachim Bumke geprägten
-		<button
-			class="anchor"
-			use:popup={popupClick}
-			onfocus={(e) => (popupContent.innerHTML = e.target.querySelector('.hidden').innerHTML)}
-			>Fassungsbegriff <span class="hidden">
+		<Popover>
+			{#snippet trigger()}Fassungsbegriff
+			{/snippet}
+			{#snippet content()}
 				Ein Ansatz, der in der Erforschung mittelhochdeutscher Epik zunehmend favorisiert wird und
 				die Annahme eines einzelnen Autororiginals verdrängt. Vgl. Joachim Bumke, Der unfeste Text.
 				Überlegungen zur Überlieferungsgeschichte und Textkritik der höfischen Epik im 13.
@@ -163,8 +150,8 @@
 				118–129; ders., Die vier Fassungen der Nibelungenklage’. Untersuchungen zur
 				Überlieferungsgeschichte und Textkritik der höfischen Epik im 13. Jahrhundert, Berlin/ New
 				York 1996 (Quellen und Forschungen zur Literatur- und Kulturgeschichte 8 [242]).
-			</span>
-		</button>
+			{/snippet}
+		</Popover>
 		vier Textfassungen dokumentiert: *D (basierend u.a. auf Handschrift D), *m (basierend u.a. auf den
 		Handschriften mno), *G (basierend u.a. auf den Handschriften GI LM OQR Z), *T (basierend u.a. auf
 		den Textzeugen TUVW).<br />
@@ -173,11 +160,10 @@
 		Speicherverfahren auch – den Forderungen der <i>New Phylogeny</i> entsprechend – einen neuen
 		Blick auf handschriftliche Beziehungen. Hierbei kann auf stemmatologische Vorgehensweisen
 		zurückgegriffen werden, die der niederländische Romanist
-		<button
-			class="anchor"
-			use:popup={popupClick}
-			onfocus={(e) => (popupContent.innerHTML = e.target.querySelector('.hidden').innerHTML)}
-			>Anthonij Dees <span class="hidden">
+		<Popover>
+			{#snippet trigger()}Anthonij Dees
+			{/snippet}
+			{#snippet content()}
 				Vgl. Anthonij Dees, Sur une constellation de quatre manuscrits, in: Mélanges de linguistique
 				et de littérature offerts à Lein Geschiere par ses amis, collègues et élèves, hrsg. v. A.
 				Dees/ A.Kibédy Varga/ R.E.V. Stuip, Amsterdam 1975, S. 1-9; ders., Considérations théoriques
@@ -186,8 +172,8 @@
 				von Margot van Mulken, The Manuscript Tradition of the Perceval of Chrétien de Troyes. A
 				stemmatological and dialectical approach, Diss. Vrije Universiteit Amsterdam, Faculteit der
 				Letteren 1993, S. 45-61.
-			</span>
-		</button>
+			{/snippet}
+		</Popover>
 		entwickelt hat.<br />
 
 		Anstelle von historischen Genealogien handschriftlicher Stammbäume geht Dees von Verkettungen in
@@ -210,11 +196,10 @@
 		Welche Möglichkeiten die synoptische Darstellung von Fassungen und Überlieferungsträgern am
 		Bildschirm bietet, zeigt die Abteilung Editionsproben auf dieser Website. Dort werden auch die
 		Verfahren der
-		<button
-			class="anchor"
-			use:popup={popupClick}
-			onfocus={(e) => (popupContent.innerHTML = e.target.querySelector('.hidden').innerHTML)}
-			>Fassungsedition <span class="hidden">
+		<Popover>
+			{#snippet trigger()}Fassungsedition
+			{/snippet}
+			{#snippet content()}
 				Die Beispiele zeigen ein Editionskonzept nach den vier Fassungen *D *G *m und *T auf: Ein
 				Mausklick auf die links neben einer Versangabe befindliche Fassungssigle (z.B. *D) bringt
 				den entsprechenden Vers der jeweils folgenden Fassung (z.B. *G) in der obersten Zeile zur
@@ -239,14 +224,13 @@
 				Menüleiste über den Fassungstexten angesprochen werden. Mit dem Button "3 Fassungen" kann
 				der Fassungstext von *T ausgeblendet werden, um eine bessere Darstellung auf Monitoren mit
 				geringerer Breite zu gewährleisten.
-			</span>
-		</button>
+			{/snippet}
+		</Popover>
 		und das Modell einer
-		<button
-			class="anchor"
-			use:popup={popupClick}
-			onfocus={(e) => (popupContent.innerHTML = e.target.querySelector('.hidden').innerHTML)}
-			>Eintextedition <span class="hidden">
+		<Popover>
+			{#snippet trigger()}Eintextedition
+			{/snippet}
+			{#snippet content()}
 				Neben der synoptischen Mehrtextedition wird auch eine Eintextedition (Lesetext) angeboten,
 				in welcher die wichtigsten editorischen Informationen gebündelt präsentiert werden. Der
 				kritische Text ist hier nach Fassung *D auf der Grundlage des St. Galler Codex 857
@@ -276,10 +260,10 @@
 				einer neuen Ausgabe von Wolframs ›Parzival‹ – erscheint in: Walther von der Vogelweide.
 				Düsseldorfer Kolloquium 2018, in Verbindung mit Franz-Josef Holznagel u. Mathias Herweg hg.
 				von Ricarda Bauschke-Hartung, Berlin 2020 (Wolfram-Studien 26), S. 471–493 (im Druck)
-			</span>
-		</button>
-		(basierend auf <a href="/hsverz" target="_self">Codex 857</a> der Stiftsbibliothek St.
-		Gallen aus der Mitte des 13. Jahrhunderts, Hs. D) erläutert.<br />
+			{/snippet}
+		</Popover>
+		(basierend auf <a href="/hsverz" target="_self">Codex 857</a> der Stiftsbibliothek St. Gallen
+		aus der Mitte des 13. Jahrhunderts, Hs. D) erläutert.<br />
 
 		Zweifellos kann in einer Digitaledition die von der <i>New Philology</i> postulierte Varianz
 		angemessener dokumentiert werden als in konventionellen Textausgaben. Die kritischen Apparate
