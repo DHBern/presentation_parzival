@@ -7,21 +7,13 @@
 
 @tailwind utilities;
 
-@import '@skeletonlabs/skeleton/themes/vintage';
-/* @import '../parzival.css'; */
-@import '../oldvintage.css';
-
 @font-face {
 	/* Reference name */
 	font-family: 'Abril Fatface';
 	src: url('/fonts/AbrilFatface-Regular.ttf');
 	font-display: swap;
 }
-
-[data-theme='vintage'] {
-	--heading-font-family: 'Abril Fatface', serif;
-	--base-font-family: 'Inter', sans-serif;
-}
+@import '../oldvintage.css';
 
 .typography {
 	h1:not(:where([class~='unstyled'], [class~='unstyled'] *)) {
