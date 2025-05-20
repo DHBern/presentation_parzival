@@ -24,22 +24,22 @@
 }
 
 .typography {
-	h1 {
+	h1:not(:where([class~='unstyled'], [class~='unstyled'] *)) {
 		@apply h1 mb-4;
 	}
 
-	h2 {
+	h2:not(:where([class~='unstyled'], [class~='unstyled'] *)) {
 		@apply h2 my-4;
 	}
-	a {
+	a:not(:where([class~='unstyled'], [class~='unstyled'] *)) {
 		@apply anchor;
 	}
-	p {
+	p:not(:where([class~='unstyled'], [class~='unstyled'] *)) {
 		@apply mb-4;
 	}
-	ul {
+	ul:not(:where([class~='unstyled'], [class~='unstyled'] *)) {
 		@apply list-disc pl-4;
-		li {
+		li:not(:where([class~='unstyled'], [class~='unstyled'] *)) {
 			@apply mb-2;
 		}
 	}
