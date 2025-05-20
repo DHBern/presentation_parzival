@@ -1,0 +1,128 @@
+@import 'tailwindcss';
+@import '@skeletonlabs/skeleton';
+
+@import '@skeletonlabs/skeleton/optional/presets';
+
+@source "../node_modules/@skeletonlabs/skeleton-svelte/dist";
+
+@tailwind utilities;
+
+@font-face {
+	/* Reference name */
+	font-family: 'Abril Fatface';
+	src: url('/fonts/AbrilFatface-Regular.ttf');
+	font-display: swap;
+}
+@import '../oldvintage.css';
+
+.typography {
+	h1:not(:where([class~='unstyled'], [class~='unstyled'] *)) {
+		@apply h1 mb-4;
+	}
+
+	h2:not(:where([class~='unstyled'], [class~='unstyled'] *)) {
+		@apply h2 my-4;
+	}
+	a:not(:where([class~='unstyled'], [class~='unstyled'] *)) {
+		@apply anchor;
+	}
+	p:not(:where([class~='unstyled'], [class~='unstyled'] *)) {
+		@apply mb-4;
+	}
+	ul:not(:where([class~='unstyled'], [class~='unstyled'] *)) {
+		@apply list-disc pl-4;
+		li:not(:where([class~='unstyled'], [class~='unstyled'] *)) {
+			@apply mb-2;
+		}
+	}
+}
+
+.tei-content {
+	.sr {
+		color: green;
+	}
+	.del_sr {
+		color: #666;
+		@apply line-through;
+	}
+	.subst,
+	.subst_sr {
+		.deleted {
+			color: #666;
+		}
+		color: green;
+	}
+	.subst_ls {
+		color: #8cfff4;
+		.deleted {
+			color: #666;
+		}
+		.rasure {
+			@apply bg-[#666];
+		}
+	}
+	.red {
+		color: #f60;
+		@apply decoration-red-500;
+	}
+	.underline {
+		text-decoration: underline;
+	}
+	.marginalia {
+		@apply italic;
+		@apply ml-4;
+	}
+	.corr,
+	.note {
+		@apply italic;
+	}
+	.gap {
+		color: green;
+		@apply bg-[#9f9f9f];
+	}
+	.initial,
+	.glory-initial,
+	.capital-initial {
+		@apply font-bold;
+		@apply text-2xl;
+		@apply text-red-500;
+	}
+
+	.majuscule,
+	.large-variant {
+		@apply font-black;
+		@apply text-xl;
+	}
+
+	.glory-initial {
+		@apply bg-[gold];
+	}
+
+	.content:has(.versechange) {
+		&::after {
+			content: '\2195';
+			@apply inline;
+			@apply h-4;
+			@apply ml-2;
+		}
+	}
+
+	.not-executed {
+		@apply text-red-500;
+		&::before {
+			content: '\005B';
+			@apply text-surface-contrast-500;
+			@apply inline;
+			@apply h-4;
+		}
+		&::after {
+			content: '\005D';
+			@apply text-surface-contrast-500;
+			@apply inline;
+			@apply h-4;
+		}
+	}
+	.deleted + .added::before {
+		content: ' ';
+	}
+}

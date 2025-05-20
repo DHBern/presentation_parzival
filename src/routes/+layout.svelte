@@ -1,24 +1,24 @@
 <script>
-	import '../app.postcss';
+	import '../app.css';
 	import '@fortawesome/fontawesome-free/css/solid.min.css';
 	import '@fortawesome/fontawesome-free/css/fontawesome.min.css';
-	import { AppBar, getDrawerStore, Drawer, initializeStores } from '@skeletonlabs/skeleton';
+	import { AppBar, Modal } from '@skeletonlabs/skeleton-svelte';
 	import { page } from '$app/state';
 	import { base } from '$app/paths';
-	import { computePosition, autoUpdate, offset, shift, flip, arrow } from '@floating-ui/dom';
-	import { storePopup } from '@skeletonlabs/skeleton';
 	/** @type {{children?: import('svelte').Snippet}} */
 	let { children } = $props();
-	storePopup.set({ computePosition, autoUpdate, offset, shift, flip, arrow });
-
-	initializeStores();
-	const drawerStore = getDrawerStore();
 
 	let classesActive = $derived((/** @type {string} */ href) =>
 		base + href === `/${page.url.pathname.split('/')[1]}`
 			? 'bg-primary-500 hover:text-primary-400 text-secondary-500'
 			: 'hover:text-primary-500'
 	);
+
+	let openState = $state(false);
+
+	function modalClose() {
+		openState = false;
+	}
 
 	function drawerOpen() {
 		const /** @type {import('@skeletonlabs/skeleton').DrawerSettings} */ s = {
@@ -41,20 +41,6 @@
 	];
 </script>
 
-<Drawer height="h-auto">
-	<nav class="list-nav">
-		<ul>
-			{#each pages as page}
-				<li>
-					<a href={`${base}${page.path}`}>
-						<span class="flex-auto">{page.slug}</span>
-					</a>
-				</li>
-			{/each}
-		</ul>
-	</nav>
-</Drawer>
-
 <AppBar>
 	{#snippet lead()}
 		<a class="text-xl uppercase font-bold" href={`${base}/`}>Parzival</a>
@@ -67,9 +53,44 @@
 		{/each}
 	</nav>
 	{#snippet trail()}
-		<button aria-label="Menü" class="lg:!hidden btn-icon" onclick={drawerOpen}>
-			<i class="fa-solid fa-bars"></i>
-		</button>
+		<Modal
+			open={openState}
+			onOpenChange={(e) => (openState = e.open)}
+			positionerJustify="justify-start"
+			positionerAlign=""
+			positionerPadding="p-10"
+			transitionsPositionerIn={{ y: -480, duration: 200 }}
+			transitionsPositionerOut={{ y: -480, duration: 200 }}
+			backdropClasses="backdrop-blur-sm"
+		>
+			{#snippet trigger()}
+				<!-- this is an anchor tag because of node_invalid_placement warning -->
+				<!-- svelte-ignore a11y_missing_attribute -->
+				<!-- svelte-ignore a11y_click_events_have_key_events -->
+				<a
+					tabindex="0"
+					role="button"
+					aria-label="Menü"
+					class="lg:!hidden btn-icon"
+					onclick={drawerOpen}
+				>
+					<i class="fa-solid fa-bars"></i>
+				</a>
+			{/snippet}
+			{#snippet content()}
+				<nav class="list-nav">
+					<ul>
+						{#each pages as page}
+							<li>
+								<a href={`${base}${page.path}`} onclick={modalClose}>
+									<span class="flex-auto">{page.slug}</span>
+								</a>
+							</li>
+						{/each}
+					</ul>
+				</nav>
+			{/snippet}
+		</Modal>
 	{/snippet}
 </AppBar>
 

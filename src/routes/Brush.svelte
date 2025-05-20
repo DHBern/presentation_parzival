@@ -171,7 +171,7 @@
 					y={mobile ? y(d.label) : start}
 					width={mobile ? end - start : x.bandwidth()}
 					height={mobile ? y.bandwidth() : end - start}
-					fill={`rgb(var(--color-primary-${colorScale(v)}))`}
+					fill={`var(--color-primary-${colorScale(v)})`}
 				/>
 			{/each}
 		</g>

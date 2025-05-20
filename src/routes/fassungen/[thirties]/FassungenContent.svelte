@@ -74,7 +74,7 @@
 </script>
 
 <div
-	class="max-h-[70vh] overflow-y-auto bg-surface-active-token rounded-xl p-4"
+	class="max-h-[70vh] overflow-y-auto preset-filled-surface-500 rounded-xl p-4"
 	bind:this={scrollContainer}
 	onscroll={(/** @type {{ target: { scrollTop: any; }; }} */ o) => {
 		scrolltop = o?.target?.scrollTop;
@@ -83,7 +83,7 @@
 >
 	{#if pages[0][0] > 1}
 		<button
-			class="btn variant-filled-primary w-full mb-4"
+			class="btn preset-filled-primary-500 w-full mb-4"
 			onclick={() =>
 				goto(`${base}/fassungen/${pages[0][0] - 1}`, {
 					noScroll: true,
@@ -106,7 +106,7 @@
 	{/each}
 	{#if pages[pages.length - 1][0] < NUMBER_OF_PAGES}
 		<button
-			class="btn variant-filled-primary w-full mt-4"
+			class="btn preset-filled-primary-500 w-full mt-4"
 			onclick={() =>
 				goto(`${base}/fassungen/${pages[pages.length - 1][0] + 1}`, {
 					noScroll: true,
@@ -118,6 +118,8 @@
 </div>
 
 <style lang="postcss">
+	@reference "tailwindcss";
+	@reference "@skeletonlabs/skeleton";
 	.thirty {
 		:global(.once) {
 			-webkit-animation-iteration-count: 4;

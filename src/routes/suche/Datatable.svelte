@@ -19,7 +19,7 @@
 </script>
 
 <div class="table-container">
-	<table class="table table-hover">
+	<table class="table">
 		<thead>
 			<tr>
 				<ThSort {table} field="humanReadableSigil">Sigle</ThSort>
@@ -69,19 +69,21 @@
 		{#if page}
 			<button
 				type="button"
-				class:variant-filled-primary={page === table.currentPage}
-				class="btn variant-filled"
+				class:preset-filled-primary-500={page === table.currentPage}
+				class="btn preset-filled"
 				onclick={() => table.setPage(page)}
 			>
 				{page}
 			</button>
 		{:else}
-			<div class="btn variant-filled-surface">...</div>
+			<div class="btn preset-filled-surface-500">...</div>
 		{/if}
 	{/each}
 </div>
 
 <style lang="postcss">
+	@reference "tailwindcss";
+	@reference "@skeletonlabs/skeleton";
 	.content :global(span) {
 		@apply text-surface-400;
 	}

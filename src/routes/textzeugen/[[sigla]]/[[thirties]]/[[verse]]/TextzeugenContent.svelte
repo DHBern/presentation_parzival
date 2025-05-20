@@ -179,7 +179,7 @@
 								onclick={() => {
 									localIiifChange(iiif);
 								}}
-								class="btn variant-filled ml-2 float-right"
+								class="btn preset-filled ml-2 float-right"
 							>
 								Seite wechseln
 							</button>
@@ -196,6 +196,8 @@
 </div>
 
 <style lang="postcss">
+	@reference "tailwindcss";
+	@reference "@skeletonlabs/skeleton";
 	.page {
 		:global(.once) {
 			-webkit-animation-iteration-count: 4;

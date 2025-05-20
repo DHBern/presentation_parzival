@@ -1,5 +1,5 @@
 <script>
-	import { InputChip, popup } from '@skeletonlabs/skeleton';
+	import { Popover, TagsInput } from '@skeletonlabs/skeleton-svelte';
 	import Brush from './Brush.svelte';
 	import Detail from './Detail.svelte';
 	import { summaryLabel } from '$lib/constants';
@@ -9,6 +9,8 @@
 		BRUSH_WINDOW_DEFAULT_END,
 		SIGLA_ORDER
 	} from './Devilstable_DEFAULTS.json';
+	import { offset, flip, shift, computePosition } from '@floating-ui/dom';
+
 	const brushDimension = 200;
 	const brushDimensionWithSafetyPixel = brushDimension + 1; // fixes a glitch, where Brush and Detail don't fit next to each other on PageResize.
 
@@ -26,7 +28,7 @@
 	let allFragmentData = $derived.by(() => {
 		if (!inputChipValueLabels.includes('fr')) return {};
 		//combine all the fragments into one Object with the label 'fr'
-		/** @type {{label: string, values: boolean[]}} */
+		/** @type {{label: string, values: boolean[]|[boolean[],string]}} */
 		let fragmentData = {
 			label: 'fr',
 			values: new Array(DATA_MAX).fill(false)
@@ -83,9 +85,27 @@
 			...rest
 		}))
 	);
+	let popupChips = $state();
+
+	const updatePos = (base, popup) => {
+		popup.style.display = 'block';
+		computePosition(base, popup, {
+			placement: 'top',
+			middleware: [flip(), shift(), offset(6)],
+			strategy: 'absolute'
+		}).then(({ x, y }) => {
+			Object.assign(popup.style, {
+				left: `${x}px`,
+				top: `${y}px`
+			});
+		});
+	};
 </script>
 
-<div class="card p-4 variant-filled-primary max-w-lg" data-popup="popupChips">
+<div
+	class="card p-4 preset-filled-primary-500 max-w-lg hidden absolute top-0 left-0"
+	bind:this={popupChips}
+>
 	<p>
 		Um Textzeugen und Fragmente zu entfernen, klicken Sie bitte auf die grau hinterlegten Kästchen.
 	</p>
@@ -97,32 +117,38 @@
 		ein. Z. B.
 		<i>fr32</i>. Um alle Fragmente in einer Spalte hinzuzufügen, geben Sie <i>fr</i> (ohne index) ein.
 	</p>
-	<div class="arrow variant-filled-primary"></div>
+	<div class="arrow preset-filled-primary-500"></div>
 </div>
+
 <div
 	class="container mx-auto mb-6 flex flex-wrap md:flex-nowrap gap-4"
-	use:popup={{
-		event: 'focus-click',
-		placement: 'top',
-		target: 'popupChips',
-		middleware: { flip: { mainAxis: false } }
+	onfocusin={(e) => updatePos(e.currentTarget, popupChips)}
+	onfocusout={(e) => {
+		popupChips.style.display = 'none';
 	}}
 >
-	<InputChip
-		whitelist={[
-			summaryLabel,
-			'fr',
-			...codices.map((/** @type {{ sigil: string; }} */ c) => c.sigil),
-			...fragments.map((/** @type {{ label: string; }} */ f) => f.label)
-		]}
-		bind:value={inputChipValues}
+	<TagsInput
+		validate={(input) => {
+			if (
+				[
+					summaryLabel,
+					'fr',
+					...codices.map((/** @type {{ sigil: string; }} */ c) => c.sigil),
+					...fragments.map((/** @type {{ label: string; }} */ f) => f.label)
+				].includes(input.inputValue)
+			) {
+				return true;
+			}
+			return false;
+		}}
+		value={inputChipValues}
+		onValueChange={(e) => (inputChipValues = e.value)}
 		placeholder="Textzeuge / Fragment hinzufügen..."
 		name="inputChips"
-		allowUpperCase
 	/>
-	<div class="btn-group md:btn-group-vertical variant-filled h-min m-auto">
+	<div class="btn-group flex-col md:-vertical preset-filled h-min m-auto">
 		<button
-			class="btn variant-filled"
+			class="btn preset-filled"
 			onclick={() => {
 				inputChipValues = defaultChips;
 			}}
@@ -130,7 +156,7 @@
 			zurücksetzen
 		</button>
 		<button
-			class="btn variant-filled"
+			class="btn preset-filled"
 			onclick={() => {
 				inputChipValues = [];
 			}}

@@ -2,7 +2,7 @@
 	import { minisearches, processTerm } from '$lib/minisearch.svelte';
 	import siglaFromHandle from '$lib/functions/siglaFromHandle';
 	import Datatable from './Datatable.svelte';
-	import { RadioGroup, RadioItem } from '@skeletonlabs/skeleton';
+	import { Segment } from '@skeletonlabs/skeleton-svelte';
 	let hasDocuments = $state(!!minisearches[0].documentCount);
 	let searchtext = $state('');
 	let useExactSearch = $state(true);
@@ -146,22 +146,32 @@
 	<div>
 		<h2 class="h2">Suchoptionen</h2>
 		<div class="flex flex-col w-fit gap-2">
-			<RadioGroup active="variant-filled-primary">
-				<RadioItem bind:group={useExactSearch} name="Suchvariante" value={true}
-					>exakte Suche</RadioItem
+			<Segment active="preset-filled-primary-500">
+				<Segment.Item bind:group={useExactSearch} name="Suchvariante" value={true}
+					>exakte Suche</Segment.Item
 				>
-				<RadioItem bind:group={useExactSearch} name="Suchvariante" value={false}>
+				<Segment.Item bind:group={useExactSearch} name="Suchvariante" value={false}>
 					unscharfe Suche
-				</RadioItem>
-			</RadioGroup>
-			<RadioGroup active="variant-filled-primary">
-				<RadioItem bind:group={corpus} name="korpus" value={'fassungen'} disabled={!hasDocuments}>
+				</Segment.Item>
+			</Segment>
+			<Segment active="preset-filled-primary-500">
+				<Segment.Item
+					bind:group={corpus}
+					name="korpus"
+					value={'fassungen'}
+					disabled={!hasDocuments}
+				>
 					Fassungen (1.67MB)
-				</RadioItem>
-				<RadioItem bind:group={corpus} name="korpus" value={'textzeugen'} disabled={!hasDocuments}>
+				</Segment.Item>
+				<Segment.Item
+					bind:group={corpus}
+					name="korpus"
+					value={'textzeugen'}
+					disabled={!hasDocuments}
+				>
 					Textzeugen (9.96MB)
-				</RadioItem>
-			</RadioGroup>
+				</Segment.Item>
+			</Segment>
 		</div>
 	</div>
 </section>
@@ -184,9 +194,9 @@
 			/>
 		</label>
 		{#if hasDocuments}
-			<button class="btn variant-filled">Suchen</button>
+			<button class="btn preset-filled">Suchen</button>
 		{:else}
-			<button class="btn variant-filled-warning" disabled
+			<button class="btn preset-filled-warning-500" disabled
 				>Lade Suche <i class="ml-1 fa-solid fa-spinner fa-spin"></i></button
 			>
 		{/if}
@@ -208,6 +218,8 @@
 </section>
 
 <style lang="postcss">
+	@reference "tailwindcss";
+	@reference "@skeletonlabs/skeleton";
 	:global(mark) {
 		@apply bg-inherit;
 		@apply font-bold;

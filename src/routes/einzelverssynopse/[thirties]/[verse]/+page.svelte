@@ -1,5 +1,5 @@
 <script>
-	import { SlideToggle } from '@skeletonlabs/skeleton';
+	import { Switch } from '@skeletonlabs/skeleton-svelte';
 	import VerseSelector from '$lib/components/VerseSelector.svelte';
 	import { base } from '$app/paths';
 	import { NUMBER_OF_PAGES } from '$lib/constants';
@@ -51,13 +51,13 @@
 		{/if}
 	</div>
 	<section>
-		<SlideToggle
+		<Switch
 			name="hyparchetypes-slider"
 			active="bg-primary-500"
 			bind:checked={hyparchetypesSlider}
 		>
 			Fassungsverse ein-/ausblenden und nach diesen sortieren
-		</SlideToggle>
+		</Switch>
 		<h2 class="h2 my-7">Zu Vers springen:</h2>
 		<VerseSelector targetPath="/einzelverssynopse" />
 		<div class="flex justify-between">

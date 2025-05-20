@@ -2,7 +2,7 @@
 	import TextzeugenSelector from '$lib/components/TextzeugenSelector.svelte';
 	import IIIFViewer from '$lib/components/IIIFViewer.svelte';
 	import TextzeugenContent from './TextzeugenContent.svelte';
-	import { SlideToggle } from '@skeletonlabs/skeleton';
+	import { Switch } from '@skeletonlabs/skeleton-svelte';
 	import { base } from '$app/paths';
 	import { page } from '$app/stores';
 	import { replaceState } from '$app/navigation';
@@ -145,8 +145,8 @@
 			</p>
 			{#if data.content?.length > 1}
 				<div>
-					<SlideToggle active="bg-primary-500" name="synchro" bind:checked={synchro}
-						>Synchrones scrollen</SlideToggle
+					<Switch active="bg-primary-500" name="synchro" bind:checked={synchro}
+						>Synchrones scrollen</Switch
 					>
 				</div>
 			{/if}
@@ -162,7 +162,7 @@
 	<div class="grid grid-cols-[repeat(auto-fit,minmax(550px,1fr))] gap-4">
 		{#each data.content as content, i}
 			<article
-				class="grid grid-cols-[repeat(auto-fit,minmax(500px,1fr))] gap-4 bg-surface-active-token my-4 py-4 px-8 rounded-xl"
+				class="grid grid-cols-[repeat(auto-fit,minmax(500px,1fr))] gap-4 preset-filled-surface-500 my-4 py-4 px-8 rounded-xl"
 			>
 				<section>
 					<div class="mb-4 relative">
