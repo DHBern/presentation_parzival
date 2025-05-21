@@ -6,6 +6,7 @@
 		BRUSH_WINDOW_DEFAULT_START,
 		BRUSH_WINDOW_DEFAULT_END
 	} from './Devilstable_DEFAULTS.json';
+	import siglaFromHandle from '$lib/functions/siglaFromHandle';
 
 	let marginTop = 20;
 	let marginRight = 0;
@@ -151,10 +152,14 @@
 		})
 	);
 	$effect.pre(() => {
-		d3.select(gy).call(d3.axisLeft(y));
+		mobile
+			? d3.select(gy).call(d3.axisLeft(y).tickFormat((d) => siglaFromHandle(d)))
+			: d3.select(gy).call(d3.axisLeft(y));
 	});
 	$effect.pre(() => {
-		mobile ? d3.select(gx).call(d3.axisBottom(x)) : d3.select(gx).call(d3.axisTop(x));
+		mobile
+			? d3.select(gx).call(d3.axisBottom(x))
+			: d3.select(gx).call(d3.axisTop(x).tickFormat((d) => siglaFromHandle(d)));
 	});
 </script>
 

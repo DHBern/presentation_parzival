@@ -1,6 +1,7 @@
 import { teipb } from '$lib/constants';
 import { generateEntries } from '$lib/functions/generateEntries';
 import { metadata } from '$lib/data/metadata';
+import siglaFromHandle from '$lib/functions/siglaFromHandle';
 
 /** @type {import('./$types').PageServerLoad} */
 export async function load({ fetch, params }) {
@@ -48,7 +49,7 @@ export async function load({ fetch, params }) {
 		verse,
 		metadata: await metadata,
 		publisherData: resolvedPublisherDataObject,
-		loss
+		loss: loss.map((/** @type {string} */ element) => siglaFromHandle(element))
 	};
 }
 
