@@ -6,6 +6,8 @@
 
 	/** @type {{data: import('./$types').PageData}} */
 	let { data } = $props();
+
+	const composureTitles = ['*D', '*m', '*G', '*T'];
 	class localPageClass {
 		/**
 		 * for the Fassungen *d, *m, *G and *T
@@ -93,20 +95,21 @@
 	<h1 class="h1 my-4">Fassungsansicht</h1>
 	<div class="grid gap-6 md:grid-cols-2 md:my-8">
 		<p>Einstellungen und Links zu den Textzeugen.</p>
-		<Switch active="bg-primary-500" name="synchro" bind:checked={synchro}>
-			Synchrones scrollen
-		</Switch>
+		<Switch active="bg-primary-500" name="synchro" bind:checked={synchro}>Synchron scrollen</Switch>
 	</div>
 	<div class="grid grid-cols-[repeat(auto-fit,minmax(400px,1fr))] gap-4 my-4 pl-4">
 		{#each localPages.pages as pages, i}
-			{#if pages.length >= 2}
-				<!-- when at least 2 pages are loaded, the one for the currect thirties should be loaded aswell  -->
-				{#if synchro}
-					<FassungenContent {pages} bind:scrolltop observe={i === 0} />
-				{:else}
-					<FassungenContent {pages} observe={true} />
+			<div>
+				<h2 class="h2">{composureTitles[i]}</h2>
+				{#if pages.length >= 2}
+					<!-- when at least 2 pages are loaded, the one for the currect thirties should be loaded aswell  -->
+					{#if synchro}
+						<FassungenContent {pages} bind:scrolltop observe={i === 0} />
+					{:else}
+						<FassungenContent {pages} observe={true} />
+					{/if}
 				{/if}
-			{/if}
+			</div>
 		{/each}
 	</div>
 </section>
