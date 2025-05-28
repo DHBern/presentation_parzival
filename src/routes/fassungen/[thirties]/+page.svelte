@@ -105,23 +105,38 @@
 	});
 	let scrolltop = $state(0);
 	let synchro = $state(true);
+	let windowWidth = $state(0);
+	const styles = getComputedStyle(document.documentElement);
+	let mobileBreakpoint = $derived(
+		windowWidth / (16 * styles.getPropertyValue('--text-scaling')) >=
+			parseInt(styles.getPropertyValue('--breakpoint-md'))
+	);
+	$effect(() => {
+		if (!mobileBreakpoint) {
+			synchro = false;
+		}
+	});
 </script>
 
+<svelte:window bind:innerWidth={windowWidth} />
 <section class="w-full" style="--verse-width: {verseWidth}ch">
 	<h1 class="h1 my-4">Fassungsansicht</h1>
 	<div class="grid gap-6 md:grid-cols-2 md:my-8">
 		<p>Einstellungen und Links zu den Textzeugen.</p>
-		<Switch
-			controlActive="bg-primary-500"
-			name="synchro"
-			checked={synchro}
-			onCheckedChange={(e) => (synchro = e.checked)}>Synchrones scrollen</Switch
-		>
+
+		{#if mobileBreakpoint}
+			<Switch
+				controlActive="bg-primary-500"
+				name="synchro"
+				checked={synchro}
+				onCheckedChange={(e) => (synchro = e.checked)}>Synchrones scrollen</Switch
+			>
+		{/if}
 	</div>
 	{#if synchro}
 		<FassungenSyncContent content={localPages.pages} titles={composureTitles} />
 	{:else}
-		<div class="grid grid-cols-[repeat(auto-fit,minmax(100px,1fr))] gap-4 my-4">
+		<div class="grid md:grid-cols-[repeat(auto-fit,minmax(100px,1fr))] gap-4 my-4">
 			{#each localPages.pages as fassung, i}
 				<div>
 					<h2 class="h2">{composureTitles[i]}</h2>
