@@ -74,7 +74,7 @@
 </script>
 
 <div
-	class="max-h-[70vh] overflow-y-auto preset-filled-surface-500 rounded-xl p-4"
+	class="max-h-[70vh] overflow-y-auto preset-filled-surface-500 rounded-xl"
 	bind:this={scrollContainer}
 	onscroll={(/** @type {{ target: { scrollTop: any; }; }} */ o) => {
 		scrolltop = o?.target?.scrollTop;
@@ -120,9 +120,10 @@
 			animation-iteration-count: 4;
 		}
 		:global(.line) {
-			display: flex;
-			gap: 1em;
-			margin: 0.5em 0;
+			@apply flex ml-1;
+			:global(.verse) {
+				@apply w-(--verse-width) shrink-0;
+			}
 		}
 		:global(.tei-cb) {
 			@apply text-right mr-2;

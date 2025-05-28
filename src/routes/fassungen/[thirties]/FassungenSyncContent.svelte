@@ -9,7 +9,6 @@
 
 	let scrollContainer = $state();
 	let lastScrollY = 0;
-	let verseWidth = $derived(page.data.thirties.length + 4);
 	/**
 	 * @type {IntersectionObserver}
 	 */
@@ -86,8 +85,7 @@
 	{/each}
 </div>
 <div
-	class="grid md:grid-cols-[repeat(auto-fit,minmax(100px,1fr))] gap-x-4 my-4 tei-content grid-flow-dense max-h-[70vh] overflow-y-auto"
-	style="--verse-width: {verseWidth}ch"
+	class="grid md:grid-cols-[repeat(auto-fit,minmax(100px,1fr))] gap-x-4 my-4 tei-content synced grid-flow-dense max-h-[70vh] overflow-y-auto"
 	bind:this={scrollContainer}
 >
 	{#each content as fassung, i}
@@ -129,30 +127,31 @@
 	@reference "tailwindcss";
 	@reference "@skeletonlabs/skeleton";
 	@reference "@skeletonlabs/skeleton/optional/presets";
-	:global(.line) {
-		@apply grid grid-cols-(--verse-width) grid-flow-col items-center-safe;
-		@apply preset-filled-surface-500;
-		:global(.verse) {
-			@apply ml-1;
+
+	.synced {
+		:global(.line) {
+			@apply grid grid-cols-(--verse-width) grid-flow-col items-center-safe;
+			@apply preset-filled-surface-500;
+			:global(.verse) {
+				@apply ml-1;
+			}
 		}
-	}
-	:global(.line:first-child) {
-		@apply rounded-t-xl;
-	}
-	@variant md {
-		:global(.column-d) {
-			grid-column: 1;
+		:global(.line:first-child) {
+			@apply rounded-t-xl;
 		}
-		:global(.column-m) {
-			grid-column: 2;
-		}
-		:global(.column-G) {
-			grid-column: 3;
-		}
-		:global(.column-T) {
-			grid-column: 4;
-		}
-		.tei-content {
+		@variant md {
+			:global(.column-d) {
+				grid-column: 1;
+			}
+			:global(.column-m) {
+				grid-column: 2;
+			}
+			:global(.column-G) {
+				grid-column: 3;
+			}
+			:global(.column-T) {
+				grid-column: 4;
+			}
 			:global(:nth-child(1 of .column-T)),
 			:global(:nth-child(1 of .column-G)),
 			:global(:nth-child(1 of .column-m)),

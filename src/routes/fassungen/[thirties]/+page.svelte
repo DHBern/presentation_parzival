@@ -4,9 +4,11 @@
 	import { NUMBER_OF_PAGES } from '$lib/constants';
 	import FassungenContent from './FassungenContent.svelte';
 	import { Switch } from '@skeletonlabs/skeleton-svelte';
+	import { page } from '$app/state';
 
 	/** @type {{data: import('./$types').PageData}} */
 	let { data } = $props();
+	let verseWidth = $derived(page.data.thirties.length + 4);
 
 	const composureTitles = ['*D', '*m', '*G', '*T'];
 	class localPageClass {
@@ -105,7 +107,7 @@
 	let synchro = $state(true);
 </script>
 
-<section class="w-full">
+<section class="w-full" style="--verse-width: {verseWidth}ch">
 	<h1 class="h1 my-4">Fassungsansicht</h1>
 	<div class="grid gap-6 md:grid-cols-2 md:my-8">
 		<p>Einstellungen und Links zu den Textzeugen.</p>
