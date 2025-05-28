@@ -6,6 +6,8 @@
 
 	/** @type {{data: import('./$types').PageData}} */
 	let { data } = $props();
+
+	const composureTitles = ['*D', '*m', '*G', '*T'];
 	class localPageClass {
 		/**
 		 * for the Fassungen *d, *m, *G and *T
@@ -102,14 +104,17 @@
 	</div>
 	<div class="grid grid-cols-[repeat(auto-fit,minmax(400px,1fr))] gap-4 my-4 pl-4">
 		{#each localPages.pages as pages, i}
-			{#if pages.length >= 2}
-				<!-- when at least 2 pages are loaded, the one for the currect thirties should be loaded aswell  -->
-				{#if synchro}
-					<FassungenContent {pages} bind:scrolltop observe={i === 0} />
-				{:else}
-					<FassungenContent {pages} observe={true} />
+			<div>
+				<h2 class="h2">{composureTitles[i]}</h2>
+				{#if pages.length >= 2}
+					<!-- when at least 2 pages are loaded, the one for the currect thirties should be loaded aswell  -->
+					{#if synchro}
+						<FassungenContent {pages} bind:scrolltop observe={i === 0} />
+					{:else}
+						<FassungenContent {pages} observe={true} />
+					{/if}
 				{/if}
-			{/if}
+			</div>
 		{/each}
 	</div>
 </section>
