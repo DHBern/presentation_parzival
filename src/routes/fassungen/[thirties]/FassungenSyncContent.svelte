@@ -9,7 +9,7 @@
 
 	let scrollContainer = $state();
 	let lastScrollY = 0;
-
+	let verseWidth = $derived(page.data.thirties.length + 4);
 	/**
 	 * @type {IntersectionObserver}
 	 */
@@ -87,11 +87,12 @@
 </div>
 <div
 	class="grid md:grid-cols-[repeat(auto-fit,minmax(100px,1fr))] gap-x-4 my-4 tei-content grid-flow-dense max-h-[70vh] overflow-y-auto"
+	style="--verse-width: {verseWidth}ch"
 	bind:this={scrollContainer}
 >
 	{#each content as fassung, i}
 		{@const column = ['d', 'm', 'G', 'T'][i]}
-		{#if fassung[0][0] > 1}
+		{#if fassung[0] && fassung[0][0] > 1}
 			<button
 				class="btn preset-filled-primary-500 w-full mb-4 column-{column}"
 				onclick={() =>
@@ -110,7 +111,7 @@
 				<hr class="!border-t-4 !border-primary-500 column-{column}" />
 			{/if}
 		{/each}
-		{#if fassung[fassung.length - 1][0] < NUMBER_OF_PAGES}
+		{#if fassung[fassung.length - 1] && fassung[fassung.length - 1][0] < NUMBER_OF_PAGES}
 			<button
 				class="btn preset-filled-primary-500 w-full mt-4 column-{column}"
 				onclick={() =>
@@ -129,7 +130,7 @@
 	@reference "@skeletonlabs/skeleton";
 	@reference "@skeletonlabs/skeleton/optional/presets";
 	:global(.line) {
-		@apply grid grid-cols-[5ch] grid-flow-col items-center-safe;
+		@apply grid grid-cols-(--verse-width) grid-flow-col items-center-safe;
 		@apply preset-filled-surface-500;
 		:global(.verse) {
 			@apply ml-1;
