@@ -5,7 +5,7 @@
 	import { base } from '$app/paths';
 	import { NUMBER_OF_PAGES } from '$lib/constants';
 
-	let { pages, observe, scrolltop = $bindable() } = $props();
+	let { pages, scrolltop = $bindable() } = $props();
 
 	let scrollContainer = $state();
 	/**
@@ -93,15 +93,9 @@
 		>
 	{/if}
 	{#each pages as page (page[0])}
-		{#if observe}
-			<div class="thirty tei-content" use:addToObserver>
-				{@html page[1]}
-			</div>
-		{:else}
-			<div class="thirty tei-content">
-				{@html page[1]}
-			</div>
-		{/if}
+		<div class="thirty tei-content" use:addToObserver>
+			{@html page[1]}
+		</div>
 		<hr class="!border-t-4 !border-primary-500" />
 	{/each}
 	{#if pages[pages.length - 1][0] < NUMBER_OF_PAGES}
