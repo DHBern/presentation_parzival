@@ -5,7 +5,7 @@
 	import { base } from '$app/paths';
 	import { NUMBER_OF_PAGES } from '$lib/constants';
 
-	let { pages, observe, scrolltop = $bindable() } = $props();
+	let { pages, scrolltop = $bindable() } = $props();
 
 	let scrollContainer = $state();
 	/**
@@ -74,7 +74,7 @@
 </script>
 
 <div
-	class="max-h-[70vh] overflow-y-auto preset-filled-surface-500 rounded-xl p-4"
+	class="max-h-[70vh] overflow-y-auto preset-filled-surface-500 rounded-xl"
 	bind:this={scrollContainer}
 	onscroll={(/** @type {{ target: { scrollTop: any; }; }} */ o) => {
 		scrolltop = o?.target?.scrollTop;
@@ -93,15 +93,9 @@
 		>
 	{/if}
 	{#each pages as page (page[0])}
-		{#if observe}
-			<div class="thirty tei-content" use:addToObserver>
-				{@html page[1]}
-			</div>
-		{:else}
-			<div class="thirty tei-content">
-				{@html page[1]}
-			</div>
-		{/if}
+		<div class="thirty tei-content" use:addToObserver>
+			{@html page[1]}
+		</div>
 		<hr class="!border-t-4 !border-primary-500" />
 	{/each}
 	{#if pages[pages.length - 1][0] < NUMBER_OF_PAGES}
@@ -126,9 +120,10 @@
 			animation-iteration-count: 4;
 		}
 		:global(.line) {
-			display: flex;
-			gap: 1em;
-			margin: 0.5em 0;
+			@apply flex ml-1;
+			:global(.verse) {
+				@apply w-(--verse-width) shrink-0;
+			}
 		}
 		:global(.tei-cb) {
 			@apply text-right mr-2;
