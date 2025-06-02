@@ -19,6 +19,7 @@
 			(entries) => {
 				entries.forEach((entry) => {
 					if (entry.isIntersecting) {
+						console.log('Intersecting', entry);
 						localPageChange(entry.target.dataset);
 					}
 				});
@@ -154,40 +155,42 @@
 			{#await pageObject.tpData}
 				Lade Seite...
 			{:then tpData}
-				<div
-					class="page tei-content"
-					data-id={pageObject.id}
-					data-next={tpData?.nextId}
-					data-previous={tpData?.previousId}
-					use:addToObserver
-				>
-					{#await pageObject.iiif then iiif}
-						{#if iiif?.id}
-							<button
-								onclick={() => {
-									localIiifChange(iiif);
-								}}
-								class="ml-2 float-right"
-							>
-								<img
-									src="{iiif.id}/full/!250,120/0/default.jpg"
-									alt="thumbnail der Seite {pageObject.id}"
-								/>
-							</button>
-						{:else}
-							<button
-								onclick={() => {
-									localIiifChange(iiif);
-								}}
-								class="btn preset-filled ml-2 float-right"
-							>
-								Seite wechseln
-							</button>
-						{/if}
-					{/await}
-					{@html tpData?.content}
-				</div>
-				<hr class="!border-t-4 !border-primary-500" />
+				{#if tpData}
+					<div
+						class="page tei-content"
+						data-id={pageObject.id}
+						data-next={tpData?.nextId}
+						data-previous={tpData?.previousId}
+						use:addToObserver
+					>
+						{#await pageObject.iiif then iiif}
+							{#if iiif?.id}
+								<button
+									onclick={() => {
+										localIiifChange(iiif);
+									}}
+									class="ml-2 float-right"
+								>
+									<img
+										src="{iiif.id}/full/!250,120/0/default.jpg"
+										alt="thumbnail der Seite {pageObject.id}"
+									/>
+								</button>
+							{:else}
+								<button
+									onclick={() => {
+										localIiifChange(iiif);
+									}}
+									class="btn preset-filled ml-2 float-right"
+								>
+									Seite wechseln
+								</button>
+							{/if}
+						{/await}
+						{@html tpData?.content}
+					</div>
+					<hr class="!border-t-4 !border-primary-500" />
+				{/if}
 			{:catch error}
 				{error.message}
 			{/await}

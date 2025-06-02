@@ -81,7 +81,7 @@
 			if (typeof c.meta === 'object') {
 				let meta = await c.meta;
 				let active = meta.find((m) => m.active);
-				return await active.iiif;
+				return active?.iiif;
 			}
 		});
 	};

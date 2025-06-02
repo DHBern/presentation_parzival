@@ -50,17 +50,21 @@ export async function load({ fetch, params }) {
 				(/** @type {{ l: string, id:string | string[]; }} */ entry) =>
 					entry.l.includes(`${thirties}.${verse}`)
 			);
-
-			if (selectedIndex > 0) {
-				returnObjects.push(data[witnes][selectedIndex - 1] ?? {});
-			}
-			returnObjects.push({ ...data[witnes][selectedIndex], active: true });
-			if (selectedIndex <= data[witnes].length - 1) {
-				returnObjects.push(data[witnes][selectedIndex + 1] ?? {});
+			if (selectedIndex === -1) {
+				console.warn(`No page found for ${witnes} with thirties ${thirties} and verse ${verse}.`);
+			} else {
+				if (selectedIndex > 0) {
+					returnObjects.push(data[witnes][selectedIndex - 1] ?? {});
+				}
+				returnObjects.push({ ...data[witnes][selectedIndex], active: true });
+				if (selectedIndex <= data[witnes].length - 1) {
+					returnObjects.push(data[witnes][selectedIndex + 1] ?? {});
+				}
 			}
 		} else {
 			returnObjects = [data[witnes][0], data[witnes][1]];
 		}
+		console.log(returnObjects);
 		returnObjects.map((returnObject) => {
 			if (returnObject.iiif && typeof returnObject.iiif === 'string') {
 				returnObject.iiif = fetch(returnObject.iiif).then((res) => {
