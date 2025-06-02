@@ -76,6 +76,9 @@
 	};
 
 	const scroll = async (/** @type {String} */ target) => {
+		if (!scrollContainer || !pages) {
+			return;
+		}
 		programmaticScroll = true;
 		//wait for promises in pages to resolve before scrolling
 		await Promise.all(
@@ -90,9 +93,6 @@
 			// 	`${base}/textzeugen/${$page.params.sigla}/${target.replace('.', '/')}?${$page.url.searchParams.toString()}`
 			// );
 			console.log('Verse not found.', target, scrollContainer);
-			return;
-		}
-		if (!scrollContainer) {
 			return;
 		}
 		// verse.scrollIntoView({ behavior: 'instant', block: 'start' });
