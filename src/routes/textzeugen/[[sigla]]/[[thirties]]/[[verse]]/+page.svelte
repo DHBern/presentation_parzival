@@ -110,7 +110,9 @@
 				id: id,
 				tpData: fetch(`${base}/textzeugen/data/${sigla}/${id}`).then((r) => r.json()),
 				// using id.toUpperCase() to match the iiif file naming convention - this might change in the future
-				iiif: fetch(`${iiif}/${id.toUpperCase()}.jpf/info.json`).then((r) => r.json())
+				iiif: fetch(`${iiif}/${id.slice(0, -1).toUpperCase()}${id.slice(-1)}.jpf/info.json`).then(
+					(r) => r.json()
+				)
 			};
 		};
 
