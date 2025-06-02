@@ -168,7 +168,7 @@
 					<div class="mb-4 relative">
 						<h2 class="h2">Textzeuge: {@html generateLabel([content.sigla])}</h2>
 						<p>
-							Vers: {localVerses[i]}
+							Vers: {localVerses[i].slice(0, -2)}{Number(localVerses[i].slice(-2))}
 						</p>
 						<div class="absolute top-0 right-0">
 							{#if !($page.url.searchParams.get('iiif')?.split('-')[i] === 'false')}
