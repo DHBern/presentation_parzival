@@ -157,8 +157,8 @@
 				<div
 					class="page tei-content"
 					data-id={pageObject.id}
-					data-next={tpData.nextId}
-					data-previous={tpData.previousId}
+					data-next={tpData?.nextId}
+					data-previous={tpData?.previousId}
 					use:addToObserver
 				>
 					{#await pageObject.iiif then iiif}
@@ -185,7 +185,7 @@
 							</button>
 						{/if}
 					{/await}
-					{@html tpData.content}
+					{@html tpData?.content}
 				</div>
 				<hr class="!border-t-4 !border-primary-500" />
 			{:catch error}
