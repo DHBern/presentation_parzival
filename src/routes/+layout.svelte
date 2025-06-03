@@ -45,7 +45,7 @@
 	{#snippet lead()}
 		<a class="text-xl uppercase font-bold" href={`${base}/`}>Parzival</a>
 	{/snippet}
-	<nav class="flex-none items-center h-full hidden lg:flex">
+	<nav class="flex-none items-center hidden lg:flex lg:flex-wrap">
 		{#each pages as page}
 			<a href={`${base}${page.path}`} class="list-nav-item h-full p-4 {classesActive(page.path)}"
 				>{page.slug}</a
