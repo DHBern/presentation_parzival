@@ -13,7 +13,7 @@
 	--base-letter-spacing: 0em;
 	--heading-font-color: var(--base-font-color);
 	--heading-font-color-dark: var(--base-font-color-dark);
-	--heading-font-family: 'Abril Fatface', cursive;
+	--heading-font-family: 'Abril Fatface', serif;
 	--heading-font-weight: bold;
 	--heading-font-style: normal;
 	--heading-letter-spacing: inherit;
