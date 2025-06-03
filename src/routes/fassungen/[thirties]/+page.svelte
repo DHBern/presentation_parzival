@@ -1,10 +1,11 @@
 <script>
 	import FassungenSyncContent from './FassungenSyncContent.svelte';
+	import FassungenContent from './FassungenContent.svelte';
 	import { base } from '$app/paths';
 	import { NUMBER_OF_PAGES } from '$lib/constants';
-	import FassungenContent from './FassungenContent.svelte';
 	import { Switch } from '@skeletonlabs/skeleton-svelte';
 	import { page } from '$app/state';
+	import { onMount } from 'svelte';
 
 	/** @type {{data: import('./$types').PageData}} */
 	let { data } = $props();
@@ -103,14 +104,21 @@
 	$effect(() => {
 		localPages.fetchPage(Number(data.thirties));
 	});
-	let scrolltop = $state(0);
 	let synchro = $state(true);
 	let windowWidth = $state(0);
-	const styles = getComputedStyle(document.documentElement);
-	let mobileBreakpoint = $derived(
-		windowWidth / (16 * styles.getPropertyValue('--text-scaling')) >=
-			parseInt(styles.getPropertyValue('--breakpoint-md'))
-	);
+	/**@type {boolean|CSSStyleDeclaration} **/ let styles = $state(false);
+	let mobileBreakpoint = $derived.by(() => {
+		if (typeof styles === 'object') {
+			return (
+				windowWidth / (16 * Number(styles.getPropertyValue('--text-scaling'))) >=
+				parseInt(styles.getPropertyValue('--breakpoint-md'))
+			);
+		}
+		return false;
+	});
+	onMount(() => {
+		styles = getComputedStyle(document.documentElement);
+	});
 	$effect(() => {
 		if (!mobileBreakpoint) {
 			synchro = false;
@@ -142,7 +150,7 @@
 					<h2 class="h2">{composureTitles[i]}</h2>
 					{#if fassung.length >= 2}
 						<!-- when at least 2 pages are loaded, the one for the currect thirties should be loaded aswell  -->
-						<FassungenContent pages={fassung} observe={true} />
+						<FassungenContent pages={fassung} />
 					{/if}
 				</div>
 			{/each}

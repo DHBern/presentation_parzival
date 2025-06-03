@@ -4,7 +4,7 @@
 	import { goto } from '$app/navigation';
 	import { base } from '$app/paths';
 	import { NUMBER_OF_PAGES } from '$lib/constants';
-	/** @type {{data: import('./$types').PageData}} */
+
 	let { content, titles } = $props();
 
 	let scrollContainer = $state();
