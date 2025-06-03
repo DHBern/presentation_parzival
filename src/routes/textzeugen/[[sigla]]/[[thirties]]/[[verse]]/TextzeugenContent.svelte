@@ -76,6 +76,9 @@
 	};
 
 	const scroll = async (/** @type {String} */ target) => {
+		if (!scrollContainer || !pages) {
+			return;
+		}
 		programmaticScroll = true;
 		//wait for promises in pages to resolve before scrolling
 		await Promise.all(
@@ -90,9 +93,6 @@
 			// 	`${base}/textzeugen/${$page.params.sigla}/${target.replace('.', '/')}?${$page.url.searchParams.toString()}`
 			// );
 			console.log('Verse not found.', target, scrollContainer);
-			return;
-		}
-		if (!scrollContainer) {
 			return;
 		}
 		// verse.scrollIntoView({ behavior: 'instant', block: 'start' });
@@ -157,8 +157,8 @@
 				<div
 					class="page tei-content"
 					data-id={pageObject.id}
-					data-next={tpData.nextId}
-					data-previous={tpData.previousId}
+					data-next={tpData?.nextId}
+					data-previous={tpData?.previousId}
 					use:addToObserver
 				>
 					{#await pageObject.iiif then iiif}
@@ -185,7 +185,7 @@
 							</button>
 						{/if}
 					{/await}
-					{@html tpData.content}
+					{@html tpData?.content}
 				</div>
 				<hr class="!border-t-4 !border-primary-500" />
 			{:catch error}

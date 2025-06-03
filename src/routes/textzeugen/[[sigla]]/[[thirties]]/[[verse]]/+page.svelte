@@ -4,7 +4,7 @@
 	import TextzeugenContent from './TextzeugenContent.svelte';
 	import { Switch } from '@skeletonlabs/skeleton-svelte';
 	import { base } from '$app/paths';
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	import { replaceState } from '$app/navigation';
 	import { iiif } from '$lib/constants';
 
@@ -109,7 +109,10 @@
 			return {
 				id: id,
 				tpData: fetch(`${base}/textzeugen/data/${sigla}/${id}`).then((r) => r.json()),
-				iiif: fetch(`${iiif}/${id}.jpf/info.json`).then((r) => r.json())
+				// using id.toUpperCase() to match the iiif file naming convention - this might change in the future
+				iiif: fetch(`${iiif}/${id.slice(0, -1).toUpperCase()}${id.slice(-1)}.jpf/info.json`).then(
+					(r) => r.json()
+				)
 			};
 		};
 
@@ -167,14 +170,16 @@
 				<section>
 					<div class="mb-4 relative">
 						<h2 class="h2">Textzeuge: {@html generateLabel([content.sigla])}</h2>
-						<p>
-							Vers: {localVerses[i]}
-						</p>
+						{#if localVerses[i]}
+							<p>
+								Vers: {localVerses[i].slice(0, -2)}{Number(localVerses[i].slice(-2))}
+							</p>
+						{/if}
 						<div class="absolute top-0 right-0">
-							{#if !($page.url.searchParams.get('iiif')?.split('-')[i] === 'false')}
+							{#if !(page.url.searchParams.get('iiif')?.split('-')[i] === 'false')}
 								<a
 									class="btn btn-icon"
-									href={generateIiifLink($page.url, i, false)}
+									href={generateIiifLink(page.url, i, false)}
 									aria-label="Faksimile verstecken"
 								>
 									<i class="fa-solid fa-eye-slash"></i>
@@ -182,7 +187,7 @@
 							{:else}
 								<a
 									class="btn btn-icon"
-									href={generateIiifLink($page.url, i, true)}
+									href={generateIiifLink(page.url, i, true)}
 									aria-label="Faksimile anzeigen"
 								>
 									<i class="fa-solid fa-eye"></i>
@@ -213,7 +218,7 @@
 									}
 								}
 								replaceState(
-									`${base}/textzeugen/${$page.params.sigla}/${verse.replace('.', '/')}?${$page.url.searchParams.toString()}`,
+									`${base}/textzeugen/${page.params.sigla}/${verse.replace('.', '/')}?${page.url.searchParams.toString()}`,
 									{}
 								);
 							}}
@@ -224,7 +229,7 @@
 						/>
 					{/await}
 				</section>
-				{#if !($page.url.searchParams.get('iiif')?.split('-')[i] === 'false')}
+				{#if !(page.url.searchParams.get('iiif')?.split('-')[i] === 'false')}
 					<section class="min-h-[40vh]">
 						{#await currentIiif[i] then current}
 							{#if typeof current === 'object' && Object.keys(current).length}
