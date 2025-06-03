@@ -4,8 +4,9 @@
 	import { goto } from '$app/navigation';
 	import { base } from '$app/paths';
 	import { NUMBER_OF_PAGES } from '$lib/constants';
+	import createObserver from './observer';
 
-	let { pages, scrolltop = $bindable() } = $props();
+	let { pages, scrolltop = $bindable(), nextPrevButton } = $props();
 
 	let scrollContainer = $state();
 	/**
@@ -14,33 +15,7 @@
 	let observer;
 	onMount(() => {
 		// update the current page when a new verse comes into view
-		let debounceTimeout;
-		observer = new IntersectionObserver(
-			(entries) => {
-				clearTimeout(debounceTimeout);
-				debounceTimeout = setTimeout(() => {
-					entries.forEach((entry) => {
-						if (entry.isIntersecting) {
-							let verse = entry.target
-								.querySelector(`[data-verse]`)
-								?.attributes['data-verse']?.value.split('.')[0];
-							if (entry.target && verse && verse !== page.data.thirties) {
-								goto(`${base}/fassungen/${verse}`, {
-									noScroll: true,
-									keepFocus: true,
-									replaceState: true
-								});
-							}
-						}
-					});
-				}, 100); // Adjust the debounce delay as needed
-			},
-			{
-				root: scrollContainer,
-				rootMargin: '-60px',
-				threshold: [0, 1]
-			}
-		);
+		observer = createObserver(false, scrollContainer, page);
 		const verse = scrollContainer?.querySelector(`[data-verse="${page.data.thirties}.01"]`);
 		if (verse) {
 			scrollContainer?.scrollTo({
@@ -82,15 +57,7 @@
 	use:setSyncedScroll
 >
 	{#if pages[0][0] > 1}
-		<button
-			class="btn preset-filled-primary-500 w-full mb-4"
-			onclick={() =>
-				goto(`${base}/fassungen/${pages[0][0] - 1}`, {
-					noScroll: true,
-					keepFocus: true,
-					replaceState: true
-				})}>lade vorherigen Dreißiger</button
-		>
+		{@render nextPrevButton(true, pages[0][0] - 1)}
 	{/if}
 	{#each pages as page (page[0])}
 		<div class="thirty tei-content" use:addToObserver>
@@ -99,15 +66,7 @@
 		<hr class="!border-t-4 !border-primary-500" />
 	{/each}
 	{#if pages[pages.length - 1][0] < NUMBER_OF_PAGES}
-		<button
-			class="btn preset-filled-primary-500 w-full mt-4"
-			onclick={() =>
-				goto(`${base}/fassungen/${pages[pages.length - 1][0] + 1}`, {
-					noScroll: true,
-					keepFocus: true,
-					replaceState: true
-				})}>lade nächsten Dreißiger</button
-		>
+		{@render nextPrevButton(false, pages[pages.length - 1][0] + 1)}
 	{/if}
 </div>
 

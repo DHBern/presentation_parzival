@@ -1,59 +1,19 @@
 <script>
 	import { onMount } from 'svelte';
 	import { page } from '$app/state';
-	import { goto } from '$app/navigation';
-	import { base } from '$app/paths';
 	import { NUMBER_OF_PAGES } from '$lib/constants';
+	import createObserver from './observer';
 
-	let { content, titles } = $props();
+	let { content, titles, nextPrevButton } = $props();
 
 	let scrollContainer = $state();
-	let lastScrollY = 0;
 	/**
 	 * @type {IntersectionObserver}
 	 */
 	let observer;
 	onMount(async () => {
 		// update the current page when a new verse comes into view
-		let debounceTimeout;
-		observer = new IntersectionObserver(
-			(entries) => {
-				clearTimeout(debounceTimeout);
-				// Detect scroll direction
-				const currentScrollY = scrollContainer?.scrollTop || 0;
-				const scrolledDown = currentScrollY > lastScrollY;
-				lastScrollY = currentScrollY;
-
-				debounceTimeout = setTimeout(() => {
-					entries.forEach((entry) => {
-						if (entry.isIntersecting) {
-							let verse;
-							if (scrolledDown) {
-								verse = entry.target.nextElementSibling
-									.querySelector(`[data-verse]`)
-									?.attributes['data-verse']?.value.split('.')[0];
-							} else {
-								verse = entry.target.previousElementSibling
-									.querySelector(`[data-verse]`)
-									?.attributes['data-verse']?.value.split('.')[0];
-							}
-							if (entry.target && verse && verse !== page.data.thirties) {
-								goto(`${base}/fassungen/${verse}`, {
-									noScroll: true,
-									keepFocus: true,
-									replaceState: true
-								});
-							}
-						}
-					});
-				}, 100); // Adjust the debounce delay as needed}, 100); // Adjust the debounce delay as needed
-			},
-			{
-				root: scrollContainer,
-				// rootMargin: '-60px',
-				threshold: [0, 1]
-			}
-		);
+		observer = createObserver(true, scrollContainer, page);
 	});
 
 	const addToObserver = (/** @type {HTMLDivElement} */ node) => {
@@ -91,15 +51,7 @@
 	{#each content as fassung, i}
 		{@const column = ['d', 'm', 'G', 'T'][i]}
 		{#if fassung[0] && fassung[0][0] > 1}
-			<button
-				class="btn preset-filled-primary-500 w-full mb-4 column-{column}"
-				onclick={() =>
-					goto(`${base}/fassungen/${fassung[0][0] - 1}`, {
-						noScroll: true,
-						keepFocus: true,
-						replaceState: true
-					})}>lade vorherigen Dreißiger</button
-			>
+			{@render nextPrevButton(false, fassung[0][0] - 1, column)}
 		{/if}
 		{#each fassung as page, j (page[0])}
 			{@html page[1]}
@@ -110,15 +62,7 @@
 			{/if}
 		{/each}
 		{#if fassung[fassung.length - 1] && fassung[fassung.length - 1][0] < NUMBER_OF_PAGES}
-			<button
-				class="btn preset-filled-primary-500 w-full mt-4 column-{column}"
-				onclick={() =>
-					goto(`${base}/fassungen/${fassung[fassung.length - 1][0] + 1}`, {
-						noScroll: true,
-						keepFocus: true,
-						replaceState: true
-					})}>lade nächsten Dreißiger</button
-			>
+			{@render nextPrevButton(true, fassung[fassung.length - 1][0] + 1, column)}
 		{/if}
 	{/each}
 </div>

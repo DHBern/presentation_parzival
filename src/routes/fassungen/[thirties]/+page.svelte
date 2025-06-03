@@ -6,6 +6,7 @@
 	import { Switch } from '@skeletonlabs/skeleton-svelte';
 	import { page } from '$app/state';
 	import { onMount } from 'svelte';
+	import { goto } from '$app/navigation';
 
 	/** @type {{data: import('./$types').PageData}} */
 	let { data } = $props();
@@ -29,7 +30,7 @@
 		 * @returns {Promise<void>} - A promise that resolves when the data is fetched.
 		 */
 		fetchPage = async (/** @type {Number} */ page) => {
-			let prepareHTML = (/** @type {string} */ html, /** @type {string} */ column) => {
+			const prepareHTML = (/** @type {string} */ html, /** @type {string} */ column) => {
 				// select all lines in the HTML and process them
 				const parser = new DOMParser();
 				const doc = parser.parseFromString(html, 'text/html');
@@ -46,7 +47,7 @@
 			if (!this.thirties.length) {
 				let content;
 				// fetch the page before the current one if the current one is not the first
-				if (page - 1 > 0) {
+				if (page > 1) {
 					content = await fetch(`${base}/fassungen/data/${page - 1}`).then((r) => r.json());
 					labels.forEach((label, index) => {
 						let preparedHTML = prepareHTML(content[index], label);
@@ -128,6 +129,19 @@
 
 <svelte:window bind:innerWidth={windowWidth} />
 <section class="w-full" style="--verse-width: {verseWidth}ch">
+	{#snippet nextPrevButton(next, page, column)}
+		<button
+			class="btn preset-filled-primary-500 w-full mb-4 {column ? 'column-' + column : ''}"
+			onclick={() =>
+				goto(`${base}/fassungen/${page}`, {
+					noScroll: true,
+					keepFocus: true,
+					replaceState: true
+				})}
+		>
+			{next ? 'Lade nächsten Dreißiger' : 'Lade vorherigen Dreißiger'}
+		</button>
+	{/snippet}
 	<h1 class="h1 my-4">Fassungsansicht</h1>
 	<div class="grid gap-6 md:grid-cols-2 md:my-8">
 		<p>Einstellungen und Links zu den Textzeugen.</p>
@@ -142,7 +156,7 @@
 		{/if}
 	</div>
 	{#if synchro}
-		<FassungenSyncContent content={localPages.pages} titles={composureTitles} />
+		<FassungenSyncContent content={localPages.pages} titles={composureTitles} {nextPrevButton} />
 	{:else}
 		<div class="grid md:grid-cols-[repeat(auto-fit,minmax(100px,1fr))] gap-4 my-4">
 			{#each localPages.pages as fassung, i}
@@ -150,7 +164,7 @@
 					<h2 class="h2">{composureTitles[i]}</h2>
 					{#if fassung.length >= 2}
 						<!-- when at least 2 pages are loaded, the one for the currect thirties should be loaded aswell  -->
-						<FassungenContent pages={fassung} />
+						<FassungenContent pages={fassung} {nextPrevButton} />
 					{/if}
 				</div>
 			{/each}
