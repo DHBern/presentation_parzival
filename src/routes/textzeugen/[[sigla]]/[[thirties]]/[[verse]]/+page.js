@@ -9,6 +9,7 @@ export async function load({ fetch, params }) {
 
 	/** @type string | boolean */
 	let thirties = params.thirties ?? '1';
+	console.log('thirties', thirties);
 	/** @type string | boolean */
 	let verse = params.verse?.padStart(2, '0') ?? '01';
 	// if params.thirties is not defined, we need to find the lowest thirty & verse that exists in all siglas
@@ -64,7 +65,6 @@ export async function load({ fetch, params }) {
 		} else {
 			returnObjects = [data[witnes][0], data[witnes][1]];
 		}
-		console.log(returnObjects);
 		returnObjects.map((returnObject) => {
 			if (returnObject.iiif && typeof returnObject.iiif === 'string') {
 				returnObject.iiif = fetch(returnObject.iiif).then((res) => {

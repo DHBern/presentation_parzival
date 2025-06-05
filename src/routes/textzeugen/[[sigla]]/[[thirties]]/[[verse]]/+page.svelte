@@ -5,7 +5,7 @@
 	import { Switch } from '@skeletonlabs/skeleton-svelte';
 	import { base } from '$app/paths';
 	import { page } from '$app/state';
-	import { replaceState } from '$app/navigation';
+	import { invalidateAll, replaceState } from '$app/navigation';
 	import { iiif } from '$lib/constants';
 
 	/** @type {{data: import('./$types').PageData}} */
@@ -62,8 +62,12 @@
 		}
 		return link.toString();
 	};
-	let localVerses = $state(Array(data.content?.length).fill(`${data.thirties}.${data.verse}`));
-	let targetverses = $state(Array(data.content?.length).fill(`${data.thirties}.${data.verse}`));
+	let localVerses = $state(
+		Array(data.content?.length).fill(`${data.thirties}.${data.verse ? data.verse : '01'}`)
+	);
+	let targetverses = $state(
+		Array(data.content?.length).fill(`${data.thirties}.${data.verse ? data.verse : '01'}`)
+	);
 	const generateLocalPagesFromData = (d) => {
 		return d?.map((c) => {
 			if (typeof c.meta === 'object') {
@@ -87,11 +91,16 @@
 	};
 	let currentIiif = $state(generateIiifFromData(data.content));
 	$effect(() => {
-		localVerses = Array(data.content?.length).fill(`${data.thirties}.${data.verse}`);
-		targetverses = Array(data.content?.length).fill(`${data.thirties}.${data.verse}`);
+		localVerses = Array(data.content?.length).fill(
+			`${data.thirties}.${data.verse ? data.verse : '01'}`
+		);
+		targetverses = Array(data.content?.length).fill(
+			`${data.thirties}.${data.verse ? data.verse : '01'}`
+		);
 		localPages = generateLocalPagesFromData(data.content);
 		currentIiif = generateIiifFromData(data.content);
 	});
+	$inspect(localPages);
 
 	const checklocalPages = async (
 		/** @type {{id:string, previous:string, next:string}} */ pageInfo,
@@ -205,28 +214,39 @@
 					{#await localPages[i]}
 						Lade Text...
 					{:then pages}
-						<TextzeugenContent
-							{pages}
-							targetverse={targetverses[i]}
-							localVerseChange={(verse) => {
-								localVerses[i] = verse;
-								if (synchro) {
-									const indexOfOther = localVerses.findIndex((v) => v != verse);
-									if (indexOfOther != -1) {
-										localVerses[indexOfOther] = verse;
-										targetverses[indexOfOther] = verse;
+						{#if pages?.length && pages[0].id}
+							<TextzeugenContent
+								{pages}
+								targetverse={targetverses[i]}
+								localVerseChange={(verse) => {
+									localVerses[i] = verse;
+									if (synchro) {
+										const indexOfOther = localVerses.findIndex((v) => v != verse);
+										if (indexOfOther != -1) {
+											localVerses[indexOfOther] = verse;
+											targetverses[indexOfOther] = verse;
+										}
 									}
-								}
-								replaceState(
-									`${base}/textzeugen/${page.params.sigla}/${verse.replace('.', '/')}?${page.url.searchParams.toString()}`,
-									{}
-								);
-							}}
-							localPageChange={(
-								/** @type {{ id: string; previous: string; next: string; }} */ pageinfo
-							) => checklocalPages(pageinfo, i, content.sigla)}
-							localIiifChange={(/** @type {Object} */ e) => (currentIiif[i] = e)}
-						/>
+									replaceState(
+										`${base}/textzeugen/${page.params.sigla}/${verse.replace('.', '/')}?${page.url.searchParams.toString()}`,
+										{}
+									);
+								}}
+								localPageChange={(
+									/** @type {{ id: string; previous: string; next: string; }} */ pageinfo
+								) => checklocalPages(pageinfo, i, content.sigla)}
+								localIiifChange={(/** @type {Object} */ e) => (currentIiif[i] = e)}
+							/>
+						{:else}
+							<p class="text-error-500">
+								Keine Daten zum Vers gefunden. Möglicherweise existiert der Vers nicht? <button
+									onclick={() => {
+										invalidateAll();
+									}}
+									class="btn">aktualisieren</button
+								>
+							</p>
+						{/if}
 					{/await}
 				</section>
 				{#if !(page.url.searchParams.get('iiif')?.split('-')[i] === 'false')}
