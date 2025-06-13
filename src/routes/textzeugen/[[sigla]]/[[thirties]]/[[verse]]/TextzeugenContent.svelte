@@ -20,6 +20,10 @@
 			(entries) => {
 				entries.forEach((entry) => {
 					if (entry.isIntersecting) {
+						if (programmaticScroll) {
+							return;
+						}
+						console.log('Intersecting', entry.target.dataset);
 						localPageChange(entry.target.dataset);
 					}
 				});
@@ -87,7 +91,7 @@
 				return page.tpData;
 			})
 		);
-		const verse = scrollContainer?.querySelector(`[data-verse="${target}"]`);
+		let verse = scrollContainer?.querySelector(`[data-verse="${target}"]`);
 		if (!verse && scrollContainer) {
 			//check whether the verse should be there
 			// goto(
@@ -98,20 +102,20 @@
 			const verses = scrollContainer.querySelectorAll('.verse');
 			const firstVerse = verses[0];
 			const lastVerse = verses[verses.length - 1];
-			const loadFurther = async (
-				/** @type {{ closest: (arg0: string) => { (): any; new (): any; dataset: any; }; }} */ el
-			) => {
-				console.log(
-					`Target verse ${target} is not in the current scrollContainer range. Loading further pages...`
-				);
-				const dataset = el.closest('.page').dataset;
-				if (dataset) {
-					programmaticScroll = true;
-					await localPageChange(dataset);
-					await scroll(target);
-				}
-			};
 			if (firstVerse && lastVerse) {
+				const loadFurther = async (
+					/** @type {{ closest: (arg0: string) => { (): any; new (): any; dataset: any; }; }} */ el
+				) => {
+					console.log(
+						`Target verse ${target} is not in the current scrollContainer range. Loading further pages...`
+					);
+					const dataset = el.closest('.page').dataset;
+					if (dataset) {
+						programmaticScroll = true;
+						await localPageChange(dataset);
+						await scroll(target);
+					}
+				};
 				const firstThirtyNumber = Number(firstVerse.dataset.verse.slice(0, -2));
 				const lastThirtyNumber = Number(lastVerse.dataset.verse.slice(0, -2));
 				const targetThirtyNumber = Number(target.slice(0, -2));
@@ -120,10 +124,24 @@
 				} else if (targetThirtyNumber > lastThirtyNumber && targetThirtyNumber < NUMBER_OF_PAGES) {
 					await loadFurther(lastVerse);
 					return;
+				} else {
+					programmaticScroll = true;
+					// find the verse that is closest to the target verse
+					const closestVerse = Array.from(verses).reduce((closest, current) => {
+						const currentThirtyNumber = Number(current.dataset.verse.slice(0, -2));
+						if (
+							Math.abs(currentThirtyNumber - targetThirtyNumber) <
+							Math.abs(Number(closest.dataset.verse.slice(0, -2)) - targetThirtyNumber)
+						) {
+							return current;
+						}
+						return closest;
+					}, verses[0]);
+					verse = closestVerse;
 				}
 			}
-			return;
-		} else {
+		}
+		if (verse) {
 			// verse.scrollIntoView({ behavior: 'instant', block: 'start' });
 			scrollContainer?.scrollTo({
 				top:
