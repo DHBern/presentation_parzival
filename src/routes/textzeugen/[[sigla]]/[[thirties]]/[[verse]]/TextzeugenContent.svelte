@@ -1,4 +1,5 @@
 <script>
+	import { NUMBER_OF_PAGES } from '$lib/constants';
 	import { onMount } from 'svelte';
 	/** @type {{pages: any}} */
 	let { pages, localPageChange, localIiifChange, localVerseChange, targetverse } = $props();
@@ -19,7 +20,6 @@
 			(entries) => {
 				entries.forEach((entry) => {
 					if (entry.isIntersecting) {
-						console.log('Intersecting', entry);
 						localPageChange(entry.target.dataset);
 					}
 				});
@@ -94,22 +94,56 @@
 			// 	`${base}/textzeugen/${$page.params.sigla}/${target.replace('.', '/')}?${$page.url.searchParams.toString()}`
 			// );
 			console.log('Verse not found.', target, scrollContainer);
+			//find out whether the verse to scroll to is smaller than the first verse in the scrollContainer or larger than the last verse in the scrollContainer
+			const verses = scrollContainer.querySelectorAll('.verse');
+			const firstVerse = verses[0];
+			const lastVerse = verses[verses.length - 1];
+			const loadFurther = async (
+				/** @type {{ closest: (arg0: string) => { (): any; new (): any; dataset: any; }; }} */ el
+			) => {
+				console.log(
+					`Target verse ${target} is not in the current scrollContainer range. Loading further pages...`
+				);
+				const dataset = el.closest('.page').dataset;
+				if (dataset) {
+					programmaticScroll = true;
+					await localPageChange(dataset);
+					await scroll(target);
+				}
+			};
+			if (firstVerse && lastVerse) {
+				const firstThirtyNumber = Number(firstVerse.dataset.verse.slice(0, -2));
+				const lastThirtyNumber = Number(lastVerse.dataset.verse.slice(0, -2));
+				const targetThirtyNumber = Number(target.slice(0, -2));
+				if (targetThirtyNumber < firstThirtyNumber && targetThirtyNumber > 0) {
+					await loadFurther(firstVerse);
+				} else if (targetThirtyNumber > lastThirtyNumber && targetThirtyNumber < NUMBER_OF_PAGES) {
+					await loadFurther(lastVerse);
+					return;
+				}
+			}
 			return;
-		}
-		// verse.scrollIntoView({ behavior: 'instant', block: 'start' });
-		scrollContainer?.scrollTo({
-			top:
-				scrollContainer?.scrollTop +
-				Number(verse.parentElement?.getBoundingClientRect().top) -
-				scrollContainer?.getBoundingClientRect().top,
-			behavior: 'instant'
-		});
-		verse.parentElement?.classList.add('animate-pulse', 'once');
-		// check whether the verse is on the last page in the scrollcontainer
-		if (scrollContainer.scrollHeight - scrollContainer.clientHeight === scrollContainer.scrollTop) {
-			const dataset = verse.parentElement?.dataset;
-			if (dataset) {
-				localPageChange(dataset);
+		} else {
+			// verse.scrollIntoView({ behavior: 'instant', block: 'start' });
+			scrollContainer?.scrollTo({
+				top:
+					scrollContainer?.scrollTop +
+					Number(verse.parentElement?.getBoundingClientRect().top) -
+					scrollContainer?.getBoundingClientRect().top,
+				behavior: 'instant'
+			});
+			if (verse) {
+				verse.parentElement?.classList.add('animate-pulse', 'once');
+			}
+			// check whether the verse is on the last page in the scrollcontainer
+			if (
+				scrollContainer.scrollHeight - scrollContainer.clientHeight ===
+				scrollContainer.scrollTop
+			) {
+				const dataset = verse.closest('.page').dataset;
+				if (dataset) {
+					await localPageChange(dataset);
+				}
 			}
 		}
 	};

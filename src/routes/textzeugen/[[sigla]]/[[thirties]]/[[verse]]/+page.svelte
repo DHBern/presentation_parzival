@@ -5,7 +5,7 @@
 	import { Switch } from '@skeletonlabs/skeleton-svelte';
 	import { base } from '$app/paths';
 	import { page } from '$app/state';
-	import { invalidateAll, replaceState } from '$app/navigation';
+	import { goto, replaceState } from '$app/navigation';
 	import { iiif } from '$lib/constants';
 
 	/** @type {{data: import('./$types').PageData}} */
@@ -100,7 +100,6 @@
 		localPages = generateLocalPagesFromData(data.content);
 		currentIiif = generateIiifFromData(data.content);
 	});
-	$inspect(localPages);
 
 	const checklocalPages = async (
 		/** @type {{id:string, previous:string, next:string}} */ pageInfo,
@@ -128,7 +127,7 @@
 		//switch statement for the cases -1, 0, localPages[i].length
 		switch (indexCurrent) {
 			case -1:
-				console.error('current page not found in localPages', pageInfo.id);
+				console.error('current page not found in localPages', pageInfo);
 				break;
 			case 0:
 				if (pageInfo.previous) {
@@ -141,6 +140,7 @@
 				}
 				break;
 		}
+		return true;
 	};
 </script>
 
@@ -172,7 +172,7 @@
 </section>
 {#if data.content}
 	<div class="grid grid-cols-[repeat(auto-fit,minmax(550px,1fr))] gap-4">
-		{#each data.content as content, i}
+		{#each data.content as content, i (content.sigla)}
 			<article
 				class="grid grid-cols-[repeat(auto-fit,minmax(500px,1fr))] gap-4 preset-filled-surface-500 my-4 py-4 px-8 rounded-xl"
 			>
@@ -234,14 +234,18 @@
 								}}
 								localPageChange={(
 									/** @type {{ id: string; previous: string; next: string; }} */ pageinfo
-								) => checklocalPages(pageinfo, i, content.sigla)}
+								) => {
+									checklocalPages(pageinfo, i, content.sigla);
+								}}
 								localIiifChange={(/** @type {Object} */ e) => (currentIiif[i] = e)}
 							/>
 						{:else}
 							<p class="text-error-500">
 								Keine Daten zum Vers gefunden. Möglicherweise existiert der Vers nicht? <button
 									onclick={() => {
-										invalidateAll();
+										goto(
+											`${base}/textzeugen/${page.params.sigla}/${localVerses[i].replace('.', '/')}?${page.url.searchParams.toString()}`
+										);
 									}}
 									class="btn">aktualisieren</button
 								>
