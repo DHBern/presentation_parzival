@@ -52,6 +52,26 @@ export async function load({ fetch, params }) {
 			);
 			if (selectedIndex === -1) {
 				console.warn(`No page found for ${witnes} with thirties ${thirties} and verse ${verse}.`);
+				// loop through the l array of all pages and find the page that contains the thirties that is closest to the requested thirties
+				const closestPages = data[witnes].reduce(
+					(closest, current, i, array) => {
+						const lowestThirties = Number(current.l[0].split('.')[0]);
+						if (lowestThirties < Number(thirties)) {
+							let returnArray = [];
+							if (i > 0) {
+								returnArray.push(array[i - 1]);
+							}
+							returnArray.push(current);
+							if (i < array.length - 1) {
+								returnArray.push(array[i + 1]);
+							}
+							return returnArray;
+						}
+						return closest;
+					},
+					[data[witnes][0], data[witnes][1]]
+				);
+				returnObjects = closestPages;
 			} else {
 				if (selectedIndex > 0) {
 					returnObjects.push(data[witnes][selectedIndex - 1] ?? {});
