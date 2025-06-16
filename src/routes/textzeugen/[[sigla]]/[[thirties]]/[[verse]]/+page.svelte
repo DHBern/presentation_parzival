@@ -238,6 +238,7 @@
 									checklocalPages(pageinfo, i, content.sigla);
 								}}
 								localIiifChange={(/** @type {Object} */ e) => (currentIiif[i] = e)}
+								range={data.ranges.find((r) => r.label === content.sigla).values}
 							/>
 						{:else}
 							<p class="text-error-500">

@@ -11,6 +11,9 @@ export async function load({ fetch, params }) {
 	let thirties = params.thirties ?? '1';
 	/** @type string | boolean */
 	let verse = params.verse?.padStart(2, '0') ?? '01';
+
+	const ranges = await fetch(`${api}/json/contiguous_ranges.json`).then((res) => res.json());
+
 	// if params.thirties is not defined, we need to find the lowest thirty & verse that exists in all siglas
 	if (sigla?.length === 1) {
 		const lowestPromises = fetch(`${api}/json/metadata-ms-page/${sigla[0]}.json`).then((r) =>
@@ -116,6 +119,7 @@ export async function load({ fetch, params }) {
 				sigla: witnes,
 				meta: meta ? meta[i] : false
 			};
-		})
+		}),
+		ranges: ranges['contiguous-ranges'].filter((r) => sigla?.includes(r.label))
 	};
 }

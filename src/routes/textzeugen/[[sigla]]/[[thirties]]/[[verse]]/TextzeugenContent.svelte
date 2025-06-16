@@ -1,8 +1,11 @@
 <script>
 	import { NUMBER_OF_PAGES } from '$lib/constants';
 	import { onMount } from 'svelte';
-	/** @type {{pages: any}} */
-	let { pages, localPageChange, localIiifChange, localVerseChange, targetverse } = $props();
+
+	let { pages, localPageChange, localIiifChange, localVerseChange, targetverse, range } = $props();
+	/**
+	 * @type {number | undefined}
+	 */
 	let localTarget;
 	/**
 	 * @type {number | null}
@@ -119,9 +122,20 @@
 				const firstThirtyNumber = Number(firstVerse.dataset.verse.slice(0, -2));
 				const lastThirtyNumber = Number(lastVerse.dataset.verse.slice(0, -2));
 				const targetThirtyNumber = Number(target.slice(0, -2));
-				if (targetThirtyNumber < firstThirtyNumber && targetThirtyNumber > 0) {
+				//check for targetThirtyNumber being in the set of available verses at all
+				let inRange = false;
+				range.forEach((/** @type {number[]} */ r) => {
+					if (targetThirtyNumber >= r[0] && targetThirtyNumber <= r[1]) {
+						inRange = true;
+					}
+				});
+				if (inRange && targetThirtyNumber < firstThirtyNumber && targetThirtyNumber > 0) {
 					await loadFurther(firstVerse);
-				} else if (targetThirtyNumber > lastThirtyNumber && targetThirtyNumber < NUMBER_OF_PAGES) {
+				} else if (
+					inRange &&
+					targetThirtyNumber > lastThirtyNumber &&
+					targetThirtyNumber < NUMBER_OF_PAGES
+				) {
 					await loadFurther(lastVerse);
 					return;
 				} else {
@@ -166,7 +180,7 @@
 		}
 	};
 	$effect(() => {
-		//this effect rerons more often than it should, sometimes the value of targetverse didn't even change this is why we need to keep track of the target ourselves
+		//this effect reruns more often than it should, sometimes the value of targetverse didn't even change this is why we need to keep track of the target ourselves
 		if (localTarget !== targetverse) {
 			localTarget = targetverse;
 			scroll(targetverse);
