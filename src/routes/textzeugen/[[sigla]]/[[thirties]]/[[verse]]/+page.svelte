@@ -91,7 +91,6 @@
 		});
 	};
 	let currentIiif = $state(generateIiifFromData(data.content));
-	$inspect(currentIiif);
 	$effect(() => {
 		localVerses = Array(data.content?.length).fill(
 			`${data.thirties}.${data.verse ? data.verse : '01'}`
@@ -241,6 +240,7 @@
 								}}
 								localIiifChange={(/** @type {Object} */ e) => (currentIiif[i] = e)}
 								range={data.ranges.find((r) => r.label === content.sigla).values}
+								label={content.sigla}
 							/>
 						{:else}
 							<p class="text-error-500">
