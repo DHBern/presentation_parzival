@@ -81,6 +81,7 @@
 
 	let localPages = $state(generateLocalPagesFromData(data.content));
 	const generateIiifFromData = (d) => {
+		console.log('generateIiifFromData', d);
 		return d?.map(async (c) => {
 			if (typeof c.meta === 'object') {
 				let meta = await c.meta;
@@ -90,6 +91,7 @@
 		});
 	};
 	let currentIiif = $state(generateIiifFromData(data.content));
+	$inspect(currentIiif);
 	$effect(() => {
 		localVerses = Array(data.content?.length).fill(
 			`${data.thirties}.${data.verse ? data.verse : '01'}`
@@ -257,6 +259,9 @@
 				{#if !(page.url.searchParams.get('iiif')?.split('-')[i] === 'false')}
 					<section class="min-h-[40vh]">
 						{#await currentIiif[i] then current}
+							{#if !current}
+								{JSON.stringify(currentIiif)}
+							{/if}
 							{#if typeof current === 'object' && Object.keys(current).length}
 								<IIIFViewer iiif={current} />
 							{/if}

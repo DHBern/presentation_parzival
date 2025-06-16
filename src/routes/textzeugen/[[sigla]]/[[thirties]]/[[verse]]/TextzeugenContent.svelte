@@ -1,6 +1,9 @@
 <script>
 	import { NUMBER_OF_PAGES } from '$lib/constants';
 	import { onMount } from 'svelte';
+	import { toaster } from '$lib/components/toaster';
+	import { page } from '$app/state';
+	import siglaFromHandle from '$lib/functions/siglaFromHandle';
 
 	let { pages, localPageChange, localIiifChange, localVerseChange, targetverse, range } = $props();
 	/**
@@ -139,6 +142,10 @@
 					await loadFurther(lastVerse);
 					return;
 				} else {
+					toaster.error({
+						title: 'Vers nicht gefunden',
+						description: `Der Vers ${target} ist nicht im Textzeugen ${siglaFromHandle(page.params.sigla)} enthalten. Es wird der nächste verfügbare Vers geladen.`
+					});
 					programmaticScroll = true;
 					// find the verse that is closest to the target verse
 					const closestVerse = Array.from(verses).reduce((closest, current) => {

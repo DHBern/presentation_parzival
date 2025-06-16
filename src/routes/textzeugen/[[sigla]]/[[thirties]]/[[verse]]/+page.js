@@ -64,7 +64,7 @@ export async function load({ fetch, params }) {
 							if (i > 0) {
 								returnArray.push(array[i - 1]);
 							}
-							returnArray.push(current);
+							returnArray.push({ ...current, active: true });
 							if (i < array.length - 1) {
 								returnArray.push(array[i + 1]);
 							}
@@ -72,7 +72,7 @@ export async function load({ fetch, params }) {
 						}
 						return closest;
 					},
-					[data[witnes][0], data[witnes][1]]
+					[{ ...data[witnes][0], active: true }, data[witnes][1]]
 				);
 				returnObjects = closestPages;
 			} else {
