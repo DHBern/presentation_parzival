@@ -248,15 +248,6 @@
 										alt="thumbnail der Seite {pageObject.id}"
 									/>
 								</button>
-							{:else}
-								<button
-									onclick={() => {
-										localIiifChange(iiif);
-									}}
-									class="btn preset-filled ml-2 float-right"
-								>
-									Seite wechseln
-								</button>
 							{/if}
 						{/await}
 						{@html tpData?.content}
