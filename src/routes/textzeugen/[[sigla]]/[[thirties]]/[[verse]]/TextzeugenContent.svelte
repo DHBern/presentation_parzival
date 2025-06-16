@@ -192,6 +192,34 @@
 			scroll(targetverse);
 		}
 	});
+	const modifyTpContent = (/** @type {string} */ content) => {
+		const parser = new DOMParser();
+		const doc = parser.parseFromString(content, 'text/html');
+		const lines = Array.from(doc.querySelectorAll('.line:has(.tei-cb)'));
+		lines.forEach((line) => {
+			const cb = line.querySelector('.tei-cb');
+			const beforeCb = line.cloneNode(true);
+			//remove everthing after the tei-cb inside .content
+			const contentBefore = beforeCb.querySelector('.content');
+			if (contentBefore) {
+				contentBefore.innerHTML = contentBefore.innerHTML.split(cb.outerHTML)[0];
+			}
+			const afterCb = line.cloneNode(true);
+			afterCb.removeAttribute('id');
+			const contentAfter = afterCb.querySelector('.content');
+			if (contentAfter) {
+				contentAfter.innerHTML = contentAfter.innerHTML.split(cb.outerHTML)[1];
+			}
+			if (!isEmptyColumn(beforeCb.querySelector('.content')?.innerHTML)) {
+				line.insertAdjacentElement('beforebegin', beforeCb);
+			}
+			line.insertAdjacentElement('beforebegin', cb);
+			line.insertAdjacentElement('beforebegin', afterCb);
+			line.remove();
+		});
+		// return content;
+		return doc.body.innerHTML;
+	};
 	const addToObserver = (/** @type {HTMLDivElement} */ node) => {
 		$effect(() => {
 			observer.observe(node);
@@ -250,7 +278,7 @@
 								</button>
 							{/if}
 						{/await}
-						{@html tpData?.content}
+						{@html modifyTpContent(tpData?.content)}
 					</div>
 					<hr class="!border-t-4 !border-primary-500" />
 				{/if}
