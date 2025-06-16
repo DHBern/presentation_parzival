@@ -241,7 +241,7 @@
 									onclick={() => {
 										localIiifChange(iiif);
 									}}
-									class="ml-2 float-right"
+									class="ml-2 float-right sticky top-0"
 								>
 									<img
 										src="{iiif.id}/full/!250,120/0/default.jpg"
