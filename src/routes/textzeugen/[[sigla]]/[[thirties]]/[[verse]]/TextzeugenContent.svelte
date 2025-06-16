@@ -244,7 +244,7 @@
 									class="ml-2 float-right sticky top-0"
 								>
 									<img
-										src="{iiif.id}/full/!250,120/0/default.jpg"
+										src="{iiif.id}/full/90,/0/default.jpg"
 										alt="thumbnail der Seite {pageObject.id}"
 									/>
 								</button>
@@ -275,7 +275,10 @@
 			margin: 0.5em 0;
 		}
 		:global(.tei-cb) {
-			@apply text-right mr-2;
+			@apply text-right pr-[95px] sticky top-0;
+			:global(p) {
+				@apply bg-surface-500;
+			}
 		}
 		:global(.tei-cb:not(.tei-cb:first-child)) {
 			@apply border-primary-300 border-solid border-t-4;

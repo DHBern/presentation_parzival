@@ -81,7 +81,6 @@
 
 	let localPages = $state(generateLocalPagesFromData(data.content));
 	const generateIiifFromData = (d) => {
-		console.log('generateIiifFromData', d);
 		return d?.map(async (c) => {
 			if (typeof c.meta === 'object') {
 				let meta = await c.meta;
