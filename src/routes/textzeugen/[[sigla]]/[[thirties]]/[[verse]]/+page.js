@@ -11,6 +11,9 @@ export async function load({ fetch, params }) {
 	let thirties = params.thirties ?? '1';
 	/** @type string | boolean */
 	let verse = params.verse?.padStart(2, '0') ?? '01';
+
+	const ranges = await fetch(`${api}/json/contiguous_ranges.json`).then((res) => res.json());
+
 	// if params.thirties is not defined, we need to find the lowest thirty & verse that exists in all siglas
 	if (sigla?.length === 1) {
 		const lowestPromises = fetch(`${api}/json/metadata-ms-page/${sigla[0]}.json`).then((r) =>
@@ -50,13 +53,36 @@ export async function load({ fetch, params }) {
 				(/** @type {{ l: string, id:string | string[]; }} */ entry) =>
 					entry.l.includes(`${thirties}.${verse}`)
 			);
-
-			if (selectedIndex > 0) {
-				returnObjects.push(data[witnes][selectedIndex - 1] ?? {});
-			}
-			returnObjects.push({ ...data[witnes][selectedIndex], active: true });
-			if (selectedIndex <= data[witnes].length - 1) {
-				returnObjects.push(data[witnes][selectedIndex + 1] ?? {});
+			if (selectedIndex === -1) {
+				console.warn(`No page found for ${witnes} with thirties ${thirties} and verse ${verse}.`);
+				// loop through the l array of all pages and find the page that contains the thirties that is closest to the requested thirties
+				const closestPages = data[witnes].reduce(
+					(closest, current, i, array) => {
+						const lowestThirties = Number(current.l[0].split('.')[0]);
+						if (lowestThirties < Number(thirties)) {
+							let returnArray = [];
+							if (i > 0) {
+								returnArray.push(array[i - 1]);
+							}
+							returnArray.push({ ...current, active: true });
+							if (i < array.length - 1) {
+								returnArray.push(array[i + 1]);
+							}
+							return returnArray;
+						}
+						return closest;
+					},
+					[{ ...data[witnes][0], active: true }, data[witnes][1]]
+				);
+				returnObjects = closestPages;
+			} else {
+				if (selectedIndex > 0) {
+					returnObjects.push(data[witnes][selectedIndex - 1] ?? {});
+				}
+				returnObjects.push({ ...data[witnes][selectedIndex], active: true });
+				if (selectedIndex <= data[witnes].length - 1) {
+					returnObjects.push(data[witnes][selectedIndex + 1] ?? {});
+				}
 			}
 		} else {
 			returnObjects = [data[witnes][0], data[witnes][1]];
@@ -93,6 +119,7 @@ export async function load({ fetch, params }) {
 				sigla: witnes,
 				meta: meta ? meta[i] : false
 			};
-		})
+		}),
+		ranges: ranges['contiguous-ranges'].filter((r) => sigla?.includes(r.label))
 	};
 }

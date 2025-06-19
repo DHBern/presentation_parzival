@@ -1,5 +1,5 @@
 <script>
-	import { Popover, TagsInput } from '@skeletonlabs/skeleton-svelte';
+	import { TagsInput } from '@skeletonlabs/skeleton-svelte';
 	import Brush from './Brush.svelte';
 	import Detail from './Detail.svelte';
 	import { summaryLabel } from '$lib/constants';
