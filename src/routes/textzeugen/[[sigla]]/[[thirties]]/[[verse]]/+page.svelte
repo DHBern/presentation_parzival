@@ -109,8 +109,9 @@
 		const indexCurrent = (await localPages[i]).findIndex(
 			(/** @type {{ id: string; }} */ p) => p.id === pageInfo.id
 		);
+		const pageArray = await localPages[i];
 		// Don't switch the iiif viewer on page change, just on click
-		// localPages[i][indexCurrent]?.iiif.then((/** @type {any} */ iiif) => {
+		//pageArray[indexCurrent]?.iiif.then((/** @type {any} */ iiif) => {
 		// 	currentIiif[i] = iiif;
 		// });
 		const createObject = (/** @type {string} */ id) => {
@@ -122,19 +123,19 @@
 			};
 		};
 
-		//switch statement for the cases -1, 0, localPages[i].length
+		//switch statement for the cases -1, 0,pageArray.length
 		switch (indexCurrent) {
 			case -1:
 				console.error('current page not found in localPages', pageInfo);
 				break;
 			case 0:
 				if (pageInfo.previous) {
-					localPages[i] = [createObject(pageInfo.previous), ...(await localPages[i])];
+					localPages[i] = [createObject(pageInfo.previous), ...pageArray];
 				}
 				break;
-			case localPages[i].length - 1:
+			case pageArray.length - 1:
 				if (pageInfo.next) {
-					localPages[i] = [...(await localPages[i]), createObject(pageInfo.next)];
+					localPages[i] = [...pageArray, createObject(pageInfo.next)];
 				}
 				break;
 		}
