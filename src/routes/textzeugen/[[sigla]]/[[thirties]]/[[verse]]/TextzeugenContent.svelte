@@ -1,7 +1,14 @@
 <script>
+	import { NUMBER_OF_PAGES } from '$lib/constants';
 	import { onMount } from 'svelte';
-	/** @type {{pages: any}} */
-	let { pages, localPageChange, localIiifChange, localVerseChange, targetverse } = $props();
+	import { toaster } from '$lib/components/toaster';
+	import siglaFromHandle from '$lib/functions/siglaFromHandle';
+
+	let { pages, localPageChange, localIiifChange, localVerseChange, targetverse, range, label } =
+		$props();
+	/**
+	 * @type {number | undefined}
+	 */
 	let localTarget;
 	/**
 	 * @type {number | null}
@@ -19,6 +26,9 @@
 			(entries) => {
 				entries.forEach((entry) => {
 					if (entry.isIntersecting) {
+						if (programmaticScroll) {
+							return;
+						}
 						localPageChange(entry.target.dataset);
 					}
 				});
@@ -86,39 +96,130 @@
 				return page.tpData;
 			})
 		);
-		const verse = scrollContainer?.querySelector(`[data-verse="${target}"]`);
+		let verse = scrollContainer?.querySelector(`[data-verse="${target}"]`);
 		if (!verse && scrollContainer) {
 			//check whether the verse should be there
 			// goto(
 			// 	`${base}/textzeugen/${$page.params.sigla}/${target.replace('.', '/')}?${$page.url.searchParams.toString()}`
 			// );
 			console.log('Verse not found.', target, scrollContainer);
-			return;
+			//find out whether the verse to scroll to is smaller than the first verse in the scrollContainer or larger than the last verse in the scrollContainer
+			const verses = scrollContainer.querySelectorAll('.verse');
+			const firstVerse = verses[0];
+			const lastVerse = verses[verses.length - 1];
+			if (firstVerse && lastVerse) {
+				const loadFurther = async (
+					/** @type {{ closest: (arg0: string) => { (): any; new (): any; dataset: any; }; }} */ el
+				) => {
+					console.log(
+						`Target verse ${target} is not in the current scrollContainer range. Loading further pages...`
+					);
+					const dataset = el.closest('.page').dataset;
+					if (dataset) {
+						programmaticScroll = true;
+						await localPageChange(dataset);
+						await scroll(target);
+					}
+				};
+				const firstThirtyNumber = Number(firstVerse.dataset.verse.slice(0, -2));
+				const lastThirtyNumber = Number(lastVerse.dataset.verse.slice(0, -2));
+				const targetThirtyNumber = Number(target.slice(0, -2));
+				//check for targetThirtyNumber being in the set of available verses at all
+				let inRange = false;
+				range.forEach((/** @type {number[]} */ r) => {
+					if (targetThirtyNumber >= r[0] && targetThirtyNumber <= r[1]) {
+						inRange = true;
+					}
+				});
+				if (inRange && targetThirtyNumber < firstThirtyNumber && targetThirtyNumber > 0) {
+					await loadFurther(firstVerse);
+				} else if (
+					inRange &&
+					targetThirtyNumber > lastThirtyNumber &&
+					targetThirtyNumber < NUMBER_OF_PAGES
+				) {
+					await loadFurther(lastVerse);
+					return;
+				} else {
+					toaster.error({
+						title: 'Vers nicht gefunden',
+						description: `Der Vers ${target} ist nicht im Textzeugen ${siglaFromHandle(label)} enthalten. Es werden die nächsten verfügbaren Verse angezeigt.`
+					});
+					programmaticScroll = true;
+					// find the verse that is closest to the target verse
+					const closestVerse = Array.from(verses).reduce((closest, current) => {
+						const currentThirtyNumber = Number(current.dataset.verse.slice(0, -2));
+						if (
+							Math.abs(currentThirtyNumber - targetThirtyNumber) <
+							Math.abs(Number(closest.dataset.verse.slice(0, -2)) - targetThirtyNumber)
+						) {
+							return current;
+						}
+						return closest;
+					}, verses[0]);
+					verse = closestVerse;
+				}
+			}
 		}
-		// verse.scrollIntoView({ behavior: 'instant', block: 'start' });
-		scrollContainer?.scrollTo({
-			top:
-				scrollContainer?.scrollTop +
-				Number(verse.parentElement?.getBoundingClientRect().top) -
-				scrollContainer?.getBoundingClientRect().top,
-			behavior: 'instant'
-		});
-		verse.parentElement?.classList.add('animate-pulse', 'once');
-		// check whether the verse is on the last page in the scrollcontainer
-		if (scrollContainer.scrollHeight - scrollContainer.clientHeight === scrollContainer.scrollTop) {
-			const dataset = verse.parentElement?.dataset;
-			if (dataset) {
-				localPageChange(dataset);
+		if (verse) {
+			// verse.scrollIntoView({ behavior: 'instant', block: 'start' });
+			scrollContainer?.scrollTo({
+				top:
+					scrollContainer?.scrollTop +
+					Number(verse.parentElement?.getBoundingClientRect().top) -
+					scrollContainer?.getBoundingClientRect().top,
+				behavior: 'instant'
+			});
+			if (verse) {
+				verse.parentElement?.classList.add('animate-pulse', 'once');
+			}
+			// check whether the verse is on the last page in the scrollcontainer
+			if (
+				scrollContainer.scrollHeight - scrollContainer.clientHeight ===
+				scrollContainer.scrollTop
+			) {
+				const dataset = verse.closest('.page').dataset;
+				if (dataset) {
+					await localPageChange(dataset);
+				}
 			}
 		}
 	};
 	$effect(() => {
-		//this effect rerons more often than it should, sometimes the value of targetverse didn't even change this is why we need to keep track of the target ourselves
+		//this effect reruns more often than it should, sometimes the value of targetverse didn't even change this is why we need to keep track of the target ourselves
 		if (localTarget !== targetverse) {
 			localTarget = targetverse;
 			scroll(targetverse);
 		}
 	});
+	const modifyTpContent = (/** @type {string} */ content) => {
+		const parser = new DOMParser();
+		const doc = parser.parseFromString(content, 'text/html');
+		const lines = Array.from(doc.querySelectorAll('.line:has(.tei-cb)'));
+		lines.forEach((line) => {
+			const cb = line.querySelector('.tei-cb');
+			const beforeCb = line.cloneNode(true);
+			//remove everthing after the tei-cb inside .content
+			const contentBefore = beforeCb.querySelector('.content');
+			if (contentBefore) {
+				contentBefore.innerHTML = contentBefore.innerHTML.split(cb.outerHTML)[0];
+			}
+			const afterCb = line.cloneNode(true);
+			afterCb.removeAttribute('id');
+			const contentAfter = afterCb.querySelector('.content');
+			if (contentAfter) {
+				contentAfter.innerHTML = contentAfter.innerHTML.split(cb.outerHTML)[1];
+			}
+			if (!isEmptyColumn(beforeCb.querySelector('.content')?.innerHTML)) {
+				line.insertAdjacentElement('beforebegin', beforeCb);
+			}
+			line.insertAdjacentElement('beforebegin', cb);
+			line.insertAdjacentElement('beforebegin', afterCb);
+			line.remove();
+		});
+		// return content;
+		return doc.body.innerHTML;
+	};
 	const addToObserver = (/** @type {HTMLDivElement} */ node) => {
 		$effect(() => {
 			observer.observe(node);
@@ -154,40 +255,33 @@
 			{#await pageObject.tpData}
 				Lade Seite...
 			{:then tpData}
-				<div
-					class="page tei-content"
-					data-id={pageObject.id}
-					data-next={tpData?.nextId}
-					data-previous={tpData?.previousId}
-					use:addToObserver
-				>
-					{#await pageObject.iiif then iiif}
-						{#if iiif?.id}
-							<button
-								onclick={() => {
-									localIiifChange(iiif);
-								}}
-								class="ml-2 float-right"
-							>
-								<img
-									src="{iiif.id}/full/!250,120/0/default.jpg"
-									alt="thumbnail der Seite {pageObject.id}"
-								/>
-							</button>
-						{:else}
-							<button
-								onclick={() => {
-									localIiifChange(iiif);
-								}}
-								class="btn preset-filled ml-2 float-right"
-							>
-								Seite wechseln
-							</button>
-						{/if}
-					{/await}
-					{@html tpData?.content}
-				</div>
-				<hr class="!border-t-4 !border-primary-500" />
+				{#if tpData}
+					<div
+						class="page tei-content"
+						data-id={pageObject.id}
+						data-next={tpData?.nextId}
+						data-previous={tpData?.previousId}
+						use:addToObserver
+					>
+						{#await pageObject.iiif then iiif}
+							{#if iiif?.id}
+								<button
+									onclick={() => {
+										localIiifChange(iiif);
+									}}
+									class="ml-2 float-right sticky top-0"
+								>
+									<img
+										src="{iiif.id}/full/90,/0/default.jpg"
+										alt="thumbnail der Seite {pageObject.id}"
+									/>
+								</button>
+							{/if}
+						{/await}
+						{@html modifyTpContent(tpData?.content)}
+					</div>
+					<hr class="!border-t-4 !border-primary-500" />
+				{/if}
 			{:catch error}
 				{error.message}
 			{/await}
@@ -209,7 +303,10 @@
 			margin: 0.5em 0;
 		}
 		:global(.tei-cb) {
-			@apply text-right mr-2;
+			@apply text-right pr-[95px] sticky top-0;
+			:global(p) {
+				@apply bg-surface-500;
+			}
 		}
 		:global(.tei-cb:not(.tei-cb:first-child)) {
 			@apply border-primary-300 border-solid border-t-4;

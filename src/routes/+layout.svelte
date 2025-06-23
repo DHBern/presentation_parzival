@@ -5,6 +5,8 @@
 	import { AppBar, Modal } from '@skeletonlabs/skeleton-svelte';
 	import { page } from '$app/state';
 	import { base } from '$app/paths';
+	import { toaster } from '$lib/components/toaster';
+	import { Toaster } from '@skeletonlabs/skeleton-svelte';
 	/** @type {{children?: import('svelte').Snippet}} */
 	let { children } = $props();
 
@@ -97,3 +99,5 @@
 <main id="page-content" class="flex-auto px-4">
 	{@render children?.()}
 </main>
+
+<Toaster {toaster}></Toaster>
