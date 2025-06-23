@@ -1,20 +1,21 @@
 <script>
 	import { Link } from '@lucide/svelte';
-	let { hoveredH2 = $bindable(), id, classes="", children } = $props();
+	let { id, classes="", children } = $props();
+	let isHovered = $state(false);
 </script>
 
 <h2
 	{id}
 	class={classes}
 	onmouseenter={() => {
-		hoveredH2.value = id;
+		isHovered = true;
 	}}
 	onmouseleave={() => {
-		hoveredH2.value = null;
+		isHovered = false;
 	}}
 >
 	{@render children()}
-	{#if hoveredH2.value == id}
+	{#if isHovered}
 		<a href={`#${id}`} class="inline-block"><Link /></a>
 	{/if}
 </h2>

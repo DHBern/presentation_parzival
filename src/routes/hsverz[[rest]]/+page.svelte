@@ -4,7 +4,6 @@
 	/** @type {{data: import('./$types').PageData}} */
 	let { data } = $props();
 	let { sigla } = $derived(data);
-	let hoveredH2 = $state({ value: null });
 </script>
 
 <div class="container mx-auto typography">
@@ -12,7 +11,7 @@
 	{#each [...sigla.codices, ...sigla.fragments] as { "handle": handle, "sigil": sigil, "info-h1": info_h2, "info-h2": loc, info }}
 		<!-- set the id of h2 (for fraction use handles, for codices use case-sensitive sigils) -->
 		{@const id = handle[0] === 'f' ? handle : sigil}
-		<H2Hoverable bind:hoveredH2 {id}>{@html info_h2}</H2Hoverable>
+		<H2Hoverable {id}>{@html info_h2}</H2Hoverable>
 		<div class="[&_ul]:!list-none [&_ul]:!pl-0 [&_li]:font-bold">
 			{@html loc}
 		</div>
@@ -20,9 +19,7 @@
 			<p>{@html info}</p>
 		{/if}
 	{/each}
-	<H2Hoverable bind:hoveredH2 id="Referenzen"
-		>Zu dieser Liste der Handschriften vergleiche man:</H2Hoverable
-	>
+	<H2Hoverable id="Referenzen">Zu dieser Liste der Handschriften vergleiche man:</H2Hoverable>
 	<ul>
 		<li>
 			Günter Kochendörfer/ Bernd Schirok: Maschinelle Textrekonstruktion. Theoretische Grundlegung,

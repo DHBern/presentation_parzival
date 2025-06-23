@@ -1,6 +1,5 @@
 <script>
 	import H2Hoverable from '$lib/components/H2Hoverable.svelte';
-	let hoveredH2 = $state({ value: null });
 </script>
 
 <div class="container mx-auto typography">
@@ -9,7 +8,7 @@
 		<a href="#vortraege">Vorträge</a>
 	</h1>
 
-	<H2Hoverable {hoveredH2} id="publikationen">Publikationen (in Auswahl)</H2Hoverable>
+	<H2Hoverable id="publikationen">Publikationen (in Auswahl)</H2Hoverable>
 
 	<p>
 		Michael Stolz: <a
@@ -269,7 +268,7 @@
 
 	<br />
 
-	<H2Hoverable {hoveredH2} id="vortraege-von-michael-stolz-und-projektmitarbeiter-innen">
+	<H2Hoverable id="vortraege-von-michael-stolz-und-projektmitarbeiter-innen">
 		Vorträge von Michael Stolz und Projektmitarbeiter/innen
 	</H2Hoverable>
 	<ul>
