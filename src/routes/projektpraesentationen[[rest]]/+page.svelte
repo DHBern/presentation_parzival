@@ -1,10 +1,15 @@
+<script>
+	import H2Hoverable from '$lib/components/H2Hoverable.svelte';
+	let hoveredH2 = $state({ value: null });
+</script>
+
 <div class="container mx-auto typography">
 	<h1>
 		Projektpräsentationen: <a href="#publikationen">Publikationen</a> und
 		<a href="#vortraege">Vorträge</a>
 	</h1>
 
-	<h2 id="publikationen">Publikationen (in Auswahl)</h2>
+	<H2Hoverable {hoveredH2} id="publikationen">Publikationen (in Auswahl)</H2Hoverable>
 
 	<p>
 		Michael Stolz: <a
@@ -264,7 +269,9 @@
 
 	<br />
 
-	<h2 id="vortraege">Vorträge von Michael Stolz und Projektmitarbeiter/innen</h2>
+	<H2Hoverable {hoveredH2} id="vortraege-von-michael-stolz-und-projektmitarbeiter-innen">
+		Vorträge von Michael Stolz und Projektmitarbeiter/innen
+	</H2Hoverable>
 	<ul>
 		<li>
 			Universität Bern, Ringvorlesung "Einblicke in die Digital Humanities", 13.12.2021 (Stefan
@@ -545,9 +552,9 @@
 		</li>
 
 		<li>
-			Universität Freiburg/Schweiz, Tagung der Wolfram von Eschenbach-Gesellschaft, "TexT & TexT
-			in lateinischer und volkssprachiger Überlieferung des Mittelalters", 1. Oktober 2004 (Vortrag
-			zu Überschriften in der Parzival-Überlieferung von Gabriel Viehhauser)
+			Universität Freiburg/Schweiz, Tagung der Wolfram von Eschenbach-Gesellschaft, "TexT & TexT in
+			lateinischer und volkssprachiger Überlieferung des Mittelalters", 1. Oktober 2004 (Vortrag zu
+			Überschriften in der Parzival-Überlieferung von Gabriel Viehhauser)
 		</li>
 
 		<li>

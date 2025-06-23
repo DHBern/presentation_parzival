@@ -1,7 +1,12 @@
+<script>
+	import H2Hoverable from '$lib/components/H2Hoverable.svelte';
+	let hoveredH2 = $state({ value: null });
+</script>
+
 <div class="container mx-auto typography">
 	<h1>Mitarbeiterinnen und Mitarbeiter am Parzival-Projekt</h1>
 
-	<h2>Projektleitung</h2>
+	<H2Hoverable {hoveredH2} id="projektleitung">Projektleitung</H2Hoverable>
 
 	<ul>
 		<li>
@@ -11,7 +16,9 @@
 		</li>
 	</ul>
 
-	<h2>Wissenschaftliche Mitarbeiterinnen und Mitarbeiter</h2>
+	<H2Hoverable {hoveredH2} id="wissenschaftliche-mitarbeiter-innen"
+		>Wissenschaftliche Mitarbeiterinnen und Mitarbeiter</H2Hoverable
+	>
 
 	<ul>
 		<li>
@@ -30,7 +37,9 @@
 		<li>Dr. Agata Mazurek (Universität Bern)</li>
 	</ul>
 
-	<h2>Programmierung und Webdesign</h2>
+	<H2Hoverable {hoveredH2} id="programmierung-und-webdesign"
+		>Programmierung und Webdesign</H2Hoverable
+	>
 	<ul>
 		<li>Simone Hiltscher (Universitäten Basel und Bern, 2005 bis 2021)</li>
 		<li>
@@ -52,14 +61,15 @@
 			> (Digital Humanities, Universität Bern, 2024)
 		</li>
 	</ul>
-
-	<h2>Wartung und Support</h2>
+	<H2Hoverable {hoveredH2} id="wartung-und-support">Wartung und Support</H2Hoverable>
 	<ul>
 		<li>Dominique Steinbach (Universität Bern)</li>
 		<li>Philipp Lammerskitten (Universität Bern)</li>
 	</ul>
 
-	<h2>Ehemalige wissenschaftliche Mitarbeiterinnen und Mitarbeiter</h2>
+	<H2Hoverable {hoveredH2} id="ehemalige-wissenschaftliche-mitarbeiter-innen"
+		>Ehemalige wissenschaftliche Mitarbeiterinnen und Mitarbeiter</H2Hoverable
+	>
 
 	<ul>
 		<li>

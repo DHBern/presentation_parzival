@@ -1,16 +1,19 @@
 <script>
+	import H2Hoverable from '$lib/components/H2Hoverable.svelte';
 	import Popover from '$lib/components/Popover.svelte';
+	let hoveredH2 = $state({ value: null });
 </script>
 
 <!-- <div class="card m-8 p-4 preset-filled-primary-500" data-popup="popupClick">
 	<span bind:this={popupContent}>content</span>
 	<div class="arrow preset-filled-primary-500"></div>
 </div> -->
+
 <div class="container mx-auto typography">
 	<h1 class="h1 mb-4">
 		Wolfram von Eschenbach, ›Parzival‹.<br />Eine überlieferungskritische Ausgabe in digitaler Form
 	</h1>
-	<h2>Voraussetzungen</h2>
+	<H2Hoverable {hoveredH2} id="voraussetzungen">Voraussetzungen</H2Hoverable>
 
 	<p>
 		Wolfram von Eschenbach hat mit seinem ›Parzival‹ einen der bedeutendsten Erzähltexte des
@@ -60,7 +63,7 @@
 		).
 	</p>
 
-	<h2>Methodischer Kontext</h2>
+	<H2Hoverable {hoveredH2} id="methodischer-kontext">Methodischer Kontext</H2Hoverable>
 	<p>
 		Dieses Desiderat findet sich auf zentrale Probleme in der philologischen Theoriediskussion der
 		germanistischen Mediävistik verwiesen. Zu nennen wären Phänomene wie das Verhältnis von
@@ -130,7 +133,7 @@
 		digitaler Form ist die unverzichtbare Voraussetzung für jede Neuedition des ›Parzival‹.
 	</p>
 
-	<h2>Das Parzival-Projekt</h2>
+	<H2Hoverable {hoveredH2} id="das-parzival-projekt">Das Parzival-Projekt</H2Hoverable>
 
 	<p>
 		Im Rahmen eines vom Schweizerischen Nationalfonds und phasenweise von der Deutschen
@@ -190,7 +193,7 @@
 		23 (2014), bes. S. 459–465.
 	</p>
 
-	<h2>Editionsproben</h2>
+	<H2Hoverable {hoveredH2} id="editionsproben">Editionsproben</H2Hoverable>
 
 	<p>
 		Welche Möglichkeiten die synoptische Darstellung von Fassungen und Überlieferungsträgern am

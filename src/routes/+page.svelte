@@ -2,6 +2,7 @@
 	import VerseSelector from '$lib/components/VerseSelector.svelte';
 	import TextzeugenSelector from '$lib/components/TextzeugenSelector.svelte';
 	import Devilstable from './Devilstable.svelte';
+	import H2Hoverable from '$lib/components/H2Hoverable.svelte';
 	import { base } from '$app/paths';
 
 	/** @type {{data: import('./$types').PageData}} */
@@ -9,6 +10,8 @@
 	let { tableData } = $derived(data);
 	let tableWidth = $state(0);
 	let tableHeight = $state(0);
+
+	let hoveredH2 = $state({ value: null });
 </script>
 
 <div class="container mx-auto grid grid-cols-[repeat(auto-fit,minmax(400px,1fr))] gap-6">
@@ -34,7 +37,7 @@
 				</p>
 			</div>
 		</div>
-		<h2 class="h2 my-4">Ankündigungen</h2>
+		<H2Hoverable {hoveredH2} id="ankuendigungen" classes="h2 my-4">Ankündigungen</H2Hoverable>
 		<p class="mb-5">
 			<a
 				class="anchor"
@@ -43,7 +46,9 @@
 				target="_blank">Metaphérein – Theories and Methods of Stemmatology</a
 			> (Wissenschaftliche Tagung Monte Verità, Ascona TI, 12.–15. Mai 2024)
 		</p>
-		<h2 class="h2 my-4">Projekt-Publikationen</h2>
+		<H2Hoverable {hoveredH2} id="projekt-publikationen" classes="h2 my-4"
+			>Projekt-Publikationen</H2Hoverable
+		>
 		<p class="mb-5">
 			Michael Stolz: <a
 				class="anchor"
@@ -95,7 +100,9 @@
 		</p>
 	</section>
 	<section>
-		<h2 class="h2 my-10" id="versindizes">Versindizes zu den Textzeugen</h2>
+		<H2Hoverable {hoveredH2} id="versindizes-zu-den-textzeugen" classes="h2 my-10"
+			>Versindizes zu den Textzeugen</H2Hoverable
+		>
 		<p class="my-5">
 			Die Indizes listen die Start- bzw. Endverse je Seite und Spalte für einen Textzeugen auf. Der
 			anzuzeigende Textzeuge kann aus der Liste ausgewählt und durch "Index anzeigen" aufgerufen
@@ -111,7 +118,7 @@
 		</select>
 	</section>
 	<section>
-		<h2 class="h2 my-10" id="verssynopse">Verssynopse</h2>
+		<H2Hoverable {hoveredH2} id="verssynops" classes="h2 my-10">Verssynopse</H2Hoverable>
 		<p class="my-5">
 			Es werden Einzelverse in sämtlichen Textzeugen und (optional) Fassungen angezeigt. Bitte geben
 			Sie im ersten Feld die Zahl eines Dreißigers (z. B. 249), im zweiten Feld die Zahl eines
@@ -125,7 +132,9 @@
 		</div>
 	</section>
 	<section>
-		<h2 class="h2 my-10" id="textzeugensynopse">Synopse zweier Textzeugen</h2>
+		<H2Hoverable {hoveredH2} id="synopse-zweier-textzeugen" classes="h2 my-10"
+			>Synopse zweier Textzeugen</H2Hoverable
+		>
 		<p class="my-5">
 			Die beiden Textzeugen können aus den Listen ausgewählt werden; der gewünschte Versbereich ist
 			in die Eingabefelder einzutragen. Der Startvers wird jeweils durch zwei Eingaben bestimmt: die
@@ -138,7 +147,9 @@
 		</div>
 	</section>
 	<section class="col-span-full">
-		<h2 class="h2 my-10" id="tabelle">Edition nach Dreißigern</h2>
+		<H2Hoverable {hoveredH2} id="edition-nach-dreissigern" classes="h2 my-10"
+			>Edition nach Dreißigern</H2Hoverable
+		>
 		<p class="my-5">
 			Aktuell sind noch die Bücher IX bis XIV (Dreißiger 433–733) in Revision; über den ganzen Text
 			hin befindet sich die Interpunktion in Überarbeitung. Die folgende Tabelle führt die Dreißiger
