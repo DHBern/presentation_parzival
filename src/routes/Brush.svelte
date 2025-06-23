@@ -3,6 +3,7 @@
 	import {
 		DATA_MIN,
 		DATA_MAX,
+		SELECTION_MIN_SIZE,
 		BRUSH_WINDOW_DEFAULT_START,
 		BRUSH_WINDOW_DEFAULT_END
 	} from './Devilstable_DEFAULTS.json';
@@ -129,7 +130,10 @@
 				const to = e.selection[1];
 
 				// Update range in Details
-				if (Math.abs(from - to) <= DATA_MAX - DATA_MIN) {
+				if (
+					Math.abs(from - to) <= DATA_MAX - DATA_MIN &&
+					Math.abs(from - to) >= SELECTION_MIN_SIZE
+				) {
 					selection.start = Math.round(valuesDim.invert(from));
 					selection.end = Math.round(valuesDim.invert(to));
 				}
@@ -146,9 +150,11 @@
 			});
 	});
 	$effect(() => {
-		d3.select(gBrush)
-			.call(brush)
-			.call(brush.move, [valuesDim(selection.start), valuesDim(selection.end)]);
+		if (Math.abs(valuesDim(selection.start) - valuesDim(selection.end)) >= SELECTION_MIN_SIZE) {
+			d3.select(gBrush)
+				.call(brush)
+				.call(brush.move, [valuesDim(selection.start), valuesDim(selection.end)]);
+		}
 	});
 	let chunkedData = $derived(
 		data.map((dataObject) => {
