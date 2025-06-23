@@ -1,6 +1,7 @@
 <script>
+	import H2Hoverable from '$lib/components/H2Hoverable.svelte';
+
 	/** @type {{data: import('./$types').PageData}} */
-	import { Link } from '@lucide/svelte';
 	let { data } = $props();
 	let { sigla } = $derived(data);
 	let hoveredH2 = $state({ value: null });
@@ -11,23 +12,7 @@
 	{#each [...sigla.codices, ...sigla.fragments] as { "handle": handle, "sigil": sigil, "info-h1": info_h2, "info-h2": loc, info }}
 		<!-- set the id of h2 (for fraction use handles, for codices use case-sensitive sigils) -->
 		{@const id = handle[0] === 'f' ? handle : sigil}
-		<!-- svelte-ignore a11y_no_static_element_interactions -->
-		<div
-			class="relative"
-			onmouseenter={() => {
-				hoveredH2.value = id;
-			}}
-			onmouseleave={() => {
-				hoveredH2.value = null;
-			}}
-		>
-			<h2 class="inline-block" {id}>
-				{@html info_h2}
-			</h2>
-			{#if hoveredH2.value == id}
-				<a href={`#${id}`} class="inline-block"><Link /></a>
-			{/if}
-		</div>
+		<H2Hoverable bind:hoveredH2 {id}>{@html info_h2}</H2Hoverable>
 		<div class="[&_ul]:!list-none [&_ul]:!pl-0 [&_li]:font-bold">
 			{@html loc}
 		</div>
@@ -35,7 +20,9 @@
 			<p>{@html info}</p>
 		{/if}
 	{/each}
-	<h2 id="Referenzen">Zu dieser Liste der Handschriften vergleiche man:</h2>
+	<H2Hoverable bind:hoveredH2 id="Referenzen"
+		>Zu dieser Liste der Handschriften vergleiche man:</H2Hoverable
+	>
 	<ul>
 		<li>
 			Günter Kochendörfer/ Bernd Schirok: Maschinelle Textrekonstruktion. Theoretische Grundlegung,
