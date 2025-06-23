@@ -1,8 +1,6 @@
 <script>
 	import { onMount } from 'svelte';
 	import { page } from '$app/state';
-	import { goto } from '$app/navigation';
-	import { base } from '$app/paths';
 	import { NUMBER_OF_PAGES } from '$lib/constants';
 	import createObserver from './observer';
 
