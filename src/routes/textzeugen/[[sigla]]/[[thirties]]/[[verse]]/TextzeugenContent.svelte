@@ -143,7 +143,7 @@
 				} else {
 					toaster.error({
 						title: 'Vers nicht gefunden',
-						description: `Der Vers ${target} ist nicht im Textzeugen ${siglaFromHandle(label)} enthalten. Es wird der nächste verfügbare Vers geladen.`
+						description: `Der Vers ${target} ist nicht im Textzeugen ${siglaFromHandle(label)} enthalten. Es werden die nächsten verfügbaren Verse angezeigt.`
 					});
 					programmaticScroll = true;
 					// find the verse that is closest to the target verse
