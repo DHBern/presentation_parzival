@@ -24,6 +24,11 @@
 		 */
 		thirties = [];
 
+		reset = () => {
+			this.pages = [[], [], [], []];
+			this.thirties = [];
+		};
+
 		/**
 		 * Fetches data for the specified page number.
 		 * @param {Number} page - The page number to fetch data for.
@@ -125,6 +130,7 @@
 			synchro = false;
 		}
 	});
+	let gotoThirties = $state(Number(data.thirties));
 </script>
 
 <svelte:window bind:innerWidth={windowWidth} />
@@ -154,6 +160,28 @@
 				onCheckedChange={(e) => (synchro = e.checked)}>Synchrones scrollen</Switch
 			>
 		{/if}
+		<form
+			onsubmit={(e) => {
+				e.preventDefault();
+				localPages.reset();
+				goto(`${base}/fassungen/${gotoThirties}`);
+			}}
+			class="col-start-2"
+		>
+			<label for="goto-thirties" class="block text-lg font-bold font-serif mb-2"
+				>Zu Dreißiger springen</label
+			>
+			<input
+				id="goto-thirties"
+				type="number"
+				placeholder="Dreißiger"
+				class="input inline max-w-28"
+				min="1"
+				max={NUMBER_OF_PAGES}
+				bind:value={gotoThirties}
+			/>
+			<button aria-label="suchen" class="btn preset-filled-error-500"> Anzeigen</button>
+		</form>
 	</div>
 	{#if synchro}
 		<FassungenSyncContent content={localPages.pages} titles={composureTitles} {nextPrevButton} />

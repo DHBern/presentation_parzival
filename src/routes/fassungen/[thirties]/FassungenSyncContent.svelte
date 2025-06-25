@@ -37,10 +37,16 @@
 		});
 	};
 	let correctPos = false;
+
+	$effect(() => {
+		if (!content[0].length && correctPos) {
+			correctPos = false;
+		}
+	});
 </script>
 
 <div class="grid md:grid-cols-[repeat(auto-fit,minmax(100px,1fr))] gap-4 my-4">
-	{#each content as fassung, i}
+	{#each content as _fassung, i}
 		<h2 class="h2">{titles[i]}</h2>
 	{/each}
 </div>
@@ -53,7 +59,7 @@
 		{#if fassung[0] && fassung[0][0] > 1}
 			{@render nextPrevButton(false, fassung[0][0] - 1, column)}
 		{/if}
-		{#each fassung as page, j (page[0])}
+		{#each fassung as page (page[0])}
 			{@html page[1]}
 			{#if i === 0}
 				<hr class="!border-t-4 !border-primary-500 column-{column}" use:addToObserver />
