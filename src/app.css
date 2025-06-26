@@ -47,10 +47,13 @@
 	}
 	.subst,
 	.subst_sr {
+		color: green;
 		.deleted {
 			color: #666;
 		}
-		color: green;
+		.rasure {
+			@apply bg-[#666];
+		}
 	}
 	.subst_ls {
 		color: #8cfff4;
