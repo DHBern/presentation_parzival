@@ -83,6 +83,13 @@
 		color: green;
 		@apply bg-[#9f9f9f];
 	}
+
+	.tei-gap3,
+	.gap.tei-gap3 {
+		@apply bg-transparent;
+		color: #666;
+	}
+
 	.initial,
 	.glory-initial,
 	.capital-initial {
