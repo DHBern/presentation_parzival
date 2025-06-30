@@ -16,7 +16,7 @@
 	class localPageClass {
 		/**
 		 * for the Fassungen *d, *m, *G and *T
-		 * @type {[[number, string][],[number, string][],[number, string][],[number, string][]]}
+		 * @type {[[number, string, {structure: [], reading: []}][],[number, string, {structure: [], reading: []}][],[number, string, {structure: [], reading: []}][],[number, string, {structure: [], reading: []}][]]}
 		 */
 		pages = $state([[], [], [], []]);
 		distributions = $state([{}, {}, {}, {}]);
@@ -30,6 +30,14 @@
 			this.thirties = [];
 		};
 
+		reducer = (acc, object) => {
+			for (const [key, value] of Object.entries(object)) {
+				if (value) {
+					acc[key] = (acc[key] ?? '') + value;
+				}
+			}
+			return acc;
+		};
 		/**
 		 * Fetches data for the specified page number.
 		 * @param {Number} page - The page number to fetch data for.
@@ -40,16 +48,8 @@
 				// select all lines in the HTML and process them
 				const parser = new DOMParser();
 				const doc = parser.parseFromString(info.content, 'text/html');
-				const reducer = (acc, object) => {
-					for (const [key, value] of Object.entries(object)) {
-						if (value) {
-							acc[key] = (acc[key] ?? '') + value;
-						}
-					}
-					return acc;
-				};
-				const condensedReading = info.reading.reduce(reducer, {});
-				const condensedStructure = info.structure.reduce(reducer, {});
+				const condensedReading = info.reading.reduce(this.reducer, {});
+				const condensedStructure = info.structure.reduce(this.reducer, {});
 				const lines = doc.querySelectorAll('div.line');
 				lines.forEach((line) => {
 					line.classList.add(`column-${column}`);
@@ -83,9 +83,15 @@
 				// fetch the page before the current one if the current one is not the first
 				if (page > 1) {
 					content = await fetch(`${base}/fassungen/data/${page - 1}`).then((r) => r.json());
+					const apparatus = content.map((c) => {
+						return {
+							structure: c.structure.reduce(this.reducer, {}),
+							reading: c.reading.reduce(this.reducer, {})
+						};
+					});
 					labels.forEach((label, index) => {
 						let preparedHTML = prepareHTML(content[index], label);
-						this.pages[index].push([page - 1, preparedHTML]);
+						this.pages[index].push([page - 1, preparedHTML, apparatus[index]]);
 						this.distributions[index][page - 1] = content[index].distribution;
 					});
 					this.thirties.push(page - 1);
@@ -93,9 +99,15 @@
 				// fetch the current page
 				if (page <= NUMBER_OF_PAGES) {
 					content = await fetch(`${base}/fassungen/data/${page}`).then((r) => r.json());
+					const apparatus = content.map((c) => {
+						return {
+							structure: c.structure.reduce(this.reducer, {}),
+							reading: c.reading.reduce(this.reducer, {})
+						};
+					});
 					labels.forEach((label, index) => {
 						let preparedHTML = prepareHTML(content[index], label);
-						this.pages[index].push([page, preparedHTML]);
+						this.pages[index].push([page, preparedHTML, apparatus[index]]);
 						this.distributions[index][page] = content[index].distribution;
 					});
 					this.thirties.push(page);
@@ -103,9 +115,15 @@
 				// fetch the page after the current one if the current one is not the last
 				if (page !== NUMBER_OF_PAGES) {
 					content = await fetch(`${base}/fassungen/data/${page + 1}`).then((r) => r.json());
+					const apparatus = content.map((c) => {
+						return {
+							structure: c.structure.reduce(this.reducer, {}),
+							reading: c.reading.reduce(this.reducer, {})
+						};
+					});
 					labels.forEach((label, index) => {
 						let preparedHTML = prepareHTML(content[index], label);
-						this.pages[index].push([page + 1, preparedHTML]);
+						this.pages[index].push([page + 1, preparedHTML, apparatus[index]]);
 						this.distributions[index][page + 1] = content[index].distribution;
 					});
 					this.thirties.push(page + 1);
@@ -116,17 +134,29 @@
 			} else {
 				if (page < this.thirties[0] && !this.thirties.includes(page)) {
 					let content = await fetch(`${base}/fassungen/data/${page}`).then((r) => r.json());
+					const apparatus = content.map((c) => {
+						return {
+							structure: c.structure.reduce(this.reducer, {}),
+							reading: c.reading.reduce(this.reducer, {})
+						};
+					});
 					labels.forEach((label, index) => {
 						let preparedHTML = prepareHTML(content[index], label);
-						this.pages[index].unshift([page, preparedHTML]);
+						this.pages[index].unshift([page, preparedHTML, apparatus[index]]);
 						this.distributions[index][page] = content[index].distribution;
 					});
 					this.thirties.unshift(page);
 				} else if (page > this.thirties[this.thirties.length - 1]) {
 					let content = await fetch(`${base}/fassungen/data/${page}`).then((r) => r.json());
+					const apparatus = content.map((c) => {
+						return {
+							structure: c.structure.reduce(this.reducer, {}),
+							reading: c.reading.reduce(this.reducer, {})
+						};
+					});
 					labels.forEach((label, index) => {
 						let preparedHTML = prepareHTML(content[index], label);
-						this.pages[index].push([page, preparedHTML]);
+						this.pages[index].push([page, preparedHTML, apparatus[index]]);
 						this.distributions[index][page] = content[index].distribution;
 					});
 					this.thirties.push(page);

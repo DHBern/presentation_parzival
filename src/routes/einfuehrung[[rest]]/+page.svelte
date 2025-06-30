@@ -114,8 +114,7 @@
 		Hss.-Verzweigung das gesamte Material, das zur textkritischen Auswertung gesammelt wurde, [...]
 		zu publizieren“ (
 		<Popover>
-			{#snippet trigger()}E. Nellmann
-			{/snippet}
+			{#snippet trigger()}E. Nellmann{/snippet}
 			{#snippet content()}
 				Eberhard Nellmann, Zur handschriftlichen Überlieferung des Parzival, in: Kolloquium über
 				Probleme altgermanistischer Editionen. Marbach am Neckar, 26. und 27. April 1966. Referate

@@ -5,6 +5,7 @@
 	import createObserver from './observer';
 
 	let { pages, scrolltop = $bindable(), nextPrevButton, title, distribution } = $props();
+	$inspect(pages);
 
 	let scrollContainer = $state();
 	/**

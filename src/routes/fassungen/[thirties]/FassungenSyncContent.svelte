@@ -1,11 +1,24 @@
 <script>
 	import { onMount } from 'svelte';
+	import {
+		FloatingArrow,
+		arrow,
+		autoUpdate,
+		flip,
+		offset,
+		shift,
+		useClick,
+		useDismiss,
+		useFloating,
+		useInteractions,
+		useRole
+	} from '@skeletonlabs/floating-ui-svelte';
+	import { fade } from 'svelte/transition';
 	import { page } from '$app/state';
 	import { NUMBER_OF_PAGES } from '$lib/constants';
 	import createObserver from './observer';
 
 	let { content, titles, nextPrevButton, distributions } = $props();
-
 	let scrollContainer = $state();
 	/**
 	 * @type {IntersectionObserver}
@@ -15,6 +28,63 @@
 		// update the current page when a new verse comes into view
 		observer = createObserver(true, scrollContainer, page);
 	});
+
+	let open = $state(false);
+	let elemArrow = $state(null);
+
+	// Use Floating
+	const floating = useFloating({
+		whileElementsMounted: autoUpdate,
+		get open() {
+			return open;
+		},
+		onOpenChange: (v) => {
+			open = v;
+		},
+		placement: 'top',
+		get middleware() {
+			return [offset(10), flip(), shift(), elemArrow && arrow({ element: elemArrow })];
+		}
+	});
+	// Interactions
+	const role = useRole(floating.context);
+	const click = useClick(floating.context);
+	const dismiss = useDismiss(floating.context);
+	const interactions = useInteractions([role, click, dismiss]);
+
+	function attachProps(node, props) {
+		const listeners = [];
+
+		for (const [key, value] of Object.entries(props)) {
+			const isEvent = key.startsWith('on') && key.length > 2 && key[2] === key[2].toUpperCase();
+			if (isEvent && typeof value === 'function') {
+				const eventName = key.slice(2).toLowerCase();
+				console.log('attaching event', eventName, value);
+				node.addEventListener(eventName, value);
+				listeners.push({ event: eventName, handler: value });
+			} else if (value !== undefined) {
+				node.setAttribute(key, value);
+			}
+		}
+
+		return {
+			destroy() {
+				for (const { event, handler } of listeners) {
+					node.removeEventListener(event, handler);
+				}
+			}
+		};
+	}
+
+	const attachListeners = (node) => {
+		$effect(() => {
+			const links = node.querySelectorAll('a');
+			links.forEach((link) => {
+				floating.elements.reference = link;
+				attachProps(link, interactions.getReferenceProps());
+			});
+		});
+	};
 
 	const addToObserver = (/** @type {HTMLDivElement} */ node) => {
 		$effect(() => {
@@ -45,6 +115,19 @@
 	});
 </script>
 
+{#if open}
+	<div
+		class="card preset-filled-primary-500 p-4 unstyled max-w-[99ch]"
+		transition:fade={{ duration: 200 }}
+	>
+		content
+		<FloatingArrow
+			bind:ref={elemArrow}
+			context={floating.context}
+			fill="var(--color-primary-500)"
+		/>
+	</div>
+{/if}
 <div class="grid md:grid-cols-[repeat(auto-fit,minmax(100px,1fr))] gap-4 my-4">
 	{#each content as _fassung, i}
 		<div>
@@ -65,7 +148,9 @@
 			{@render nextPrevButton(false, fassung[0][0] - 1, column)}
 		{/if}
 		{#each fassung as page (page[0])}
-			{@html page[1]}
+			<div class="contents" use:attachListeners>
+				{@html page[1]}
+			</div>
 			{#if i === 0}
 				<hr class="!border-t-4 !border-primary-500 column-{column}" use:addToObserver />
 			{:else}
