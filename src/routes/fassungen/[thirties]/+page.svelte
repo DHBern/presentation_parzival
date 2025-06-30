@@ -55,7 +55,7 @@
 				if (page > 1) {
 					content = await fetch(`${base}/fassungen/data/${page - 1}`).then((r) => r.json());
 					labels.forEach((label, index) => {
-						let preparedHTML = prepareHTML(content[index], label);
+						let preparedHTML = prepareHTML(content[index].content, label);
 						this.pages[index].push([page - 1, preparedHTML]);
 					});
 					this.thirties.push(page - 1);
@@ -64,7 +64,7 @@
 				if (page <= NUMBER_OF_PAGES) {
 					content = await fetch(`${base}/fassungen/data/${page}`).then((r) => r.json());
 					labels.forEach((label, index) => {
-						let preparedHTML = prepareHTML(content[index], label);
+						let preparedHTML = prepareHTML(content[index].content, label);
 						this.pages[index].push([page, preparedHTML]);
 					});
 					this.thirties.push(page);
@@ -73,7 +73,7 @@
 				if (page !== NUMBER_OF_PAGES) {
 					content = await fetch(`${base}/fassungen/data/${page + 1}`).then((r) => r.json());
 					labels.forEach((label, index) => {
-						let preparedHTML = prepareHTML(content[index], label);
+						let preparedHTML = prepareHTML(content[index].content, label);
 						this.pages[index].push([page + 1, preparedHTML]);
 					});
 					this.thirties.push(page + 1);
@@ -85,14 +85,14 @@
 				if (page < this.thirties[0] && !this.thirties.includes(page)) {
 					let content = await fetch(`${base}/fassungen/data/${page}`).then((r) => r.json());
 					labels.forEach((label, index) => {
-						let preparedHTML = prepareHTML(content[index], label);
+						let preparedHTML = prepareHTML(content[index].content, label);
 						this.pages[index].unshift([page, preparedHTML]);
 					});
 					this.thirties.unshift(page);
 				} else if (page > this.thirties[this.thirties.length - 1]) {
 					let content = await fetch(`${base}/fassungen/data/${page}`).then((r) => r.json());
 					labels.forEach((label, index) => {
-						let preparedHTML = prepareHTML(content[index], label);
+						let preparedHTML = prepareHTML(content[index].content, label);
 						this.pages[index].push([page, preparedHTML]);
 					});
 					this.thirties.push(page);
