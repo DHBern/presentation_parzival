@@ -36,13 +36,41 @@
 		 * @returns {Promise<void>} - A promise that resolves when the data is fetched.
 		 */
 		fetchPage = async (/** @type {Number} */ page) => {
-			const prepareHTML = (/** @type {string} */ html, /** @type {string} */ column) => {
+			const prepareHTML = (info, /** @type {string} */ column) => {
 				// select all lines in the HTML and process them
 				const parser = new DOMParser();
-				const doc = parser.parseFromString(html, 'text/html');
+				const doc = parser.parseFromString(info.content, 'text/html');
+				const reducer = (acc, object) => {
+					for (const [key, value] of Object.entries(object)) {
+						if (value) {
+							acc[key] = (acc[key] ?? '') + value;
+						}
+					}
+					return acc;
+				};
+				const condensedReading = info.reading.reduce(reducer, {});
+				const condensedStructure = info.structure.reduce(reducer, {});
 				const lines = doc.querySelectorAll('div.line');
 				lines.forEach((line) => {
 					line.classList.add(`column-${column}`);
+					const verseNode = line.querySelector('[data-verse]');
+					if (verseNode) {
+						const verse = verseNode.getAttribute('data-verse')?.split('.')[1];
+						if (verse) {
+							const readingInfo = condensedReading[verse];
+							const structureInfo = condensedStructure[verse];
+							if (readingInfo || structureInfo) {
+								const parts = verseNode.innerHTML.split('.');
+								if (parts.length > 1) {
+									const beforeDot = parts[0] + '.';
+									const afterDot = parts[1];
+									verseNode.innerHTML = `${beforeDot}<a class="anchor" href="#verse-${verse}">${afterDot}</a>`;
+								} else {
+									verseNode.innerHTML = `<a class="anchor" href="#verse-${verse}">${verseNode.innerHTML}</a>`;
+								}
+							}
+						}
+					}
 				});
 				return Array.from(lines)
 					.map((line) => line.outerHTML)
@@ -56,7 +84,7 @@
 				if (page > 1) {
 					content = await fetch(`${base}/fassungen/data/${page - 1}`).then((r) => r.json());
 					labels.forEach((label, index) => {
-						let preparedHTML = prepareHTML(content[index].content, label);
+						let preparedHTML = prepareHTML(content[index], label);
 						this.pages[index].push([page - 1, preparedHTML]);
 						this.distributions[index][page - 1] = content[index].distribution;
 					});
@@ -66,7 +94,7 @@
 				if (page <= NUMBER_OF_PAGES) {
 					content = await fetch(`${base}/fassungen/data/${page}`).then((r) => r.json());
 					labels.forEach((label, index) => {
-						let preparedHTML = prepareHTML(content[index].content, label);
+						let preparedHTML = prepareHTML(content[index], label);
 						this.pages[index].push([page, preparedHTML]);
 						this.distributions[index][page] = content[index].distribution;
 					});
@@ -76,7 +104,7 @@
 				if (page !== NUMBER_OF_PAGES) {
 					content = await fetch(`${base}/fassungen/data/${page + 1}`).then((r) => r.json());
 					labels.forEach((label, index) => {
-						let preparedHTML = prepareHTML(content[index].content, label);
+						let preparedHTML = prepareHTML(content[index], label);
 						this.pages[index].push([page + 1, preparedHTML]);
 						this.distributions[index][page + 1] = content[index].distribution;
 					});
@@ -89,7 +117,7 @@
 				if (page < this.thirties[0] && !this.thirties.includes(page)) {
 					let content = await fetch(`${base}/fassungen/data/${page}`).then((r) => r.json());
 					labels.forEach((label, index) => {
-						let preparedHTML = prepareHTML(content[index].content, label);
+						let preparedHTML = prepareHTML(content[index], label);
 						this.pages[index].unshift([page, preparedHTML]);
 						this.distributions[index][page] = content[index].distribution;
 					});
@@ -97,7 +125,7 @@
 				} else if (page > this.thirties[this.thirties.length - 1]) {
 					let content = await fetch(`${base}/fassungen/data/${page}`).then((r) => r.json());
 					labels.forEach((label, index) => {
-						let preparedHTML = prepareHTML(content[index].content, label);
+						let preparedHTML = prepareHTML(content[index], label);
 						this.pages[index].push([page, preparedHTML]);
 						this.distributions[index][page] = content[index].distribution;
 					});
