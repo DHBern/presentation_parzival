@@ -180,7 +180,7 @@
 				max={NUMBER_OF_PAGES}
 				bind:value={gotoThirties}
 			/>
-			<button aria-label="suchen" class="btn preset-filled-error-500"> Anzeigen</button>
+			<button aria-label="suchen" class="btn preset-filled-primary-500">Anzeigen</button>
 		</form>
 	</div>
 	{#if synchro}
