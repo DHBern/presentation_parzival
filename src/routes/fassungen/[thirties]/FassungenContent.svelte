@@ -50,7 +50,7 @@
 <div class="mb-4">
 	<h2 class="h2 inline">{title}</h2>
 	<div class="inline [&_ul,&_li]:inline [&_li]:mr-1">
-		{@html distribution[page.data.thirties]}
+		{@html distribution[activeThirties.value]}
 	</div>
 </div>
 <div
