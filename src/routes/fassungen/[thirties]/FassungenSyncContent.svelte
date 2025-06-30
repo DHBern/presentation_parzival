@@ -4,7 +4,7 @@
 	import { NUMBER_OF_PAGES } from '$lib/constants';
 	import createObserver from './observer';
 
-	let { content, titles, nextPrevButton } = $props();
+	let { content, titles, nextPrevButton, distributions } = $props();
 
 	let scrollContainer = $state();
 	/**
@@ -39,7 +39,7 @@
 	let correctPos = false;
 
 	$effect(() => {
-		if (!content[0].length && correctPos) {
+		if (!content[0]?.length && correctPos) {
 			correctPos = false;
 		}
 	});
@@ -47,7 +47,12 @@
 
 <div class="grid md:grid-cols-[repeat(auto-fit,minmax(100px,1fr))] gap-4 my-4">
 	{#each content as _fassung, i}
-		<h2 class="h2">{titles[i]}</h2>
+		<div>
+			<h2 class="h2 inline">{titles[i]}</h2>
+			<div class="inline [&_ul,&_li]:inline [&_li]:mr-1">
+				{@html distributions[i][page.data.thirties]}
+			</div>
+		</div>
 	{/each}
 </div>
 <div

@@ -4,16 +4,17 @@
 	import { NUMBER_OF_PAGES } from '$lib/constants';
 	import createObserver from './observer';
 
-	let { pages, scrolltop = $bindable(), nextPrevButton } = $props();
+	let { pages, scrolltop = $bindable(), nextPrevButton, title, distribution } = $props();
 
 	let scrollContainer = $state();
 	/**
 	 * @type {IntersectionObserver}
 	 */
 	let observer;
+	let activeThirties = $state({ value: page.data.thirties });
 	onMount(() => {
 		// update the current page when a new verse comes into view
-		observer = createObserver(false, scrollContainer, page);
+		observer = createObserver(false, scrollContainer, page, activeThirties);
 		const verse = scrollContainer?.querySelector(`[data-verse="${page.data.thirties}.01"]`);
 		if (verse) {
 			scrollContainer?.scrollTo({
@@ -46,6 +47,12 @@
 	};
 </script>
 
+<div class="mb-4">
+	<h2 class="h2 inline">{title}</h2>
+	<div class="inline [&_ul,&_li]:inline [&_li]:mr-1">
+		{@html distribution[page.data.thirties]}
+	</div>
+</div>
 <div
 	class="max-h-[70vh] overflow-y-auto preset-filled-surface-500 rounded-xl"
 	bind:this={scrollContainer}

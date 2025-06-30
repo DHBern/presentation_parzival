@@ -19,6 +19,7 @@
 		 * @type {[[number, string][],[number, string][],[number, string][],[number, string][]]}
 		 */
 		pages = $state([[], [], [], []]);
+		distributions = $state([{}, {}, {}, {}]);
 		/**
 		 * @type {Number[]}
 		 */
@@ -57,6 +58,7 @@
 					labels.forEach((label, index) => {
 						let preparedHTML = prepareHTML(content[index].content, label);
 						this.pages[index].push([page - 1, preparedHTML]);
+						this.distributions[index][page - 1] = content[index].distribution;
 					});
 					this.thirties.push(page - 1);
 				}
@@ -66,6 +68,7 @@
 					labels.forEach((label, index) => {
 						let preparedHTML = prepareHTML(content[index].content, label);
 						this.pages[index].push([page, preparedHTML]);
+						this.distributions[index][page] = content[index].distribution;
 					});
 					this.thirties.push(page);
 				}
@@ -75,6 +78,7 @@
 					labels.forEach((label, index) => {
 						let preparedHTML = prepareHTML(content[index].content, label);
 						this.pages[index].push([page + 1, preparedHTML]);
+						this.distributions[index][page + 1] = content[index].distribution;
 					});
 					this.thirties.push(page + 1);
 				}
@@ -87,6 +91,7 @@
 					labels.forEach((label, index) => {
 						let preparedHTML = prepareHTML(content[index].content, label);
 						this.pages[index].unshift([page, preparedHTML]);
+						this.distributions[index][page] = content[index].distribution;
 					});
 					this.thirties.unshift(page);
 				} else if (page > this.thirties[this.thirties.length - 1]) {
@@ -94,6 +99,7 @@
 					labels.forEach((label, index) => {
 						let preparedHTML = prepareHTML(content[index].content, label);
 						this.pages[index].push([page, preparedHTML]);
+						this.distributions[index][page] = content[index].distribution;
 					});
 					this.thirties.push(page);
 				} else if (page === this.thirties[0] && page > 1) {
@@ -184,15 +190,24 @@
 		</form>
 	</div>
 	{#if synchro}
-		<FassungenSyncContent content={localPages.pages} titles={composureTitles} {nextPrevButton} />
+		<FassungenSyncContent
+			content={localPages.pages}
+			distributions={localPages.distributions}
+			titles={composureTitles}
+			{nextPrevButton}
+		/>
 	{:else}
 		<div class="grid md:grid-cols-[repeat(auto-fit,minmax(100px,1fr))] gap-4 my-4">
 			{#each localPages.pages as fassung, i}
 				<div>
-					<h2 class="h2">{composureTitles[i]}</h2>
 					{#if fassung.length >= 2}
 						<!-- when at least 2 pages are loaded, the one for the currect thirties should be loaded aswell  -->
-						<FassungenContent pages={fassung} {nextPrevButton} />
+						<FassungenContent
+							pages={fassung}
+							distribution={localPages.distributions[i]}
+							{nextPrevButton}
+							title={composureTitles[i]}
+						/>
 					{/if}
 				</div>
 			{/each}
