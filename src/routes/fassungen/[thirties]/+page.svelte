@@ -179,7 +179,7 @@
 					replaceState: true
 				})}
 		>
-			{next ? 'Lade nächsten Dreißiger' : 'Lade vorherigen Dreißiger'}
+			{next ? 'Nächsten Dreißiger anzeigen' : 'vorherigen Dreißiger anzeigen'}
 		</button>
 	{/snippet}
 	<h1 class="h1 my-4">Fassungsansicht</h1>
