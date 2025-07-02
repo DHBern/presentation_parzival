@@ -11,7 +11,7 @@
 		</li>
 	</ul>
 
-	<h2>Wissenschaftliche Mitarbeiterinnen und Mitarbeiter</h2>
+	<h2>Wissenschaftliche Ko-Leitung</h2>
 
 	<ul>
 		<li>
@@ -20,14 +20,7 @@
 				target="_blank">PD Dr. Stefan Abel</a
 			> (Universität Bern)
 		</li>
-		<li>Dr. Ann-Kathrin Deininger (Universität Bern)</li>
-		<li>
-			<a
-				href="https://www.germanistik.unibe.ch/ueber_uns/personen/dr_strieder_miriam/index_ger.html"
-				target="_blank">Dr. Miriam Strieder</a
-			> (Universität Bern)
-		</li>
-		<li>Dr. Agata Mazurek (Universität Bern)</li>
+
 	</ul>
 
 	<h2>Programmierung und Webdesign</h2>
@@ -51,11 +44,7 @@
 				target="_blank">Sebastian Flick</a
 			> (Digital Humanities, Universität Bern, 2024)
 		</li>
-	</ul>
-
-	<h2>Wartung und Support</h2>
-	<ul>
-		<li>Dominique Steinbach (Universität Bern)</li>
+		<li>Dominique Steinbach (Universität Basel und Bern)</li>
 		<li>Philipp Lammerskitten (Universität Bern)</li>
 	</ul>
 
@@ -81,10 +70,18 @@
 				target="_blank">Prof. Dr. Kathrin Chlench</a
 			> (Universität Bern, jetzt W3-Professorin an der Universität Bonn)
 		</li>
+		<li>Dr. Ann-Kathrin Deininger (Universität Bern)</li>
+		<li>
+			<a
+				href="https://www.germanistik.unibe.ch/ueber_uns/personen/dr_strieder_miriam/index_ger.html"
+				target="_blank">Dr. Miriam Strieder</a
+			> (Universität Bern)
+		</li>
+		<li>Dr. Agata Mazurek (Universität Bern)</li>
 		<li>
 			<a href="https://www.ku.de/suche?tx_solr%5Bq%5D=simon+falch#tx-solr-search" target="_blank"
 				>Dr. Simon Falch</a
-			> (Universität Bern, jetzt wieder Katholische Universität Eichstätt-Ingolstadt)
+			> (Universität Bern)
 		</li>
 		<li>Sonja Falk M.A. (Universität Erlangen-Nürnberg)</li>
 		<li>Dr. Richard Fasching (Universität Bern, jetzt Universität Zürich)</li>
@@ -100,6 +97,7 @@
 		<li>Simone Lahn M.A. (Universität Erlangen-Nürnberg)</li>
 		<li>Dr. Judith Lange (Universität Bern, jetzt Universität Duisburg-Essen)</li>
 		<li>Dr. Claudia Lingscheid (Universität Bern, jetzt in der Verwaltung der Universität Oslo)</li>
+		<li>Dr. Agata Mazurek (Universität Bern)</li>
 		<li>Dr. Christoph Pretzer (Universität Bern, jetzt Marie Curie-Fellow)</li>
 		<li>Anett Rehner M.A. (Berlin-Brandenburgische Akademie der Wissenschaften)</li>
 		<li>
@@ -119,6 +117,8 @@
 			> (Berlin-Brandenburgische Akademie der Wissenschaften, jetzt Professor für Germanistische Mediävistik,
 			Universität Duisburg-Essen)
 		</li>
+		<li>Christian Sonder M.A. (Universität Bern)</li>
+		<li>Dr. Miriam Strieder (Universität Bern, jetzt Universität Bonn)</li>
 		<li>
 			<a href="http://www.uni-stuttgart.de/dh/Abteilung/Mitarbeiter/Viehhauser.html" target="_blank"
 				>Prof. Dr. Gabriel Viehhauser</a
