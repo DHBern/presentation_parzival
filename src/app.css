@@ -84,8 +84,7 @@
 		@apply bg-[#9f9f9f];
 	}
 
-	.tei-gap3,
-	.gap.tei-gap3 {
+	.tei-gap3.fragment-loss {
 		@apply bg-transparent;
 		color: #666;
 	}
