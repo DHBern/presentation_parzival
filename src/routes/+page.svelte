@@ -34,65 +34,6 @@
 				</p>
 			</div>
 		</div>
-		<h2 class="h2 my-4">Ankündigungen</h2>
-		<p class="mb-5">
-			<a
-				class="anchor"
-				href="https://www.parzival.unibe.ch/metapherein2024"
-				title="Tagung Metapherein"
-				target="_blank">Metaphérein – Theories and Methods of Stemmatology</a
-			> (Wissenschaftliche Tagung Monte Verità, Ascona TI, 12.–15. Mai 2024)
-		</p>
-		<h2 class="h2 my-4">Projekt-Publikationen</h2>
-		<p class="mb-5">
-			Michael Stolz: <a
-				class="anchor"
-				href="https://schwabe.ch/Michael-Stolz-Parzival-im-Manuskript-978-3-7965-4223-7"
-				title="Parzival im Manuskript"
-				target="_blank">Parzival im Manuskript</a
-			>. Profile der Parzival–Überlieferung am Beispiel von fünf Hand-<br />schriften des 13. bis
-			15. Jahrhunderts. Mit einem Beitrag von Richard F. Fasching, Basel 2020 [419 S.] [<a
-				class="anchor"
-				href="{base}/4086_8_Titelflyer_Stolz_Parzival.pdf"
-				title="Flyer Parzival im Manuskript"
-				target="_blank">Flyer</a
-			>]
-		</p>
-		<p class="mb-5">
-			Projektbeitrag Michael Stolz: <a
-				class="anchor"
-				href="{base}/Stolz_Wolfr18_SD.pdf"
-				target="_blank">[gemeinsam mit Elke Brüggen:] Fassungen, Übersetzung und Kommentar.</a
-			> Profile einer neuen Ausgabe von Wolframs ›Parzival‹, in: Walther von der Vogelweide. Düsseldorfer
-			Kolloquium 2018, hg. von Ricarda Bauschke und Veronika Hassel in Verbindung mit Franz-Josef Holznagel
-			und Susanne Köbele, Berlin 2020 (Wolfram-Studien 26), S. 469–491.
-		</p>
-		<p class="mb-5">
-			Projektbeitrag Michael Stolz: <a
-				class="anchor"
-				href="{base}/Stolz_Eintext16_SD-1.pdf"
-				target="_blank">Von den Fassungen zur Eintextedition.</a
-			>
-			Eine neue Leseausgabe <br />von Wolframs ›Parzival‹, in: Überlieferungsgeschichte
-			transdisziplinär, in Verbindung mit Horst Brunner und Freimut Löser hg. von Dorothea Klein,
-			Wiesbaden 2016 (Wissensliteratur im Mittelalter 52), S. 353–388.
-		</p>
-		<p class="mb-5">
-			Projektbeitrag Michael Stolz: <a
-				class="anchor"
-				href="{base}/Stolz_Wolfr12_SD.pdf"
-				target="_blank">Chrétiens ›Roman de Perceval‹ und Wolframs ›Parzival‹.</a
-			> <br />Ihre Überlieferung und textkritische Erschließung, in: Wolframs Parzival-Roman im
-			europäischen Kontext. Tübinger Kolloquium 2012, in Verbindung mit Susanne Köbele und Eckart
-			Conrad Lutz hg. von Klaus Ridder, Berlin 2014 (Wolfram-Studien 23), S. 431–478.
-		</p>
-		<p class="mb-5">
-			<a
-				class="anchor"
-				href="http://www.philhist.unibe.ch/studium/studienprogramme/master_editionsphilologie/index_ger.html"
-				target="_blank">Masterstudienprogramm „Editionsphilologie”</a
-			> an der Universität Bern
-		</p>
 	</section>
 	<section>
 		<h2 class="h2 my-10" id="versindizes">Versindizes zu den Textzeugen</h2>
