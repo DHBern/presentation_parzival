@@ -12,7 +12,7 @@
 	<h1 class="h1 mb-4">
 		Wolfram von Eschenbach, ›Parzival‹.<br />Eine überlieferungskritische Ausgabe in digitaler Form
 	</h1>
-	<H2Hoverable id="voraussetzungen">Voraussetzungen</H2Hoverable>
+	<H2Hoverable name="Voraussetzungen"></H2Hoverable>
 
 	<p>
 		Wolfram von Eschenbach hat mit seinem ›Parzival‹ einen der bedeutendsten Erzähltexte des
@@ -62,7 +62,7 @@
 		).
 	</p>
 
-	<H2Hoverable id="methodischer-kontext">Methodischer Kontext</H2Hoverable>
+	<H2Hoverable name="Methodischer Kontext"></H2Hoverable>
 	<p>
 		Dieses Desiderat findet sich auf zentrale Probleme in der philologischen Theoriediskussion der
 		germanistischen Mediävistik verwiesen. Zu nennen wären Phänomene wie das Verhältnis von
@@ -132,7 +132,7 @@
 		digitaler Form ist die unverzichtbare Voraussetzung für jede Neuedition des ›Parzival‹.
 	</p>
 
-	<H2Hoverable id="das-parzival-projekt">Das Parzival-Projekt</H2Hoverable>
+	<H2Hoverable name="Das Parzival-Projekt"></H2Hoverable>
 
 	<p>
 		Im Rahmen eines vom Schweizerischen Nationalfonds und phasenweise von der Deutschen
@@ -192,7 +192,7 @@
 		23 (2014), bes. S. 459–465.
 	</p>
 
-	<H2Hoverable id="editionsproben">Editionsproben</H2Hoverable>
+	<H2Hoverable name="Editionsproben"></H2Hoverable>
 
 	<p>
 		Welche Möglichkeiten die synoptische Darstellung von Fassungen und Überlieferungsträgern am

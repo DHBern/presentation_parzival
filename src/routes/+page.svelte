@@ -35,7 +35,7 @@
 				</p>
 			</div>
 		</div>
-		<H2Hoverable id="ankuendigungen" classes="h2 my-4">Ankündigungen</H2Hoverable>
+		<H2Hoverable name="Ankündigungen" classes="h2 my-4"></H2Hoverable>
 		<p class="mb-5">
 			<a
 				class="anchor"
@@ -44,7 +44,7 @@
 				target="_blank">Metaphérein – Theories and Methods of Stemmatology</a
 			> (Wissenschaftliche Tagung Monte Verità, Ascona TI, 12.–15. Mai 2024)
 		</p>
-		<H2Hoverable id="projekt-publikationen" classes="h2 my-4">Projekt-Publikationen</H2Hoverable>
+		<H2Hoverable name="Projekt-Publikationen" classes="h2 my-4"></H2Hoverable>
 		<p class="mb-5">
 			Michael Stolz: <a
 				class="anchor"
@@ -96,9 +96,7 @@
 		</p>
 	</section>
 	<section>
-		<H2Hoverable id="versindizes-zu-den-textzeugen" classes="h2 my-10"
-			>Versindizes zu den Textzeugen</H2Hoverable
-		>
+		<H2Hoverable name="Versindizes zu den Textzeugen" classes="h2 my-10"></H2Hoverable>
 		<p class="my-5">
 			Die Indizes listen die Start- bzw. Endverse je Seite und Spalte für einen Textzeugen auf. Der
 			anzuzeigende Textzeuge kann aus der Liste ausgewählt und durch "Index anzeigen" aufgerufen
@@ -114,7 +112,7 @@
 		</select>
 	</section>
 	<section>
-		<H2Hoverable id="verssynops" classes="h2 my-10">Verssynopse</H2Hoverable>
+		<H2Hoverable name="Verssynops" classes="h2 my-10"></H2Hoverable>
 		<p class="my-5">
 			Es werden Einzelverse in sämtlichen Textzeugen und (optional) Fassungen angezeigt. Bitte geben
 			Sie im ersten Feld die Zahl eines Dreißigers (z. B. 249), im zweiten Feld die Zahl eines
@@ -128,9 +126,7 @@
 		</div>
 	</section>
 	<section>
-		<H2Hoverable id="synopse-zweier-textzeugen" classes="h2 my-10"
-			>Synopse zweier Textzeugen</H2Hoverable
-		>
+		<H2Hoverable name="Synopse zweier Textzeugen" classes="h2 my-10"></H2Hoverable>
 		<p class="my-5">
 			Die beiden Textzeugen können aus den Listen ausgewählt werden; der gewünschte Versbereich ist
 			in die Eingabefelder einzutragen. Der Startvers wird jeweils durch zwei Eingaben bestimmt: die
@@ -143,15 +139,13 @@
 		</div>
 	</section>
 	<section class="col-span-full">
-		<H2Hoverable id="edition-nach-dreissigern" classes="h2 my-10"
-			>Edition nach Dreißigern</H2Hoverable
-		>
+		<H2Hoverable name="Edition nach Dreißigern" classes="h2 my-10"></H2Hoverable>
 		<p class="my-5">
-			Aktuell befindet sich noch die Interpunktion in Überarbeitung (Dreißiger 201 bis 472).
-			Die Tabelle ermöglicht die Auswahl von Dreißigern der synoptischen Fassungsedition
-			(unter „Fassungen“) und Handschriftentranskriptionen (unter den einzelnen Siglen).
-			Die Fragmente sind in der Spalte rechts außen nach Dreißigern aufgeführt.
-			Alle Textzeugen können auch einzeln über das untenstehende Feld angewählt und entfernt werden.
+			Aktuell befindet sich noch die Interpunktion in Überarbeitung (Dreißiger 201 bis 472). Die
+			Tabelle ermöglicht die Auswahl von Dreißigern der synoptischen FassungsEdition nach
+			Dreißigern) und Handschriftentranskriptionen (unter den einzelnen Siglen). Die Fragmente sind
+			in der Spalte rechts außen nach Dreißigern aufgeführt. Alle Textzeugen können auch einzeln
+			über das untenstehende Feld angewählt und entfernt werden.
 		</p>
 		<div
 			class="w-[calc(100vw-4rem)] mx-[calc(50%-50vw+2rem)] h-[90vh]"

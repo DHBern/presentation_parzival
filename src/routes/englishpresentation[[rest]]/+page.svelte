@@ -4,7 +4,7 @@
 
 <div class="container mx-auto typography">
 	<h1>Wolfram von Eschenbach, <i>Parzival</i>.<br />A New Critical Electronic Edition</h1>
-	<H2Hoverable id="introductory">Introductory</H2Hoverable>
+	<H2Hoverable locale="en" name="Introductory"></H2Hoverable>
 
 	<p>
 		Tolfram von Eschenbach’s <i>Parzival</i> ranks as one of the most significant narrative works to
@@ -26,7 +26,7 @@
 		to be in need of revision.
 	</p>
 
-	<H2Hoverable id="methodological-context">Methodological context</H2Hoverable>
+	<H2Hoverable locale="en" name="Methodological context"></H2Hoverable>
 
 	<p>
 		The challenge presented to the editor of <i>Parzival</i>
@@ -55,7 +55,7 @@
 		indispensable prerequisite for any new edition of <i>Parzival</i>.
 	</p>
 
-	<H2Hoverable id="the-parzival-project">The Parzival-project</H2Hoverable>
+	<H2Hoverable locale="en" name="The Parzival-project"></H2Hoverable>
 
 	<p>
 		In a project funded by the Swiss National Science Foundation (SNF) a research team at Berne
@@ -65,7 +65,7 @@
 		on mss. mno a.o.), *G (based on ms. GI LM OQR Z a.o.), and *T (based on mss. TUVW a.o.).
 	</p>
 
-	<H2Hoverable id="sample-edition">Sample edition</H2Hoverable>
+	<H2Hoverable locale="en" name="Sample edition"></H2Hoverable>
 
 	<p>
 		The possibilities offered by the synoptic representation of the manuscript sources on screen are

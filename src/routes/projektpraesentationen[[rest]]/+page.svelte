@@ -268,9 +268,7 @@
 
 	<br />
 
-	<H2Hoverable id="vortraege-von-michael-stolz-und-projektmitarbeiter-innen">
-		Vorträge von Michael Stolz und Projektmitarbeiter/innen
-	</H2Hoverable>
+	<H2Hoverable name="Vorträge von Michael Stolz und Projektmitarbeiter/innen"></H2Hoverable>
 	<ul>
 		<li>
 			Universität Bern, Ringvorlesung "Einblicke in die Digital Humanities", 13.12.2021 (Stefan

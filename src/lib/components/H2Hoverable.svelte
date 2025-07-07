@@ -1,13 +1,17 @@
 <script>
-	// import '@fortawesome/fontawesome-free/css/solid.min.css';
-	// import '@fortawesome/fontawesome-free/css/fontawesome.min.css';
+	import slugify from 'slugify';
 	import '@fortawesome/fontawesome-free/css/all.css';
-	let { id, classes = '', children } = $props();
+	let { id = null, name = null, classes = '', children = null, locale='de' } = $props();
+	id = name ? slugify(name, { locale: locale, lower: true, strict: true }) : id ? id : '';
 </script>
 
 <h2 {id} class={classes}>
 	<a href={`#${id}`} class="inline-block">
-		{@render children()}
+		{#if name}
+			{name}
+		{:else}
+			{@render children()}
+		{/if}
 	</a>
 </h2>
 
