@@ -4,7 +4,7 @@
 	import { NUMBER_OF_PAGES } from '$lib/constants';
 	import createObserver from './observer';
 
-	let { content, titles, nextPrevButton } = $props();
+	let { content, titles, nextPrevButton, distributions } = $props();
 
 	let scrollContainer = $state();
 	/**
@@ -37,11 +37,22 @@
 		});
 	};
 	let correctPos = false;
+
+	$effect(() => {
+		if (!content[0]?.length && correctPos) {
+			correctPos = false;
+		}
+	});
 </script>
 
 <div class="grid md:grid-cols-[repeat(auto-fit,minmax(100px,1fr))] gap-4 my-4">
-	{#each content as fassung, i}
-		<h2 class="h2">{titles[i]}</h2>
+	{#each content as _fassung, i}
+		<div>
+			<h2 class="h2 inline">{titles[i]}</h2>
+			<div class="inline [&_ul,&_li]:inline [&_li]:mr-1">
+				{@html distributions[i][page.data.thirties]}
+			</div>
+		</div>
 	{/each}
 </div>
 <div
@@ -53,7 +64,7 @@
 		{#if fassung[0] && fassung[0][0] > 1}
 			{@render nextPrevButton(false, fassung[0][0] - 1, column)}
 		{/if}
-		{#each fassung as page, j (page[0])}
+		{#each fassung as page (page[0])}
 			{@html page[1]}
 			{#if i === 0}
 				<hr class="!border-t-4 !border-primary-500 column-{column}" use:addToObserver />
