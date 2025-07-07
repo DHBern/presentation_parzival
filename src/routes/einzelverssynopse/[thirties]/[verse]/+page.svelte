@@ -51,11 +51,7 @@
 		{/if}
 	</div>
 	<section>
-		<Switch
-			name="hyparchetypes-slider"
-			active="bg-primary-500"
-			bind:checked={hyparchetypesSlider}
-		>
+		<Switch name="hyparchetypes-slider" active="bg-primary-500" bind:checked={hyparchetypesSlider}>
 			Fassungsverse ein-/ausblenden und nach diesen sortieren
 		</Switch>
 		<h2 class="h2 my-7">Zu Vers springen:</h2>
