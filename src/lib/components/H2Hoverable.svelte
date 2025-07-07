@@ -13,8 +13,9 @@
 
 <style>
 	h2 {
+		display: flex;
+		align-items: center;
 		position: relative;
-		display: inline-block; /* Ensure the heading is inline */
 	}
 	h2::after {
 		content: '\f0c1';
@@ -23,7 +24,6 @@
 		-webkit-font-smoothing: antialiased;
 		margin-left: 0.5em;
 		visibility: hidden;
-		transition: opacity 0.3s ease;
 	}
 
 	h2:hover::after {
