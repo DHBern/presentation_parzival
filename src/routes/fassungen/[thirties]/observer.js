@@ -6,7 +6,7 @@ import { base } from '$app/paths';
  * @param {Element} scrollContainer
  * @param {{ data: { thirties: any; }; }} page
  */
-export default function createObserver(isSync, scrollContainer, page) {
+export default function createObserver(isSync, scrollContainer, page, activeThirties = null) {
 	let lastScrollY = 0;
 	/**
 	 * @type {string | number | NodeJS.Timeout | undefined}
@@ -46,6 +46,9 @@ export default function createObserver(isSync, scrollContainer, page) {
 								.querySelector(`[data-verse]`)
 								?.attributes['data-verse']?.value.split('.')[0];
 							if (entry.target && verse && verse !== page.data.thirties) {
+								if (activeThirties) {
+									activeThirties.value = verse;
+								}
 								goto(`${base}/fassungen/${verse}`, {
 									noScroll: true,
 									keepFocus: true,

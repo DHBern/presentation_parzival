@@ -147,12 +147,11 @@
 			>Edition nach Dreißigern</H2Hoverable
 		>
 		<p class="my-5">
-			Aktuell sind noch die Bücher IX bis XIV (Dreißiger 433–733) in Revision; über den ganzen Text
-			hin befindet sich die Interpunktion in Überarbeitung. Die folgende Tabelle führt die Dreißiger
-			des ›Parzival‹ nach Lachmanns Zählung auf. Die in der Datenbank enthaltenen Fassungstexte und
-			Transkriptionen der Überlieferungszeugen können durch Anklicken der Links aufgerufen werden.
-			Durch Anklicken der Siglen in der obersten Leiste kann direkt zum ersten vorhandenen Dreißiger
-			im jeweiligen Überlieferungszeugen gesprungen werden.
+			Aktuell befindet sich noch die Interpunktion in Überarbeitung (Dreißiger 201 bis 472).
+			Die Tabelle ermöglicht die Auswahl von Dreißigern der synoptischen Fassungsedition
+			(unter „Fassungen“) und Handschriftentranskriptionen (unter den einzelnen Siglen).
+			Die Fragmente sind in der Spalte rechts außen nach Dreißigern aufgeführt.
+			Alle Textzeugen können auch einzeln über das untenstehende Feld angewählt und entfernt werden.
 		</p>
 		<div
 			class="w-[calc(100vw-4rem)] mx-[calc(50%-50vw+2rem)] h-[90vh]"

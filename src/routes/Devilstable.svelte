@@ -143,7 +143,7 @@
 		}}
 		value={inputChipValues}
 		onValueChange={(e) => (inputChipValues = e.value)}
-		placeholder="Textzeuge / Fragment hinzufügen..."
+		placeholder="Textzeugen / Fragmente einzeln auswählen …"
 		name="inputChips"
 	/>
 	<div class="btn-group flex-col md:-vertical preset-filled h-min m-auto">

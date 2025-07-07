@@ -19,10 +19,16 @@
 		 * @type {[[number, string][],[number, string][],[number, string][],[number, string][]]}
 		 */
 		pages = $state([[], [], [], []]);
+		distributions = $state([{}, {}, {}, {}]);
 		/**
 		 * @type {Number[]}
 		 */
 		thirties = [];
+
+		reset = () => {
+			this.pages = [[], [], [], []];
+			this.thirties = [];
+		};
 
 		/**
 		 * Fetches data for the specified page number.
@@ -30,13 +36,41 @@
 		 * @returns {Promise<void>} - A promise that resolves when the data is fetched.
 		 */
 		fetchPage = async (/** @type {Number} */ page) => {
-			const prepareHTML = (/** @type {string} */ html, /** @type {string} */ column) => {
+			const prepareHTML = (info, /** @type {string} */ column) => {
 				// select all lines in the HTML and process them
 				const parser = new DOMParser();
-				const doc = parser.parseFromString(html, 'text/html');
+				const doc = parser.parseFromString(info.content, 'text/html');
+				const reducer = (acc, object) => {
+					for (const [key, value] of Object.entries(object)) {
+						if (value) {
+							acc[key] = (acc[key] ?? '') + value;
+						}
+					}
+					return acc;
+				};
+				const condensedReading = info.reading.reduce(reducer, {});
+				const condensedStructure = info.structure.reduce(reducer, {});
 				const lines = doc.querySelectorAll('div.line');
 				lines.forEach((line) => {
 					line.classList.add(`column-${column}`);
+					const verseNode = line.querySelector('[data-verse]');
+					if (verseNode) {
+						const verse = verseNode.getAttribute('data-verse')?.split('.')[1];
+						if (verse) {
+							const readingInfo = condensedReading[verse];
+							const structureInfo = condensedStructure[verse];
+							if (readingInfo || structureInfo) {
+								const parts = verseNode.innerHTML.split('.');
+								if (parts.length > 1) {
+									const beforeDot = parts[0] + '.';
+									const afterDot = parts[1];
+									verseNode.innerHTML = `${beforeDot}<a class="anchor" href="#verse-${verse}">${afterDot}</a>`;
+								} else {
+									verseNode.innerHTML = `<a class="anchor" href="#verse-${verse}">${verseNode.innerHTML}</a>`;
+								}
+							}
+						}
+					}
 				});
 				return Array.from(lines)
 					.map((line) => line.outerHTML)
@@ -52,6 +86,7 @@
 					labels.forEach((label, index) => {
 						let preparedHTML = prepareHTML(content[index], label);
 						this.pages[index].push([page - 1, preparedHTML]);
+						this.distributions[index][page - 1] = content[index].distribution;
 					});
 					this.thirties.push(page - 1);
 				}
@@ -61,6 +96,7 @@
 					labels.forEach((label, index) => {
 						let preparedHTML = prepareHTML(content[index], label);
 						this.pages[index].push([page, preparedHTML]);
+						this.distributions[index][page] = content[index].distribution;
 					});
 					this.thirties.push(page);
 				}
@@ -70,6 +106,7 @@
 					labels.forEach((label, index) => {
 						let preparedHTML = prepareHTML(content[index], label);
 						this.pages[index].push([page + 1, preparedHTML]);
+						this.distributions[index][page + 1] = content[index].distribution;
 					});
 					this.thirties.push(page + 1);
 				}
@@ -82,6 +119,7 @@
 					labels.forEach((label, index) => {
 						let preparedHTML = prepareHTML(content[index], label);
 						this.pages[index].unshift([page, preparedHTML]);
+						this.distributions[index][page] = content[index].distribution;
 					});
 					this.thirties.unshift(page);
 				} else if (page > this.thirties[this.thirties.length - 1]) {
@@ -89,6 +127,7 @@
 					labels.forEach((label, index) => {
 						let preparedHTML = prepareHTML(content[index], label);
 						this.pages[index].push([page, preparedHTML]);
+						this.distributions[index][page] = content[index].distribution;
 					});
 					this.thirties.push(page);
 				} else if (page === this.thirties[0] && page > 1) {
@@ -125,6 +164,7 @@
 			synchro = false;
 		}
 	});
+	let gotoThirties = $state(Number(data.thirties));
 </script>
 
 <svelte:window bind:innerWidth={windowWidth} />
@@ -139,7 +179,7 @@
 					replaceState: true
 				})}
 		>
-			{next ? 'Lade nächsten Dreißiger' : 'Lade vorherigen Dreißiger'}
+			{next ? 'Nächsten Dreißiger anzeigen' : 'vorherigen Dreißiger anzeigen'}
 		</button>
 	{/snippet}
 	<h1 class="h1 my-4">Fassungsansicht</h1>
@@ -154,17 +194,48 @@
 				onCheckedChange={(e) => (synchro = e.checked)}>Synchrones scrollen</Switch
 			>
 		{/if}
+		<form
+			onsubmit={(e) => {
+				e.preventDefault();
+				localPages.reset();
+				goto(`${base}/fassungen/${gotoThirties}`);
+			}}
+			class="col-start-2"
+		>
+			<label for="goto-thirties" class="block text-lg font-bold font-serif mb-2"
+				>Zu Dreißiger springen</label
+			>
+			<input
+				id="goto-thirties"
+				type="number"
+				placeholder="Dreißiger"
+				class="input inline max-w-28"
+				min="1"
+				max={NUMBER_OF_PAGES}
+				bind:value={gotoThirties}
+			/>
+			<button aria-label="suchen" class="btn preset-filled-primary-500">Anzeigen</button>
+		</form>
 	</div>
 	{#if synchro}
-		<FassungenSyncContent content={localPages.pages} titles={composureTitles} {nextPrevButton} />
+		<FassungenSyncContent
+			content={localPages.pages}
+			distributions={localPages.distributions}
+			titles={composureTitles}
+			{nextPrevButton}
+		/>
 	{:else}
 		<div class="grid md:grid-cols-[repeat(auto-fit,minmax(100px,1fr))] gap-4 my-4">
 			{#each localPages.pages as fassung, i}
 				<div>
-					<h2 class="h2">{composureTitles[i]}</h2>
 					{#if fassung.length >= 2}
 						<!-- when at least 2 pages are loaded, the one for the currect thirties should be loaded aswell  -->
-						<FassungenContent pages={fassung} {nextPrevButton} />
+						<FassungenContent
+							pages={fassung}
+							distribution={localPages.distributions[i]}
+							{nextPrevButton}
+							title={composureTitles[i]}
+						/>
 					{/if}
 				</div>
 			{/each}
