@@ -11,7 +11,7 @@
 	let tableHeight = $state(0);
 </script>
 
-<div class="container mx-auto grid grid-cols-[repeat(auto-fit,minmax(400px,1fr))] gap-6">
+<div class="container mx-auto grid grid-cols-1 md:grid-cols-2 gap-6 gap-x-20">
 	<section class="col-span-full">
 		<div class="mt-20 mb-4">
 			<h1 class="h1">Wolfram von Eschenbach, ›Parzival‹: Digitale Edition</h1>
@@ -34,22 +34,6 @@
 				</p>
 			</div>
 		</div>
-	</section>
-	<section>
-		<h2 class="h2 my-10" id="versindizes">Versindizes zu den Textzeugen</h2>
-		<p class="my-5">
-			Die Indizes listen die Start- bzw. Endverse je Seite und Spalte für einen Textzeugen auf. Der
-			anzuzeigende Textzeuge kann aus der Liste ausgewählt und durch "Index anzeigen" aufgerufen
-			werden.
-		</p>
-
-		<select class="select">
-			<option value="1">Textzeuge auswählen</option>
-			<option value="2">G</option>
-			<option value="3">D</option>
-			<option value="4">m</option>
-			<option value="5">Fr</option>
-		</select>
 	</section>
 	<section>
 		<h2 class="h2 my-10" id="verssynopse">Verssynopse</h2>
