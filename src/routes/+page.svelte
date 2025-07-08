@@ -11,7 +11,7 @@
 	let tableHeight = $state(0);
 </script>
 
-<div class="container mx-auto grid grid-cols-[repeat(auto-fit,minmax(400px,1fr))] gap-6">
+<div class="container mx-auto grid grid-cols-1 md:grid-cols-2 gap-6 gap-x-20">
 	<section class="col-span-full">
 		<div class="mt-20 mb-4">
 			<h1 class="h1">Wolfram von Eschenbach, ›Parzival‹: Digitale Edition</h1>
