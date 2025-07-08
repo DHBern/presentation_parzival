@@ -36,22 +36,6 @@
 		</div>
 	</section>
 	<section>
-		<h2 class="h2 my-10" id="versindizes">Versindizes zu den Textzeugen</h2>
-		<p class="my-5">
-			Die Indizes listen die Start- bzw. Endverse je Seite und Spalte für einen Textzeugen auf. Der
-			anzuzeigende Textzeuge kann aus der Liste ausgewählt und durch "Index anzeigen" aufgerufen
-			werden.
-		</p>
-
-		<select class="select">
-			<option value="1">Textzeuge auswählen</option>
-			<option value="2">G</option>
-			<option value="3">D</option>
-			<option value="4">m</option>
-			<option value="5">Fr</option>
-		</select>
-	</section>
-	<section>
 		<h2 class="h2 my-10" id="verssynopse">Verssynopse</h2>
 		<p class="my-5">
 			Es werden Einzelverse in sämtlichen Textzeugen und (optional) Fassungen angezeigt. Bitte geben
