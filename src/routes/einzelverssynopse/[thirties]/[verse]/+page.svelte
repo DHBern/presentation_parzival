@@ -11,6 +11,19 @@
 	// remove leading zeros in verse
 	let verseNoZero = $derived(verse.replace(/^0+/, ''));
 	let hyparchetypesSlider = $state(false);
+	let highestVerseNumber = $derived(Number(thirties) === 257 ? 32 : 30);
+	let highestVerseNumberPrev = $derived(Number(thirties) === 258 ? 32 : 30);
+	let prevVerseURL = $derived(
+		`${base}/einzelverssynopse/${
+			parseInt(verse) === 1 ? parseInt(thirties) - 1 : thirties
+		}/${parseInt(verse) === 1 ? highestVerseNumberPrev : parseInt(verse) - 1}`
+	);
+
+	let nextVerseURL = $derived(
+		`${base}/einzelverssynopse/${
+			parseInt(verse) >= highestVerseNumber ? parseInt(thirties) + 1 : thirties
+		}/${parseInt(verse) >= highestVerseNumber ? 1 : parseInt(verse) + 1}`
+	);
 </script>
 
 <div class="container mx-auto p-4 flex flex-wrap justify-between gap-9">
@@ -66,24 +79,10 @@
 		<VerseSelector targetPath="/einzelverssynopse" coordinates={[thirties, verse]} />
 		<div class="flex justify-between">
 			{#if !(parseInt(thirties) === 1 && parseInt(verse) === 1)}
-				<a
-					class="anchor"
-					href="{base}/einzelverssynopse/{parseInt(verse) === 1
-						? parseInt(thirties) - 1
-						: thirties}/{parseInt(verse) === 1 ? 30 : parseInt(verse) - 1}"
-				>
-					vorheriger Vers
-				</a>
+				<a class="anchor" href={prevVerseURL}> vorheriger Vers </a>
 			{/if}
-			{#if !(parseInt(thirties) === NUMBER_OF_PAGES && parseInt(verse) >= 30)}
-				<a
-					class="anchor"
-					href="{base}/einzelverssynopse/{parseInt(verse) >= 30
-						? parseInt(thirties) + 1
-						: thirties}/{parseInt(verse) >= 30 ? 1 : parseInt(verse) + 1}"
-				>
-					nächster Vers
-				</a>
+			{#if !(parseInt(thirties) === NUMBER_OF_PAGES && parseInt(verse) >= highestVerseNumber)}
+				<a class="anchor" href={nextVerseURL}> nächster Vers </a>
 			{/if}
 		</div>
 	</section>
