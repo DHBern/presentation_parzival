@@ -46,14 +46,20 @@
 		</dl>
 		{#if loss.length > 0}
 			<p class="max-w-sm">
-				Der Vers {thirties}.{verseNoZero} fehlt in folgenden Handschriften aufgrund eines umfangreichen Textausfalls
-				(Fragmente werden für diese Auflistung nicht berücksichtigt):
+				Der Vers {thirties}.{verseNoZero} fehlt in folgenden Handschriften aufgrund eines umfangreichen
+				Textausfalls (Fragmente werden für diese Auflistung nicht berücksichtigt):
 				<b>{loss.join(', ')}</b>
 			</p>
 		{/if}
 	</div>
 	<section>
-		<Switch name="hyparchetypes-slider" thumbInactive="bg-surface-800" controlInactive="bg-surface-100" checked={hyparchetypesSlider} onCheckedChange={(e) => (hyparchetypesSlider = e.checked)}>
+		<Switch
+			name="hyparchetypes-slider"
+			thumbInactive="bg-surface-800"
+			controlInactive="bg-surface-100"
+			checked={hyparchetypesSlider}
+			onCheckedChange={(e) => (hyparchetypesSlider = e.checked)}
+		>
 			Fassungstexte ein-/ausblenden und nach Fassungen sortieren
 		</Switch>
 		<h2 class="h2 my-7">Zu Vers springen:</h2>

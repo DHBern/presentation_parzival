@@ -156,8 +156,11 @@
 			</p>
 			{#if data.content?.length > 1}
 				<div>
-					<Switch active="bg-primary-500" name="synchro" bind:checked={synchro}
-						>Synchrones scrollen</Switch
+					<Switch
+						thumbInactive="bg-surface-800"
+						controlInactive="bg-surface-100"
+						name="synchro"
+						checked={synchro}>Synchrones scrollen</Switch
 					>
 				</div>
 			{/if}
