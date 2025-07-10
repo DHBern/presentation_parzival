@@ -56,37 +56,19 @@
 	);
 
 	// Set ColorScale and check for dark-mode
-	let isDarkMode = $state(true);
-	onMount(() => {
-		const mediaQueryList = window.matchMedia('(prefers-color-scheme: dark)');
-		// initial check
-		isDarkMode = mediaQueryList && mediaQueryList.matches;
-
-		const listener = (ev) => {
-			isDarkMode = ev.matches;
-		};
-
-		mediaQueryList.addEventListener('change', listener);
-
-		return () => {
-			mediaQueryList.removeEventListener('change', listener);
-		};
-	});
-
-	let colorScale = $derived.by(() => {
-		if (isDarkMode) {
-			return d3
-				.scaleThreshold()
-				.domain([0.001, 1 / 4, 2 / 4, 3 / 4, 0.9999])
-				.range(['1000', '800', '600', '400', '200', '50']);
-		} else {
-			return d3
-				.scaleThreshold()
-				.domain([0.001, 1 / 4, 2 / 4, 3 / 4, 0.9999])
-				.range(['50', '200', '400', '600', '800', '900']);
-		}
-	});
-	// $: colorScale = d3.scaleQuantize([0, 1], ['50', '200', '400', '500', '600', '900']);
+	let colorScale = $derived(
+		d3
+			.scaleThreshold()
+			.domain([0.001, 1 / 4, 2 / 4, 3 / 4, 0.9999])
+			.range([
+				'fill-primary-100-900',
+				'fill-primary-400-600',
+				'fill-primary-500',
+				'fill-primary-600-400',
+				'fill-primary-800-200',
+				'fill-primary-950-50'
+			])
+	);
 
 	// create chunks: each chunk is a number counting the number of true values in the chunk
 	let sourcesDim = $derived(d3.scaleBand().domain(data.map((d) => d.label)));
@@ -209,7 +191,7 @@
 					y={mobile ? y(d.label) : start}
 					width={mobile ? end - start : x.bandwidth()}
 					height={mobile ? y.bandwidth() : end - start}
-					fill={`var(--color-primary-${colorScale(v)})`}
+					class={`var(--color-primary-${colorScale(v)})`}
 				/>
 			{/each}
 		</g>
