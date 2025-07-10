@@ -3,6 +3,8 @@
 	import VerseSelector from '$lib/components/VerseSelector.svelte';
 	import { base } from '$app/paths';
 	import { NUMBER_OF_PAGES } from '$lib/constants';
+	import { goto } from '$app/navigation';
+	import { onMount } from 'svelte';
 
 	/** @type {{data: import('./$types').PageData}} */
 	let { data } = $props();
@@ -24,6 +26,22 @@
 			parseInt(verse) >= highestVerseNumber ? parseInt(thirties) + 1 : thirties
 		}/${parseInt(verse) >= highestVerseNumber ? 1 : parseInt(verse) + 1}`
 	);
+
+	function handleKeyDown(ev) {
+		if (ev.key === 'ArrowRight') {
+			goto(nextVerseURL);
+		}
+		if (ev.key === 'ArrowLeft') {
+			goto(prevVerseURL);
+		}
+	}
+
+	onMount(() => {
+		window.addEventListener('keydown', handleKeyDown);
+		return () => {
+			window.removeEventListener('keydown', handleKeyDown);
+		};
+	});
 </script>
 
 <div class="container mx-auto p-4 flex flex-wrap justify-between gap-9">
