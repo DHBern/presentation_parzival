@@ -188,7 +188,8 @@
 
 		{#if mobileBreakpoint}
 			<Switch
-				controlActive="bg-primary-500"
+				thumbInactive="bg-surface-800"
+				controlInactive="bg-surface-100"
 				name="synchro"
 				checked={synchro}
 				onCheckedChange={(e) => (synchro = e.checked)}>Synchrones scrollen</Switch

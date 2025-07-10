@@ -37,6 +37,7 @@
 		{ slug: 'Mitarbeitende', path: '/mitarbeitende' },
 		{ slug: 'Projektpräsentationen', path: '/projektpraesentationen' },
 		{ slug: 'Fassungen', path: '/fassungen' },
+		{ slug: 'Einzelverssynopsen', path: '/einzelverssynopse' },
 		{ slug: 'Monotext', path: '/monotext' },
 		{ slug: 'Suche', path: '/suche' },
 	];
