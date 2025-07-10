@@ -53,7 +53,7 @@
 		{/if}
 	</div>
 	<section>
-		<Switch name="hyparchetypes-slider" active="bg-primary-500" bind:checked={hyparchetypesSlider}>
+		<Switch name="hyparchetypes-slider" thumbInactive="bg-surface-800" controlInactive="bg-surface-100" checked={hyparchetypesSlider} onCheckedChange={(e) => (hyparchetypesSlider = e.checked)}>
 			Fassungstexte ein-/ausblenden und nach Fassungen sortieren
 		</Switch>
 		<h2 class="h2 my-7">Zu Vers springen:</h2>
