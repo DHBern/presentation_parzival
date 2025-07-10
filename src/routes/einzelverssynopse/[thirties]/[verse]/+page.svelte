@@ -8,11 +8,13 @@
 	let { data } = $props();
 
 	let { thirties, verse, metadata, publisherData, loss } = $derived(data);
+	// remove leading zeros in verse
+	let verseNoZero = $derived(verse.replace(/^0+/, ''));
 	let hyparchetypesSlider = $state(false);
 </script>
 
 <div class="container mx-auto p-4 flex flex-wrap justify-between gap-9">
-	<h1 class="h1 w-full">Verssynopse zu {thirties}.{verse}</h1>
+	<h1 class="h1 w-full">Verssynopse zu {thirties}.{verseNoZero}</h1>
 	<div class="tei-content">
 		<dl class="grid grid-cols-[auto_1fr] justify-between h-fit mb-4 w-fit font-mono">
 			<dt class="font-bold font-heading-token pr-4">Handschrift</dt>
@@ -44,7 +46,7 @@
 		</dl>
 		{#if loss.length > 0}
 			<p class="max-w-sm">
-				Der Vers {thirties}.{verse} fehlt in folgenden Handschriften aufgrund eines umfangreichen Textausfalls
+				Der Vers {thirties}.{verseNoZero} fehlt in folgenden Handschriften aufgrund eines umfangreichen Textausfalls
 				(Fragmente werden für diese Auflistung nicht berücksichtigt):
 				<b>{loss.join(', ')}</b>
 			</p>
