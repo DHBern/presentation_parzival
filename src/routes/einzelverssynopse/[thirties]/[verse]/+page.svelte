@@ -63,7 +63,7 @@
 			Fassungstexte ein-/ausblenden und nach Fassungen sortieren
 		</Switch>
 		<h2 class="h2 my-7">Zu Vers springen:</h2>
-		<VerseSelector targetPath="/einzelverssynopse" />
+		<VerseSelector targetPath="/einzelverssynopse" coordinates={[thirties, verse]} />
 		<div class="flex justify-between">
 			{#if !(parseInt(thirties) === 1 && parseInt(verse) === 1)}
 				<a
