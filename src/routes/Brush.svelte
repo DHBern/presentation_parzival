@@ -57,17 +57,17 @@
 
 	// Set ColorScale and check for dark-mode
 	let colorScale = $derived(
-		d3
-			.scaleThreshold()
-			.domain([0.001, 1 / 4, 2 / 4, 3 / 4, 0.9999])
-			.range([
+		d3.scaleThreshold(
+			[0.001, 1 / 4, 2 / 4, 3 / 4, 0.9999],
+			[
 				'fill-primary-100-900',
 				'fill-primary-400-600',
 				'fill-primary-500',
 				'fill-primary-600-400',
 				'fill-primary-800-200',
 				'fill-primary-950-50'
-			])
+			]
+		)
 	);
 
 	// create chunks: each chunk is a number counting the number of true values in the chunk
