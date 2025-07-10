@@ -38,6 +38,7 @@
 		{ slug: 'Projektpräsentationen', path: '/projektpraesentationen' },
 		{ slug: 'Fassungen', path: '/fassungen' },
 		{ slug: 'Monotext', path: '/monotext' },
+		{ slug: 'Dreissiger-Matrix', path: `${base}/#edition-nach-dreissigern` },
 		{ slug: 'Suche', path: '/suche' },
 	];
 </script>

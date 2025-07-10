@@ -1,6 +1,10 @@
+<script>
+	import H2Hoverable from '$lib/components/H2Hoverable.svelte';
+</script>
+
 <div class="container mx-auto typography">
 	<h1>Wolfram von Eschenbach, <i>Parzival</i>.<br />A New Critical Electronic Edition</h1>
-	<h2>Introductory</h2>
+	<H2Hoverable locale="en" name="Introductory"></H2Hoverable>
 
 	<p>
 		Tolfram von Eschenbach’s <i>Parzival</i> ranks as one of the most significant narrative works to
@@ -21,7 +25,8 @@
 		and has become increasingly discontented with working with a text that is generally acknowledged
 		to be in need of revision.
 	</p>
-	<h2>Methodological context</h2>
+
+	<H2Hoverable locale="en" name="Methodological context"></H2Hoverable>
 
 	<p>
 		The challenge presented to the editor of <i>Parzival</i>
@@ -49,7 +54,8 @@
 		can be put into practice with the aid of digital technology. A critical digital edition is the
 		indispensable prerequisite for any new edition of <i>Parzival</i>.
 	</p>
-	<h2>The Parzival-project</h2>
+
+	<H2Hoverable locale="en" name="The Parzival-project"></H2Hoverable>
 
 	<p>
 		In a project funded by the Swiss National Science Foundation (SNF) a research team at Berne
@@ -59,7 +65,7 @@
 		on mss. mno a.o.), *G (based on ms. GI LM OQR Z a.o.), and *T (based on mss. TUVW a.o.).
 	</p>
 
-	<h2>Sample edition</h2>
+	<H2Hoverable locale="en" name="Sample edition"></H2Hoverable>
 
 	<p>
 		The possibilities offered by the synoptic representation of the manuscript sources on screen are
