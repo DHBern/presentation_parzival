@@ -24,14 +24,14 @@
 
 	const pages = [
 		{ slug: 'Einführung', path: '/einfuehrung' },
+		{ slug: 'Dreißiger-Matrix', path: `${base}/#edition-nach-dreissigern` },
 		{ slug: 'English Presentation', path: '/englishpresentation' },
 		{ slug: 'Handschriftenverzeichnis', path: '/hsverz' },
 		{ slug: 'Mitarbeitende', path: '/mitarbeitende' },
 		{ slug: 'Projektpräsentationen', path: '/projektpraesentationen' },
 		{ slug: 'Fassungen', path: '/fassungen' },
 		{ slug: 'Monotext', path: '/monotext' },
-		{ slug: 'Dreissiger-Matrix', path: `${base}/#edition-nach-dreissigern` },
-		{ slug: 'Suche', path: '/suche' },
+		{ slug: 'Suche', path: '/suche' }
 	];
 </script>
 
