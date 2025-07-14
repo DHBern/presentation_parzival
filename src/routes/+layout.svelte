@@ -22,14 +22,6 @@
 		openState = false;
 	}
 
-	function drawerOpen() {
-		const /** @type {import('@skeletonlabs/skeleton').DrawerSettings} */ s = {
-				id: 'topnav',
-				position: 'top'
-			};
-		drawerStore.open(s);
-	}
-
 	const pages = [
 		{ slug: 'Einführung', path: '/einfuehrung' },
 		{ slug: 'English Presentation', path: '/englishpresentation' },
@@ -69,13 +61,7 @@
 				<!-- this is an anchor tag because of node_invalid_placement warning -->
 				<!-- svelte-ignore a11y_missing_attribute -->
 				<!-- svelte-ignore a11y_click_events_have_key_events -->
-				<a
-					tabindex="0"
-					role="button"
-					aria-label="Menü"
-					class="lg:!hidden btn-icon"
-					onclick={drawerOpen}
-				>
+				<a tabindex="0" role="button" aria-label="Menü" class="lg:!hidden btn-icon">
 					<i class="fa-solid fa-bars"></i>
 				</a>
 			{/snippet}
