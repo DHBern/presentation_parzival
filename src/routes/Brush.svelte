@@ -191,7 +191,7 @@
 					y={mobile ? y(d.label) : start}
 					width={mobile ? end - start : x.bandwidth()}
 					height={mobile ? y.bandwidth() : end - start}
-					class={`var(--color-primary-${colorScale(v)})`}
+					class={colorScale(v)}
 				/>
 			{/each}
 		</g>
