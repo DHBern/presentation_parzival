@@ -39,7 +39,6 @@
 		{ slug: 'Fassungen', path: '/fassungen' },
 		{ slug: 'Monotext', path: '/monotext' },
 		{ slug: 'Suche', path: '/suche' },
-		{ slug: 'Versindizes', path: '/versindizes' }
 	];
 </script>
 
