@@ -2,7 +2,8 @@
 	import slugify from 'slugify';
 	import '@fortawesome/fontawesome-free/css/all.css';
 	let { id = null, name = null, classes = '', children = null, locale='de' } = $props();
-	id = name ? slugify(name, { locale: locale, lower: true, strict: true }) : id ? id : '';
+	id = name ? slugify(name, { locale: locale, lower: true, strict: true }) : id ? id : Math.floor(Math.random() * 100000)
+;
 </script>
 
 <h2 {id} class={classes}>
