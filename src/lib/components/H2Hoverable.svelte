@@ -8,10 +8,10 @@
 
 <h2 {id} class={classes}>
 	<a href={`#${id}`} class="inline-block">
-		{#if name}
-			{name}
-		{:else}
+		{#if children}
 			{@render children()}
+		{:else}
+			{name}
 		{/if}
 	</a>
 </h2>
