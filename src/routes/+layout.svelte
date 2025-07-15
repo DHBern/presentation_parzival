@@ -22,29 +22,24 @@
 		openState = false;
 	}
 
-	function drawerOpen() {
-		const /** @type {import('@skeletonlabs/skeleton').DrawerSettings} */ s = {
-				id: 'topnav',
-				position: 'top'
-			};
-		drawerStore.open(s);
-	}
-
 	const pages = [
 		{ slug: 'Einführung', path: '/einfuehrung' },
+		{ slug: 'Dreißiger-Matrix', path: `${base}/#edition-nach-dreissigern` },
 		{ slug: 'English Presentation', path: '/englishpresentation' },
 		{ slug: 'Handschriftenverzeichnis', path: '/hsverz' },
 		{ slug: 'Mitarbeitende', path: '/mitarbeitende' },
 		{ slug: 'Projektpräsentationen', path: '/projektpraesentationen' },
 		{ slug: 'Fassungen', path: '/fassungen' },
 		{ slug: 'Monotext', path: '/monotext' },
-		{ slug: 'Suche', path: '/suche' },
+		{ slug: 'Suche', path: '/suche' }
 	];
 </script>
 
 <AppBar>
 	{#snippet lead()}
-		<a class="text-xl uppercase font-bold" href={`${base}/`}>Parzival</a>
+		<div class="flex flex-col justify-center">
+			<a class="text-xl uppercase font-bold" href={`${base}/`}>Parzival</a>
+		</div>
 	{/snippet}
 	<nav class="flex-none items-center hidden lg:flex lg:flex-wrap">
 		{#each pages as page}
@@ -68,13 +63,7 @@
 				<!-- this is an anchor tag because of node_invalid_placement warning -->
 				<!-- svelte-ignore a11y_missing_attribute -->
 				<!-- svelte-ignore a11y_click_events_have_key_events -->
-				<a
-					tabindex="0"
-					role="button"
-					aria-label="Menü"
-					class="lg:!hidden btn-icon"
-					onclick={drawerOpen}
-				>
+				<a tabindex="0" role="button" aria-label="Menü" class="lg:!hidden btn-icon">
 					<i class="fa-solid fa-bars"></i>
 				</a>
 			{/snippet}
