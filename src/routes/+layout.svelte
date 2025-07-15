@@ -37,7 +37,9 @@
 
 <AppBar>
 	{#snippet lead()}
-		<a class="text-xl uppercase font-bold" href={`${base}/`}>Parzival</a>
+		<div class="flex flex-col justify-center">
+			<a class="text-xl uppercase font-bold" href={`${base}/`}>Parzival</a>
+		</div>
 	{/snippet}
 	<nav class="flex-none items-center hidden lg:flex lg:flex-wrap">
 		{#each pages as page}
