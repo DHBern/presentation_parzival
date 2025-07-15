@@ -112,7 +112,7 @@
 		</select>
 	</section>
 	<section>
-		<H2Hoverable name="Verssynops" classes="h2 my-10"></H2Hoverable>
+		<H2Hoverable name="Verssynopse" classes="h2 my-10"></H2Hoverable>
 		<p class="my-5">
 			Es werden Einzelverse in sämtlichen Textzeugen und (optional) Fassungen angezeigt. Bitte geben
 			Sie im ersten Feld die Zahl eines Dreißigers (z. B. 249), im zweiten Feld die Zahl eines
