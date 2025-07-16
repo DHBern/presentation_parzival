@@ -60,7 +60,7 @@
 		d3.scaleThreshold(
 			[0.001, 1 / 4, 2 / 4, 3 / 4, 0.9999],
 			[
-				'fill-primary-100-900',
+				'fill-surface-50-950',
 				'fill-primary-400-600',
 				'fill-primary-500',
 				'fill-primary-600-400',
