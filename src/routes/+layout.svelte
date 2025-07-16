@@ -87,18 +87,20 @@
 				</a>
 			{/snippet}
 			{#snippet content()}
-			<LightSwitch classes='fixed top-10 right-10' />
-				<nav class="list-nav absolute top-30 left-20 text-lg font-bold">
-					<ul>
-						{#each pages as page}
-							<li>
-								<a href={`${base}${page.path}`} onclick={modalClose}>
-									<span class="flex-auto hover:text-primary-500">{page.slug}</span>
-								</a>
-							</li>
-						{/each}
-					</ul>
-				</nav>
+				<div class="h-full w-full pt-10 md:pt-20 md:pl-20 pl-10 overflow-y-auto block">
+					<LightSwitch classes="fixed top-5 right-5" />
+					<nav class="list-nav text-md md:text-lg font-bold h-full">
+						<ul>
+							{#each pages as page}
+								<li>
+									<a href={`${base}${page.path}`} onclick={modalClose}>
+										<span class="flex-auto hover:text-primary-500">{page.slug}</span>
+									</a>
+								</li>
+							{/each}
+						</ul>
+					</nav>
+				</div>
 			{/snippet}
 		</Modal>
 	{/snippet}
