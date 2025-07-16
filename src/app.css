@@ -15,6 +15,9 @@
 }
 @import '../oldvintage.css';
 
+/* Activates dark mode by adding or removing the .dark class to the <html> element */
+@custom-variant dark (&:where(.dark, .dark *));
+
 .typography {
 	h1:not(:where([class~='unstyled'], [class~='unstyled'] *)) {
 		@apply h1 mb-4;
