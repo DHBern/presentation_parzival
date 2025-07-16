@@ -84,7 +84,7 @@
 			positionerPadding="p-10"
 			transitionsPositionerIn={{ y: -480, duration: 200 }}
 			transitionsPositionerOut={{ y: -480, duration: 200 }}
-			backdropClasses="backdrop-blur-sm"
+			backdropClasses="backdrop-blur-xl"
 		>
 			{#snippet trigger()}
 				<!-- this is an anchor tag because of node_invalid_placement warning -->
@@ -101,12 +101,13 @@
 				</a>
 			{/snippet}
 			{#snippet content()}
-				<nav class="list-nav">
+				{@render darkmodeSwitch("fixed top-10 right-10")}
+				<nav class="list-nav absolute top-30 left-20 text-lg font-bold">
 					<ul>
 						{#each pages as page}
 							<li>
 								<a href={`${base}${page.path}`} onclick={modalClose}>
-									<span class="flex-auto">{page.slug}</span>
+									<span class="flex-auto hover:text-primary-500">{page.slug}</span>
 								</a>
 							</li>
 						{/each}
