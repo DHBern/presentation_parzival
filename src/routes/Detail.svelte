@@ -14,8 +14,15 @@
 	import siglaFromHandle from '$lib/functions/siglaFromHandle';
 	import metadataFromHandle from '$lib/functions/metadataFromHandle';
 
-	/** @type {{codices: any, width?: number, height?: number,data?: {values: boolean[], label: string}[],  selection: {start: number, end: number}}} */
-	let { codices, width = 400, height = 400, data = [], selection = $bindable() } = $props();
+	/** @type {{codices: any, width?: number, height?: number,data?: {values: boolean[], label: string}[],  selection: {start: number, end: number}, roundToStep: function}} */
+	let {
+		codices,
+		width = 400,
+		height = 400,
+		data = [],
+		selection = $bindable(),
+		roundToStep
+	} = $props();
 	let marginTop = 30;
 	let marginRight = 0;
 	let marginBottom = 20;
@@ -60,15 +67,17 @@
 			// Zoom in
 			if (event.deltaY > 0) {
 				// Zoom out
-				selection.start = Math.max(DATA_MIN, selection.start - ZOOM_INCREMENT);
-				selection.end = Math.min(DATA_MAX, selection.end + ZOOM_INCREMENT);
+				selection.start = roundToStep(Math.max(DATA_MIN, selection.start - ZOOM_INCREMENT));
+				selection.end = roundToStep(Math.min(DATA_MAX, selection.end + ZOOM_INCREMENT));
 			} else {
 				// Zoom in
 				if (delta > ZOOM_MINIMUM_WINDOW_SIZE) {
-					selection.start = Math.max(DATA_MIN, selection.start + ZOOM_INCREMENT);
-					selection.end = Math.max(
-						selection.start + ZOOM_MINIMUM_WINDOW_SIZE,
-						Math.min(DATA_MAX, selection.end - ZOOM_INCREMENT)
+					selection.start = roundToStep(Math.max(DATA_MIN, selection.start + ZOOM_INCREMENT));
+					selection.end = roundToStep(
+						Math.max(
+							selection.start + ZOOM_MINIMUM_WINDOW_SIZE,
+							Math.min(DATA_MAX, selection.end - ZOOM_INCREMENT)
+						)
 					);
 				}
 			}
@@ -76,12 +85,12 @@
 			// Scroll
 			if (event.deltaY > 0) {
 				// Scroll down
-				selection.end = Math.min(DATA_MAX, selection.end + SCROLL_SPEED);
-				selection.start = selection.end - delta;
+				selection.end = roundToStep(Math.min(DATA_MAX, selection.end + SCROLL_SPEED));
+				selection.start = roundToStep(selection.end - delta);
 			} else {
 				// Scroll up
-				selection.start = Math.max(DATA_MIN, selection.start - SCROLL_SPEED);
-				selection.end = selection.start + delta;
+				selection.start = roundToStep(Math.max(DATA_MIN, selection.start - SCROLL_SPEED));
+				selection.end = roundToStep(selection.start + delta);
 			}
 		}
 	};

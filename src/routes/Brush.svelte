@@ -3,6 +3,7 @@
 	import {
 		DATA_MIN,
 		DATA_MAX,
+		STEP_SIZE,
 		BRUSH_WINDOW_DEFAULT_START,
 		BRUSH_WINDOW_DEFAULT_END
 	} from './Devilstable_DEFAULTS.json';
@@ -27,7 +28,7 @@
 	 */
 	let gBrush = $state();
 
-	/** @type {{width?: number, height?: number, data?: {values: boolean[], label: string}[], selection: {start: number, end: number}}} */
+	/** @type {{width?: number, height?: number, data?: {values: boolean[], label: string}[], selection: {start: number, end: number}, roundToStep: function}} */
 	let {
 		width = 400,
 		height = 150,
@@ -41,7 +42,8 @@
 				values: []
 			}
 		],
-		selection = $bindable()
+		selection = $bindable(),
+		roundToStep
 	} = $props();
 
 	let mobile = $derived(width > height);
@@ -95,6 +97,7 @@
 					[width - marginRight, height - marginBottom]
 				])
 	);
+
 	$effect(() => {
 		brush
 			.on('brush', (/** @type {{ selection: [number, number]; }} */ e) => {
@@ -108,8 +111,20 @@
 				}
 			})
 			.on('end', (/** @type {{ selection: [number, number]; }} */ e) => {
-				const from = e.selection[0];
-				const to = e.selection[1];
+				// Return if not triggered by user interaction
+				if (!e.sourceEvent || !e.selection) return;
+
+				// Snap the selection to the nearest step
+				let [from, to] = e.selection.map((d) => roundToStep(valuesDim.invert(d)));
+				if (to == from) to = from + STEP_SIZE; // prevent range of zero
+				selection.start = from;
+				selection.end = to;
+				console.log('Snapped values:', from, to);
+
+				// Move the brush to the snapped positions
+				d3.select(gBrush) // Use the correct reference for gBrush
+					.transition()
+					.call(brush.move, to > from ? [x(from), x(to)] : null);
 
 				// Update range in Details
 				if (Math.abs(from - to) > DATA_MAX - DATA_MIN) {
