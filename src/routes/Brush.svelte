@@ -60,7 +60,6 @@
 			.domain([0.001, 1 / 4, 2 / 4, 3 / 4, 0.9999])
 			.range(['900', '600', '500', '400', '200', '50'])
 	);
-	// $: colorScale = d3.scaleQuantize([0, 1], ['50', '200', '400', '500', '600', '900']);
 
 	// create chunks: each chunk is a number counting the number of true values in the chunk
 	let sourcesDim = $derived(d3.scaleBand().domain(data.map((d) => d.label)));
