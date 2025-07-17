@@ -3,10 +3,12 @@
 	import {
 		DATA_MIN,
 		DATA_MAX,
+		SELECTION_MIN_SIZE,
 		BRUSH_WINDOW_DEFAULT_START,
 		BRUSH_WINDOW_DEFAULT_END
 	} from './Devilstable_DEFAULTS.json';
 	import siglaFromHandle from '$lib/functions/siglaFromHandle';
+	import { onMount } from 'svelte';
 
 	let marginTop = 20;
 	let marginRight = 0;
@@ -52,13 +54,21 @@
 			? Math.max(Math.floor(availableWidth / optimalChunkWidth), 1)
 			: Math.max(Math.floor((height - marginTop - marginBottom) / optimalChunkWidth), 1)
 	);
+
+	// Set ColorScale and check for dark-mode
 	let colorScale = $derived(
-		d3
-			.scaleThreshold()
-			.domain([0.001, 1 / 4, 2 / 4, 3 / 4, 0.9999])
-			.range(['900', '600', '500', '400', '200', '50'])
+		d3.scaleThreshold(
+			[0.001, 1 / 4, 2 / 4, 3 / 4, 0.9999],
+			[
+				'fill-surface-50-950',
+				'fill-primary-400-600',
+				'fill-primary-500',
+				'fill-primary-600-400',
+				'fill-primary-800-200',
+				'fill-primary-950-50'
+			]
+		)
 	);
-	// $: colorScale = d3.scaleQuantize([0, 1], ['50', '200', '400', '500', '600', '900']);
 
 	// create chunks: each chunk is a number counting the number of true values in the chunk
 	let sourcesDim = $derived(d3.scaleBand().domain(data.map((d) => d.label)));
@@ -102,7 +112,10 @@
 				const to = e.selection[1];
 
 				// Update range in Details
-				if (Math.abs(from - to) <= DATA_MAX - DATA_MIN) {
+				if (
+					Math.abs(from - to) <= DATA_MAX - DATA_MIN &&
+					Math.abs(from - to) >= SELECTION_MIN_SIZE
+				) {
 					selection.start = Math.round(valuesDim.invert(from));
 					selection.end = Math.round(valuesDim.invert(to));
 				}
@@ -119,9 +132,11 @@
 			});
 	});
 	$effect(() => {
-		d3.select(gBrush)
-			.call(brush)
-			.call(brush.move, [valuesDim(selection.start), valuesDim(selection.end)]);
+		if (Math.abs(valuesDim(selection.start) - valuesDim(selection.end)) >= SELECTION_MIN_SIZE) {
+			d3.select(gBrush)
+				.call(brush)
+				.call(brush.move, [valuesDim(selection.start), valuesDim(selection.end)]);
+		}
 	});
 	let chunkedData = $derived(
 		data.map((dataObject) => {
@@ -176,7 +191,7 @@
 					y={mobile ? y(d.label) : start}
 					width={mobile ? end - start : x.bandwidth()}
 					height={mobile ? y.bandwidth() : end - start}
-					fill={`var(--color-primary-${colorScale(v)})`}
+					class={colorScale(v)}
 				/>
 			{/each}
 		</g>
