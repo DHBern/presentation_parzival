@@ -1,8 +1,7 @@
 <script lang="ts">
 	import { Switch } from '@skeletonlabs/skeleton-svelte';
-	import { onMount } from 'svelte';
 
-	let checked = $state(false); // false = light-mode (default)
+	let checked = $state(false);
 	let { classes } = $props();
 
 	$effect(() => {
@@ -16,15 +15,6 @@
 		localStorage.setItem('mode', mode);
 		checked = event.checked;
 	};
-
-	onMount(() => {
-		// Check the user's preferred color scheme
-		const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)').matches;
-		if (prefersDarkScheme) {
-			checked = true;
-			onCheckedChange({ checked: checked });
-		}
-	});
 </script>
 
 <svelte:head>
