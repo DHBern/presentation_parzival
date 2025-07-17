@@ -233,6 +233,7 @@
 					.axisRight(y)
 					.ticks(20)
 					.tickSize(width - marginLeft - marginRight)
+					.tickFormat(d3.format("d")) // Format ticks as integers
 			)
 			.call(
 				(/** @type import('d3-selection').Selection<SVGGElement, any, null, undefined> */ g) => {
