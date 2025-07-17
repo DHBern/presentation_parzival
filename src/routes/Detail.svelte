@@ -68,7 +68,7 @@
 			if (event.deltaY > 0) {
 				// Zoom out
 				selection.start = roundToStep(Math.max(DATA_MIN, selection.start - ZOOM_INCREMENT));
-				selection.end = roundToStep(Math.min(DATA_MAX, selection.end + ZOOM_INCREMENT));
+				selection.end = roundToStep(Math.min(DATA_MAX, selection.end + ZOOM_INCREMENT))-1;
 			} else {
 				// Zoom in
 				if (delta > ZOOM_MINIMUM_WINDOW_SIZE) {
@@ -78,7 +78,7 @@
 							selection.start + ZOOM_MINIMUM_WINDOW_SIZE,
 							Math.min(DATA_MAX, selection.end - ZOOM_INCREMENT)
 						)
-					);
+					)-1;
 				}
 			}
 		} else {
@@ -86,11 +86,11 @@
 			if (event.deltaY > 0) {
 				// Scroll down
 				selection.end = roundToStep(Math.min(DATA_MAX, selection.end + SCROLL_SPEED));
-				selection.start = roundToStep(selection.end - delta);
+				selection.start = roundToStep(selection.end - delta)-1;
 			} else {
 				// Scroll up
 				selection.start = roundToStep(Math.max(DATA_MIN, selection.start - SCROLL_SPEED));
-				selection.end = roundToStep(selection.start + delta);
+				selection.end = roundToStep(selection.start + delta)-1;
 			}
 		}
 	};
@@ -345,7 +345,7 @@
 					<li>
 						<a href={`${base}/textzeugen/${handle}/${verse}`} class="hover:text-secondary-900">
 							{@html siglaFromHandle(handle)}
-							{verse}
+							{verse} 
 						</a>
 					</li>
 				{/each}

@@ -116,6 +116,7 @@
 				// Snap the selection to the nearest step
 				let [from, to] = e.selection.map((d) => roundToStep(valuesDim.invert(d)));
 				if (to == from) to = from + STEP_SIZE; // prevent range of zero
+				to = to-1; // lower the end by one
 				selection.start = from;
 				selection.end = to;
 				console.log('Snapped values:', from, to);
