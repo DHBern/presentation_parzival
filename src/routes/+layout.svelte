@@ -8,7 +8,6 @@
 	import { toaster } from '$lib/components/toaster';
 	import { Toaster } from '@skeletonlabs/skeleton-svelte';
 	import { Switch } from '@skeletonlabs/skeleton-svelte';
-	import LightSwitch from '$lib/components/LightSwitch.svelte';
 
 	/** @type {{children?: import('svelte').Snippet}} */
 	let { children } = $props();
@@ -51,6 +50,21 @@
 		<a class="text-xl uppercase font-bold" href={`${base}/`}>Parzival</a>
 	{/snippet}
 
+	{#snippet darkmodeSwitch(classes = '')}
+		<Switch
+			compact
+			{classes}
+			name="darkmodeToggle"
+			controlActive="bg-surface-500"
+			onCheckedChange={(e) => {
+				document.documentElement.classList.toggle('dark');
+			}}
+		>
+			{#snippet inactiveChild()}<i class="fa-solid fa-moon"></i>{/snippet}
+			{#snippet activeChild()}<i class="fa-regular fa-sun"></i>{/snippet}
+		</Switch>
+	{/snippet}
+
 	<div class="flex-none items-center hidden lg:flex lg:justify-between gap-10">
 		<nav class="lg:flex lg:flex-wrap">
 			{#each pages as page}
@@ -59,7 +73,7 @@
 				>
 			{/each}
 		</nav>
-		<LightSwitch />
+		{@render darkmodeSwitch()}
 	</div>
 	{#snippet trail()}
 		<Modal
@@ -87,7 +101,7 @@
 				</a>
 			{/snippet}
 			{#snippet content()}
-			<LightSwitch classes='fixed top-10 right-10' />
+				{@render darkmodeSwitch("fixed top-10 right-10")}
 				<nav class="list-nav absolute top-30 left-20 text-lg font-bold">
 					<ul>
 						{#each pages as page}
