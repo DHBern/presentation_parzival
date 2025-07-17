@@ -7,8 +7,6 @@
 	import { base } from '$app/paths';
 	import { toaster } from '$lib/components/toaster';
 	import { Toaster } from '@skeletonlabs/skeleton-svelte';
-	import { Switch } from '@skeletonlabs/skeleton-svelte';
-
 	/** @type {{children?: import('svelte').Snippet}} */
 	let { children } = $props();
 
@@ -49,32 +47,13 @@
 	{#snippet lead()}
 		<a class="text-xl uppercase font-bold" href={`${base}/`}>Parzival</a>
 	{/snippet}
-
-	{#snippet darkmodeSwitch(classes = '')}
-		<Switch
-			compact
-			{classes}
-			name="darkmodeToggle"
-			controlActive="bg-surface-500"
-			onCheckedChange={(e) => {
-				document.documentElement.classList.toggle('dark');
-			}}
-		>
-			{#snippet inactiveChild()}<i class="fa-solid fa-moon"></i>{/snippet}
-			{#snippet activeChild()}<i class="fa-regular fa-sun"></i>{/snippet}
-		</Switch>
-	{/snippet}
-
-	<div class="flex-none items-center hidden lg:flex lg:justify-between gap-10">
-		<nav class="lg:flex lg:flex-wrap">
-			{#each pages as page}
-				<a href={`${base}${page.path}`} class="list-nav-item h-full p-4 {classesActive(page.path)}"
-					>{page.slug}</a
-				>
-			{/each}
-		</nav>
-		{@render darkmodeSwitch()}
-	</div>
+	<nav class="flex-none items-center hidden lg:flex lg:flex-wrap">
+		{#each pages as page}
+			<a href={`${base}${page.path}`} class="list-nav-item h-full p-4 {classesActive(page.path)}"
+				>{page.slug}</a
+			>
+		{/each}
+	</nav>
 	{#snippet trail()}
 		<Modal
 			open={openState}
