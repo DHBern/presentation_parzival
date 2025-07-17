@@ -68,7 +68,7 @@
 			positionerPadding="p-10"
 			transitionsPositionerIn={{ y: -480, duration: 200 }}
 			transitionsPositionerOut={{ y: -480, duration: 200 }}
-			backdropClasses="backdrop-blur-sm"
+			backdropClasses="backdrop-blur-xl"
 		>
 			{#snippet trigger()}
 				<!-- this is an anchor tag because of node_invalid_placement warning -->
