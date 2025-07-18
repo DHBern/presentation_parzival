@@ -24,7 +24,7 @@
 
 	const pages = [
 		{ slug: 'Einführung', path: '/einfuehrung' },
-		{ slug: 'Dreißiger-Matrix', path: `${base}/#edition-nach-dreissigern` },
+		{ slug: 'Dreißiger-Matrix', path: `/#edition-nach-dreissigern` },
 		{ slug: 'English Presentation', path: '/englishpresentation' },
 		{ slug: 'Handschriftenverzeichnis', path: '/hsverz' },
 		{ slug: 'Mitarbeitende', path: '/mitarbeitende' },
