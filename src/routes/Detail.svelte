@@ -3,25 +3,19 @@
 	import { computePosition, shift, flip, offset } from '@floating-ui/dom';
 	import { base } from '$app/paths';
 	import { fragmentLabel, summaryLabel } from '$lib/constants';
-	import {
-		DATA_MIN,
-		DATA_MAX,
-		SCROLL_SPEED,
-		ZOOM_INCREMENT,
-		ZOOM_MINIMUM_WINDOW_SIZE
-	} from './Devilstable_DEFAULTS.json';
+	import { ZOOM_INCREMENT } from './Devilstable_DEFAULTS.json';
 
 	import siglaFromHandle from '$lib/functions/siglaFromHandle';
 	import metadataFromHandle from '$lib/functions/metadataFromHandle';
 
-	/** @type {{codices: any, width?: number, height?: number,data?: {values: boolean[], label: string}[],  selection: {start: number, end: number}, roundToStep: function}} */
+	/** @type {{codices: any, width?: number, height?: number,data?: {values: boolean[], label: string}[],  selection: {start: number, end: number}, modifySelection: function}} */
 	let {
 		codices,
 		width = 400,
 		height = 400,
 		data = [],
 		selection = $bindable(),
-		roundToStep
+		modifySelection
 	} = $props();
 	let marginTop = 30;
 	let marginRight = 0;
@@ -61,38 +55,7 @@
 		// Check if the CTRL key is held down during the scroll
 		const isZooming = event.ctrlKey;
 
-		let delta = selection.end - selection.start;
-
-		if (isZooming) {
-			// Zoom in
-			if (event.deltaY > 0) {
-				// Zoom out
-				selection.start = roundToStep(Math.max(DATA_MIN, selection.start - ZOOM_INCREMENT));
-				selection.end = roundToStep(Math.min(DATA_MAX, selection.end + ZOOM_INCREMENT))-1;
-			} else {
-				// Zoom in
-				if (delta > ZOOM_MINIMUM_WINDOW_SIZE) {
-					selection.start = roundToStep(Math.max(DATA_MIN, selection.start + ZOOM_INCREMENT));
-					selection.end = roundToStep(
-						Math.max(
-							selection.start + ZOOM_MINIMUM_WINDOW_SIZE,
-							Math.min(DATA_MAX, selection.end - ZOOM_INCREMENT)
-						)
-					)-1;
-				}
-			}
-		} else {
-			// Scroll
-			if (event.deltaY > 0) {
-				// Scroll down
-				selection.end = roundToStep(Math.min(DATA_MAX, selection.end + SCROLL_SPEED));
-				selection.start = roundToStep(selection.end - delta)-1;
-			} else {
-				// Scroll up
-				selection.start = roundToStep(Math.max(DATA_MIN, selection.start - SCROLL_SPEED));
-				selection.end = roundToStep(selection.start + delta)-1;
-			}
-		}
+		modifySelection(event.deltaY > 0 ? ZOOM_INCREMENT : -ZOOM_INCREMENT, !isZooming);
 	};
 
 	const handleMouseMove = (/** @type {{ clientX: any; clientY: any; }} */ event) => {
@@ -233,7 +196,7 @@
 					.axisRight(y)
 					.ticks(20)
 					.tickSize(width - marginLeft - marginRight)
-					.tickFormat(d3.format("d")) // Format ticks as integers
+					.tickFormat(d3.format('d')) // Format ticks as integers
 			)
 			.call(
 				(/** @type import('d3-selection').Selection<SVGGElement, any, null, undefined> */ g) => {
@@ -346,7 +309,7 @@
 					<li>
 						<a href={`${base}/textzeugen/${handle}/${verse}`} class="hover:text-secondary-900">
 							{@html siglaFromHandle(handle)}
-							{verse} 
+							{verse}
 						</a>
 					</li>
 				{/each}

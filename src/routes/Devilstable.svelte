@@ -4,9 +4,7 @@
 	import Detail from './Detail.svelte';
 	import { summaryLabel } from '$lib/constants';
 	import {
-		DATA_MIN,
 		DATA_MAX,
-		STEP_SIZE,
 		BRUSH_WINDOW_DEFAULT_START,
 		BRUSH_WINDOW_DEFAULT_END,
 		SIGLA_ORDER
@@ -103,12 +101,7 @@
 		});
 	};
 
-	// Rounding function to snap to the nearest step
-	function roundToStep(value) {
-		if (value >= DATA_MAX) return DATA_MAX;
-		if (value <= DATA_MIN) return DATA_MIN;
-		return Math.min(Math.max(Math.round(value / STEP_SIZE) * STEP_SIZE, DATA_MIN), DATA_MAX);
-	}
+	let modifySelection = $state();
 </script>
 
 <div
@@ -179,7 +172,7 @@
 	height={mobile ? brushDimension : height}
 	data={boolData.filter((d) => d.label !== summaryLabel)}
 	bind:selection
-	{roundToStep}
+	bind:modifySelection
 />
 <Detail
 	{codices}
@@ -187,7 +180,7 @@
 	height={mobile ? height - brushDimension : height}
 	data={detailData}
 	bind:selection
-	{roundToStep}
+	{modifySelection}
 />
 
 <style>
