@@ -100,6 +100,8 @@
 			});
 		});
 	};
+
+	let modifySelection = $state();
 </script>
 
 <div
@@ -170,6 +172,7 @@
 	height={mobile ? brushDimension : height}
 	data={boolData.filter((d) => d.label !== summaryLabel)}
 	bind:selection
+	bind:modifySelection
 />
 <Detail
 	{codices}
@@ -177,6 +180,7 @@
 	height={mobile ? height - brushDimension : height}
 	data={detailData}
 	bind:selection
+	{modifySelection}
 />
 
 <style>
