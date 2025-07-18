@@ -7,12 +7,14 @@
 	import { page } from '$app/state';
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
+	import FassungenPopover from './FassungenPopover.svelte';
 
 	/** @type {{data: import('./$types').PageData}} */
 	let { data } = $props();
 	let verseWidth = $derived(page.data.thirties.length + 4);
 
 	const composureTitles = ['*D', '*m', '*G', '*T'];
+	const composureTitlesByColumn = { d: '*D', m: '*m', G: '*G', T: '*T' };
 	class localPageClass {
 		/**
 		 * for the Fassungen *d, *m, *G and *T
@@ -43,7 +45,7 @@
 				const reducer = (acc, object) => {
 					for (const [key, value] of Object.entries(object)) {
 						if (value) {
-							acc[key] = (acc[key] ?? '') + value;
+							acc[key] = (acc[key] ?? '') + value + '<br/>';
 						}
 					}
 					return acc;
@@ -57,15 +59,24 @@
 					if (verseNode) {
 						const verse = verseNode.getAttribute('data-verse')?.split('.')[1];
 						if (verse) {
-							const readingInfo = condensedReading[verse];
-							const structureInfo = condensedStructure[verse];
-							if (readingInfo || structureInfo) {
+							const reading_info = condensedReading[verse];
+							const structure_info = condensedStructure[verse];
+							if (reading_info || structure_info) {
 								const parts = verseNode.innerHTML.split('.');
 								if (parts.length > 1) {
 									const beforeDot = parts[0] + '.';
 									const afterDot = parts[1];
-									verseNode.innerHTML = `${beforeDot}<a class="anchor" href="#verse-${verse}">${afterDot}</a>`;
+									verseNode.innerHTML = `${beforeDot}<a 
+									class="anchor" 
+									href="#verse-${verse}"
+									data-structure_info=${structure_info ? '"' + structure_info + '"' : '""'}
+									data-reading_info=${reading_info ? '"' + reading_info + '"' : '""'}
+									data-dreissiger=${parts[0] ? parts[0] : '""'}
+									data-verse=${verse.replace(/^0+/, '')}
+									data-title="${composureTitlesByColumn[column] + ' ' + beforeDot + verse.replace(/^0+/, '')}" 
+									>${afterDot}</a>`;
 								} else {
+									//!! This does not seem to work (LAB)
 									verseNode.innerHTML = `<a class="anchor" href="#verse-${verse}">${verseNode.innerHTML}</a>`;
 								}
 							}
@@ -143,6 +154,11 @@
 	let localPages = new localPageClass();
 	$effect(() => {
 		localPages.fetchPage(Number(data.thirties));
+		setTimeout(addEventListeners, 1000);
+		setTimeout(addEventListeners, 2000);
+		setTimeout(addEventListeners, 3000);
+		setTimeout(addEventListeners, 5000);
+		setTimeout(addEventListeners, 10000);
 	});
 	let synchro = $state(true);
 	let windowWidth = $state(0);
@@ -158,7 +174,67 @@
 	});
 	onMount(() => {
 		styles = getComputedStyle(document.documentElement);
+		setTimeout(addEventListeners, 1000);
+		setTimeout(addEventListeners, 2000);
+		setTimeout(addEventListeners, 3000);
+		setTimeout(addEventListeners, 5000);
+		setTimeout(addEventListeners, 10000);
 	});
+
+	// Event Listeners for Popovers
+	const onMouseEnter = (ev) => {
+		fillFassungenPopoverStore(ev.target);
+	};
+	const onMouseLeave = () => {
+		// setTimeout(resetFassungenPopoverStore, 500);
+	};
+	const addEventListeners = () => {
+		removeEventListeners();
+		console.log('will add listeners');
+		document.querySelectorAll('.anchor').forEach((el) => {
+			console.log('adding listener', el.dataset.title);
+			el.addEventListener('mouseenter', onMouseEnter, false);
+			el.addEventListener('mouseleave', onMouseLeave, false);
+		});
+	};
+	const removeEventListeners = () => {
+		console.log('will remove listeners');
+		document.querySelectorAll(`.anchor`).forEach((el) => {
+			console.log('removing listener', el.dataset.title);
+			el.removeEventListener('mouseenter', onMouseEnter);
+			el.removeEventListener('mouseleave', onMouseLeave);
+		});
+	};
+
+	// PopoverStore containing the content of the selected popover
+	let FassungenPopoverStore = $state({
+		elTrigger: undefined,
+		dreissiger: '',
+		verse: '',
+		title: '',
+		structure_info: '',
+		reading_info: ''
+	});
+	const fillFassungenPopoverStore = (elTrigger) => {
+		console.log('filling popover');
+		const data = elTrigger.dataset;
+		FassungenPopoverStore.elTrigger = elTrigger;
+		FassungenPopoverStore.title = data.title;
+		FassungenPopoverStore.dreissiger = data.dreissiger;
+		FassungenPopoverStore.verse = data.verse;
+		FassungenPopoverStore.structure_info = data.structure_info;
+		FassungenPopoverStore.reading_info = data.reading_info;
+	};
+	const resetFassungenPopoverStore = () => {
+		console.log('resetting popover');
+		FassungenPopoverStore.elTrigger = undefined;
+		FassungenPopoverStore.title = '';
+		FassungenPopoverStore.dreissiger = '';
+		FassungenPopoverStore.verse = '';
+		FassungenPopoverStore.structure_info = '';
+		FassungenPopoverStore.reading_info = '';
+	};
+
 	$effect(() => {
 		if (!mobileBreakpoint) {
 			synchro = false;
@@ -168,7 +244,13 @@
 </script>
 
 <svelte:window bind:innerWidth={windowWidth} />
-<section class="w-full" style="--verse-width: {verseWidth}ch">
+<button
+	class="bg-primary-500 rounded-md p-5 m-5"
+	onclick={() => {
+		addEventListeners();
+	}}>ADD Listeners</button
+>
+<section id="sectionFassungen" class="w-full" style="--verse-width: {verseWidth}ch">
 	{#snippet nextPrevButton(next, page, column)}
 		<button
 			class="btn preset-filled-primary-500 w-full mb-4 {column ? 'column-' + column : ''}"
@@ -217,6 +299,21 @@
 			<button aria-label="suchen" class="btn preset-filled-primary-500">Anzeigen</button>
 		</form>
 	</div>
+
+	<!-- Apparat Popover -->
+	{#if FassungenPopoverStore.elTrigger}
+		<FassungenPopover
+			{resetFassungenPopoverStore}
+			elTrigger={FassungenPopoverStore.elTrigger}
+			dreissiger={FassungenPopoverStore.dreissiger}
+			verse={FassungenPopoverStore.verse}
+			title={FassungenPopoverStore.title}
+			structure_info={FassungenPopoverStore.structure_info}
+			reading_info={FassungenPopoverStore.reading_info}
+		/>
+	{/if}
+
+	<!-- Fassungen Content -->
 	{#if synchro}
 		<FassungenSyncContent
 			content={localPages.pages}
