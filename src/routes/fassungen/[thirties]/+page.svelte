@@ -69,9 +69,9 @@
 									verseNode.innerHTML = `${beforeDot}<a 
 									class="anchor" 
 									href="#verse-${verse}"
-									data-structure_info=${structure_info ? '"' + structure_info + '"' : '""'}
-									data-reading_info=${reading_info ? '"' + reading_info + '"' : '""'}
-									data-dreissiger=${parts[0] ? parts[0] : '""'}
+									data-structure_info="${structure_info ? structure_info : ''}"
+									data-reading_info="${reading_info ? reading_info : ''}"
+									data-dreissiger=${parts[0]}
 									data-verse=${verse.replace(/^0+/, '')}
 									data-title="${composureTitlesByColumn[column] + ' ' + beforeDot + verse.replace(/^0+/, '')}" 
 									>${afterDot}</a>`;
