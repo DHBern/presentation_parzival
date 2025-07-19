@@ -44,7 +44,7 @@
 </script>
 
 <button
-	class="close_button absolute top-0 left-0 w-full h-full"
+	class="close_button fixed top-0 left-0 w-full h-full"
 	onclick={resetFassungenPopoverStore}
     aria-label="Apparat schliessen"
 ></button>
