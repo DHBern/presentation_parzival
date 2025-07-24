@@ -1,7 +1,11 @@
+<script>
+	import H2Hoverable from '$lib/components/H2Hoverable.svelte';
+</script>
+
 <div class="container mx-auto typography">
 	<h1>Mitarbeiterinnen und Mitarbeiter am Parzival-Projekt</h1>
 
-	<h2>Projektleitung</h2>
+	<H2Hoverable name="Projektleitung"></H2Hoverable>
 
 	<ul>
 		<li>
@@ -11,7 +15,7 @@
 		</li>
 	</ul>
 
-	<h2>Wissenschaftliche Ko-Leitung</h2>
+	<H2Hoverable name="Wissenschaftliche Mitarbeiterinnen und Mitarbeiter"></H2Hoverable>
 
 	<ul>
 		<li>
@@ -22,7 +26,7 @@
 		</li>
 	</ul>
 
-	<h2>Programmierung und Webdesign</h2>
+	<H2Hoverable name="Programmierung und Webdesign"></H2Hoverable>
 	<ul>
 		<li>Simone Hiltscher (Universitäten Basel und Bern, 2005 bis 2021)</li>
 		<li>
@@ -43,11 +47,14 @@
 				target="_blank">Sebastian Flick</a
 			> (Digital Humanities, Universität Bern, 2024)
 		</li>
-		<li>Dominique Steinbach (Universität Basel und Bern)</li>
+	</ul>
+	<H2Hoverable name="Wartung und Support"></H2Hoverable>
+	<ul>
+		<li>Dominique Steinbach (Universität Bern)</li>
 		<li>Philipp Lammerskitten (Universität Bern)</li>
 	</ul>
 
-	<h2>Ehemalige wissenschaftliche Mitarbeiterinnen und Mitarbeiter</h2>
+	<H2Hoverable name="Ehemalige wissenschaftliche Mitarbeiterinnen und Mitarbeiter"></H2Hoverable>
 
 	<ul>
 		<li>

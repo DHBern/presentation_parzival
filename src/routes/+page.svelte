@@ -2,6 +2,7 @@
 	import VerseSelector from '$lib/components/VerseSelector.svelte';
 	import TextzeugenSelector from '$lib/components/TextzeugenSelector.svelte';
 	import Devilstable from './Devilstable.svelte';
+	import H2Hoverable from '$lib/components/H2Hoverable.svelte';
 	import { base } from '$app/paths';
 
 	/** @type {{data: import('./$types').PageData}} */
@@ -11,7 +12,7 @@
 	let tableHeight = $state(0);
 </script>
 
-<div class="container mx-auto grid grid-cols-[repeat(auto-fit,minmax(400px,1fr))] gap-6">
+<div class="container mx-auto grid grid-cols-1 md:grid-cols-2 gap-6 gap-x-20">
 	<section class="col-span-full">
 		<div class="mt-20 mb-4">
 			<h1 class="h1">Wolfram von Eschenbach, ›Parzival‹: Digitale Edition</h1>
@@ -36,23 +37,7 @@
 		</div>
 	</section>
 	<section>
-		<h2 class="h2 my-10" id="versindizes">Versindizes zu den Textzeugen</h2>
-		<p class="my-5">
-			Die Indizes listen die Start- bzw. Endverse je Seite und Spalte für einen Textzeugen auf. Der
-			anzuzeigende Textzeuge kann aus der Liste ausgewählt und durch "Index anzeigen" aufgerufen
-			werden.
-		</p>
-
-		<select class="select">
-			<option value="1">Textzeuge auswählen</option>
-			<option value="2">G</option>
-			<option value="3">D</option>
-			<option value="4">m</option>
-			<option value="5">Fr</option>
-		</select>
-	</section>
-	<section>
-		<h2 class="h2 my-10" id="verssynopse">Verssynopse</h2>
+		<H2Hoverable name="Verssynopse" classes="h2 my-10"></H2Hoverable>
 		<p class="my-5">
 			Es werden Einzelverse in sämtlichen Textzeugen und (optional) Fassungen angezeigt. Bitte geben
 			Sie im ersten Feld die Zahl eines Dreißigers (z. B. 249), im zweiten Feld die Zahl eines
@@ -66,7 +51,7 @@
 		</div>
 	</section>
 	<section>
-		<h2 class="h2 my-10" id="textzeugensynopse">Synopse zweier Textzeugen</h2>
+		<H2Hoverable name="Synopse zweier Textzeugen" classes="h2 my-10"></H2Hoverable>
 		<p class="my-5">
 			Die beiden Textzeugen können aus den Listen ausgewählt werden; der gewünschte Versbereich ist
 			in die Eingabefelder einzutragen. Der Startvers wird jeweils durch zwei Eingaben bestimmt: die
@@ -79,11 +64,11 @@
 		</div>
 	</section>
 	<section class="col-span-full">
-		<h2 class="h2 my-10" id="tabelle">Edition nach Dreißigern (Fassungen und Textzeugen)</h2>
+		<H2Hoverable name="Edition nach Dreißigern" classes="h2 my-10"></H2Hoverable>
 		<p class="my-5">
 			Aktuell befindet sich noch die Interpunktion in Überarbeitung (Dreißiger 201 bis 472). Die
-			Tabelle ermöglicht die Auswahl von Dreißigern der synoptischen Fassungsedition (unter
-			„Fassungen“) und Handschriftentranskriptionen (unter den einzelnen Siglen). Die Fragmente sind
+			Tabelle ermöglicht die Auswahl von Dreißigern der synoptischen FassungsEdition nach
+			Dreißigern) und Handschriftentranskriptionen (unter den einzelnen Siglen). Die Fragmente sind
 			in der Spalte rechts außen nach Dreißigern aufgeführt. Alle Textzeugen können auch einzeln
 			über das untenstehende Feld angewählt und entfernt werden.
 		</p>

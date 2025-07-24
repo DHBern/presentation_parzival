@@ -23,7 +23,7 @@
 	h2:not(:where([class~='unstyled'], [class~='unstyled'] *)) {
 		@apply h2 my-4;
 	}
-	a:not(:where([class~='unstyled'], [class~='unstyled'] *)) {
+	a:not(:where([class~='unstyled'], [class~='unstyled'] *, h2 > a, h3 > a, h4 > a)) {
 		@apply anchor;
 	}
 	p:not(:where([class~='unstyled'], [class~='unstyled'] *)) {
@@ -47,10 +47,13 @@
 	}
 	.subst,
 	.subst_sr {
+		color: green;
 		.deleted {
 			color: #666;
 		}
-		color: green;
+		.rasure {
+			@apply bg-[#666];
+		}
 	}
 	.subst_ls {
 		color: #8cfff4;
@@ -80,6 +83,12 @@
 		color: green;
 		@apply bg-[#9f9f9f];
 	}
+
+	.fragment-loss {
+		@apply bg-transparent;
+		color: #666;
+	}
+
 	.initial,
 	.glory-initial,
 	.capital-initial {

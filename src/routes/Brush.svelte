@@ -1,12 +1,6 @@
 <script>
 	import * as d3 from 'd3';
-	import {
-		DATA_MIN,
-		DATA_MAX,
-		SELECTION_MIN_SIZE,
-		BRUSH_WINDOW_DEFAULT_START,
-		BRUSH_WINDOW_DEFAULT_END
-	} from './Devilstable_DEFAULTS.json';
+	import { DATA_MIN, DATA_MAX } from './Devilstable_DEFAULTS.json';
 	import siglaFromHandle from '$lib/functions/siglaFromHandle';
 	import { onMount } from 'svelte';
 
@@ -29,7 +23,7 @@
 	 */
 	let gBrush = $state();
 
-	/** @type {{width?: number, height?: number, data?: {values: boolean[], label: string}[], selection: {start: number, end: number}}} */
+	/** @type {{width?: number, height?: number, data?: {values: boolean[], label: string}[], selection: {start: number, end: number}, modifySelection: function}} */
 	let {
 		width = 400,
 		height = 150,
@@ -43,7 +37,8 @@
 				values: []
 			}
 		],
-		selection = $bindable()
+		selection = $bindable(),
+		modifySelection = $bindable()
 	} = $props();
 
 	let mobile = $derived(width > height);
@@ -75,10 +70,11 @@
 	let xChunk = $derived(
 		d3
 			.scaleLinear()
+			.clamp(true)
 			.domain([0, numChunks])
 			.range(mobile ? [marginLeft, width - marginRight] : [marginBottom, height - marginTop])
 	);
-	let valuesDim = $derived(d3.scaleLinear().domain([DATA_MIN, DATA_MAX]));
+	let valuesDim = $derived(d3.scaleLinear().domain([DATA_MIN, DATA_MAX]).clamp(true));
 	/** @type any */
 	let x = $derived(
 		mobile
@@ -105,9 +101,34 @@
 					[width - marginRight, height - marginBottom]
 				])
 	);
+
+	modifySelection = (/** @type {number} */ modifier, /** @type {any} */ move) => {
+		const startVal = valuesDim.invert(
+			xChunk(xChunk.invert(valuesDim(selection.start)) + (move ? modifier : -modifier))
+		);
+		const endVal = valuesDim.invert(xChunk(xChunk.invert(valuesDim(selection.end)) + modifier));
+		if (
+			startVal > endVal ||
+			(move && selection.end >= DATA_MAX && endVal >= DATA_MAX) ||
+			(move && selection.start <= DATA_MIN && startVal <= DATA_MIN)
+		) {
+			return;
+		}
+		if (!Math.floor(endVal - startVal)) {
+			// this happens when two chunks are selected and user zooms in, or the selection reached the top and user scrolls up, or the selection reached the bottom and user scrolls down
+			if (!move) {
+				selection.end = endVal;
+			}
+			return;
+		}
+		selection.start = startVal;
+		selection.end = endVal;
+	};
+
 	$effect(() => {
 		brush
 			.on('brush', (/** @type {{ selection: [number, number]; }} */ e) => {
+				if (!e.sourceEvent || !e.selection) return;
 				const from = e.selection[0];
 				const to = e.selection[1];
 
@@ -121,22 +142,22 @@
 				}
 			})
 			.on('end', (/** @type {{ selection: [number, number]; }} */ e) => {
-				const from = e.selection[0];
-				const to = e.selection[1];
+				// Return if not triggered by user interaction
+				if (!e.sourceEvent || !e.selection) return;
+
+				// Snap the selection to the nearest step
+				let [from, to] = e.selection.map((d) => Math.round(xChunk.invert(d)));
+				if (to <= from) {
+					to = from + 1; // Ensure to is always greater than from
+				}
+
+				const thirtiesTo = valuesDim.invert(xChunk(to));
+				const thirtiesFrom = valuesDim.invert(xChunk(from));
 
 				// Update range in Details
-				if (Math.abs(from - to) > DATA_MAX - DATA_MIN) {
-					selection.start = Math.round(valuesDim.invert(from));
-					selection.end = Math.round(valuesDim.invert(to));
-				}
+				selection.start = thirtiesFrom || DATA_MIN;
+				selection.end = Math.min(thirtiesTo, DATA_MAX);
 			});
-	});
-	$effect(() => {
-		if (Math.abs(valuesDim(selection.start) - valuesDim(selection.end)) >= SELECTION_MIN_SIZE) {
-			d3.select(gBrush)
-				.call(brush)
-				.call(brush.move, [valuesDim(selection.start), valuesDim(selection.end)]);
-		}
 	});
 	let chunkedData = $derived(
 		data.map((dataObject) => {
@@ -175,6 +196,20 @@
 		mobile
 			? d3.select(gx).call(d3.axisBottom(x))
 			: d3.select(gx).call(d3.axisTop(x).tickFormat((d) => siglaFromHandle(d)));
+	});
+
+	$effect(() => {
+		//this effect moves the brush when the selection changes
+		d3.select(gBrush)
+			.call(brush)
+			.call(brush.move, [valuesDim(selection.start), valuesDim(selection.end)]);
+	});
+	$effect(() => {
+		// this effect ensures that the brush is snapped to a chunk
+		selection.start = valuesDim.invert(
+			xChunk(Math.round(xChunk.invert(valuesDim(selection.start))))
+		);
+		selection.end = valuesDim.invert(xChunk(Math.round(xChunk.invert(valuesDim(selection.end)))));
 	});
 </script>
 
