@@ -20,7 +20,6 @@
 				target="_blank">PD Dr. Stefan Abel</a
 			> (Universität Bern)
 		</li>
-
 	</ul>
 
 	<h2>Programmierung und Webdesign</h2>

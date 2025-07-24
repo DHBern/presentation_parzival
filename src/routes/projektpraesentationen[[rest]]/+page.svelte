@@ -545,9 +545,9 @@
 		</li>
 
 		<li>
-			Universität Freiburg/Schweiz, Tagung der Wolfram von Eschenbach-Gesellschaft, "TexT & TexT
-			in lateinischer und volkssprachiger Überlieferung des Mittelalters", 1. Oktober 2004 (Vortrag
-			zu Überschriften in der Parzival-Überlieferung von Gabriel Viehhauser)
+			Universität Freiburg/Schweiz, Tagung der Wolfram von Eschenbach-Gesellschaft, "TexT & TexT in
+			lateinischer und volkssprachiger Überlieferung des Mittelalters", 1. Oktober 2004 (Vortrag zu
+			Überschriften in der Parzival-Überlieferung von Gabriel Viehhauser)
 		</li>
 
 		<li>

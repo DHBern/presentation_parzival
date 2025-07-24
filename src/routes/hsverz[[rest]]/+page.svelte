@@ -1,5 +1,4 @@
 <script>
-	
 	/** @type {{data: import('./$types').PageData}} */
 	let { data } = $props();
 	let { sigla } = $derived(data);
