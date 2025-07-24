@@ -133,10 +133,7 @@
 				const to = e.selection[1];
 
 				// Update range in Details
-				if (
-					Math.abs(from - to) <= DATA_MAX - DATA_MIN &&
-					Math.abs(from - to) >= SELECTION_MIN_SIZE
-				) {
+				if (Math.abs(from - to) <= DATA_MAX - DATA_MIN) {
 					selection.start = Math.round(valuesDim.invert(from));
 					selection.end = Math.round(valuesDim.invert(to));
 				}
