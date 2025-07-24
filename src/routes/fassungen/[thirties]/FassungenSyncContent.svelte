@@ -86,7 +86,7 @@
 	.synced {
 		:global(.line) {
 			@apply grid grid-cols-(--verse-width) grid-flow-col items-center-safe;
-			@apply preset-filled-surface-500;
+			@apply bg-gray-100 dark:preset-filled-surface-500;
 			:global(.verse) {
 				@apply ml-1;
 			}

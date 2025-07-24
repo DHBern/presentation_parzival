@@ -2,6 +2,7 @@
 	import * as d3 from 'd3';
 	import { DATA_MIN, DATA_MAX } from './Devilstable_DEFAULTS.json';
 	import siglaFromHandle from '$lib/functions/siglaFromHandle';
+	import { onMount } from 'svelte';
 
 	let marginTop = 20;
 	let marginRight = 0;
@@ -48,11 +49,20 @@
 			? Math.max(Math.floor(availableWidth / optimalChunkWidth), 1)
 			: Math.max(Math.floor((height - marginTop - marginBottom) / optimalChunkWidth), 1)
 	);
+
+	// Set ColorScale and check for dark-mode
 	let colorScale = $derived(
-		d3
-			.scaleThreshold()
-			.domain([0.001, 1 / 4, 2 / 4, 3 / 4, 0.9999])
-			.range(['900', '600', '500', '400', '200', '50'])
+		d3.scaleThreshold(
+			[0.001, 1 / 4, 2 / 4, 3 / 4, 0.9999],
+			[
+				'fill-surface-50-950',
+				'fill-primary-400-600',
+				'fill-primary-500',
+				'fill-primary-600-400',
+				'fill-primary-800-200',
+				'fill-primary-950-50'
+			]
+		)
 	);
 
 	// create chunks: each chunk is a number counting the number of true values in the chunk
@@ -213,7 +223,7 @@
 					y={mobile ? y(d.label) : start}
 					width={mobile ? end - start : x.bandwidth()}
 					height={mobile ? y.bandwidth() : end - start}
-					fill={`var(--color-primary-${colorScale(v)})`}
+					class={colorScale(v)}
 				/>
 			{/each}
 		</g>
