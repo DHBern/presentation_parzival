@@ -11,7 +11,7 @@
 
 	let { thirties, verse, metadata, publisherData, loss } = $derived(data);
 	// remove leading zeros in verse
-	let verseNoZero = $derived(verse.replace(/^0+/, ''));
+	let verseNoZero = $derived(verse.slice(0, -2)+Number(verse.slice(-2)));
 	let hyparchetypesSlider = $state(false);
 	let highestVerseNumber = $derived(Number(thirties) === 257 ? 32 : 30);
 	let highestVerseNumberPrev = $derived(Number(thirties) === 258 ? 32 : 30);
