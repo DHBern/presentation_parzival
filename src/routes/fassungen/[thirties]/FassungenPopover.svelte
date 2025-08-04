@@ -77,8 +77,6 @@
 <style lang="postcss">
 	@reference "tailwindcss";
 	@reference "@skeletonlabs/skeleton";
-	/* @import '/parzival.css' */
-	/* @reference "parzival" */
 	.fassungen_popover :global(a) {
 		@apply text-primary-800 font-bold;
 	}
