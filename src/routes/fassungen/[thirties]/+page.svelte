@@ -268,12 +268,6 @@
 </script>
 
 <svelte:window bind:innerWidth={windowWidth} />
-<button
-	class="bg-primary-500 rounded-md p-5 m-5"
-	onclick={() => {
-		addTriggerListeners();
-	}}>ADD Listeners</button
->
 <section id="sectionFassungen" class="w-full" style="--verse-width: {verseWidth}ch">
 	{#snippet nextPrevButton(next, page, column)}
 		<button
