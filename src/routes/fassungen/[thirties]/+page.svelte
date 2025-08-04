@@ -194,8 +194,8 @@
 	let timeoutonMouseLeavePopup = $state();
 	let ignoreLeave = $state(false);
 
-	const fillFassungenPopoverStore = (elTrigger) => {
-		if (!ignoreLeave) {
+	const fillFassungenPopoverStore = (elTrigger, ignore = false) => {
+		if (!ignore) {
 			resetFassungenPopoverStore();
 			const data = elTrigger.dataset;
 			FassungenPopoverStore.elTrigger = elTrigger;
@@ -223,11 +223,11 @@
 
 	const onClickTrigger = (ev) => {
 		ignoreLeave = true;
-		fillFassungenPopoverStore(ev.target);
+		fillFassungenPopoverStore(ev.target, false);
 	};
 	const onMouseEnterTrigger = (ev) => {
 		clearTimeouts(); // prevents diappearing popover when user hovers multiple triggers before hovering the popover
-		fillFassungenPopoverStore(ev.target);
+		fillFassungenPopoverStore(ev.target, ignoreLeave);
 	};
 	const onMouseLeaveTrigger = () => {
 		if (!ignoreLeave) {
