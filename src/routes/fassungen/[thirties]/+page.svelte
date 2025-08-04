@@ -265,6 +265,12 @@
 	};
 
 	$effect(() => {
+		// add eventListeners when synchro is switched
+		synchro;
+		addTriggerListeners();
+	});
+
+	$effect(() => {
 		if (!mobileBreakpoint) {
 			synchro = false;
 		}
