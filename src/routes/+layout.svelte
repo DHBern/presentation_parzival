@@ -12,8 +12,8 @@
 
 	let classesActive = $derived((/** @type {string} */ href) =>
 		base + href === `/${page.url.pathname.split('/')[1]}`
-			? 'bg-primary-500 hover:text-primary-400 text-secondary-500'
-			: 'hover:text-primary-500'
+			? 'bg-primary-300 hover:bg-primary-300 hover:text-primary-700 text-primary-900'
+			: 'hover:text-primary-600'
 	);
 
 	let openState = $state(false);
@@ -22,16 +22,9 @@
 		openState = false;
 	}
 
-	function drawerOpen() {
-		const /** @type {import('@skeletonlabs/skeleton').DrawerSettings} */ s = {
-				id: 'topnav',
-				position: 'top'
-			};
-		drawerStore.open(s);
-	}
-
 	const pages = [
 		{ slug: 'Einführung', path: '/einfuehrung' },
+		{ slug: 'Dreißiger-Matrix', path: `/#edition-nach-dreissigern` },
 		{ slug: 'English Presentation', path: '/englishpresentation' },
 		{ slug: 'Handschriftenverzeichnis', path: '/hsverz' },
 		{ slug: 'Mitarbeitende', path: '/mitarbeitende' },
@@ -39,21 +32,22 @@
 		{ slug: 'Fassungen', path: '/fassungen' },
 		{ slug: 'Einzelverssynopsen', path: '/einzelverssynopse' },
 		{ slug: 'Monotext', path: '/monotext' },
-		{ slug: 'Suche', path: '/suche' },
-		{ slug: 'Versindizes', path: '/versindizes' }
+		{ slug: 'Suche', path: '/suche' }
 	];
 </script>
 
-<AppBar>
+<AppBar classes="px-4 py-0">
 	{#snippet lead()}
-		<a class="text-xl uppercase font-bold" href={`${base}/`}>Parzival</a>
+		<a class="text-xl uppercase font-bold hover:text-primary-700" href={`${base}/`}>Parzival</a>
 	{/snippet}
-	<nav class="flex-none items-center hidden lg:flex lg:flex-wrap">
-		{#each pages as page}
-			<a href={`${base}${page.path}`} class="list-nav-item h-full p-4 {classesActive(page.path)}"
-				>{page.slug}</a
-			>
-		{/each}
+	<nav class="">
+		<ul class="hidden items-center flex-none lg:flex lg:flex-wrap">
+			{#each pages as page}
+				<li class="list-nav-item inline-block h-full p-4 {classesActive(page.path)}">
+					<a href={`${base}${page.path}`}>{page.slug}</a>
+				</li>
+			{/each}
+		</ul>
 	</nav>
 	{#snippet trail()}
 		<Modal
@@ -64,19 +58,13 @@
 			positionerPadding="p-10"
 			transitionsPositionerIn={{ y: -480, duration: 200 }}
 			transitionsPositionerOut={{ y: -480, duration: 200 }}
-			backdropClasses="backdrop-blur-sm"
+			backdropClasses="backdrop-blur-xl"
 		>
 			{#snippet trigger()}
 				<!-- this is an anchor tag because of node_invalid_placement warning -->
 				<!-- svelte-ignore a11y_missing_attribute -->
 				<!-- svelte-ignore a11y_click_events_have_key_events -->
-				<a
-					tabindex="0"
-					role="button"
-					aria-label="Menü"
-					class="lg:!hidden btn-icon"
-					onclick={drawerOpen}
-				>
+				<a tabindex="0" role="button" aria-label="Menü" class="lg:!hidden btn-icon">
 					<i class="fa-solid fa-bars"></i>
 				</a>
 			{/snippet}
