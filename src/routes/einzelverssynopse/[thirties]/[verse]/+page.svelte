@@ -11,10 +11,13 @@
 
 	let { thirties, verse, metadata, publisherData, loss } = $derived(data);
 	// remove leading zeros in verse
-	let verseNoZero = $derived(verse.slice(0, -2)+Number(verse.slice(-2)));
+	let verseNoZero = $derived(verse.slice(0, -2) + Number(verse.slice(-2)));
 	let hyparchetypesSlider = $state(false);
+
+	//! This is a temporary fix (not all thirties have exactly 30 verses!)
 	let highestVerseNumber = $derived(Number(thirties) === 257 ? 32 : 30);
 	let highestVerseNumberPrev = $derived(Number(thirties) === 258 ? 32 : 30);
+
 	let prevVerseURL = $derived(
 		`${base}/einzelverssynopse/${
 			parseInt(verse) === 1 ? parseInt(thirties) - 1 : thirties
