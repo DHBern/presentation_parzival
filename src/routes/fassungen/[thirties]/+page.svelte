@@ -188,15 +188,23 @@
 		structure_info: '',
 		reading_info: ''
 	});
+
+	// Event Listeners for Popovers
+	let timeoutonMouseLeaveTrigger = $state();
+	let timeoutonMouseLeavePopup = $state();
+	let ignoreLeave = $state(false);
+
 	const fillFassungenPopoverStore = (elTrigger) => {
-		resetFassungenPopoverStore();
-		const data = elTrigger.dataset;
-		FassungenPopoverStore.elTrigger = elTrigger;
-		FassungenPopoverStore.title = data.title;
-		FassungenPopoverStore.dreissiger = data.dreissiger;
-		FassungenPopoverStore.verse = data.verse;
-		FassungenPopoverStore.structure_info = data.structure_info;
-		FassungenPopoverStore.reading_info = data.reading_info;
+		if (!ignoreLeave) {
+			resetFassungenPopoverStore();
+			const data = elTrigger.dataset;
+			FassungenPopoverStore.elTrigger = elTrigger;
+			FassungenPopoverStore.title = data.title;
+			FassungenPopoverStore.dreissiger = data.dreissiger;
+			FassungenPopoverStore.verse = data.verse;
+			FassungenPopoverStore.structure_info = data.structure_info;
+			FassungenPopoverStore.reading_info = data.reading_info;
+		}
 	};
 	const resetFassungenPopoverStore = () => {
 		FassungenPopoverStore.elTrigger = undefined;
@@ -206,11 +214,6 @@
 		FassungenPopoverStore.structure_info = '';
 		FassungenPopoverStore.reading_info = '';
 	};
-
-	// Event Listeners for Popovers
-	let timeoutonMouseLeaveTrigger = $state();
-	let timeoutonMouseLeavePopup = $state();
-	let ignoreLeave = $state(false);
 
 	// const popover = document.querySelector('fassungen_popover');
 	const clearTimeouts = () => {
