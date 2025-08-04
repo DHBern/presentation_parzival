@@ -42,10 +42,15 @@
 				// select all lines in the HTML and process them
 				const parser = new DOMParser();
 				const doc = parser.parseFromString(info.content, 'text/html');
+				// The reducer will...
+				// 1. transform the input array into an object array by...
+				// 	 a. grouping by the key
+				//   b. glowing strings together for repeating key (separated by linebreak)
+				// 2. escape any occurence of " inside the strings, since they would break data-attributes attachment (not tested, since this is to prevent a hypothetical bug)
 				const reducer = (acc, object) => {
 					for (const [key, value] of Object.entries(object)) {
 						if (value) {
-							acc[key] = (acc[key] ?? '') + value + '<br/>';
+							acc[key] = (acc[key] ?? '') + value.replace('"', '\"') + '<br/>';
 						}
 					}
 					return acc;
@@ -148,7 +153,7 @@
 				}
 			}
 			tick().then(() => {
-				addEventListeners();
+				addTriggerListeners();
 			});
 			return Promise.resolve();
 		};
@@ -174,31 +179,6 @@
 		styles = getComputedStyle(document.documentElement);
 	});
 
-	// Event Listeners for Popovers
-	const onMouseEnter = (ev) => {
-		fillFassungenPopoverStore(ev.target);
-	};
-	const onMouseLeave = () => {
-		// setTimeout(resetFassungenPopoverStore, 500);
-	};
-	const addEventListeners = () => {
-		removeEventListeners();
-		console.log('will add listeners');
-		document.querySelectorAll('.anchor').forEach((el) => {
-			console.log('adding listener', el.dataset.title);
-			el.addEventListener('mouseenter', onMouseEnter, false);
-			el.addEventListener('mouseleave', onMouseLeave, false);
-		});
-	};
-	const removeEventListeners = () => {
-		console.log('will remove listeners');
-		document.querySelectorAll(`.anchor`).forEach((el) => {
-			console.log('removing listener', el.dataset.title);
-			el.removeEventListener('mouseenter', onMouseEnter);
-			el.removeEventListener('mouseleave', onMouseLeave);
-		});
-	};
-
 	// PopoverStore containing the content of the selected popover
 	let FassungenPopoverStore = $state({
 		elTrigger: undefined,
@@ -209,7 +189,7 @@
 		reading_info: ''
 	});
 	const fillFassungenPopoverStore = (elTrigger) => {
-		console.log('filling popover');
+		resetFassungenPopoverStore();
 		const data = elTrigger.dataset;
 		FassungenPopoverStore.elTrigger = elTrigger;
 		FassungenPopoverStore.title = data.title;
@@ -219,13 +199,61 @@
 		FassungenPopoverStore.reading_info = data.reading_info;
 	};
 	const resetFassungenPopoverStore = () => {
-		console.log('resetting popover');
 		FassungenPopoverStore.elTrigger = undefined;
 		FassungenPopoverStore.title = '';
 		FassungenPopoverStore.dreissiger = '';
 		FassungenPopoverStore.verse = '';
 		FassungenPopoverStore.structure_info = '';
 		FassungenPopoverStore.reading_info = '';
+	};
+
+	// Event Listeners for Popovers
+	let timeoutonMouseLeaveTrigger = $state();
+	let timeoutonMouseLeavePopup = $state();
+	let ignoreLeave = $state(false);
+
+	// const popover = document.querySelector('fassungen_popover');
+	const clearTimeouts = () => {
+		clearTimeout(timeoutonMouseLeaveTrigger);
+		clearTimeout(timeoutonMouseLeavePopup);
+	};
+
+	const onClickTrigger = (ev) => {
+		ignoreLeave = true;
+		fillFassungenPopoverStore(ev.target);
+	};
+	const onMouseEnterTrigger = (ev) => {
+		clearTimeouts(); // prevents diappearing popover when user hovers multiple triggers before hovering the popover
+		fillFassungenPopoverStore(ev.target);
+	};
+	const onMouseLeaveTrigger = () => {
+		if (!ignoreLeave) {
+			timeoutonMouseLeaveTrigger = setTimeout(resetFassungenPopoverStore, 500);
+		}
+	};
+	const onMouseEnterPopover = () => {
+		clearTimeouts();
+	};
+	const onMouseLeavePopover = () => {
+		if (!ignoreLeave) {
+			timeoutonMouseLeavePopup = setTimeout(resetFassungenPopoverStore, 500);
+		}
+	};
+
+	const addTriggerListeners = () => {
+		removeTriggerListeners();
+		document.querySelectorAll('.anchor').forEach((el) => {
+			el.addEventListener('mouseenter', onMouseEnterTrigger, false);
+			el.addEventListener('mouseleave', onMouseLeaveTrigger, false);
+			el.addEventListener('click', onClickTrigger, false);
+		});
+	};
+	const removeTriggerListeners = () => {
+		document.querySelectorAll(`.anchor`).forEach((el) => {
+			el.removeEventListener('mouseenter', onMouseEnterTrigger);
+			el.removeEventListener('mouseleave', onMouseLeaveTrigger);
+			el.removeEventListener('click', onClickTrigger);
+		});
 	};
 
 	$effect(() => {
@@ -240,7 +268,7 @@
 <button
 	class="bg-primary-500 rounded-md p-5 m-5"
 	onclick={() => {
-		addEventListeners();
+		addTriggerListeners();
 	}}>ADD Listeners</button
 >
 <section id="sectionFassungen" class="w-full" style="--verse-width: {verseWidth}ch">
@@ -296,13 +324,19 @@
 	<!-- Apparat Popover -->
 	{#if FassungenPopoverStore.elTrigger}
 		<FassungenPopover
-			{resetFassungenPopoverStore}
+			reset={() => {
+				resetFassungenPopoverStore();
+				clearTimeouts();
+				ignoreLeave = false;
+			}}
 			elTrigger={FassungenPopoverStore.elTrigger}
 			dreissiger={FassungenPopoverStore.dreissiger}
 			verse={FassungenPopoverStore.verse}
 			title={FassungenPopoverStore.title}
 			structure_info={FassungenPopoverStore.structure_info}
 			reading_info={FassungenPopoverStore.reading_info}
+			onMouseEnter={onMouseEnterPopover}
+			onMouseLeave={onMouseLeavePopover}
 		/>
 	{/if}
 
