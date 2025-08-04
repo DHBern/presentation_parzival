@@ -4,7 +4,15 @@
 	import { computePosition, offset, flip, shift } from '@floating-ui/dom';
 	import { autoPlacement } from '@floating-ui/dom';
 
-	let { resetFassungenPopoverStore, elTrigger, dreissiger, verse, title, structure_info, reading_info } = $props();
+	let {
+		resetFassungenPopoverStore,
+		elTrigger,
+		dreissiger,
+		verse,
+		title,
+		structure_info,
+		reading_info
+	} = $props();
 	let elPopover = $state();
 
 	function populateAnchorTags(string) {
@@ -46,7 +54,7 @@
 <button
 	class="close_button fixed top-0 left-0 w-full h-full"
 	onclick={resetFassungenPopoverStore}
-    aria-label="Apparat schliessen"
+	aria-label="Apparat schliessen"
 ></button>
 <!-- class="absolute z-10 rounded-md border-2 border-[#94ffcf] border-white bg-[#e0fff1] p-5" -->
 <div
@@ -68,12 +76,13 @@
 
 <style lang="postcss">
 	@reference "tailwindcss";
+	@reference "@skeletonlabs/skeleton";
 	/* @import '/parzival.css' */
 	/* @reference "parzival" */
 	.fassungen_popover :global(a) {
-		@apply text-orange-600 font-bold;
+		@apply text-primary-800 font-bold;
 	}
-    .close_button {
-        @apply hover:cursor-default;
-    }
+	.close_button {
+		@apply hover:cursor-default;
+	}
 </style>

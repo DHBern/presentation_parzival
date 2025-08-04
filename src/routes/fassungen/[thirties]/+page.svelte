@@ -5,7 +5,7 @@
 	import { NUMBER_OF_PAGES } from '$lib/constants';
 	import { Switch } from '@skeletonlabs/skeleton-svelte';
 	import { page } from '$app/state';
-	import { onMount } from 'svelte';
+	import { onMount, tick } from 'svelte';
 	import { goto } from '$app/navigation';
 	import FassungenPopover from './FassungenPopover.svelte';
 
@@ -66,14 +66,14 @@
 								if (parts.length > 1) {
 									const beforeDot = parts[0] + '.';
 									const afterDot = parts[1];
-									verseNode.innerHTML = `${beforeDot}<a 
-									class="anchor" 
+									verseNode.innerHTML = `${beforeDot}<a
+									class="anchor"
 									href="#verse-${verse}"
 									data-structure_info="${structure_info ? structure_info : ''}"
 									data-reading_info="${reading_info ? reading_info : ''}"
 									data-dreissiger=${parts[0]}
 									data-verse=${verse.replace(/^0+/, '')}
-									data-title="${composureTitlesByColumn[column] + ' ' + beforeDot + verse.replace(/^0+/, '')}" 
+									data-title="${composureTitlesByColumn[column] + ' ' + beforeDot + verse.replace(/^0+/, '')}"
 									>${afterDot}</a>`;
 								} else {
 									//!! This does not seem to work (LAB)
@@ -147,6 +147,9 @@
 					this.fetchPage(page + 1);
 				}
 			}
+			tick().then(() => {
+				addEventListeners();
+			});
 			return Promise.resolve();
 		};
 	}
@@ -154,11 +157,6 @@
 	let localPages = new localPageClass();
 	$effect(() => {
 		localPages.fetchPage(Number(data.thirties));
-		setTimeout(addEventListeners, 1000);
-		setTimeout(addEventListeners, 2000);
-		setTimeout(addEventListeners, 3000);
-		setTimeout(addEventListeners, 5000);
-		setTimeout(addEventListeners, 10000);
 	});
 	let synchro = $state(true);
 	let windowWidth = $state(0);
@@ -174,11 +172,6 @@
 	});
 	onMount(() => {
 		styles = getComputedStyle(document.documentElement);
-		setTimeout(addEventListeners, 1000);
-		setTimeout(addEventListeners, 2000);
-		setTimeout(addEventListeners, 3000);
-		setTimeout(addEventListeners, 5000);
-		setTimeout(addEventListeners, 10000);
 	});
 
 	// Event Listeners for Popovers
