@@ -258,6 +258,11 @@
 			el.removeEventListener('click', onClickTrigger);
 		});
 	};
+	const closePopupOnInteraction = () => {
+		resetFassungenPopoverStore();
+		clearTimeouts();
+		ignoreLeave = false;
+	};
 
 	$effect(() => {
 		if (!mobileBreakpoint) {
@@ -321,25 +326,22 @@
 	<!-- Apparat Popover -->
 	{#if FassungenPopoverStore.elTrigger}
 		<FassungenPopover
-			reset={() => {
-				resetFassungenPopoverStore();
-				clearTimeouts();
-				ignoreLeave = false;
-			}}
+			resetPopup={closePopupOnInteraction}
+			onMouseEnter={onMouseEnterPopover}
+			onMouseLeave={onMouseLeavePopover}
 			elTrigger={FassungenPopoverStore.elTrigger}
 			dreissiger={FassungenPopoverStore.dreissiger}
 			verse={FassungenPopoverStore.verse}
 			title={FassungenPopoverStore.title}
 			structure_info={FassungenPopoverStore.structure_info}
 			reading_info={FassungenPopoverStore.reading_info}
-			onMouseEnter={onMouseEnterPopover}
-			onMouseLeave={onMouseLeavePopover}
 		/>
 	{/if}
 
 	<!-- Fassungen Content -->
 	{#if synchro}
 		<FassungenSyncContent
+			resetPopup={closePopupOnInteraction}
 			content={localPages.pages}
 			distributions={localPages.distributions}
 			titles={composureTitles}
@@ -352,10 +354,11 @@
 					{#if fassung.length >= 2}
 						<!-- when at least 2 pages are loaded, the one for the currect thirties should be loaded aswell  -->
 						<FassungenContent
+							resetPopup={closePopupOnInteraction}
 							pages={fassung}
 							distribution={localPages.distributions[i]}
-							{nextPrevButton}
 							title={composureTitles[i]}
+							{nextPrevButton}
 						/>
 					{/if}
 				</div>

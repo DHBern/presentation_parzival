@@ -5,7 +5,7 @@
 	import { autoPlacement } from '@floating-ui/dom';
 
 	let {
-		reset,
+		resetPopup,
 		elTrigger,
 		dreissiger,
 		verse,
@@ -46,7 +46,7 @@
 
 	const closeOnEscape = (ev) => {
 		console.log(ev.code);
-		if (ev.code == 'Escape') reset();
+		if (ev.code == 'Escape') resetPopup();
 	};
 
 	onMount(() => {
@@ -79,7 +79,7 @@
 		<h1 class="h6">{title}</h1>
 		<button
 			class="close_button cursor-pointer"
-			onclick={reset}
+			onclick={resetPopup}
 			aria-label="Apparat schliessen"
 			tabindex="0"><i class="fa-solid fa-xmark"></i></button
 		>
