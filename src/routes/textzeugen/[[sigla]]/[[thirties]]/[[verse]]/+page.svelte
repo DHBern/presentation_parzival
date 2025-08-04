@@ -160,7 +160,8 @@
 						thumbInactive="bg-surface-800"
 						controlInactive="bg-surface-100"
 						name="synchro"
-						checked={synchro}>Synchrones scrollen</Switch
+						checked={synchro}
+						onCheckedChange={(e) => (synchro = e.checked)}>Synchrones scrollen</Switch
 					>
 				</div>
 			{/if}
