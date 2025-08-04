@@ -50,7 +50,7 @@
 				const reducer = (acc, object) => {
 					for (const [key, value] of Object.entries(object)) {
 						if (value) {
-							acc[key] = (acc[key] ?? '') + value.replace('"', '\"') + '<br/>';
+							acc[key] = (acc[key] ?? '') + value.replace('"', `&quot;`) + '<br/>';
 						}
 					}
 					return acc;
