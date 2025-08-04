@@ -1,5 +1,6 @@
 <script>
-	
+	import H2Hoverable from '$lib/components/H2Hoverable.svelte';
+
 	/** @type {{data: import('./$types').PageData}} */
 	let { data } = $props();
 	let { sigla } = $derived(data);
@@ -7,8 +8,10 @@
 
 <div class="container mx-auto typography">
 	<h1 class="h1">Parzival-Handschriften und Fragmente zu den Editionsproben</h1>
-	{#each [...sigla.codices, ...sigla.fragments] as { "info-h1": sigil, "info-h2": loc, info }}
-		<h2>{@html sigil}</h2>
+	{#each [...sigla.codices, ...sigla.fragments] as { "handle": handle, "sigil": sigil, "info-h1": info_h2, "info-h2": loc, info }}
+		<!-- set the id of h2 (for fraction use handles, for codices use case-sensitive sigils) -->
+		{@const id = handle[0] === 'f' ? handle : sigil}
+		<H2Hoverable {id}>{@html info_h2}</H2Hoverable>
 		<div class="[&_ul]:!list-none [&_ul]:!pl-0 [&_li]:font-bold">
 			{@html loc}
 		</div>
@@ -16,7 +19,7 @@
 			<p>{@html info}</p>
 		{/if}
 	{/each}
-	<h2>Zu dieser Liste der Handschriften vergleiche man:</h2>
+	<H2Hoverable id="Referenzen">Zu dieser Liste der Handschriften vergleiche man:</H2Hoverable>
 	<ul>
 		<li>
 			Günter Kochendörfer/ Bernd Schirok: Maschinelle Textrekonstruktion. Theoretische Grundlegung,
