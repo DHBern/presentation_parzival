@@ -61,7 +61,7 @@
 	</div>
 </div>
 <div
-	class="max-h-[70vh] overflow-y-auto preset-filled-surface-500 rounded-xl"
+	class="max-h-[70vh] overflow-y-auto bg-gray-100 dark:preset-filled-surface-500 rounded-xl"
 	bind:this={scrollContainer}
 	onscroll={(/** @type {{ target: { scrollTop: any; }; }} */ o) => {
 		scrolltop = o?.target?.scrollTop;

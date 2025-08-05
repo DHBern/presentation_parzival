@@ -19,7 +19,8 @@
 
 	let additional = $state('');
 
-	let thirtiesVal = $state(Number(coordinates[0]));
+	let thirtiesVal = $derived(Number(coordinates[0]));
+	let verseVal = $derived(Number(coordinates[1]));
 
 	function handleInput(/** @type {Event} */ e) {
 		if (e.target instanceof HTMLInputElement) {
@@ -75,7 +76,7 @@
 			max={thirtiesVal === 257 ? 32 : 30}
 			oninput={handleInput}
 			bind:this={verse}
-			value={Number(coordinates[1])}
+			value={verseVal}
 		/>-<input type="text" placeholder="Zusatz" class="input max-w-20" bind:value={additional} />
 		<button
 			aria-label="suchen"

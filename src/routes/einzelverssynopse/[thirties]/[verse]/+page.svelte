@@ -3,18 +3,54 @@
 	import VerseSelector from '$lib/components/VerseSelector.svelte';
 	import { base } from '$app/paths';
 	import { NUMBER_OF_PAGES } from '$lib/constants';
+	import { goto } from '$app/navigation';
+	import { onMount } from 'svelte';
 
 	/** @type {{data: import('./$types').PageData}} */
 	let { data } = $props();
 
 	let { thirties, verse, metadata, publisherData, loss } = $derived(data);
+	// remove leading zeros in verse
+	let verseNoZero = $derived(verse.slice(0, -2) + Number(verse.slice(-2)));
 	let hyparchetypesSlider = $state(false);
+
+	//! This is a temporary fix (not all thirties have exactly 30 verses!)
+	let highestVerseNumber = $derived(Number(thirties) === 257 ? 32 : 30);
+	let highestVerseNumberPrev = $derived(Number(thirties) === 258 ? 32 : 30);
+
+	let prevVerseURL = $derived(
+		`${base}/einzelverssynopse/${
+			parseInt(verse) === 1 ? parseInt(thirties) - 1 : thirties
+		}/${parseInt(verse) === 1 ? highestVerseNumberPrev : parseInt(verse) - 1}`
+	);
+
+	let nextVerseURL = $derived(
+		`${base}/einzelverssynopse/${
+			parseInt(verse) >= highestVerseNumber ? parseInt(thirties) + 1 : thirties
+		}/${parseInt(verse) >= highestVerseNumber ? 1 : parseInt(verse) + 1}`
+	);
+
+	function handleKeyDown(ev) {
+		if (ev.key === 'ArrowRight') {
+			goto(nextVerseURL);
+		}
+		if (ev.key === 'ArrowLeft') {
+			goto(prevVerseURL);
+		}
+	}
+
+	onMount(() => {
+		window.addEventListener('keydown', handleKeyDown);
+		return () => {
+			window.removeEventListener('keydown', handleKeyDown);
+		};
+	});
 </script>
 
 <div class="container mx-auto p-4 flex flex-wrap justify-between gap-9">
-	<h1 class="h1 w-full">Verssynopse zu {thirties}.{verse}</h1>
+	<h1 class="h1 w-full">Verssynopse zu {thirties}.{verseNoZero}</h1>
 	<div class="tei-content">
-		<dl class="grid grid-cols-[auto_1fr] justify-between h-fit mb-4 w-fit font-mono">
+		<dl class="grid grid-cols-[auto_1fr] justify-between h-fit mb-4 w-fit">
 			<dt class="font-bold font-heading-token pr-4">Handschrift</dt>
 			<dd class="font-bold font-heading-token border-l-2 border-current pl-4">Wortlaut</dd>
 			{#each metadata.hyparchetypes as archetype (archetype.handle)}
@@ -44,38 +80,30 @@
 		</dl>
 		{#if loss.length > 0}
 			<p class="max-w-sm">
-				Der Vers {thirties}.{verse} fehlt in folgenden Handschriften aufgrund eines umfangreichen Textausfalls
-				(Fragmente werden für diese Auflistung nicht berücksichtigt):
+				Der Vers {thirties}.{verseNoZero} fehlt in folgenden Handschriften aufgrund eines umfangreichen
+				Textausfalls (Fragmente werden für diese Auflistung nicht berücksichtigt):
 				<b>{loss.join(', ')}</b>
 			</p>
 		{/if}
 	</div>
 	<section>
-		<Switch name="hyparchetypes-slider" active="bg-primary-500" bind:checked={hyparchetypesSlider}>
-			Fassungsverse ein-/ausblenden und nach diesen sortieren
+		<Switch
+			name="hyparchetypes-slider"
+			thumbInactive="bg-surface-800"
+			controlInactive="bg-surface-100"
+			checked={hyparchetypesSlider}
+			onCheckedChange={(e) => (hyparchetypesSlider = e.checked)}
+		>
+			Fassungstexte ein-/ausblenden und nach Fassungen sortieren
 		</Switch>
 		<h2 class="h2 my-7">Zu Vers springen:</h2>
-		<VerseSelector targetPath="/einzelverssynopse" />
+		<VerseSelector targetPath="/einzelverssynopse" coordinates={[thirties, verse]} />
 		<div class="flex justify-between">
 			{#if !(parseInt(thirties) === 1 && parseInt(verse) === 1)}
-				<a
-					class="anchor"
-					href="{base}/einzelverssynopse/{parseInt(verse) === 1
-						? parseInt(thirties) - 1
-						: thirties}/{parseInt(verse) === 1 ? 30 : parseInt(verse) - 1}"
-				>
-					vorheriger Vers
-				</a>
+				<a class="anchor" href={prevVerseURL}> vorheriger Vers </a>
 			{/if}
-			{#if !(parseInt(thirties) === NUMBER_OF_PAGES && parseInt(verse) >= 30)}
-				<a
-					class="anchor"
-					href="{base}/einzelverssynopse/{parseInt(verse) >= 30
-						? parseInt(thirties) + 1
-						: thirties}/{parseInt(verse) >= 30 ? 1 : parseInt(verse) + 1}"
-				>
-					nächster Vers
-				</a>
+			{#if !(parseInt(thirties) === NUMBER_OF_PAGES && parseInt(verse) >= highestVerseNumber)}
+				<a class="anchor" href={nextVerseURL}> nächster Vers </a>
 			{/if}
 		</div>
 	</section>
