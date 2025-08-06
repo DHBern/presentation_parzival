@@ -7,6 +7,7 @@
 	import { page } from '$app/state';
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
+	import handleFromSigla from '$lib/functions/handleFromSigla';
 
 	/** @type {{data: import('./$types').PageData}} */
 	let { data } = $props();
@@ -72,9 +73,18 @@
 						}
 					}
 				});
-				return Array.from(lines)
-					.map((line) => line.outerHTML)
-					.join('');
+
+				return {
+					preparedHTML: Array.from(lines)
+						.map((line) => line.outerHTML)
+						.join(''),
+					preparedDistribution: info.distribution.replace(
+						/<a\s+data-thirties="([0-9]+)">([^<]+)<\/a>/g,
+						(_match, p1, p2) => {
+							return `<a href="${base}/textzeugen/${handleFromSigla(p2)}/${p1}">${p2}</a>`;
+						}
+					)
+				};
 			};
 			let labels = ['d', 'm', 'G', 'T'];
 			// if the page is not already loaded
@@ -84,9 +94,9 @@
 				if (page > 1) {
 					content = await fetch(`${base}/fassungen/data/${page - 1}`).then((r) => r.json());
 					labels.forEach((label, index) => {
-						let preparedHTML = prepareHTML(content[index], label);
+						const { preparedHTML, preparedDistribution } = prepareHTML(content[index], label);
 						this.pages[index].push([page - 1, preparedHTML]);
-						this.distributions[index][page - 1] = content[index].distribution;
+						this.distributions[index][page - 1] = preparedDistribution;
 					});
 					this.thirties.push(page - 1);
 				}
@@ -94,9 +104,9 @@
 				if (page <= NUMBER_OF_PAGES) {
 					content = await fetch(`${base}/fassungen/data/${page}`).then((r) => r.json());
 					labels.forEach((label, index) => {
-						let preparedHTML = prepareHTML(content[index], label);
+						const { preparedHTML, preparedDistribution } = prepareHTML(content[index], label);
 						this.pages[index].push([page, preparedHTML]);
-						this.distributions[index][page] = content[index].distribution;
+						this.distributions[index][page] = preparedDistribution;
 					});
 					this.thirties.push(page);
 				}
@@ -104,9 +114,9 @@
 				if (page !== NUMBER_OF_PAGES) {
 					content = await fetch(`${base}/fassungen/data/${page + 1}`).then((r) => r.json());
 					labels.forEach((label, index) => {
-						let preparedHTML = prepareHTML(content[index], label);
+						const { preparedHTML, preparedDistribution } = prepareHTML(content[index], label);
 						this.pages[index].push([page + 1, preparedHTML]);
-						this.distributions[index][page + 1] = content[index].distribution;
+						this.distributions[index][page + 1] = preparedDistribution;
 					});
 					this.thirties.push(page + 1);
 				}
@@ -117,17 +127,17 @@
 				if (page < this.thirties[0] && !this.thirties.includes(page)) {
 					let content = await fetch(`${base}/fassungen/data/${page}`).then((r) => r.json());
 					labels.forEach((label, index) => {
-						let preparedHTML = prepareHTML(content[index], label);
+						const { preparedHTML, preparedDistribution } = prepareHTML(content[index], label);
 						this.pages[index].unshift([page, preparedHTML]);
-						this.distributions[index][page] = content[index].distribution;
+						this.distributions[index][page] = preparedDistribution;
 					});
 					this.thirties.unshift(page);
 				} else if (page > this.thirties[this.thirties.length - 1]) {
 					let content = await fetch(`${base}/fassungen/data/${page}`).then((r) => r.json());
 					labels.forEach((label, index) => {
-						let preparedHTML = prepareHTML(content[index], label);
+						const { preparedHTML, preparedDistribution } = prepareHTML(content[index], label);
 						this.pages[index].push([page, preparedHTML]);
-						this.distributions[index][page] = content[index].distribution;
+						this.distributions[index][page] = preparedDistribution;
 					});
 					this.thirties.push(page);
 				} else if (page === this.thirties[0] && page > 1) {
