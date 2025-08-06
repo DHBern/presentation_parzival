@@ -73,22 +73,17 @@
 						}
 					}
 				});
-				const distribution = parser.parseFromString(info.distribution, 'text/html');
-				const distriLinks = distribution.querySelectorAll('a');
-				// add href to each link with this pattern: /textzeugen/{column}/{thirties}
-				distriLinks.forEach((link) => {
-					const verse = link.getAttribute('data-thirties');
-					const sigil = link.innerHTML;
-					if (verse) {
-						link.setAttribute('href', `${base}/textzeugen/${handleFromSigla(sigil)}/${verse}`);
-					}
-				});
 
 				return {
 					preparedHTML: Array.from(lines)
 						.map((line) => line.outerHTML)
 						.join(''),
-					preparedDistribution: distribution.body.innerHTML
+					preparedDistribution: info.distribution.replace(
+						/<a\s+data-thirties="([0-9]+)">([^<]+)<\/a>/g,
+						(_match, p1, p2) => {
+							return `<a href="${base}/textzeugen/${handleFromSigla(p2)}/${p1}">${p2}</a>`;
+						}
+					)
 				};
 			};
 			let labels = ['d', 'm', 'G', 'T'];
