@@ -7,15 +7,17 @@
 </script>
 
 <script>
-	/** @type {{iiif:  Object }} */
+	/** @type {{iiif:  {manifest: Object, overlay: string} }} */
 	let { iiif } = $props();
 	const uuid = crypto.randomUUID();
 	/**
 	 * @type {import('openseadragon').Viewer}
 	 */
 	let viewer;
+	/** @type {HTMLImageElement | null} */
+	let overlayEl = $state(null);
 
-	const generateViewer = (/** @type {Element} */ node, /** @type {Object} */ iiif) => {
+	const generateViewer = (/** @type {Element} */ node, /** @type {Object} */ manifest) => {
 		/** @type {ResizeObserver}*/
 		let observer;
 		const createViewer = () => {
@@ -82,14 +84,32 @@
 					}
 				}
 			});
+
+			const syncOverlay = () => {
+				const item = viewer?.world.getItemAt(0);
+				if (!item || !iiif?.overlay) return;
+				const bounds = item.getBounds(); // viewport coords of the image
+				if (viewer.overlaysContainer.children.length === 0) {
+					viewer.addOverlay(overlayEl, bounds, OpenSeadragon.Placement.TOP_LEFT);
+				} else {
+					viewer.updateOverlay(overlayEl, bounds, OpenSeadragon.Placement.TOP_LEFT);
+				}
+			};
+
+			// Keep overlay aligned
+			viewer.addHandler('open', syncOverlay);
+			viewer.addHandler('animation', syncOverlay);
+			viewer.addHandler('rotate', syncOverlay);
+			viewer.addHandler('resize', syncOverlay);
+
 			observer = new ResizeObserver((_entries) => {
 				setTimeout(() => {
 					viewer.viewport.goHome(false);
 				}, 50);
 			});
 			observer.observe(node);
-			if (!iiif) return;
-			viewer.open(iiif);
+			if (!manifest) return;
+			viewer.open(manifest);
 		};
 		if (!OpenSeadragon) {
 			import('openseadragon').then((r) => {
@@ -106,16 +126,29 @@
 			 */
 			update(iiif) {
 				if (!viewer) return;
-				viewer.open(iiif);
+				viewer.open($state.snapshot(iiif));
 			},
 			destroy() {
 				viewer.destroy();
 				if (observer) {
 					observer.disconnect();
 				}
+				viewer.removeAllHandlers('open');
+				viewer.removeAllHandlers('animation');
+				viewer.removeAllHandlers('rotate');
+				viewer.removeAllHandlers('resize');
 			}
 		};
 	};
 </script>
 
-<div id="viewer-{uuid}" class="w-full h-full" use:generateViewer={$state.snapshot(iiif)}></div>
+{#await iiif.manifest then imageObject}
+	<div id={'viewer-' + uuid} class="w-full h-full" use:generateViewer={imageObject}></div>
+{/await}
+<img
+	id={'overlay-' + uuid}
+	class="max-w-none max-h-none"
+	src={iiif.overlay}
+	alt="overlay"
+	bind:this={overlayEl}
+/>

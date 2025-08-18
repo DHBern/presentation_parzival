@@ -46,7 +46,7 @@ export async function load({ fetch, params }) {
 
 	const meta = sigla?.map(async (witnes) => {
 		const data = await fetch(`${api}/json/metadata-ms-page/${witnes}.json`).then((r) => r.json());
-		/**  @type {{ iiif: string | Promise<any>, id: string, tpData: Promise<{content: string}> }[]} */
+		/**  @type {{ iiif: string | Promise<any>, id: string, tpData: Promise<{content: string}>, overlay: string }[]} */
 		let returnObjects = [];
 		if (thirties) {
 			const selectedIndex = data[witnes].findIndex(
@@ -103,10 +103,13 @@ export async function load({ fetch, params }) {
 						return r.json();
 					}
 				);
+				returnObject.overlay = `${api}/svg/${returnObject.id}.svg`;
 			}
 			return returnObject;
 		});
-		return returnObjects.length ? returnObjects : [{ tpData: false, iiif: false, page: false }];
+		return returnObjects.length
+			? returnObjects
+			: [{ tpData: false, iiif: false, page: false, overlay: false }];
 	});
 
 	return {
