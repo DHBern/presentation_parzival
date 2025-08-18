@@ -103,7 +103,11 @@ export async function load({ fetch, params }) {
 						return r.json();
 					}
 				);
-				returnObject.overlay = `${api}/svg/${returnObject.id}.svg`;
+				if (witnes.startsWith('fr')) {
+					returnObject.overlay = `${api}/svg/${returnObject.id.replace(witnes, `${witnes.replace('fr', '').padStart(3, '0')}_`)}.svg`;
+				} else {
+					returnObject.overlay = `${api}/svg/${returnObject.id}.svg`;
+				}
 			}
 			return returnObject;
 		});

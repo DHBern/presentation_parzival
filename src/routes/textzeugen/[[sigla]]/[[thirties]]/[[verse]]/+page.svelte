@@ -120,7 +120,9 @@
 				tpData: fetch(`${base}/textzeugen/data/${sigla}/${id}`).then((r) => r.json()),
 				// using id.toUpperCase() to match the iiif file naming convention - this might change in the future
 				iiif: fetch(`${iiif}/${id}.jpf/info.json`).then((r) => r.json()),
-				overlay: `${api}/svg/${id}.svg`
+				overlay: !sigla.startsWith('fr')
+					? `${api}/svg/${id}.svg`
+					: `${api}/svg/${id.replace(sigla, `${sigla.replace('fr', '').padStart(3, '0')}_`)}.svg`
 			};
 		};
 
