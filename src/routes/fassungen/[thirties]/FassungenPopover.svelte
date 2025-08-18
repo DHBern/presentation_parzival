@@ -45,7 +45,6 @@
 	};
 
 	const closeOnEscape = (ev) => {
-		console.log(ev.code);
 		if (ev.code == 'Escape') resetPopup();
 	};
 
