@@ -82,7 +82,6 @@
 									data-title="${composureTitlesByColumn[column] + ' ' + beforeDot + verse.replace(/^0+/, '')}"
 									>${afterDot}</a>`;
 								} else {
-									//!! This does not seem to work (LAB)
 									verseNode.innerHTML = `<a class="anchor" href="#verse-${verse}">${verseNode.innerHTML}</a>`;
 								}
 							}
