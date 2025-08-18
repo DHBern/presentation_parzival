@@ -45,13 +45,10 @@
 	};
 
 	const closeOnEscape = (ev) => {
-		console.log(ev.code);
 		if (ev.code == 'Escape') resetPopup();
 	};
 
 	onMount(() => {
-		// close popup when Esc is pressed
-		window.addEventListener('keydown', closeOnEscape);
 		// Cleanup
 		const cleanup = autoUpdate(
 			elTrigger,
@@ -59,11 +56,12 @@
 			updateFunctionFloatingPopover(elTrigger, elPopover)
 		);
 		return () => {
-			window.removeEventListener('keydown', closeOnEscape);
 			cleanup();
 		};
 	});
 </script>
+
+<svelte:window onkeydown={closeOnEscape} />
 
 <!-- class="absolute z-10 rounded-md border-2 border-[#94ffcf] border-white bg-[#e0fff1] p-5" -->
 <div
