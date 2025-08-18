@@ -17,12 +17,6 @@
 	} = $props();
 	let elPopover = $state();
 
-	function populateAnchorTags(string) {
-		return string.replace(/<a>(.*?)<\/a>/g, (match, p1) => {
-			return `<a href="/textzeugen/${p1.toLowerCase()}/${dreissiger}/${verse}">${p1}</a>`;
-		});
-	}
-
 	function updateFunctionFloatingPopover(elMark, elPopup) {
 		return () => {
 			computePosition(elMark, elPopup, {
@@ -85,11 +79,11 @@
 	<div class="p-4 pt-6">
 		{#if structure_info}
 			<h2 class="h5">Apparat 1</h2>
-			<p class="mb-2">{@html populateAnchorTags(structure_info)}</p>
+			<p class="mb-2">{@html structure_info}</p>
 		{/if}
 		{#if reading_info}
 			<h2 class="h5">Apparat 2</h2>
-			<p>{@html populateAnchorTags(reading_info)}</p>
+			<p>{@html reading_info}</p>
 		{/if}
 	</div>
 </div>
