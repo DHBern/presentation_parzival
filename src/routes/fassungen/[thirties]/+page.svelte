@@ -225,7 +225,6 @@
 		FassungenPopoverStore.reading_info = '';
 	};
 
-	// const popover = document.querySelector('fassungen_popover');
 	const clearTimeouts = () => {
 		clearTimeout(timeoutonMouseLeaveTrigger);
 		clearTimeout(timeoutonMouseLeavePopup);
