@@ -234,7 +234,7 @@
 		fillFassungenPopoverStore(ev.target, false);
 	};
 	const onMouseEnterTrigger = (ev) => {
-		clearTimeouts(); // prevents diappearing popover when user hovers multiple triggers before hovering the popover
+		clearTimeouts();
 		fillFassungenPopoverStore(ev.target, ignoreLeave);
 	};
 	const onMouseLeaveTrigger = () => {
