@@ -22,7 +22,7 @@
 			computePosition(elMark, elPopup, {
 				middleware: [
 					autoPlacement({ allowedPlacements: ['top', 'bottom'] }),
-					offset(15),
+					offset(1),
 					flip(),
 					shift()
 				],
