@@ -9,6 +9,7 @@
 	import { goto } from '$app/navigation';
 	import ApparatPopover from './ApparatPopover.svelte';
 	import handleFromSigla from '$lib/functions/handleFromSigla';
+	import FassungskommentarModal from './FassungskommentarModal.svelte';
 
 	/** @type {{data: import('./$types').PageData}} */
 	let { data } = $props();
@@ -191,6 +192,29 @@
 	// --------------------------------------
 	// Fassungskommenatre
 	// --------------------------------------
+	// Store containing the content of the selected popover
+	let FassKommStore = $state({
+		dreissiger: '',
+		verse: '',
+		comment: ''
+	});
+
+	const fillFassKommStore = (elTrigger, ignore = false) => {
+		if (!ignore) {
+			resetFassKommStore();
+			const data = elTrigger.dataset;
+			FassKommStore.elTrigger = elTrigger;
+			FassKommStore.dreissiger = data.dreissiger;
+			FassKommStore.verse = data.verse;
+			FassKommStore.comment = data.comment;
+		}
+	};
+	const resetFassKommStore = () => {
+		FassKommStore.dreissiger = '';
+		FassKommStore.verse = '';
+		FassKommStore.comment = '';
+	};
+
 	// --------------------------------------
 	// Apparate
 	// --------------------------------------
@@ -344,14 +368,14 @@
 		</form>
 	</div>
 
-	<!-- Apparat Popover -->
-	{#if FassungenPopoverStore.elTrigger}
-		<FassungenPopover
-			resetPopup={closePopupOnInteraction}
-			onMouseEnter={onMouseEnterPopover}
-			onMouseLeave={onMouseLeavePopover}
-			elTrigger={FassungenPopoverStore.elTrigger}
-			dreissiger={FassungenPopoverStore.dreissiger}
+	<!-- Modal for Fassungskommentar -->
+	{#if FassKommStore.elTrigger}
+		<FassungskommentarModal
+			dreissiger={FassKommStore.dreissiger}
+			verse={FassKommStore.verse}
+			comment={FassKommStore.comment}
+		/>
+	{/if}
 
 	<!-- Popover for Apparat -->
 	{#if ApparatStore.elTrigger}
