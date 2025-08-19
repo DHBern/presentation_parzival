@@ -7,7 +7,7 @@
 	import { page } from '$app/state';
 	import { onMount, tick } from 'svelte';
 	import { goto } from '$app/navigation';
-	import FassungenPopover from './FassungenPopover.svelte';
+	import ApparatPopover from './ApparatPopover.svelte';
 	import handleFromSigla from '$lib/functions/handleFromSigla';
 
 	/** @type {{data: import('./$types').PageData}} */
@@ -162,7 +162,7 @@
 				}
 			}
 			tick().then(() => {
-				addTriggerListeners();
+				addApparatTriggerListeners();
 			});
 			return Promise.resolve();
 		};
@@ -188,8 +188,14 @@
 		styles = getComputedStyle(document.documentElement);
 	});
 
-	// PopoverStore containing the content of the selected popover
-	let FassungenPopoverStore = $state({
+	// --------------------------------------
+	// Fassungskommenatre
+	// --------------------------------------
+	// --------------------------------------
+	// Apparate
+	// --------------------------------------
+	// ApparatStrore contains the content of the selected popover
+	let ApparatStore = $state({
 		elTrigger: undefined,
 		dreissiger: '',
 		verse: '',
@@ -199,75 +205,75 @@
 	});
 
 	// Event Listeners for Popovers
-	let timeoutonMouseLeaveTrigger = $state();
+	let timeoutonMouseLeaveApparatTrigger = $state();
 	let timeoutonMouseLeavePopup = $state();
 	let ignoreLeave = $state(false);
 
-	const fillFassungenPopoverStore = (elTrigger, ignore = false) => {
+	const fillApparatStore = (elTrigger, ignore = false) => {
 		if (!ignore) {
-			resetFassungenPopoverStore();
+			resetApparatStore();
 			const data = elTrigger.dataset;
-			FassungenPopoverStore.elTrigger = elTrigger;
-			FassungenPopoverStore.title = data.title;
-			FassungenPopoverStore.dreissiger = data.dreissiger;
-			FassungenPopoverStore.verse = data.verse;
-			FassungenPopoverStore.structure_info = data.structure_info;
-			FassungenPopoverStore.reading_info = data.reading_info;
+			ApparatStore.elTrigger = elTrigger;
+			ApparatStore.title = data.title;
+			ApparatStore.dreissiger = data.dreissiger;
+			ApparatStore.verse = data.verse;
+			ApparatStore.structure_info = data.structure_info;
+			ApparatStore.reading_info = data.reading_info;
 		}
 	};
-	const resetFassungenPopoverStore = () => {
-		FassungenPopoverStore.elTrigger = undefined;
-		FassungenPopoverStore.title = '';
-		FassungenPopoverStore.dreissiger = '';
-		FassungenPopoverStore.verse = '';
-		FassungenPopoverStore.structure_info = '';
-		FassungenPopoverStore.reading_info = '';
+	const resetApparatStore = () => {
+		ApparatStore.elTrigger = undefined;
+		ApparatStore.title = '';
+		ApparatStore.dreissiger = '';
+		ApparatStore.verse = '';
+		ApparatStore.structure_info = '';
+		ApparatStore.reading_info = '';
 	};
 
 	const clearTimeouts = () => {
-		clearTimeout(timeoutonMouseLeaveTrigger);
+		clearTimeout(timeoutonMouseLeaveApparatTrigger);
 		clearTimeout(timeoutonMouseLeavePopup);
 	};
 
-	const onClickTrigger = (ev) => {
+	const onClickApparatTrigger = (ev) => {
 		ignoreLeave = true;
-		fillFassungenPopoverStore(ev.target, false);
+		fillApparatStore(ev.target, false);
 	};
-	const onMouseEnterTrigger = (ev) => {
+	const onMouseEnterApparatTrigger = (ev) => {
 		clearTimeouts();
-		fillFassungenPopoverStore(ev.target, ignoreLeave);
+		fillApparatStore(ev.target, ignoreLeave);
 	};
-	const onMouseLeaveTrigger = () => {
+	const onMouseLeaveApparatTrigger = () => {
 		if (!ignoreLeave) {
-			timeoutonMouseLeaveTrigger = setTimeout(resetFassungenPopoverStore, 500);
+			timeoutonMouseLeaveApparatTrigger = setTimeout(resetApparatStore, 500);
 		}
 	};
-	const onMouseEnterPopover = () => {
+	const onMouseEnterApparatPopover = () => {
 		clearTimeouts();
 	};
-	const onMouseLeavePopover = () => {
+	const onMouseLeaveApparatPopover = () => {
 		if (!ignoreLeave) {
-			timeoutonMouseLeavePopup = setTimeout(resetFassungenPopoverStore, 500);
+			timeoutonMouseLeavePopup = setTimeout(resetApparatStore, 500);
 		}
 	};
 
-	const addTriggerListeners = () => {
-		removeTriggerListeners();
+	const addApparatTriggerListeners = () => {
+		removeApparatTriggerListeners();
 		document.querySelectorAll('.anchor').forEach((el) => {
-			el.addEventListener('mouseenter', onMouseEnterTrigger, false);
-			el.addEventListener('mouseleave', onMouseLeaveTrigger, false);
-			el.addEventListener('click', onClickTrigger, false);
+			el.addEventListener('mouseenter', onMouseEnterApparatTrigger, false);
+			el.addEventListener('mouseleave', onMouseLeaveApparatTrigger, false);
+			el.addEventListener('click', onClickApparatTrigger, false);
 		});
 	};
-	const removeTriggerListeners = () => {
+	const removeApparatTriggerListeners = () => {
 		document.querySelectorAll(`.anchor`).forEach((el) => {
-			el.removeEventListener('mouseenter', onMouseEnterTrigger);
-			el.removeEventListener('mouseleave', onMouseLeaveTrigger);
-			el.removeEventListener('click', onClickTrigger);
+			el.removeEventListener('mouseenter', onMouseEnterApparatTrigger);
+			el.removeEventListener('mouseleave', onMouseLeaveApparatTrigger);
+			el.removeEventListener('click', onClickApparatTrigger);
 		});
 	};
-	const closePopupOnInteraction = () => {
-		resetFassungenPopoverStore();
+	const closeApparatOnInteraction = () => {
+		resetApparatStore();
 		clearTimeouts();
 		ignoreLeave = false;
 	};
@@ -275,7 +281,7 @@
 	$effect(() => {
 		// add eventListeners when synchro is switched
 		synchro;
-		addTriggerListeners();
+		addApparatTriggerListeners();
 	});
 
 	$effect(() => {
@@ -346,17 +352,26 @@
 			onMouseLeave={onMouseLeavePopover}
 			elTrigger={FassungenPopoverStore.elTrigger}
 			dreissiger={FassungenPopoverStore.dreissiger}
-			verse={FassungenPopoverStore.verse}
-			title={FassungenPopoverStore.title}
-			structure_info={FassungenPopoverStore.structure_info}
-			reading_info={FassungenPopoverStore.reading_info}
+
+	<!-- Popover for Apparat -->
+	{#if ApparatStore.elTrigger}
+		<ApparatPopover
+			resetPopup={closeApparatOnInteraction}
+			onMouseEnter={onMouseEnterApparatPopover}
+			onMouseLeave={onMouseLeaveApparatPopover}
+			elTrigger={ApparatStore.elTrigger}
+			dreissiger={ApparatStore.dreissiger}
+			verse={ApparatStore.verse}
+			title={ApparatStore.title}
+			structure_info={ApparatStore.structure_info}
+			reading_info={ApparatStore.reading_info}
 		/>
 	{/if}
 
 	<!-- Fassungen Content -->
 	{#if synchro}
 		<FassungenSyncContent
-			resetPopup={closePopupOnInteraction}
+			resetPopup={closeApparatOnInteraction}
 			content={localPages.pages}
 			distributions={localPages.distributions}
 			titles={composureTitles}
@@ -369,7 +384,7 @@
 					{#if fassung.length >= 2}
 						<!-- when at least 2 pages are loaded, the one for the currect thirties should be loaded aswell  -->
 						<FassungenContent
-							resetPopup={closePopupOnInteraction}
+							resetPopup={closeApparatOnInteraction}
 							pages={fassung}
 							distribution={localPages.distributions[i]}
 							title={composureTitles[i]}
