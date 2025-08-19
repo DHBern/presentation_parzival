@@ -56,7 +56,7 @@
 					}
 					return acc;
 				};
-				const condensedReading = info.reading.reduce(reducer, {});
+				constantin condensedReading = info.reading.reduce(reducer, {});
 				const condensedStructure = info.structure.reduce(reducer, {});
 				const lines = doc.querySelectorAll('div.line');
 				lines.forEach((line) => {
