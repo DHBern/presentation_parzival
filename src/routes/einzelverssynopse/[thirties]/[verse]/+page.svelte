@@ -38,14 +38,9 @@
 			goto(prevVerseURL);
 		}
 	}
-
-	onMount(() => {
-		window.addEventListener('keydown', handleKeyDown);
-		return () => {
-			window.removeEventListener('keydown', handleKeyDown);
-		};
-	});
 </script>
+
+<svelte:window onkeydown={handleKeyDown} />
 
 <div class="container mx-auto p-4 flex flex-wrap justify-between gap-9">
 	<h1 class="h1 w-full">Verssynopse zu {thirties}.{verseNoZero}</h1>

@@ -4,7 +4,7 @@
 	import { NUMBER_OF_PAGES } from '$lib/constants';
 	import createObserver from './observer';
 
-	let { content, titles, nextPrevButton, distributions } = $props();
+	let { content, titles, nextPrevButton, distributions, resetPopup = () => {} } = $props();
 
 	let scrollContainer = $state();
 	/**
@@ -58,6 +58,9 @@
 <div
 	class="grid md:grid-cols-[repeat(auto-fit,minmax(100px,1fr))] gap-x-4 my-4 tei-content synced grid-flow-dense max-h-[70vh] overflow-y-auto"
 	bind:this={scrollContainer}
+	onscroll={() => {
+		resetPopup();
+	}}
 >
 	{#each content as fassung, i}
 		{@const column = ['d', 'm', 'G', 'T'][i]}
