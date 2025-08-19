@@ -1,4 +1,4 @@
-import { teipb } from '$lib/constants';
+import { URL_TEI_PB } from '$lib/constants';
 import { generateEntries } from '$lib/functions/generateEntries';
 import { metadata } from '$lib/data/metadata';
 import siglaFromHandle from '$lib/functions/siglaFromHandle';
@@ -14,14 +14,14 @@ export async function load({ fetch, params }) {
 	// Fetch the textzeugen
 	(await metadata).codices.forEach((/** @type {{ handle: string | number; }} */ element) => {
 		publisherData[element.handle] = fetch(
-			`${teipb}/parts/${element.handle}.xml/json?odd=parzival.odd&view=page&id=${element.handle}_${thirties}.${verse}`
+			`${URL_TEI_PB}/parts/${element.handle}.xml/json?odd=parzival.odd&view=page&id=${element.handle}_${thirties}.${verse}`
 		);
 	});
 
 	// Fetch fassungen
 	(await metadata).hyparchetypes.forEach((/** @type {{ handle: string | number; }} */ element) => {
 		publisherData[element.handle] = fetch(
-			`${teipb}/parts/syn${thirties}.xml/json?odd=parzival.odd&view=single&xpath=//l[@n=%27${element.handle}%20${thirties}.${verse}%27]`
+			`${URL_TEI_PB}/parts/syn${thirties}.xml/json?odd=parzival.odd&view=single&xpath=//l[@n=%27${element.handle}%20${thirties}.${verse}%27]`
 		);
 	});
 
