@@ -82,25 +82,15 @@
 						HOVER: 'flip_hover.svg',
 						DOWN: 'flip_pressed.svg'
 					}
-				}
+				},
+				overlays: [
+					{
+						element: overlayEl,
+						location: new OpenSeadragon.Rect(0, 0, 1, manifest?.height / manifest?.width),
+						placement: OpenSeadragon.Placement.TOP_LEFT
+					}
+				]
 			});
-
-			const syncOverlay = () => {
-				const item = viewer?.world.getItemAt(0);
-				if (!item || !iiif?.overlay) return;
-				const bounds = item.getBounds(); // viewport coords of the image
-				if (viewer.overlaysContainer.children.length === 0) {
-					viewer.addOverlay(overlayEl, bounds, OpenSeadragon.Placement.TOP_LEFT);
-				} else {
-					viewer.updateOverlay(overlayEl, bounds, OpenSeadragon.Placement.TOP_LEFT);
-				}
-			};
-
-			// Keep overlay aligned
-			viewer.addHandler('open', syncOverlay);
-			viewer.addHandler('animation', syncOverlay);
-			viewer.addHandler('rotate', syncOverlay);
-			viewer.addHandler('resize', syncOverlay);
 
 			observer = new ResizeObserver((_entries) => {
 				setTimeout(() => {
@@ -133,10 +123,6 @@
 				if (observer) {
 					observer.disconnect();
 				}
-				viewer.removeAllHandlers('open');
-				viewer.removeAllHandlers('animation');
-				viewer.removeAllHandlers('rotate');
-				viewer.removeAllHandlers('resize');
 			}
 		};
 	};
