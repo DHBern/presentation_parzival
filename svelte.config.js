@@ -20,7 +20,8 @@ const config = {
 		},
 		prerender: {
 			handleHttpError: 'warn', //remove this for production
-			handleMissingId: 'warn' //remove this for production
+			handleMissingId: 'warn', //remove this for production
+			concurrency: 5 // adjust as needed
 		}
 	}
 };
