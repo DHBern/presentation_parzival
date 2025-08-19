@@ -1,6 +1,7 @@
-import { api } from '$lib/constants';
+import { URL_STATIC_API } from '$lib/constants';
 import { base } from '$app/paths';
 import { metadata } from '$lib/data/metadata';
+import filenameFromHandleAndId from '$lib/functions/filenameFromHandleAndId';
 
 /** @type {import('./$types').PageLoad} */
 export async function load({ fetch, params }) {
@@ -12,12 +13,14 @@ export async function load({ fetch, params }) {
 	/** @type string | boolean */
 	let verse = params.verse?.padStart(2, '0') ?? '01';
 
-	const ranges = await fetch(`${api}/json/contiguous_ranges.json`).then((res) => res.json());
+	const ranges = await fetch(`${URL_STATIC_API}/json/contiguous_ranges.json`).then((res) =>
+		res.json()
+	);
 
 	// if params.thirties is not defined, we need to find the lowest thirty & verse that exists in all siglas
 	if (sigla?.length === 1) {
-		const lowestPromises = fetch(`${api}/json/metadata-ms-page/${sigla[0]}.json`).then((r) =>
-			r.json()
+		const lowestPromises = fetch(`${URL_STATIC_API}/json/metadata-ms-page/${sigla[0]}.json`).then(
+			(r) => r.json()
 		);
 		if (!params.thirties) {
 			thirties = false;
@@ -44,19 +47,21 @@ export async function load({ fetch, params }) {
 		}
 	}
 
-	const meta = sigla?.map(async (witnes) => {
-		const data = await fetch(`${api}/json/metadata-ms-page/${witnes}.json`).then((r) => r.json());
-		/**  @type {{ iiif: string | Promise<any>, id: string, tpData: Promise<{content: string}> }[]} */
+	const meta = sigla?.map(async (handle) => {
+		const data = await fetch(`${URL_STATIC_API}/json/metadata-ms-page/${handle}.json`).then((r) =>
+			r.json()
+		);
+		/**  @type {{ iiif: string | Promise<any>, id: string, tpData: Promise<{content: string}>, overlay: string }[]} */
 		let returnObjects = [];
 		if (thirties) {
-			const selectedIndex = data[witnes].findIndex(
+			const selectedIndex = data[handle].findIndex(
 				(/** @type {{ l: string, id:string | string[]; }} */ entry) =>
 					entry.l.includes(`${thirties}.${verse}`)
 			);
 			if (selectedIndex === -1) {
-				console.warn(`No page found for ${witnes} with thirties ${thirties} and verse ${verse}.`);
+				console.warn(`No page found for ${handle} with thirties ${thirties} and verse ${verse}.`);
 				// loop through the l array of all pages and find the page that contains the thirties that is closest to the requested thirties
-				const closestPages = data[witnes].reduce(
+				const closestPages = data[handle].reduce(
 					(closest, current, i, array) => {
 						const lowestThirties = Number(current.l[0].split('.')[0]);
 						if (lowestThirties < Number(thirties)) {
@@ -72,20 +77,20 @@ export async function load({ fetch, params }) {
 						}
 						return closest;
 					},
-					[{ ...data[witnes][0], active: true }, data[witnes][1]]
+					[{ ...data[handle][0], active: true }, data[handle][1]]
 				);
 				returnObjects = closestPages;
 			} else {
 				if (selectedIndex > 0) {
-					returnObjects.push(data[witnes][selectedIndex - 1] ?? {});
+					returnObjects.push(data[handle][selectedIndex - 1] ?? {});
 				}
-				returnObjects.push({ ...data[witnes][selectedIndex], active: true });
-				if (selectedIndex <= data[witnes].length - 1) {
-					returnObjects.push(data[witnes][selectedIndex + 1] ?? {});
+				returnObjects.push({ ...data[handle][selectedIndex], active: true });
+				if (selectedIndex <= data[handle].length - 1) {
+					returnObjects.push(data[handle][selectedIndex + 1] ?? {});
 				}
 			}
 		} else {
-			returnObjects = [data[witnes][0], data[witnes][1]];
+			returnObjects = [data[handle][0], data[handle][1]];
 		}
 		returnObjects.map((returnObject) => {
 			if (returnObject.iiif && typeof returnObject.iiif === 'string') {
@@ -98,15 +103,19 @@ export async function load({ fetch, params }) {
 				});
 			}
 			if (returnObject.id) {
-				returnObject.tpData = fetch(`${base}/textzeugen/data/${witnes}/${returnObject.id}`).then(
+				returnObject.tpData = fetch(`${base}/textzeugen/data/${handle}/${returnObject.id}`).then(
 					(r) => {
 						return r.json();
 					}
 				);
+
+				returnObject.overlay = `${URL_STATIC_API}/svg/${filenameFromHandleAndId(handle, returnObject.id)}.svg`;
 			}
 			return returnObject;
 		});
-		return returnObjects.length ? returnObjects : [{ tpData: false, iiif: false, page: false }];
+		return returnObjects.length
+			? returnObjects
+			: [{ tpData: false, iiif: false, page: false, overlay: false }];
 	});
 
 	return {

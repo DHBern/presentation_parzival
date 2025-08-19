@@ -70,7 +70,7 @@
 	use:setSyncedScroll
 >
 	{#if pages[0][0] > 1}
-		{@render nextPrevButton(true, pages[0][0] - 1)}
+		{@render nextPrevButton(false, pages[0][0] - 1)}
 	{/if}
 	{#each pages as page (page[0])}
 		<div class="thirty tei-content" use:addToObserver>
@@ -79,7 +79,7 @@
 		<hr class="!border-t-4 !border-primary-500" />
 	{/each}
 	{#if pages[pages.length - 1][0] < NUMBER_OF_PAGES}
-		{@render nextPrevButton(false, pages[pages.length - 1][0] + 1)}
+		{@render nextPrevButton(true, pages[pages.length - 1][0] + 1)}
 	{/if}
 </div>
 

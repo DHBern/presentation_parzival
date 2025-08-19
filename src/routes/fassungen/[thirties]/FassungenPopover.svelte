@@ -17,18 +17,12 @@
 	} = $props();
 	let elPopover = $state();
 
-	function populateAnchorTags(string) {
-		return string.replace(/<a>(.*?)<\/a>/g, (match, p1) => {
-			return `<a href="/textzeugen/${p1.toLowerCase()}/${dreissiger}/${verse}">${p1}</a>`;
-		});
-	}
-
 	function updateFunctionFloatingPopover(elMark, elPopup) {
 		return () => {
 			computePosition(elMark, elPopup, {
 				middleware: [
 					autoPlacement({ allowedPlacements: ['top', 'bottom'] }),
-					offset(15),
+					offset(1),
 					flip(),
 					shift()
 				],
@@ -45,13 +39,10 @@
 	};
 
 	const closeOnEscape = (ev) => {
-		console.log(ev.code);
 		if (ev.code == 'Escape') resetPopup();
 	};
 
 	onMount(() => {
-		// close popup when Esc is pressed
-		window.addEventListener('keydown', closeOnEscape);
 		// Cleanup
 		const cleanup = autoUpdate(
 			elTrigger,
@@ -59,11 +50,12 @@
 			updateFunctionFloatingPopover(elTrigger, elPopover)
 		);
 		return () => {
-			window.removeEventListener('keydown', closeOnEscape);
 			cleanup();
 		};
 	});
 </script>
+
+<svelte:window onkeydown={closeOnEscape} />
 
 <!-- class="absolute z-10 rounded-md border-2 border-[#94ffcf] border-white bg-[#e0fff1] p-5" -->
 <div
@@ -87,11 +79,11 @@
 	<div class="p-4 pt-6">
 		{#if structure_info}
 			<h2 class="h5">Apparat 1</h2>
-			<p class="mb-2">{@html populateAnchorTags(structure_info)}</p>
+			<p class="mb-2">{@html structure_info}</p>
 		{/if}
 		{#if reading_info}
 			<h2 class="h5">Apparat 2</h2>
-			<p>{@html populateAnchorTags(reading_info)}</p>
+			<p>{@html reading_info}</p>
 		{/if}
 	</div>
 </div>
