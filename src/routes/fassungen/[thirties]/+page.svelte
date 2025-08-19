@@ -5,8 +5,9 @@
 	import { NUMBER_OF_PAGES } from '$lib/constants';
 	import { Switch } from '@skeletonlabs/skeleton-svelte';
 	import { page } from '$app/state';
-	import { onMount } from 'svelte';
+	import { onMount, tick } from 'svelte';
 	import { goto } from '$app/navigation';
+	import FassungenPopover from './FassungenPopover.svelte';
 	import handleFromSigla from '$lib/functions/handleFromSigla';
 
 	/** @type {{data: import('./$types').PageData}} */
@@ -14,6 +15,7 @@
 	let verseWidth = $derived(page.data.thirties.length + 4);
 
 	const composureTitles = ['*D', '*m', '*G', '*T'];
+	const composureTitlesByColumn = { d: '*D', m: '*m', G: '*G', T: '*T' };
 	class localPageClass {
 		/**
 		 * for the Fassungen *d, *m, *G and *T
@@ -41,10 +43,15 @@
 				// select all lines in the HTML and process them
 				const parser = new DOMParser();
 				const doc = parser.parseFromString(info.content, 'text/html');
+				// The reducer will...
+				// 1. transform the input array into an object array by...
+				// 	 a. grouping by the key
+				//   b. glowing strings together for repeating key (separated by linebreak)
+				// 2. escape any occurence of " inside the strings, since they would break data-attributes attachment (not tested, since this is to prevent a hypothetical bug)
 				const reducer = (acc, object) => {
 					for (const [key, value] of Object.entries(object)) {
 						if (value) {
-							acc[key] = (acc[key] ?? '') + value;
+							acc[key] = (acc[key] ?? '') + value.replace('"', `&quot;`) + '<br/>';
 						}
 					}
 					return acc;
@@ -58,14 +65,22 @@
 					if (verseNode) {
 						const verse = verseNode.getAttribute('data-verse')?.split('.')[1];
 						if (verse) {
-							const readingInfo = condensedReading[verse];
-							const structureInfo = condensedStructure[verse];
-							if (readingInfo || structureInfo) {
+							const reading_info = condensedReading[verse];
+							const structure_info = condensedStructure[verse];
+							if (reading_info || structure_info) {
 								const parts = verseNode.innerHTML.split('.');
 								if (parts.length > 1) {
 									const beforeDot = parts[0] + '.';
 									const afterDot = parts[1];
-									verseNode.innerHTML = `${beforeDot}<a class="anchor" href="#verse-${verse}">${afterDot}</a>`;
+									verseNode.innerHTML = `${beforeDot}<a
+									class="anchor"
+									href="#verse-${verse}"
+									data-structure_info="${structure_info ? structure_info : ''}"
+									data-reading_info="${reading_info ? reading_info : ''}"
+									data-dreissiger=${parts[0]}
+									data-verse=${verse.replace(/^0+/, '')}
+									data-title="${composureTitlesByColumn[column] + ' ' + beforeDot + verse.replace(/^0+/, '')}"
+									>${afterDot}</a>`;
 								} else {
 									verseNode.innerHTML = `<a class="anchor" href="#verse-${verse}">${verseNode.innerHTML}</a>`;
 								}
@@ -146,6 +161,9 @@
 					this.fetchPage(page + 1);
 				}
 			}
+			tick().then(() => {
+				addTriggerListeners();
+			});
 			return Promise.resolve();
 		};
 	}
@@ -169,6 +187,97 @@
 	onMount(() => {
 		styles = getComputedStyle(document.documentElement);
 	});
+
+	// PopoverStore containing the content of the selected popover
+	let FassungenPopoverStore = $state({
+		elTrigger: undefined,
+		dreissiger: '',
+		verse: '',
+		title: '',
+		structure_info: '',
+		reading_info: ''
+	});
+
+	// Event Listeners for Popovers
+	let timeoutonMouseLeaveTrigger = $state();
+	let timeoutonMouseLeavePopup = $state();
+	let ignoreLeave = $state(false);
+
+	const fillFassungenPopoverStore = (elTrigger, ignore = false) => {
+		if (!ignore) {
+			resetFassungenPopoverStore();
+			const data = elTrigger.dataset;
+			FassungenPopoverStore.elTrigger = elTrigger;
+			FassungenPopoverStore.title = data.title;
+			FassungenPopoverStore.dreissiger = data.dreissiger;
+			FassungenPopoverStore.verse = data.verse;
+			FassungenPopoverStore.structure_info = data.structure_info;
+			FassungenPopoverStore.reading_info = data.reading_info;
+		}
+	};
+	const resetFassungenPopoverStore = () => {
+		FassungenPopoverStore.elTrigger = undefined;
+		FassungenPopoverStore.title = '';
+		FassungenPopoverStore.dreissiger = '';
+		FassungenPopoverStore.verse = '';
+		FassungenPopoverStore.structure_info = '';
+		FassungenPopoverStore.reading_info = '';
+	};
+
+	const clearTimeouts = () => {
+		clearTimeout(timeoutonMouseLeaveTrigger);
+		clearTimeout(timeoutonMouseLeavePopup);
+	};
+
+	const onClickTrigger = (ev) => {
+		ignoreLeave = true;
+		fillFassungenPopoverStore(ev.target, false);
+	};
+	const onMouseEnterTrigger = (ev) => {
+		clearTimeouts();
+		fillFassungenPopoverStore(ev.target, ignoreLeave);
+	};
+	const onMouseLeaveTrigger = () => {
+		if (!ignoreLeave) {
+			timeoutonMouseLeaveTrigger = setTimeout(resetFassungenPopoverStore, 500);
+		}
+	};
+	const onMouseEnterPopover = () => {
+		clearTimeouts();
+	};
+	const onMouseLeavePopover = () => {
+		if (!ignoreLeave) {
+			timeoutonMouseLeavePopup = setTimeout(resetFassungenPopoverStore, 500);
+		}
+	};
+
+	const addTriggerListeners = () => {
+		removeTriggerListeners();
+		document.querySelectorAll('.anchor').forEach((el) => {
+			el.addEventListener('mouseenter', onMouseEnterTrigger, false);
+			el.addEventListener('mouseleave', onMouseLeaveTrigger, false);
+			el.addEventListener('click', onClickTrigger, false);
+		});
+	};
+	const removeTriggerListeners = () => {
+		document.querySelectorAll(`.anchor`).forEach((el) => {
+			el.removeEventListener('mouseenter', onMouseEnterTrigger);
+			el.removeEventListener('mouseleave', onMouseLeaveTrigger);
+			el.removeEventListener('click', onClickTrigger);
+		});
+	};
+	const closePopupOnInteraction = () => {
+		resetFassungenPopoverStore();
+		clearTimeouts();
+		ignoreLeave = false;
+	};
+
+	$effect(() => {
+		// add eventListeners when synchro is switched
+		synchro;
+		addTriggerListeners();
+	});
+
 	$effect(() => {
 		if (!mobileBreakpoint) {
 			synchro = false;
@@ -178,7 +287,7 @@
 </script>
 
 <svelte:window bind:innerWidth={windowWidth} />
-<section class="w-full" style="--verse-width: {verseWidth}ch">
+<section id="sectionFassungen" class="w-full" style="--verse-width: {verseWidth}ch">
 	{#snippet nextPrevButton(next, page, column)}
 		<button
 			class="btn preset-filled-primary-500 w-full mb-4 {column ? 'column-' + column : ''}"
@@ -228,8 +337,26 @@
 			<button aria-label="suchen" class="btn preset-filled-primary-500">Anzeigen</button>
 		</form>
 	</div>
+
+	<!-- Apparat Popover -->
+	{#if FassungenPopoverStore.elTrigger}
+		<FassungenPopover
+			resetPopup={closePopupOnInteraction}
+			onMouseEnter={onMouseEnterPopover}
+			onMouseLeave={onMouseLeavePopover}
+			elTrigger={FassungenPopoverStore.elTrigger}
+			dreissiger={FassungenPopoverStore.dreissiger}
+			verse={FassungenPopoverStore.verse}
+			title={FassungenPopoverStore.title}
+			structure_info={FassungenPopoverStore.structure_info}
+			reading_info={FassungenPopoverStore.reading_info}
+		/>
+	{/if}
+
+	<!-- Fassungen Content -->
 	{#if synchro}
 		<FassungenSyncContent
+			resetPopup={closePopupOnInteraction}
 			content={localPages.pages}
 			distributions={localPages.distributions}
 			titles={composureTitles}
@@ -242,10 +369,11 @@
 					{#if fassung.length >= 2}
 						<!-- when at least 2 pages are loaded, the one for the currect thirties should be loaded aswell  -->
 						<FassungenContent
+							resetPopup={closePopupOnInteraction}
 							pages={fassung}
 							distribution={localPages.distributions[i]}
-							{nextPrevButton}
 							title={composureTitles[i]}
+							{nextPrevButton}
 						/>
 					{/if}
 				</div>

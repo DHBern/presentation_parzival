@@ -4,7 +4,14 @@
 	import { NUMBER_OF_PAGES } from '$lib/constants';
 	import createObserver from './observer';
 
-	let { pages, scrolltop = $bindable(), nextPrevButton, title, distribution } = $props();
+	let {
+		pages,
+		resetPopup = () => {},
+		scrolltop = $bindable(),
+		nextPrevButton,
+		title,
+		distribution
+	} = $props();
 
 	let scrollContainer = $state();
 	/**
@@ -58,6 +65,7 @@
 	bind:this={scrollContainer}
 	onscroll={(/** @type {{ target: { scrollTop: any; }; }} */ o) => {
 		scrolltop = o?.target?.scrollTop;
+		resetPopup();
 	}}
 	use:setSyncedScroll
 >

@@ -1,6 +1,7 @@
 import { json } from '@sveltejs/kit';
 import { NUMBER_OF_PAGES, teipb, api } from '$lib/constants';
 import { metadata } from '$lib/data/metadata';
+import handleFromSigla from '$lib/functions/handleFromSigla';
 
 /** @type {import('./$types').RequestHandler} */
 export async function GET({ params, fetch }) {
@@ -9,7 +10,27 @@ export async function GET({ params, fetch }) {
 	if (!apparatus.ok) {
 		console.log('Failed to fetch apparatus', apparatus);
 	}
-	const apparatusData = (await apparatus.json()).versions;
+	let apparatusData = (await apparatus.json()).versions;
+	
+	// Populate Anchor Tags
+	function populateAnchorTags(string, verse) {
+		return string.replace(/<a>(.*?)<\/a>/g, (match, p1) => {
+			return `<a href='/textzeugen/${handleFromSigla(p1)}/${params.thirties}/${verse}'>${p1}</a>`;
+		});
+	}
+	apparatusData.forEach(i =>{
+		i.structure.forEach(item => {
+			for (let key in item) {
+				item[key] = populateAnchorTags(item[key], key);
+			}
+		});
+		i.reading.forEach(item => {
+			for (let key in item) {
+				item[key] = populateAnchorTags(item[key], key);
+			}
+		});
+	});
+	
 	const teipbData = hyparchetypes.map(async (h) => {
 		const r = await fetch(
 			`${teipb}/parts/syn${params.thirties}.xml/json?&view=single&odd=parzival-verse.odd&xpath=//div[@subtype=%27${h.handle.replace('*', '')}%27 and @type=%27Textteil%27]`
