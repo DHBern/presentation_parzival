@@ -6,7 +6,8 @@
 	import { base } from '$app/paths';
 	import { page } from '$app/state';
 	import { goto, replaceState } from '$app/navigation';
-	import { iiif } from '$lib/constants';
+	import { URL_STATIC_API, URL_IIIF } from '$lib/constants';
+	import filenameFromHandleAndId from '$lib/functions/filenameFromHandleAndId';
 
 	/** @type {{data: import('./$types').PageData}} */
 	let { data } = $props();
@@ -85,7 +86,7 @@
 			if (typeof c.meta === 'object') {
 				let meta = await c.meta;
 				let active = meta.find((m) => m.active);
-				return active?.iiif;
+				return { manifest: active?.iiif, overlay: active?.overlay };
 			}
 		});
 	};
@@ -119,7 +120,8 @@
 				id: id,
 				tpData: fetch(`${base}/textzeugen/data/${sigla}/${id}`).then((r) => r.json()),
 				// using id.toUpperCase() to match the iiif file naming convention - this might change in the future
-				iiif: fetch(`${iiif}/${id}.jpf/info.json`).then((r) => r.json())
+				iiif: fetch(`${URL_IIIF}/${id}.jpf/info.json`).then((r) => r.json()),
+				overlay: `${URL_STATIC_API}/svg/${filenameFromHandleAndId(sigla, id)}.svg`
 			};
 		};
 
