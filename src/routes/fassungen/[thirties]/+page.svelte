@@ -82,7 +82,6 @@
 									data-title="${composureTitlesByColumn[column] + ' ' + beforeDot + verse.replace(/^0+/, '')}"
 									>${afterDot}</a>`;
 								} else {
-									//!! This does not seem to work (LAB)
 									verseNode.innerHTML = `<a class="anchor" href="#verse-${verse}">${verseNode.innerHTML}</a>`;
 								}
 							}
@@ -225,7 +224,6 @@
 		FassungenPopoverStore.reading_info = '';
 	};
 
-	// const popover = document.querySelector('fassungen_popover');
 	const clearTimeouts = () => {
 		clearTimeout(timeoutonMouseLeaveTrigger);
 		clearTimeout(timeoutonMouseLeavePopup);
@@ -236,7 +234,7 @@
 		fillFassungenPopoverStore(ev.target, false);
 	};
 	const onMouseEnterTrigger = (ev) => {
-		clearTimeouts(); // prevents diappearing popover when user hovers multiple triggers before hovering the popover
+		clearTimeouts();
 		fillFassungenPopoverStore(ev.target, ignoreLeave);
 	};
 	const onMouseLeaveTrigger = () => {
