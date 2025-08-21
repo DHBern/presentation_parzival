@@ -9,6 +9,7 @@ jobs:
   build_site:
     runs-on:
       group: parzival
+      labels: Feirefiz
     services:
       existdb:
         image: existdb/existdb:6.2.0
