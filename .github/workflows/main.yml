@@ -7,9 +7,7 @@ on:
 
 jobs:
   build_site:
-    runs-on:
-      group: parzival
-      labels: Feirefiz
+    runs-on: ubuntu-latest
     services:
       existdb:
         image: existdb/existdb:6.2.0
