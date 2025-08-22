@@ -1,6 +1,7 @@
 <script>
 	import FassungenSyncContent from './FassungenSyncContent.svelte';
 	import FassungenContent from './FassungenContent.svelte';
+	import FassungskommentarModal from './FassungskommentarModal.svelte';
 	import { base } from '$app/paths';
 	import { NUMBER_OF_PAGES } from '$lib/constants';
 	import { Switch } from '@skeletonlabs/skeleton-svelte';
@@ -9,7 +10,6 @@
 	import { goto } from '$app/navigation';
 	import ApparatPopover from './ApparatPopover.svelte';
 	import handleFromSigla from '$lib/functions/handleFromSigla';
-	import FassungskommentarModal from './FassungskommentarModal.svelte';
 
 	/** @type {{data: import('./$types').PageData}} */
 	let { data } = $props();
@@ -57,14 +57,46 @@
 					}
 					return acc;
 				};
-				const condensedReading = info.reading.reduce(reducer, {});
-				const condensedStructure = info.structure.reduce(reducer, {});
+				const condensedReading = info.apparat.reading.reduce(reducer, {});
+				const condensedStructure = info.apparat.structure.reduce(reducer, {});
+
 				const lines = doc.querySelectorAll('div.line');
 				lines.forEach((line) => {
 					line.classList.add(`column-${column}`);
+
+					// Nodes
 					const verseNode = line.querySelector('[data-verse]');
+					// console.log(verseNode?.getAttribute('data-verse'));
 					if (verseNode) {
+						const dreissiger = verseNode.getAttribute('data-verse')?.split('.')[0];
 						const verse = verseNode.getAttribute('data-verse')?.split('.')[1];
+
+						// Fassungskommentar Triggers
+						const contentNode = line.querySelector('.content');
+						if (contentNode) {
+							if (verse) {
+								console.log(column);
+								const fasskomm_info = info.fasskomm.find((f) => {
+									return (
+										Number(f.verse) === Number(verse) &&
+										Number(f.dreissiger) === Number(dreissiger) &&
+										f.fassung_targets.toLowerCase().includes(column.toLowerCase())
+									);
+								});
+								if (fasskomm_info) {
+									contentNode.innerHTML = `${contentNode.innerHTML}<sup><a
+									class="fasskommanchor"
+									href="#fasskomm-${dreissiger}.${verse}"
+									data-commentary="${fasskomm_info.commentary ? fasskomm_info.commentary : ''}"
+									data-dreissiger=${dreissiger}
+									data-verse=${verse.replace(/^0+/, '')}
+									data-title="${composureTitlesByColumn[column] + ' ' + dreissiger + verse.replace(/^0+/, '')}"
+									>K</a></sup>`;
+								}
+							}
+						}
+
+						// Apparat Triggers
 						if (verse) {
 							const reading_info = condensedReading[verse];
 							const structure_info = condensedStructure[verse];
@@ -94,7 +126,7 @@
 					preparedHTML: Array.from(lines)
 						.map((line) => line.outerHTML)
 						.join(''),
-					preparedDistribution: info.distribution.replace(
+					preparedDistribution: info.apparat.distribution.replace(
 						/<a\s+data-thirties="([0-9]+)">([^<]+)<\/a>/g,
 						(_match, p1, p2) => {
 							return `<a href="${base}/textzeugen/${handleFromSigla(p2)}/${p1}">${p2}</a>`;
@@ -105,12 +137,12 @@
 			let labels = ['d', 'm', 'G', 'T'];
 			// if the page is not already loaded
 			if (!this.thirties.length) {
-				let content;
+				let info;
 				// fetch the page before the current one if the current one is not the first
 				if (page > 1) {
-					content = await fetch(`${base}/fassungen/data/${page - 1}`).then((r) => r.json());
+					info = await fetch(`${base}/fassungen/data/${page - 1}`).then((r) => r.json());
 					labels.forEach((label, index) => {
-						const { preparedHTML, preparedDistribution } = prepareHTML(content[index], label);
+						const { preparedHTML, preparedDistribution } = prepareHTML(info[index], label);
 						this.pages[index].push([page - 1, preparedHTML]);
 						this.distributions[index][page - 1] = preparedDistribution;
 					});
@@ -118,9 +150,9 @@
 				}
 				// fetch the current page
 				if (page <= NUMBER_OF_PAGES) {
-					content = await fetch(`${base}/fassungen/data/${page}`).then((r) => r.json());
+					info = await fetch(`${base}/fassungen/data/${page}`).then((r) => r.json());
 					labels.forEach((label, index) => {
-						const { preparedHTML, preparedDistribution } = prepareHTML(content[index], label);
+						const { preparedHTML, preparedDistribution } = prepareHTML(info[index], label);
 						this.pages[index].push([page, preparedHTML]);
 						this.distributions[index][page] = preparedDistribution;
 					});
@@ -128,9 +160,9 @@
 				}
 				// fetch the page after the current one if the current one is not the last
 				if (page !== NUMBER_OF_PAGES) {
-					content = await fetch(`${base}/fassungen/data/${page + 1}`).then((r) => r.json());
+					info = await fetch(`${base}/fassungen/data/${page + 1}`).then((r) => r.json());
 					labels.forEach((label, index) => {
-						const { preparedHTML, preparedDistribution } = prepareHTML(content[index], label);
+						const { preparedHTML, preparedDistribution } = prepareHTML(info[index], label);
 						this.pages[index].push([page + 1, preparedHTML]);
 						this.distributions[index][page + 1] = preparedDistribution;
 					});
@@ -141,17 +173,17 @@
 				}
 			} else {
 				if (page < this.thirties[0] && !this.thirties.includes(page)) {
-					let content = await fetch(`${base}/fassungen/data/${page}`).then((r) => r.json());
+					let info = await fetch(`${base}/fassungen/data/${page}`).then((r) => r.json());
 					labels.forEach((label, index) => {
-						const { preparedHTML, preparedDistribution } = prepareHTML(content[index], label);
+						const { preparedHTML, preparedDistribution } = prepareHTML(info[index], label);
 						this.pages[index].unshift([page, preparedHTML]);
 						this.distributions[index][page] = preparedDistribution;
 					});
 					this.thirties.unshift(page);
 				} else if (page > this.thirties[this.thirties.length - 1]) {
-					let content = await fetch(`${base}/fassungen/data/${page}`).then((r) => r.json());
+					let info = await fetch(`${base}/fassungen/data/${page}`).then((r) => r.json());
 					labels.forEach((label, index) => {
-						const { preparedHTML, preparedDistribution } = prepareHTML(content[index], label);
+						const { preparedHTML, preparedDistribution } = prepareHTML(info[index], label);
 						this.pages[index].push([page, preparedHTML]);
 						this.distributions[index][page] = preparedDistribution;
 					});
@@ -164,6 +196,7 @@
 			}
 			tick().then(() => {
 				addApparatTriggerListeners();
+				addFasskommTriggerListeners();
 			});
 			return Promise.resolve();
 		};
@@ -193,26 +226,45 @@
 	// Fassungskommenatre
 	// --------------------------------------
 	// Store containing the content of the selected popover
-	let FassKommStore = $state({
+	let FasskommStore = $state({
+		elTrigger: undefined,
 		dreissiger: '',
 		verse: '',
-		comment: ''
+		commentary: ''
 	});
 
-	const fillFassKommStore = (elTrigger, ignore = false) => {
+	const fillFasskommStore = (elTrigger, ignore = false) => {
 		if (!ignore) {
-			resetFassKommStore();
-			const data = elTrigger.dataset;
-			FassKommStore.elTrigger = elTrigger;
-			FassKommStore.dreissiger = data.dreissiger;
-			FassKommStore.verse = data.verse;
-			FassKommStore.comment = data.comment;
+			console.log('FILL', elTrigger.dataset.dreissiger);
+			resetFasskommStore();
+			const elData = elTrigger.dataset;
+			FasskommStore.elTrigger = elTrigger;
+			FasskommStore.dreissiger = elData.dreissiger;
+			FasskommStore.verse = elData.verse;
+			FasskommStore.commentary = elData.commentary;
 		}
 	};
-	const resetFassKommStore = () => {
-		FassKommStore.dreissiger = '';
-		FassKommStore.verse = '';
-		FassKommStore.comment = '';
+	const resetFasskommStore = () => {
+		FasskommStore.elTrigger = undefined;
+		FasskommStore.dreissiger = '';
+		FasskommStore.verse = '';
+		FasskommStore.commentary = '';
+	};
+
+	// Triggers
+	const addFasskommTriggerListeners = () => {
+		removeFasskommTriggerListeners();
+		document.querySelectorAll('.fasskommanchor').forEach((el) => {
+			el.addEventListener('click', onClickFasskommTrigger, false);
+		});
+	};
+	const removeFasskommTriggerListeners = () => {
+		document.querySelectorAll(`.fasskommanchor`).forEach((el) => {
+			el.removeEventListener('click', onClickFasskommTrigger);
+		});
+	};
+	const onClickFasskommTrigger = (ev) => {
+		fillFasskommStore(ev.target, false);
 	};
 
 	// --------------------------------------
@@ -230,19 +282,19 @@
 
 	// Event Listeners for Popovers
 	let timeoutonMouseLeaveApparatTrigger = $state();
-	let timeoutonMouseLeavePopup = $state();
-	let ignoreLeave = $state(false);
+	let timeoutonMouseLeaveApparatPopup = $state();
+	let ignoreApparatLeave = $state(false);
 
 	const fillApparatStore = (elTrigger, ignore = false) => {
 		if (!ignore) {
 			resetApparatStore();
-			const data = elTrigger.dataset;
+			const elData = elTrigger.dataset;
 			ApparatStore.elTrigger = elTrigger;
-			ApparatStore.title = data.title;
-			ApparatStore.dreissiger = data.dreissiger;
-			ApparatStore.verse = data.verse;
-			ApparatStore.structure_info = data.structure_info;
-			ApparatStore.reading_info = data.reading_info;
+			ApparatStore.title = elData.title;
+			ApparatStore.dreissiger = elData.dreissiger;
+			ApparatStore.verse = elData.verse;
+			ApparatStore.structure_info = elData.structure_info;
+			ApparatStore.reading_info = elData.reading_info;
 		}
 	};
 	const resetApparatStore = () => {
@@ -256,19 +308,19 @@
 
 	const clearTimeouts = () => {
 		clearTimeout(timeoutonMouseLeaveApparatTrigger);
-		clearTimeout(timeoutonMouseLeavePopup);
+		clearTimeout(timeoutonMouseLeaveApparatPopup);
 	};
 
 	const onClickApparatTrigger = (ev) => {
-		ignoreLeave = true;
+		ignoreApparatLeave = true;
 		fillApparatStore(ev.target, false);
 	};
 	const onMouseEnterApparatTrigger = (ev) => {
 		clearTimeouts();
-		fillApparatStore(ev.target, ignoreLeave);
+		fillApparatStore(ev.target, ignoreApparatLeave);
 	};
 	const onMouseLeaveApparatTrigger = () => {
-		if (!ignoreLeave) {
+		if (!ignoreApparatLeave) {
 			timeoutonMouseLeaveApparatTrigger = setTimeout(resetApparatStore, 500);
 		}
 	};
@@ -276,11 +328,13 @@
 		clearTimeouts();
 	};
 	const onMouseLeaveApparatPopover = () => {
-		if (!ignoreLeave) {
-			timeoutonMouseLeavePopup = setTimeout(resetApparatStore, 500);
+		if (!ignoreApparatLeave) {
+			timeoutonMouseLeaveApparatPopup = setTimeout(resetApparatStore, 500);
 		}
 	};
 
+	// -------------------------------------------------
+	// Triggers
 	const addApparatTriggerListeners = () => {
 		removeApparatTriggerListeners();
 		document.querySelectorAll('.anchor').forEach((el) => {
@@ -299,13 +353,14 @@
 	const closeApparatOnInteraction = () => {
 		resetApparatStore();
 		clearTimeouts();
-		ignoreLeave = false;
+		ignoreApparatLeave = false;
 	};
 
 	$effect(() => {
 		// add eventListeners when synchro is switched
 		synchro;
 		addApparatTriggerListeners();
+		addFasskommTriggerListeners();
 	});
 
 	$effect(() => {
@@ -369,11 +424,10 @@
 	</div>
 
 	<!-- Modal for Fassungskommentar -->
-	{#if FassKommStore.elTrigger}
+	{#if FasskommStore.elTrigger}
 		<FassungskommentarModal
-			dreissiger={FassKommStore.dreissiger}
-			verse={FassKommStore.verse}
-			comment={FassKommStore.comment}
+			commentary={FasskommStore.commentary}
+			bind:openState={FasskommStore.elTrigger}
 		/>
 	{/if}
 
@@ -420,3 +474,11 @@
 		</div>
 	{/if}
 </section>
+
+<style lang="postcss">
+	@reference "tailwindcss";
+	@reference "@skeletonlabs/skeleton";
+	:global(.fasskommanchor) {
+		@apply text-red-500 z-10;
+	}
+</style>

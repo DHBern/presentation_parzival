@@ -1,45 +1,22 @@
 <script>
 	import { Modal } from '@skeletonlabs/skeleton-svelte';
 
-	let { dreissiger, verse, comment } = $props();
-
-	function populateAnchorTags(string) {
-		return string.replace(/<a>(.*?)<\/a>/g, (match, p1) => {
-			return `<a href="/textzeugen/${p1.toLowerCase()}/${dreissiger}/${verse}">${p1}</a>`;
-		});
-	}
-
-	let openState = $state(false);
-
-	function modalClose() {
-		openState = false;
-	}
+	let { commentary, openState = $bindable() } = $props();
 </script>
 
-<!-- max-w-[1500px] border-4 border-surface-500 bg-primary-400 transition-transform duration-500 -->
 <Modal
-	open={openState}
-	onOpenChange={(e) => (openState = e.open)}
+	defaultOpen={true}
+	onOpenChange={() => (openState = false)}
 	classes="fassungskommentar_modal"
 	triggerBase="btn preset-tonal"
-	contentBase="card bg-surface-100-900 p-4 space-y-4 shadow-xl max-w-screen-sm"
+	contentBase="w-[80vw] card bg-surface-100-900 p-4 space-y-4 shadow-xl max-w-screen-sm"
+	base=""
 	backdropClasses="backdrop-blur-sm"
 >
-	{#snippet trigger()}Open Modal{/snippet}
 	{#snippet content()}
-		<!-- <div class="py-2 px-4 flex gap-4 justify-between items-center bg-primary-500"> -->
-		<header class="flex justify-between">
-			<h2 class="h2">Fassungskommentar für {dreissiger}.{verse}</h2>
-			<button
-				class="close_button cursor-pointer"
-				onclick={modalClose}
-				aria-label="Apparat schliessen"
-				tabindex="0"><i class="fa-solid fa-xmark"></i></button
-			>
-		</header>
-		<article>
+		<article class="fk-modal-content h-[80vh] overflow-auto">
 			{#if content}
-				{@html populateAnchorTags(comment)}
+				{@html commentary}
 			{/if}
 		</article>
 	{/snippet}
@@ -48,7 +25,33 @@
 <style lang="postcss">
 	@reference "tailwindcss";
 	@reference "@skeletonlabs/skeleton";
-	.fassungen_popover :global(a) {
-		@apply text-primary-800 font-bold;
+	.fk-modal-content {
+		:global(.fassungs-kommentar a) {
+			@apply text-primary-800 font-bold;
+		}
+		:global(.fk-title) {
+			@apply h3;
+		}
+		:global(.fk-content) {
+			@apply my-3;
+		}
+		:global(.fk-commentary) {
+			@apply mb-1 text-lg;
+		}
+		:global(.fk-literatur) {
+			@apply first:mt-8; /* this does not work... why? */
+		}
+		:global(.fk-literatur .fk-commentary) {
+			@apply my-3  text-sm;
+		}
+		:global(.fk-bold) {
+			@apply font-bold;
+		}
+		:global(.fk-italic) {
+			@apply italic;
+		}
+		:global(.fk-small-caps) {
+			@apply [font-variant:small-caps];
+		}
 	}
 </style>

@@ -64,7 +64,7 @@
 	tabindex={0}
 	onmouseenter={onMouseEnter}
 	onmouseleave={onMouseLeave}
-	class="fassungen_popover absolute max-w-[500px] border-4 border-surface-500 bg-primary-400 transition-transform duration-500"
+	class="fassungen_popover z-90 absolute max-w-[500px] border-4 border-surface-500 bg-primary-400 transition-transform duration-500"
 	bind:this={elPopover}
 >
 	<div class="py-2 px-4 flex gap-4 justify-between items-center bg-primary-500">
