@@ -66,7 +66,6 @@
 
 					// Nodes
 					const verseNode = line.querySelector('[data-verse]');
-					// console.log(verseNode?.getAttribute('data-verse'));
 					if (verseNode) {
 						const dreissiger = verseNode.getAttribute('data-verse')?.split('.')[0];
 						const verse = verseNode.getAttribute('data-verse')?.split('.')[1];
@@ -75,7 +74,6 @@
 						const contentNode = line.querySelector('.content');
 						if (contentNode) {
 							if (verse) {
-								console.log(column);
 								const fasskomm_info = info.fasskomm.find((f) => {
 									return (
 										Number(f.verse) === Number(verse) &&
@@ -235,7 +233,6 @@
 
 	const fillFasskommStore = (elTrigger, ignore = false) => {
 		if (!ignore) {
-			console.log('FILL', elTrigger.dataset.dreissiger);
 			resetFasskommStore();
 			const elData = elTrigger.dataset;
 			FasskommStore.elTrigger = elTrigger;
