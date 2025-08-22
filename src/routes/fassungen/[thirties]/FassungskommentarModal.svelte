@@ -1,7 +1,7 @@
 <script>
 	import { Modal } from '@skeletonlabs/skeleton-svelte';
 
-	let { commentary, openState = $bindable() } = $props();
+	let { commentary, id, openState = $bindable() } = $props();
 </script>
 
 <Modal
@@ -14,6 +14,11 @@
 	backdropClasses="backdrop-blur-sm"
 >
 	{#snippet content()}
+		{#if id[2] !== 'A'}
+			<header class="flex justify-between bg-green-400">
+				<h1 class="h5">Editorischer Kommentar</h1>
+			</header>
+		{/if}
 		<article class="fk-modal-content h-[80vh] overflow-auto">
 			{#if content}
 				{@html commentary}

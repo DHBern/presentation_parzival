@@ -83,11 +83,12 @@
 								});
 								if (fasskomm_info) {
 									contentNode.innerHTML = `${contentNode.innerHTML}<sup><a
-									class="fasskommanchor"
+									class="fasskommanchor ${fasskomm_info.id[2] === 'A' ? 'multi' : 'single'}"
 									href="#fasskomm-${dreissiger}.${verse}"
 									data-commentary="${fasskomm_info.commentary ? fasskomm_info.commentary : ''}"
 									data-dreissiger=${dreissiger}
 									data-verse=${verse.replace(/^0+/, '')}
+									data-id=${fasskomm_info.id}
 									data-title="${composureTitlesByColumn[column] + ' ' + dreissiger + verse.replace(/^0+/, '')}"
 									>K</a></sup>`;
 								}
@@ -228,6 +229,7 @@
 		elTrigger: undefined,
 		dreissiger: '',
 		verse: '',
+		id: '',
 		commentary: ''
 	});
 
@@ -238,6 +240,7 @@
 			FasskommStore.elTrigger = elTrigger;
 			FasskommStore.dreissiger = elData.dreissiger;
 			FasskommStore.verse = elData.verse;
+			FasskommStore.id = elData.id;
 			FasskommStore.commentary = elData.commentary;
 		}
 	};
@@ -245,6 +248,7 @@
 		FasskommStore.elTrigger = undefined;
 		FasskommStore.dreissiger = '';
 		FasskommStore.verse = '';
+		FasskommStore.id = '';
 		FasskommStore.commentary = '';
 	};
 
@@ -424,6 +428,7 @@
 	{#if FasskommStore.elTrigger}
 		<FassungskommentarModal
 			commentary={FasskommStore.commentary}
+			id={FasskommStore.id}
 			bind:openState={FasskommStore.elTrigger}
 		/>
 	{/if}
@@ -475,7 +480,10 @@
 <style lang="postcss">
 	@reference "tailwindcss";
 	@reference "@skeletonlabs/skeleton";
-	:global(.fasskommanchor) {
+	:global(.fasskommanchor.single) {
+		@apply text-green-600 z-10;
+	}
+	:global(.fasskommanchor.multi) {
 		@apply text-red-500 z-10;
 	}
 </style>
