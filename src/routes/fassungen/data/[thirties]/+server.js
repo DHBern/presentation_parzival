@@ -17,7 +17,7 @@ export async function GET({ params, fetch }) {
 	let fasskommData = commentary.map(({ vers, ...rest }) => {
 		let [dreissiger, verse] = vers.split('.');
 		return { dreissiger, verse, ...rest };
-	});
+	}).filter((item)=>{return Number(item.dreissiger) === Number(params.thirties)});
 
 	// --------------------
 	// Apparatus
@@ -61,8 +61,8 @@ export async function GET({ params, fetch }) {
 		}
 		return {
 			content: (await r.json()).content,
-			// only use apparatus that match hyparchetype
-			fasskomm: fasskommData,
+			// only use fasskomm and apparatus that match hyparchetype
+			fasskomm: fasskommData.filter((/** @type {{ handle: string; }} */ f) => f.fassung_targets.includes(h.handle.replace('*',''))),
 			apparat: apparatusData.find((/** @type {{ handle: string; }} */ a) => a.handle === h.handle)
 		};
 	});

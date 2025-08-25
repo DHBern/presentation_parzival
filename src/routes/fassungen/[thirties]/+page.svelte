@@ -67,28 +67,23 @@
 					// Nodes
 					const verseNode = line.querySelector('[data-verse]');
 					if (verseNode) {
-						const dreissiger = verseNode.getAttribute('data-verse')?.split('.')[0];
 						const verse = verseNode.getAttribute('data-verse')?.split('.')[1];
 
 						// Fassungskommentar Triggers
 						const contentNode = line.querySelector('.content');
 						if (contentNode && verse) {
 							const fasskomm_info = info.fasskomm.find((f) => {
-								return (
-									Number(f.verse) === Number(verse) &&
-									Number(f.dreissiger) === Number(dreissiger) &&
-									f.fassung_targets.toLowerCase().includes(column.toLowerCase())
-								);
+								return Number(f.verse) === Number(verse);
 							});
 							if (fasskomm_info) {
 								contentNode.innerHTML = `${contentNode.innerHTML}<sup><a
 									class="fasskommanchor ${fasskomm_info.id[2] === 'A' ? 'multi' : 'single'}"
-									href="#fasskomm-${dreissiger}.${verse}"
+									href="#fasskomm-${fasskomm_info.dreissiger}.${verse}"
 									data-commentary="${fasskomm_info.commentary ? fasskomm_info.commentary : ''}"
-									data-dreissiger=${dreissiger}
+									data-dreissiger=${fasskomm_info.dreissiger}
 									data-verse=${verse.replace(/^0+/, '')}
 									data-id=${fasskomm_info.id}
-									data-title="${composureTitlesByColumn[column] + ' ' + dreissiger + verse.replace(/^0+/, '')}"
+									data-title="${composureTitlesByColumn[column] + ' ' + fasskomm_info.dreissiger + verse.replace(/^0+/, '')}"
 									>K</a></sup>`;
 							}
 						}
