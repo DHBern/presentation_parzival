@@ -14,8 +14,10 @@
 	backdropClasses="backdrop-blur-sm"
 >
 	{#snippet content()}
-		<header class={['flex justify-between', id[2] !== 'A' ? 'bg-green-600' : 'bg-red-700']}>
-			<h1 class="h5">Editorischer Kommentar</h1>
+		<header
+			class={['flex justify-between p-1 px-2', id[2] !== 'A' ? 'bg-green-600 ' : 'bg-red-700 ']}
+		>
+			<h1 class="h5 text-surface-50">Editorischer Kommentar</h1>
 		</header>
 		<article class="fk-modal-content h-[80vh] overflow-auto">
 			{#if content}
