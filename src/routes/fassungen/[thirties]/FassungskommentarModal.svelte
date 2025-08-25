@@ -41,8 +41,8 @@
 		:global(.fk-commentary) {
 			@apply mb-1 text-lg;
 		}
-		:global(first:.fk-literatur) {
-			@apply mt-8;
+		:global(.fk-literatur) {
+			@apply first:mt-8; /* this does not work... why? */
 		}
 		:global(.fk-literatur .fk-commentary) {
 			@apply my-3  text-sm;
