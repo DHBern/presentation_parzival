@@ -19,7 +19,7 @@
 				<h1 class="h5">Editorischer Kommentar</h1>
 			</header>
 		{/if}
-		<article class="fk-modal-content h-[80vh] overflow-auto">
+		<article class="fk-modal-content max-h-[80vh] overflow-auto">
 			{#if content}
 				{@html commentary}
 			{/if}
