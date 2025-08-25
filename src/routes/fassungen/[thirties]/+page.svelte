@@ -72,7 +72,8 @@
 
 						// Fassungskommentar Triggers
 						const contentNode = line.querySelector('.content');
-						if (contentNode && verse) {
+						if (contentNode) {
+							if (verse) {
 								const fasskomm_info = info.fasskomm.find((f) => {
 									return (
 										Number(f.verse) === Number(verse) &&
