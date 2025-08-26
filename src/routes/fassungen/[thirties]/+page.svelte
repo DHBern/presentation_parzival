@@ -48,11 +48,10 @@
 				// 1. transform the input array into an object array by...
 				// 	 a. grouping by the key
 				//   b. glowing strings together for repeating key (separated by linebreak)
-				// 2. escape any occurence of " inside the strings, since they would break data-attributes attachment (not tested, since this is to prevent a hypothetical bug)
 				const reducer = (acc, object) => {
 					for (const [key, value] of Object.entries(object)) {
 						if (value) {
-							acc[key] = (acc[key] ?? '') + value.replace('"', `&quot;`) + '<br/>';
+							acc[key] = (acc[key] ?? '') + value + '<br/>';
 						}
 					}
 					return acc;
@@ -79,7 +78,7 @@
 								contentNode.innerHTML = `${contentNode.innerHTML}<sup><a
 									class="fasskommanchor ${fasskomm_info.id[2] === 'A' ? 'multi' : 'single'}"
 									href="#fasskomm-${fasskomm_info.dreissiger}.${verse}"
-									data-commentary="${fasskomm_info.commentary ? fasskomm_info.commentary : ''}"
+									data-commentary="${encodeURIComponent(fasskomm_info.commentary ? fasskomm_info.commentary : '')}"
 									data-dreissiger=${fasskomm_info.dreissiger}
 									data-verse=${verse.replace(/^0+/, '')}
 									data-id=${fasskomm_info.id}
@@ -100,8 +99,8 @@
 									verseNode.innerHTML = `${beforeDot}<a
 									class="anchor"
 									href="#verse-${verse}"
-									data-structure_info="${structure_info ? structure_info : ''}"
-									data-reading_info="${reading_info ? reading_info : ''}"
+									data-structure_info="${encodeURIComponent(structure_info ? structure_info : '')}"
+									data-reading_info="${encodeURIComponent(reading_info ? reading_info : '')}"
 									data-dreissiger=${parts[0]}
 									data-verse=${verse.replace(/^0+/, '')}
 									data-title="${composureTitlesByColumn[column] + ' ' + beforeDot + verse.replace(/^0+/, '')}"
@@ -234,7 +233,7 @@
 			FasskommStore.dreissiger = elData.dreissiger;
 			FasskommStore.verse = elData.verse;
 			FasskommStore.id = elData.id;
-			FasskommStore.commentary = elData.commentary;
+			FasskommStore.commentary = decodeURIComponent(elData.commentary);
 		}
 	};
 	const resetFasskommStore = () => {
@@ -287,8 +286,8 @@
 			ApparatStore.title = elData.title;
 			ApparatStore.dreissiger = elData.dreissiger;
 			ApparatStore.verse = elData.verse;
-			ApparatStore.structure_info = elData.structure_info;
-			ApparatStore.reading_info = elData.reading_info;
+			ApparatStore.structure_info = decodeURIComponent(elData.structure_info);
+			ApparatStore.reading_info = decodeURIComponent(elData.reading_info);
 		}
 	};
 	const resetApparatStore = () => {
