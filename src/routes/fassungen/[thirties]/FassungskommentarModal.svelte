@@ -43,7 +43,7 @@
 		:global(.fk-commentary) {
 			@apply mb-1 text-lg;
 		}
-		:global(.fk-literatur:first-child) {
+		:global(.fk-content + .fk-literatur) {
 			@apply mt-8;
 		}
 		:global(.fk-literatur .fk-commentary) {
