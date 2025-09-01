@@ -214,7 +214,6 @@
 	<g bind:this={gy} transform="translate({marginLeft - 5} ,0)" />
 	<g bind:this={gx} transform="translate(0,{mobile ? height - marginBottom : marginTop - 1})" />
 	{#key y | x}
-		{@debug height}
 		{#each chunkedData as d}
 			<g>
 				{#each d.values as v, j}
