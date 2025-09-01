@@ -1,13 +1,14 @@
 <script>
 	import FassungenSyncContent from './FassungenSyncContent.svelte';
 	import FassungenContent from './FassungenContent.svelte';
+	import FassungskommentarModal from './FassungskommentarModal.svelte';
 	import { base } from '$app/paths';
 	import { NUMBER_OF_PAGES } from '$lib/constants';
 	import { Switch } from '@skeletonlabs/skeleton-svelte';
 	import { page } from '$app/state';
 	import { onMount, tick } from 'svelte';
 	import { goto } from '$app/navigation';
-	import FassungenPopover from './FassungenPopover.svelte';
+	import ApparatPopover from './ApparatPopover.svelte';
 	import handleFromSigla from '$lib/functions/handleFromSigla';
 
 	/** @type {{data: import('./$types').PageData}} */
@@ -47,23 +48,46 @@
 				// 1. transform the input array into an object array by...
 				// 	 a. grouping by the key
 				//   b. glowing strings together for repeating key (separated by linebreak)
-				// 2. escape any occurence of " inside the strings, since they would break data-attributes attachment (not tested, since this is to prevent a hypothetical bug)
 				const reducer = (acc, object) => {
 					for (const [key, value] of Object.entries(object)) {
 						if (value) {
-							acc[key] = (acc[key] ?? '') + value.replace('"', `&quot;`) + '<br/>';
+							acc[key] = (acc[key] ?? '') + value + '<br/>';
 						}
 					}
 					return acc;
 				};
-				const condensedReading = info.reading.reduce(reducer, {});
-				const condensedStructure = info.structure.reduce(reducer, {});
+				const condensedReading = info.apparat.reading.reduce(reducer, {});
+				const condensedStructure = info.apparat.structure.reduce(reducer, {});
+
 				const lines = doc.querySelectorAll('div.line');
 				lines.forEach((line) => {
 					line.classList.add(`column-${column}`);
+
+					// Nodes
 					const verseNode = line.querySelector('[data-verse]');
 					if (verseNode) {
 						const verse = verseNode.getAttribute('data-verse')?.split('.')[1];
+
+						// Fassungskommentar Triggers
+						const contentNode = line.querySelector('.content');
+						if (contentNode && verse) {
+							const fasskomm_info = info.fasskomm.find((f) => {
+								return Number(f.verse) === Number(verse);
+							});
+							if (fasskomm_info) {
+								contentNode.innerHTML = `${contentNode.innerHTML}<sup><a
+									class="fasskommanchor ${fasskomm_info.id[2] === 'A' ? 'multi' : 'single'}"
+									href="#fasskomm-${fasskomm_info.dreissiger}.${verse}"
+									data-commentary="${encodeURIComponent(fasskomm_info.commentary ? fasskomm_info.commentary : '')}"
+									data-dreissiger=${fasskomm_info.dreissiger}
+									data-verse=${verse.replace(/^0+/, '')}
+									data-id=${fasskomm_info.id}
+									data-title="${composureTitlesByColumn[column] + ' ' + fasskomm_info.dreissiger + verse.replace(/^0+/, '')}"
+									>K</a></sup>`;
+							}
+						}
+
+						// Apparat Triggers
 						if (verse) {
 							const reading_info = condensedReading[verse];
 							const structure_info = condensedStructure[verse];
@@ -75,8 +99,8 @@
 									verseNode.innerHTML = `${beforeDot}<a
 									class="anchor"
 									href="#verse-${verse}"
-									data-structure_info="${structure_info ? structure_info : ''}"
-									data-reading_info="${reading_info ? reading_info : ''}"
+									data-structure_info="${encodeURIComponent(structure_info ? structure_info : '')}"
+									data-reading_info="${encodeURIComponent(reading_info ? reading_info : '')}"
 									data-dreissiger=${parts[0]}
 									data-verse=${verse.replace(/^0+/, '')}
 									data-title="${composureTitlesByColumn[column] + ' ' + beforeDot + verse.replace(/^0+/, '')}"
@@ -93,7 +117,7 @@
 					preparedHTML: Array.from(lines)
 						.map((line) => line.outerHTML)
 						.join(''),
-					preparedDistribution: info.distribution.replace(
+					preparedDistribution: info.apparat.distribution.replace(
 						/<a\s+data-thirties="([0-9]+)">([^<]+)<\/a>/g,
 						(_match, p1, p2) => {
 							return `<a href="${base}/textzeugen/${handleFromSigla(p2)}/${p1}">${p2}</a>`;
@@ -104,12 +128,12 @@
 			let labels = ['d', 'm', 'G', 'T'];
 			// if the page is not already loaded
 			if (!this.thirties.length) {
-				let content;
+				let info;
 				// fetch the page before the current one if the current one is not the first
 				if (page > 1) {
-					content = await fetch(`${base}/fassungen/data/${page - 1}`).then((r) => r.json());
+					info = await fetch(`${base}/fassungen/data/${page - 1}`).then((r) => r.json());
 					labels.forEach((label, index) => {
-						const { preparedHTML, preparedDistribution } = prepareHTML(content[index], label);
+						const { preparedHTML, preparedDistribution } = prepareHTML(info[index], label);
 						this.pages[index].push([page - 1, preparedHTML]);
 						this.distributions[index][page - 1] = preparedDistribution;
 					});
@@ -117,9 +141,9 @@
 				}
 				// fetch the current page
 				if (page <= NUMBER_OF_PAGES) {
-					content = await fetch(`${base}/fassungen/data/${page}`).then((r) => r.json());
+					info = await fetch(`${base}/fassungen/data/${page}`).then((r) => r.json());
 					labels.forEach((label, index) => {
-						const { preparedHTML, preparedDistribution } = prepareHTML(content[index], label);
+						const { preparedHTML, preparedDistribution } = prepareHTML(info[index], label);
 						this.pages[index].push([page, preparedHTML]);
 						this.distributions[index][page] = preparedDistribution;
 					});
@@ -127,9 +151,9 @@
 				}
 				// fetch the page after the current one if the current one is not the last
 				if (page !== NUMBER_OF_PAGES) {
-					content = await fetch(`${base}/fassungen/data/${page + 1}`).then((r) => r.json());
+					info = await fetch(`${base}/fassungen/data/${page + 1}`).then((r) => r.json());
 					labels.forEach((label, index) => {
-						const { preparedHTML, preparedDistribution } = prepareHTML(content[index], label);
+						const { preparedHTML, preparedDistribution } = prepareHTML(info[index], label);
 						this.pages[index].push([page + 1, preparedHTML]);
 						this.distributions[index][page + 1] = preparedDistribution;
 					});
@@ -140,17 +164,17 @@
 				}
 			} else {
 				if (page < this.thirties[0] && !this.thirties.includes(page)) {
-					let content = await fetch(`${base}/fassungen/data/${page}`).then((r) => r.json());
+					let info = await fetch(`${base}/fassungen/data/${page}`).then((r) => r.json());
 					labels.forEach((label, index) => {
-						const { preparedHTML, preparedDistribution } = prepareHTML(content[index], label);
+						const { preparedHTML, preparedDistribution } = prepareHTML(info[index], label);
 						this.pages[index].unshift([page, preparedHTML]);
 						this.distributions[index][page] = preparedDistribution;
 					});
 					this.thirties.unshift(page);
 				} else if (page > this.thirties[this.thirties.length - 1]) {
-					let content = await fetch(`${base}/fassungen/data/${page}`).then((r) => r.json());
+					let info = await fetch(`${base}/fassungen/data/${page}`).then((r) => r.json());
 					labels.forEach((label, index) => {
-						const { preparedHTML, preparedDistribution } = prepareHTML(content[index], label);
+						const { preparedHTML, preparedDistribution } = prepareHTML(info[index], label);
 						this.pages[index].push([page, preparedHTML]);
 						this.distributions[index][page] = preparedDistribution;
 					});
@@ -162,7 +186,8 @@
 				}
 			}
 			tick().then(() => {
-				addTriggerListeners();
+				addApparatTriggerListeners();
+				addFasskommTriggerListeners();
 			});
 			return Promise.resolve();
 		};
@@ -188,8 +213,58 @@
 		styles = getComputedStyle(document.documentElement);
 	});
 
-	// PopoverStore containing the content of the selected popover
-	let FassungenPopoverStore = $state({
+	// --------------------------------------
+	// Fassungskommenatre
+	// --------------------------------------
+	// Store containing the content of the selected popover
+	let FasskommStore = $state({
+		elTrigger: undefined,
+		dreissiger: '',
+		verse: '',
+		id: '',
+		commentary: ''
+	});
+
+	const fillFasskommStore = (elTrigger, ignore = false) => {
+		if (!ignore) {
+			resetFasskommStore();
+			const elData = elTrigger.dataset;
+			FasskommStore.elTrigger = elTrigger;
+			FasskommStore.dreissiger = elData.dreissiger;
+			FasskommStore.verse = elData.verse;
+			FasskommStore.id = elData.id;
+			FasskommStore.commentary = decodeURIComponent(elData.commentary);
+		}
+	};
+	const resetFasskommStore = () => {
+		FasskommStore.elTrigger = undefined;
+		FasskommStore.dreissiger = '';
+		FasskommStore.verse = '';
+		FasskommStore.id = '';
+		FasskommStore.commentary = '';
+	};
+
+	// Triggers
+	const addFasskommTriggerListeners = () => {
+		removeFasskommTriggerListeners();
+		document.querySelectorAll('.fasskommanchor').forEach((el) => {
+			el.addEventListener('click', onClickFasskommTrigger, false);
+		});
+	};
+	const removeFasskommTriggerListeners = () => {
+		document.querySelectorAll(`.fasskommanchor`).forEach((el) => {
+			el.removeEventListener('click', onClickFasskommTrigger);
+		});
+	};
+	const onClickFasskommTrigger = (ev) => {
+		fillFasskommStore(ev.target, false);
+	};
+
+	// --------------------------------------
+	// Apparate
+	// --------------------------------------
+	// ApparatStrore contains the content of the selected popover
+	let ApparatStore = $state({
 		elTrigger: undefined,
 		dreissiger: '',
 		verse: '',
@@ -199,83 +274,86 @@
 	});
 
 	// Event Listeners for Popovers
-	let timeoutonMouseLeaveTrigger = $state();
-	let timeoutonMouseLeavePopup = $state();
-	let ignoreLeave = $state(false);
+	let timeoutonMouseLeaveApparatTrigger = $state();
+	let timeoutonMouseLeaveApparatPopup = $state();
+	let ignoreApparatLeave = $state(false);
 
-	const fillFassungenPopoverStore = (elTrigger, ignore = false) => {
+	const fillApparatStore = (elTrigger, ignore = false) => {
 		if (!ignore) {
-			resetFassungenPopoverStore();
-			const data = elTrigger.dataset;
-			FassungenPopoverStore.elTrigger = elTrigger;
-			FassungenPopoverStore.title = data.title;
-			FassungenPopoverStore.dreissiger = data.dreissiger;
-			FassungenPopoverStore.verse = data.verse;
-			FassungenPopoverStore.structure_info = data.structure_info;
-			FassungenPopoverStore.reading_info = data.reading_info;
+			resetApparatStore();
+			const elData = elTrigger.dataset;
+			ApparatStore.elTrigger = elTrigger;
+			ApparatStore.title = elData.title;
+			ApparatStore.dreissiger = elData.dreissiger;
+			ApparatStore.verse = elData.verse;
+			ApparatStore.structure_info = decodeURIComponent(elData.structure_info);
+			ApparatStore.reading_info = decodeURIComponent(elData.reading_info);
 		}
 	};
-	const resetFassungenPopoverStore = () => {
-		FassungenPopoverStore.elTrigger = undefined;
-		FassungenPopoverStore.title = '';
-		FassungenPopoverStore.dreissiger = '';
-		FassungenPopoverStore.verse = '';
-		FassungenPopoverStore.structure_info = '';
-		FassungenPopoverStore.reading_info = '';
+	const resetApparatStore = () => {
+		ApparatStore.elTrigger = undefined;
+		ApparatStore.title = '';
+		ApparatStore.dreissiger = '';
+		ApparatStore.verse = '';
+		ApparatStore.structure_info = '';
+		ApparatStore.reading_info = '';
 	};
 
 	const clearTimeouts = () => {
-		clearTimeout(timeoutonMouseLeaveTrigger);
-		clearTimeout(timeoutonMouseLeavePopup);
+		clearTimeout(timeoutonMouseLeaveApparatTrigger);
+		clearTimeout(timeoutonMouseLeaveApparatPopup);
 	};
 
-	const onClickTrigger = (ev) => {
-		ignoreLeave = true;
-		fillFassungenPopoverStore(ev.target, false);
+	const onClickApparatTrigger = (ev) => {
+		ignoreApparatLeave = true;
+		fillApparatStore(ev.target, false);
 	};
-	const onMouseEnterTrigger = (ev) => {
+	const onMouseEnterApparatTrigger = (ev) => {
 		clearTimeouts();
-		fillFassungenPopoverStore(ev.target, ignoreLeave);
+		fillApparatStore(ev.target, ignoreApparatLeave);
 	};
-	const onMouseLeaveTrigger = () => {
-		if (!ignoreLeave) {
-			timeoutonMouseLeaveTrigger = setTimeout(resetFassungenPopoverStore, 500);
+	const onMouseLeaveApparatTrigger = () => {
+		if (!ignoreApparatLeave) {
+			timeoutonMouseLeaveApparatTrigger = setTimeout(resetApparatStore, 500);
 		}
 	};
-	const onMouseEnterPopover = () => {
+	const onMouseEnterApparatPopover = () => {
 		clearTimeouts();
 	};
-	const onMouseLeavePopover = () => {
-		if (!ignoreLeave) {
-			timeoutonMouseLeavePopup = setTimeout(resetFassungenPopoverStore, 500);
+	const onMouseLeaveApparatPopover = () => {
+		if (!ignoreApparatLeave) {
+			timeoutonMouseLeaveApparatPopup = setTimeout(resetApparatStore, 500);
 		}
 	};
 
-	const addTriggerListeners = () => {
-		removeTriggerListeners();
+	// -------------------------------------------------
+	// Triggers
+	const addApparatTriggerListeners = () => {
+		removeApparatTriggerListeners();
 		document.querySelectorAll('.anchor').forEach((el) => {
-			el.addEventListener('mouseenter', onMouseEnterTrigger, false);
-			el.addEventListener('mouseleave', onMouseLeaveTrigger, false);
-			el.addEventListener('click', onClickTrigger, false);
+			el.addEventListener('mouseenter', onMouseEnterApparatTrigger, false);
+			el.addEventListener('mouseleave', onMouseLeaveApparatTrigger, false);
+			el.addEventListener('click', onClickApparatTrigger, false);
 		});
 	};
-	const removeTriggerListeners = () => {
+	const removeApparatTriggerListeners = () => {
 		document.querySelectorAll(`.anchor`).forEach((el) => {
-			el.removeEventListener('mouseenter', onMouseEnterTrigger);
-			el.removeEventListener('mouseleave', onMouseLeaveTrigger);
-			el.removeEventListener('click', onClickTrigger);
+			el.removeEventListener('mouseenter', onMouseEnterApparatTrigger);
+			el.removeEventListener('mouseleave', onMouseLeaveApparatTrigger);
+			el.removeEventListener('click', onClickApparatTrigger);
 		});
 	};
-	const closePopupOnInteraction = () => {
-		resetFassungenPopoverStore();
+	const closeApparatOnInteraction = () => {
+		resetApparatStore();
 		clearTimeouts();
-		ignoreLeave = false;
+		ignoreApparatLeave = false;
 	};
 
 	$effect(() => {
 		// add eventListeners when synchro is switched
 		synchro;
-		addTriggerListeners();
+		addApparatTriggerListeners();
+		addFasskommTriggerListeners();
 	});
 
 	$effect(() => {
@@ -338,25 +416,34 @@
 		</form>
 	</div>
 
-	<!-- Apparat Popover -->
-	{#if FassungenPopoverStore.elTrigger}
-		<FassungenPopover
-			resetPopup={closePopupOnInteraction}
-			onMouseEnter={onMouseEnterPopover}
-			onMouseLeave={onMouseLeavePopover}
-			elTrigger={FassungenPopoverStore.elTrigger}
-			dreissiger={FassungenPopoverStore.dreissiger}
-			verse={FassungenPopoverStore.verse}
-			title={FassungenPopoverStore.title}
-			structure_info={FassungenPopoverStore.structure_info}
-			reading_info={FassungenPopoverStore.reading_info}
+	<!-- Modal for Fassungskommentar -->
+	{#if FasskommStore.elTrigger}
+		<FassungskommentarModal
+			commentary={FasskommStore.commentary}
+			id={FasskommStore.id}
+			bind:openState={FasskommStore.elTrigger}
+		/>
+	{/if}
+
+	<!-- Popover for Apparat -->
+	{#if ApparatStore.elTrigger}
+		<ApparatPopover
+			resetPopup={closeApparatOnInteraction}
+			onMouseEnter={onMouseEnterApparatPopover}
+			onMouseLeave={onMouseLeaveApparatPopover}
+			elTrigger={ApparatStore.elTrigger}
+			dreissiger={ApparatStore.dreissiger}
+			verse={ApparatStore.verse}
+			title={ApparatStore.title}
+			structure_info={ApparatStore.structure_info}
+			reading_info={ApparatStore.reading_info}
 		/>
 	{/if}
 
 	<!-- Fassungen Content -->
 	{#if synchro}
 		<FassungenSyncContent
-			resetPopup={closePopupOnInteraction}
+			resetPopup={closeApparatOnInteraction}
 			content={localPages.pages}
 			distributions={localPages.distributions}
 			titles={composureTitles}
@@ -369,7 +456,7 @@
 					{#if fassung.length >= 2}
 						<!-- when at least 2 pages are loaded, the one for the currect thirties should be loaded aswell  -->
 						<FassungenContent
-							resetPopup={closePopupOnInteraction}
+							resetPopup={closeApparatOnInteraction}
 							pages={fassung}
 							distribution={localPages.distributions[i]}
 							title={composureTitles[i]}
@@ -381,3 +468,14 @@
 		</div>
 	{/if}
 </section>
+
+<style lang="postcss">
+	@reference "tailwindcss";
+	@reference "@skeletonlabs/skeleton";
+	:global(.fasskommanchor.single) {
+		@apply text-green-600 z-10;
+	}
+	:global(.fasskommanchor.multi) {
+		@apply text-red-500 z-10;
+	}
+</style>
