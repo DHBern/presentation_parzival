@@ -267,7 +267,7 @@
 							{#if iiif?.id}
 								<button
 									onclick={() => {
-										localIiifChange(iiif);
+										localIiifChange({ manifest: iiif, overlay: pageObject.overlay });
 									}}
 									class="ml-2 float-right sticky top-0"
 								>

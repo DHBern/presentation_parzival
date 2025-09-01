@@ -1,11 +1,11 @@
 import { json } from '@sveltejs/kit';
-import { api, teipb } from '$lib/constants';
+import { URL_STATIC_API, URL_TEI_PB } from '$lib/constants';
 import { metadata } from '$lib/data/metadata';
 
 /** @type {import('./$types').RequestHandler} */
 export async function GET({ params, fetch }) {
 	const teipbData = fetch(
-		`${teipb}/parts/${params.witnes}.xml/json?&view=page&id=${params.page}&odd=parzival-verse.odd`
+		`${URL_TEI_PB}/parts/${params.witnes}.xml/json?&view=page&id=${params.page}&odd=parzival-verse.odd`
 	).then((r) => {
 		if (!r.ok) {
 			console.error('Failed to fetch tpData', r);
@@ -21,7 +21,7 @@ export async function entries() {
 	const { codices, fragments } = await metadata;
 	const handles = [...codices, ...fragments].map((c) => c.handle);
 	const metadataPage = handles.map((h) =>
-		fetch(`${api}/json/metadata-ms-page/${h}.json`).then((r) => r.json())
+		fetch(`${URL_STATIC_API}/json/metadata-ms-page/${h}.json`).then((r) => r.json())
 	);
 
 	/**
