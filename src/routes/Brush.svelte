@@ -213,20 +213,23 @@
 <svg {width} {height} class="float-left" shape-rendering="crispEdges">
 	<g bind:this={gy} transform="translate({marginLeft - 5} ,0)" />
 	<g bind:this={gx} transform="translate(0,{mobile ? height - marginBottom : marginTop - 1})" />
-	{#each chunkedData as d}
-		<g>
-			{#each d.values as v, j}
-				{@const start = xChunk(j)}
-				{@const end = xChunk(j + 1)}
-				<rect
-					x={mobile ? start : x(d.label)}
-					y={mobile ? y(d.label) : start}
-					width={mobile ? end - start : x.bandwidth()}
-					height={mobile ? y.bandwidth() : end - start}
-					class={colorScale(v)}
-				/>
-			{/each}
-		</g>
-	{/each}
+	{#key y | x}
+		{@debug height}
+		{#each chunkedData as d}
+			<g>
+				{#each d.values as v, j}
+					{@const start = xChunk(j)}
+					{@const end = xChunk(j + 1)}
+					<rect
+						x={mobile ? start : x(d.label)}
+						y={mobile ? y(d.label) : start}
+						width={mobile ? end - start : x.bandwidth()}
+						height={mobile ? y.bandwidth() : end - start}
+						class={colorScale(v)}
+					/>
+				{/each}
+			</g>
+		{/each}
+	{/key}
 	<g bind:this={gBrush} transform="translate(0,{mobile ? marginTop : 0})" />
 </svg>
