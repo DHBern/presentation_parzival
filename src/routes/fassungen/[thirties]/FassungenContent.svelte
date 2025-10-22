@@ -3,14 +3,15 @@
 	import { page } from '$app/state';
 	import { NUMBER_OF_PAGES } from '$lib/constants';
 	import createObserver from './observer';
+	import FassungenAsyncContent from './FassungenAsyncContent.svelte';
 
 	let {
-		pages,
-		resetPopup = () => {},
-		scrolltop = $bindable(),
+		content,
+		titles,
 		nextPrevButton,
-		title,
-		distribution
+		distributions,
+		resetPopup = () => {},
+		synchro = true
 	} = $props();
 
 	let scrollContainer = $state();
@@ -18,90 +19,130 @@
 	 * @type {IntersectionObserver}
 	 */
 	let observer;
-	let activeThirties = $state({ value: page.data.thirties });
-	onMount(() => {
+	onMount(async () => {
 		// update the current page when a new verse comes into view
-		observer = createObserver(false, scrollContainer, page, activeThirties);
-		const verse = scrollContainer?.querySelector(`[data-verse="${page.data.thirties}.01"]`);
-		if (verse) {
-			scrollContainer?.scrollTo({
-				top:
-					scrollContainer?.scrollTop +
-					Number(verse.parentElement?.getBoundingClientRect().top) -
-					scrollContainer?.getBoundingClientRect().top,
-				behavior: 'instant'
-			});
-		} else {
-			console.log('no verse found');
-		}
+		observer = createObserver(true, scrollContainer, page);
 	});
 
 	const addToObserver = (/** @type {HTMLDivElement} */ node) => {
 		$effect(() => {
+			if (!correctPos) {
+				const targetVerse = node.parentElement?.querySelector(
+					`[data-verse="${page.data.thirties}.01"]`
+				);
+				if (targetVerse) {
+					targetVerse?.scrollIntoView({
+						behavior: 'instant',
+						block: 'start'
+					});
+					correctPos = true;
+				}
+			}
 			observer.observe(node);
 			return () => {
 				observer.unobserve(node);
 			};
 		});
 	};
+	let correctPos = false;
 
-	const setSyncedScroll = (/** @type {HTMLDivElement} */ node) => {
-		$effect(() => {
-			if (scrolltop && node.scrollTop !== scrolltop) {
-				node.scrollTo({ top: scrolltop, behavior: 'instant' });
-			}
-		});
-	};
+	$effect(() => {
+		if (!content[0]?.length && correctPos) {
+			correctPos = false;
+		}
+	});
 </script>
 
-<div class="mb-4">
-	<h2 class="h2 inline">{title}</h2>
-	<div class="inline [&_ul,&_li]:inline [&_li]:mr-1">
-		{@html distribution[activeThirties.value]}
-	</div>
-</div>
-<div
-	class="max-h-[70vh] overflow-y-auto bg-gray-100 dark:preset-filled-surface-500 rounded-xl"
-	bind:this={scrollContainer}
-	onscroll={(/** @type {{ target: { scrollTop: any; }; }} */ o) => {
-		scrolltop = o?.target?.scrollTop;
-		resetPopup();
-	}}
-	use:setSyncedScroll
->
-	{#if pages[0][0] > 1}
-		{@render nextPrevButton(false, pages[0][0] - 1)}
-	{/if}
-	{#each pages as page (page[0])}
-		<div class="thirty tei-content" use:addToObserver>
-			{@html page[1]}
+<div class="grid md:grid-cols-[repeat(auto-fit,minmax(100px,1fr))] gap-4 my-4">
+	{#each content as _fassung, i}
+		<div>
+			<h2 class="h2 inline">{titles[i]}</h2>
+			<div class="inline [&_ul,&_li]:inline [&_li]:mr-1">
+				{@html distributions[i][page.data.thirties]}
+			</div>
 		</div>
-		<hr class="!border-t-4 !border-primary-500" />
 	{/each}
-	{#if pages[pages.length - 1][0] < NUMBER_OF_PAGES}
-		{@render nextPrevButton(true, pages[pages.length - 1][0] + 1)}
-	{/if}
 </div>
+{#if !synchro}
+	<div class="grid md:grid-cols-[repeat(auto-fit,minmax(100px,1fr))] gap-4 my-4">
+		{#each content as fassung}
+			<div>
+				{#if fassung.length >= 2}
+					<!-- when at least 2 pages are loaded, the one for the currect thirties should be loaded aswell  -->
+					<FassungenAsyncContent {resetPopup} pages={fassung} {nextPrevButton} />
+				{/if}
+			</div>
+		{/each}
+	</div>
+{:else}
+	<div
+		class="grid md:grid-cols-[repeat(auto-fit,minmax(100px,1fr))] gap-x-4 my-4 tei-content synced grid-flow-dense max-h-[70vh] overflow-y-auto"
+		bind:this={scrollContainer}
+		onscroll={() => {
+			resetPopup();
+		}}
+	>
+		{#each content as fassung, i}
+			{@const column = ['d', 'm', 'G', 'T'][i]}
+			{#if fassung[0] && fassung[0][0] > 1}
+				{@render nextPrevButton(false, fassung[0][0] - 1, column)}
+			{/if}
+			{#each fassung as page (page[0])}
+				{@html page[1]}
+				{#if i === 0}
+					<hr class="!border-t-4 !border-primary-500 column-{column}" use:addToObserver />
+				{:else}
+					<hr class="!border-t-4 !border-primary-500 column-{column}" />
+				{/if}
+			{/each}
+			{#if fassung[fassung.length - 1] && fassung[fassung.length - 1][0] < NUMBER_OF_PAGES}
+				{@render nextPrevButton(true, fassung[fassung.length - 1][0] + 1, column)}
+			{/if}
+		{/each}
+	</div>
+{/if}
 
 <style lang="postcss">
 	@reference "tailwindcss";
 	@reference "@skeletonlabs/skeleton";
-	.thirty {
-		:global(.once) {
-			-webkit-animation-iteration-count: 4;
-			animation-iteration-count: 4;
-		}
+	@reference "@skeletonlabs/skeleton/optional/presets";
+
+	.synced {
 		:global(.line) {
-			@apply flex ml-1;
+			@apply grid grid-cols-(--verse-width) grid-flow-col items-center-safe;
+			@apply bg-gray-100 dark:preset-filled-surface-500;
 			:global(.verse) {
-				@apply w-(--verse-width) shrink-0;
+				@apply ml-1;
 			}
 		}
-		:global(.tei-cb) {
-			@apply text-right mr-2;
+		:global(.line:first-child) {
+			@apply rounded-t-xl;
 		}
-		:global(.tei-cb:not(.tei-cb:first-child)) {
-			@apply border-primary-300 border-solid border-t-4;
+		@variant md {
+			:global(.column-d) {
+				grid-column: 1;
+			}
+			:global(.column-m) {
+				grid-column: 2;
+			}
+			:global(.column-G) {
+				grid-column: 3;
+			}
+			:global(.column-T) {
+				grid-column: 4;
+			}
+			:global(:nth-child(1 of .column-T)),
+			:global(:nth-child(1 of .column-G)),
+			:global(:nth-child(1 of .column-m)),
+			:global(:nth-child(1 of .column-d)) {
+				@apply rounded-t-xl;
+			}
+			:global(:nth-last-child(1 of .column-T)),
+			:global(:nth-last-child(1 of .column-G)),
+			:global(:nth-last-child(1 of .column-m)),
+			:global(:nth-last-child(1 of .column-d)) {
+				@apply rounded-b-xl;
+			}
 		}
 	}
 </style>
