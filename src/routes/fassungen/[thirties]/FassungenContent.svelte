@@ -68,7 +68,7 @@
 		{#each content as fassung}
 			<div>
 				{#if fassung.length >= 2}
-					<!-- when at least 2 pages are loaded, the one for the currect thirties should be loaded aswell  -->
+					<!-- when at least 2 pages are loaded, the one for the current thirties should be loaded as well  -->
 					<FassungenAsyncContent {resetPopup} pages={fassung} {nextPrevButton} />
 				{/if}
 			</div>
