@@ -2,7 +2,7 @@
 	import { minisearches, processTerm } from '$lib/minisearch.svelte';
 	import siglaFromHandle from '$lib/functions/siglaFromHandle';
 	import Datatable from './Datatable.svelte';
-	import { Segment } from '@skeletonlabs/skeleton-svelte';
+	import { SegmentedControl } from '@skeletonlabs/skeleton-svelte';
 	let hasDocuments = $state(!!minisearches[0].documentCount);
 	let searchtext = $state('');
 	let useExactSearch = $state(true);
@@ -146,15 +146,15 @@
 	<div>
 		<h2 class="h2">Suchoptionen</h2>
 		<div class="flex flex-col w-fit gap-2">
-			<Segment active="preset-filled-primary-500">
+			<SegmentedControl active="preset-filled-primary-500">
 				<Segment.Item bind:group={useExactSearch} name="Suchvariante" value={true}
 					>exakte Suche</Segment.Item
 				>
 				<Segment.Item bind:group={useExactSearch} name="Suchvariante" value={false}>
 					unscharfe Suche
 				</Segment.Item>
-			</Segment>
-			<Segment active="preset-filled-primary-500">
+			</SegmentedControl>
+			<SegmentedControl active="preset-filled-primary-500">
 				<Segment.Item
 					bind:group={corpus}
 					name="korpus"
@@ -171,7 +171,7 @@
 				>
 					Textzeugen (9.96MB)
 				</Segment.Item>
-			</Segment>
+			</SegmentedControl>
 		</div>
 	</div>
 </section>

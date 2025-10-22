@@ -2,11 +2,11 @@
 	import '../app.css';
 	import '@fortawesome/fontawesome-free/css/solid.min.css';
 	import '@fortawesome/fontawesome-free/css/fontawesome.min.css';
-	import { AppBar, Modal } from '@skeletonlabs/skeleton-svelte';
+	import { AppBar, Dialog } from '@skeletonlabs/skeleton-svelte';
 	import { page } from '$app/state';
 	import { base } from '$app/paths';
 	import { toaster } from '$lib/components/toaster';
-	import { Toaster } from '@skeletonlabs/skeleton-svelte';
+	import { Toast } from '@skeletonlabs/skeleton-svelte';
 	/** @type {{children?: import('svelte').Snippet}} */
 	let { children } = $props();
 
@@ -50,7 +50,7 @@
 		</ul>
 	</nav>
 	{#snippet trail()}
-		<Modal
+		<Dialog
 			open={openState}
 			onOpenChange={(e) => (openState = e.open)}
 			positionerJustify="justify-start"
@@ -81,7 +81,7 @@
 					</ul>
 				</nav>
 			{/snippet}
-		</Modal>
+		</Dialog>
 	{/snippet}
 </AppBar>
 
@@ -89,4 +89,4 @@
 	{@render children?.()}
 </main>
 
-<Toaster {toaster}></Toaster>
+<Toast.Group {toaster}></Toast.Group>

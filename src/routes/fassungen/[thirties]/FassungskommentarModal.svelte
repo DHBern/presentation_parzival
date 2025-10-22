@@ -1,10 +1,10 @@
 <script>
-	import { Modal } from '@skeletonlabs/skeleton-svelte';
+	import { Dialog } from '@skeletonlabs/skeleton-svelte';
 
 	let { commentary, id, openState = $bindable() } = $props();
 </script>
 
-<Modal
+<Dialog
 	defaultOpen={true}
 	onOpenChange={() => (openState = false)}
 	classes="fassungskommentar_modal"
@@ -25,7 +25,7 @@
 			{/if}
 		</article>
 	{/snippet}
-</Modal>
+</Dialog>
 
 <style lang="postcss">
 	@reference "tailwindcss";
