@@ -36,53 +36,57 @@
 	];
 </script>
 
-<AppBar classes="px-4 py-0">
-	{#snippet lead()}
-		<a class="text-xl uppercase font-bold hover:text-primary-700" href={`${base}/`}>Parzival</a>
-	{/snippet}
-	<nav class="">
-		<ul class="hidden items-center flex-none lg:flex lg:flex-wrap">
-			{#each pages as page}
-				<li class="list-nav-item inline-block h-full p-4 {classesActive(page.path)}">
-					<a href={`${base}${page.path}`}>{page.slug}</a>
-				</li>
-			{/each}
-		</ul>
-	</nav>
-	{#snippet trail()}
-		<Dialog
-			open={openState}
-			onOpenChange={(e) => (openState = e.open)}
-			positionerJustify="justify-start"
-			positionerAlign=""
-			positionerPadding="p-10"
-			transitionsPositionerIn={{ y: -480, duration: 200 }}
-			transitionsPositionerOut={{ y: -480, duration: 200 }}
-			backdropClasses="backdrop-blur-xl"
-		>
-			{#snippet trigger()}
-				<!-- this is an anchor tag because of node_invalid_placement warning -->
-				<!-- svelte-ignore a11y_missing_attribute -->
-				<!-- svelte-ignore a11y_click_events_have_key_events -->
-				<a tabindex="0" role="button" aria-label="Menü" class="lg:!hidden btn-icon">
-					<i class="fa-solid fa-bars"></i>
-				</a>
-			{/snippet}
-			{#snippet content()}
-				<nav class="list-nav">
-					<ul>
-						{#each pages as page}
-							<li>
-								<a href={`${base}${page.path}`} onclick={modalClose}>
-									<span class="flex-auto">{page.slug}</span>
-								</a>
-							</li>
-						{/each}
-					</ul>
-				</nav>
-			{/snippet}
-		</Dialog>
-	{/snippet}
+<AppBar>
+	<AppBar.Toolbar class="px-4 py-0">
+		<AppBar.Lead>
+			<a class="text-xl uppercase font-bold hover:text-primary-700" href={`${base}/`}>Parzival</a>
+		</AppBar.Lead>
+		<AppBar.Headline>
+			<nav class="">
+				<ul class="hidden items-center flex-none lg:flex lg:flex-wrap">
+					{#each pages as page}
+						<li class="list-nav-item inline-block h-full p-4 {classesActive(page.path)}">
+							<a href={`${base}${page.path}`}>{page.slug}</a>
+						</li>
+					{/each}
+				</ul>
+			</nav>
+		</AppBar.Headline>
+		<AppBar.Trail>
+			<Dialog
+				open={openState}
+				onOpenChange={(e) => (openState = e.open)}
+				positionerJustify="justify-start"
+				positionerAlign=""
+				positionerPadding="p-10"
+				transitionsPositionerIn={{ y: -480, duration: 200 }}
+				transitionsPositionerOut={{ y: -480, duration: 200 }}
+				backdropClasses="backdrop-blur-xl"
+			>
+				{#snippet trigger()}
+					<!-- this is an anchor tag because of node_invalid_placement warning -->
+					<!-- svelte-ignore a11y_missing_attribute -->
+					<!-- svelte-ignore a11y_click_events_have_key_events -->
+					<a tabindex="0" role="button" aria-label="Menü" class="lg:!hidden btn-icon">
+						<i class="fa-solid fa-bars"></i>
+					</a>
+				{/snippet}
+				{#snippet content()}
+					<nav class="list-nav">
+						<ul>
+							{#each pages as page}
+								<li>
+									<a href={`${base}${page.path}`} onclick={modalClose}>
+										<span class="flex-auto">{page.slug}</span>
+									</a>
+								</li>
+							{/each}
+						</ul>
+					</nav>
+				{/snippet}
+			</Dialog>
+		</AppBar.Trail>
+	</AppBar.Toolbar>
 </AppBar>
 
 <main id="page-content" class="flex-auto px-4">
