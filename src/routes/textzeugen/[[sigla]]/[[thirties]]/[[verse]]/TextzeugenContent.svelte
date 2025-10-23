@@ -142,8 +142,9 @@
 					return;
 				} else {
 					toaster.error({
-						title: 'Vers nicht gefunden',
-						description: `Der Vers ${target} ist nicht im Textzeugen ${siglaFromHandle(label)} enthalten. Es werden die nächsten verfügbaren Verse angezeigt.`
+						title: 'Vers nicht überliefert',
+						description: `Der Vers ${target} ist im Textzeugen ${siglaFromHandle(label)} nicht enthalten. Es werden die nächsten verfügbaren Verse angezeigt.`,
+						duration: 60 * 5 * 1000
 					});
 					programmaticScroll = true;
 					// find the verse that is closest to the target verse
