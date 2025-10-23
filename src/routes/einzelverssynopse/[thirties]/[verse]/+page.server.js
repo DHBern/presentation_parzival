@@ -2,6 +2,7 @@ import { URL_TEI_PB } from '$lib/constants';
 import { generateEntries } from '$lib/functions/generateEntries';
 import { metadata } from '$lib/data/metadata';
 import siglaFromHandle from '$lib/functions/siglaFromHandle';
+import { verses } from '$lib/data/verses';
 
 /** @type {import('./$types').PageServerLoad} */
 export async function load({ fetch, params }) {
@@ -44,10 +45,18 @@ export async function load({ fetch, params }) {
 	// Convert array back to object
 	const resolvedPublisherDataObject = Object.fromEntries(resolvedPublisherData);
 
+	const index = (await verses).findIndex(
+		(/** @type {{thirties: string, verse: string}} */ v) =>
+			v.thirties === thirties && v.verse === verse
+	);
+	const prevVerse = index > 0 ? (await verses)[index - 1] : null;
+
+	const nextVerse = index < (await verses).length - 1 ? (await verses)[index + 1] : null;
+
 	return {
 		thirties,
 		verse,
-		metadata: await metadata,
+		metadata: { ...(await metadata), next: nextVerse, prev: prevVerse },
 		publisherData: resolvedPublisherDataObject,
 		loss: loss.map((/** @type {string} */ element) => siglaFromHandle(element))
 	};

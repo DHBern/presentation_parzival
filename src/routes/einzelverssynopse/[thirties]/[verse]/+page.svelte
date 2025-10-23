@@ -4,7 +4,6 @@
 	import { base } from '$app/paths';
 	import { NUMBER_OF_PAGES } from '$lib/constants';
 	import { goto } from '$app/navigation';
-	import { onMount } from 'svelte';
 
 	/** @type {{data: import('./$types').PageData}} */
 	let { data } = $props();
