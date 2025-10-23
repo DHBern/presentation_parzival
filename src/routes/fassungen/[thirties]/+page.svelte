@@ -402,7 +402,15 @@
 	{/snippet}
 	<h1 class="h1 my-4">Fassungsansicht</h1>
 	<div class="grid gap-6 md:grid-cols-2 md:my-8">
-		<p>Einstellungen und Links zu den Textzeugen.</p>
+		<p>
+			Finden Sie hier den Monotext als PDF: <a
+				class="anchor"
+				target="_blank"
+				href="https://dhbern.github.io/parzival-static-api/api/export/pdf/monopsen.pdf#page={data.thirties}"
+			>
+				Dreißiger {data.thirties}
+			</a>
+		</p>
 
 		{#if mobileBreakpoint}
 			<Switch
