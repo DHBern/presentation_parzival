@@ -347,14 +347,14 @@
 	// Triggers
 	const addApparatTriggerListeners = () => {
 		removeApparatTriggerListeners();
-		document.querySelectorAll('.anchor').forEach((el) => {
+		document.querySelectorAll('.verse .anchor').forEach((el) => {
 			el.addEventListener('mouseenter', onMouseEnterApparatTrigger, false);
 			el.addEventListener('mouseleave', onMouseLeaveApparatTrigger, false);
 			el.addEventListener('click', onClickApparatTrigger, false);
 		});
 	};
 	const removeApparatTriggerListeners = () => {
-		document.querySelectorAll(`.anchor`).forEach((el) => {
+		document.querySelectorAll(`.verse .anchor`).forEach((el) => {
 			el.removeEventListener('mouseenter', onMouseEnterApparatTrigger);
 			el.removeEventListener('mouseleave', onMouseLeaveApparatTrigger);
 			el.removeEventListener('click', onClickApparatTrigger);
