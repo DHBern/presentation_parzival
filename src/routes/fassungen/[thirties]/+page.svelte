@@ -16,6 +16,7 @@
 	let verseWidth = $derived(page.data.thirties.length + 4);
 
 	const composureTitles = ['*D', '*m', '*G', '*T'];
+	/** @type {Record<string, string>} */
 	const composureTitlesByColumn = { d: '*D', m: '*m', G: '*G', T: '*T' };
 	class localPageClass {
 		/**
@@ -23,6 +24,7 @@
 		 * @type {[[number, string][],[number, string][],[number, string][],[number, string][]]}
 		 */
 		pages = $state([[], [], [], []]);
+		/** @type {Record<string, string>[]} */
 		distributions = $state([{}, {}, {}, {}]);
 		/**
 		 * @type {Number[]}
@@ -40,7 +42,10 @@
 		 * @returns {Promise<void>} - A promise that resolves when the data is fetched.
 		 */
 		fetchPage = async (/** @type {Number} */ page) => {
-			const prepareHTML = (info, /** @type {string} */ column) => {
+			const prepareHTML = (
+				/** @type {{ content: string; apparat: { reading: any[]; structure: any[]; distribution: string; }; fasskomm: any[]; }} */ info,
+				/** @type {string} */ column
+			) => {
 				// select all lines in the HTML and process them
 				const parser = new DOMParser();
 				const doc = parser.parseFromString(info.content, 'text/html');
@@ -48,7 +53,10 @@
 				// 1. transform the input array into an object array by...
 				// 	 a. grouping by the key
 				//   b. glowing strings together for repeating key (separated by linebreak)
-				const reducer = (acc, object) => {
+				const reducer = (
+					/** @type {{ [x: string]: any; }} */ acc,
+					/** @type {{ [s: string]: any; } | ArrayLike<any>} */ object
+				) => {
 					for (const [key, value] of Object.entries(object)) {
 						if (value) {
 							acc[key] = (acc[key] ?? '') + value + '<br/>';
@@ -128,6 +136,9 @@
 			let labels = ['d', 'm', 'G', 'T'];
 			// if the page is not already loaded
 			if (!this.thirties.length) {
+				/**
+				 * @type {{ content: string; apparat: { reading: any[]; structure: any[]; distribution: string; }; fasskomm: any[]; }[]}
+				 */
 				let info;
 				// fetch the page before the current one if the current one is not the first
 				if (page > 1) {
@@ -218,22 +229,22 @@
 	// --------------------------------------
 	// Store containing the content of the selected popover
 	let FasskommStore = $state({
-		elTrigger: undefined,
+		/** @type { HTMLElement | undefined } */ elTrigger: undefined,
 		dreissiger: '',
 		verse: '',
 		id: '',
 		commentary: ''
 	});
 
-	const fillFasskommStore = (elTrigger, ignore = false) => {
+	const fillFasskommStore = (/** @type { HTMLElement } */ elTrigger, ignore = false) => {
 		if (!ignore) {
 			resetFasskommStore();
 			const elData = elTrigger.dataset;
 			FasskommStore.elTrigger = elTrigger;
-			FasskommStore.dreissiger = elData.dreissiger;
-			FasskommStore.verse = elData.verse;
-			FasskommStore.id = elData.id;
-			FasskommStore.commentary = decodeURIComponent(elData.commentary);
+			FasskommStore.dreissiger = elData.dreissiger ?? '';
+			FasskommStore.verse = elData.verse ?? '';
+			FasskommStore.id = elData.id ?? '';
+			FasskommStore.commentary = decodeURIComponent(elData.commentary ?? '');
 		}
 	};
 	const resetFasskommStore = () => {
@@ -256,8 +267,10 @@
 			el.removeEventListener('click', onClickFasskommTrigger);
 		});
 	};
-	const onClickFasskommTrigger = (ev) => {
-		fillFasskommStore(ev.target, false);
+	const onClickFasskommTrigger = (/** @type { Event } */ ev) => {
+		if (ev.target instanceof HTMLElement) {
+			fillFasskommStore(ev.target, false);
+		}
 	};
 
 	// --------------------------------------
@@ -265,7 +278,7 @@
 	// --------------------------------------
 	// ApparatStrore contains the content of the selected popover
 	let ApparatStore = $state({
-		elTrigger: undefined,
+		/** @type { HTMLElement | undefined } */ elTrigger: undefined,
 		dreissiger: '',
 		verse: '',
 		title: '',
@@ -278,16 +291,16 @@
 	let timeoutonMouseLeaveApparatPopup = $state();
 	let ignoreApparatLeave = $state(false);
 
-	const fillApparatStore = (elTrigger, ignore = false) => {
+	const fillApparatStore = (/** @type { HTMLElement } */ elTrigger, ignore = false) => {
 		if (!ignore) {
 			resetApparatStore();
 			const elData = elTrigger.dataset;
 			ApparatStore.elTrigger = elTrigger;
-			ApparatStore.title = elData.title;
-			ApparatStore.dreissiger = elData.dreissiger;
-			ApparatStore.verse = elData.verse;
-			ApparatStore.structure_info = decodeURIComponent(elData.structure_info);
-			ApparatStore.reading_info = decodeURIComponent(elData.reading_info);
+			ApparatStore.title = elData.title ?? '';
+			ApparatStore.dreissiger = elData.dreissiger ?? '';
+			ApparatStore.verse = elData.verse ?? '';
+			ApparatStore.structure_info = decodeURIComponent(elData.structure_info ?? '');
+			ApparatStore.reading_info = decodeURIComponent(elData.reading_info ?? '');
 		}
 	};
 	const resetApparatStore = () => {
@@ -304,13 +317,17 @@
 		clearTimeout(timeoutonMouseLeaveApparatPopup);
 	};
 
-	const onClickApparatTrigger = (ev) => {
+	const onClickApparatTrigger = (/** @type { Event } */ ev) => {
 		ignoreApparatLeave = true;
-		fillApparatStore(ev.target, false);
+		if (ev.target instanceof HTMLElement) {
+			fillApparatStore(ev.target, false);
+		}
 	};
-	const onMouseEnterApparatTrigger = (ev) => {
+	const onMouseEnterApparatTrigger = (/** @type { Event } */ ev) => {
 		clearTimeouts();
-		fillApparatStore(ev.target, ignoreApparatLeave);
+		if (ev.target instanceof HTMLElement) {
+			fillApparatStore(ev.target, ignoreApparatLeave);
+		}
 	};
 	const onMouseLeaveApparatTrigger = () => {
 		if (!ignoreApparatLeave) {
@@ -330,14 +347,14 @@
 	// Triggers
 	const addApparatTriggerListeners = () => {
 		removeApparatTriggerListeners();
-		document.querySelectorAll('.anchor').forEach((el) => {
+		document.querySelectorAll('.verse .anchor').forEach((el) => {
 			el.addEventListener('mouseenter', onMouseEnterApparatTrigger, false);
 			el.addEventListener('mouseleave', onMouseLeaveApparatTrigger, false);
 			el.addEventListener('click', onClickApparatTrigger, false);
 		});
 	};
 	const removeApparatTriggerListeners = () => {
-		document.querySelectorAll(`.anchor`).forEach((el) => {
+		document.querySelectorAll(`.verse .anchor`).forEach((el) => {
 			el.removeEventListener('mouseenter', onMouseEnterApparatTrigger);
 			el.removeEventListener('mouseleave', onMouseLeaveApparatTrigger);
 			el.removeEventListener('click', onClickApparatTrigger);
@@ -366,7 +383,11 @@
 
 <svelte:window bind:innerWidth={windowWidth} />
 <section id="sectionFassungen" class="w-full" style="--verse-width: {verseWidth}ch">
-	{#snippet nextPrevButton(next, page, column)}
+	{#snippet nextPrevButton(
+		/** @type {boolean} */ next,
+		/** @type {String} */ page,
+		/** @type {string} */ column
+	)}
 		<button
 			class="btn preset-filled-primary-500 w-full mb-4 {column ? 'column-' + column : ''}"
 			onclick={() =>
@@ -381,7 +402,15 @@
 	{/snippet}
 	<h1 class="h1 my-4">Fassungsansicht</h1>
 	<div class="grid gap-6 md:grid-cols-2 md:my-8">
-		<p>Einstellungen und Links zu den Textzeugen.</p>
+		<p>
+			Finden Sie hier den Monotext als PDF: <a
+				class="anchor"
+				target="_blank"
+				href="https://dhbern.github.io/parzival-static-api/api/export/pdf/monopsen.pdf#page={data.thirties}"
+			>
+				Dreißiger {data.thirties}
+			</a>
+		</p>
 
 		{#if mobileBreakpoint}
 			<Switch
