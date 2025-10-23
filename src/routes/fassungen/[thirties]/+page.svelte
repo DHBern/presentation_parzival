@@ -1,5 +1,4 @@
 <script>
-	import FassungenSyncContent from './FassungenSyncContent.svelte';
 	import FassungenContent from './FassungenContent.svelte';
 	import FassungskommentarModal from './FassungskommentarModal.svelte';
 	import { base } from '$app/paths';
@@ -441,32 +440,14 @@
 	{/if}
 
 	<!-- Fassungen Content -->
-	{#if synchro}
-		<FassungenSyncContent
-			resetPopup={closeApparatOnInteraction}
-			content={localPages.pages}
-			distributions={localPages.distributions}
-			titles={composureTitles}
-			{nextPrevButton}
-		/>
-	{:else}
-		<div class="grid md:grid-cols-[repeat(auto-fit,minmax(100px,1fr))] gap-4 my-4">
-			{#each localPages.pages as fassung, i}
-				<div>
-					{#if fassung.length >= 2}
-						<!-- when at least 2 pages are loaded, the one for the currect thirties should be loaded aswell  -->
-						<FassungenContent
-							resetPopup={closeApparatOnInteraction}
-							pages={fassung}
-							distribution={localPages.distributions[i]}
-							title={composureTitles[i]}
-							{nextPrevButton}
-						/>
-					{/if}
-				</div>
-			{/each}
-		</div>
-	{/if}
+	<FassungenContent
+		resetPopup={closeApparatOnInteraction}
+		content={localPages.pages}
+		distributions={localPages.distributions}
+		titles={composureTitles}
+		{nextPrevButton}
+		{synchro}
+	/>
 </section>
 
 <style lang="postcss">
