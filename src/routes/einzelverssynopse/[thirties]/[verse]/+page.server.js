@@ -44,14 +44,13 @@ export async function load({ fetch, params }) {
 
 	// Convert array back to object
 	const resolvedPublisherDataObject = Object.fromEntries(resolvedPublisherData);
+	const filteredVerses = /** @type {{siglum:string, thirties: string, verse: string}[]} */ (
+		await verses
+	).filter((v) => !v.siglum.includes('fr'));
+	const index = filteredVerses.findIndex((v) => v?.thirties === thirties && v?.verse === verse);
+	const prevVerse = index > 0 ? filteredVerses[index - 1] : null;
 
-	const index = (await verses).findIndex(
-		(/** @type {{thirties: string, verse: string}} */ v) =>
-			v.thirties === thirties && v.verse === verse
-	);
-	const prevVerse = index > 0 ? (await verses)[index - 1] : null;
-
-	const nextVerse = index < (await verses).length - 1 ? (await verses)[index + 1] : null;
+	const nextVerse = index < filteredVerses.length - 1 ? filteredVerses[index + 1] : null;
 
 	return {
 		thirties,
