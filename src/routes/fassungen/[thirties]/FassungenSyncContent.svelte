@@ -94,9 +94,6 @@
 				@apply ml-1;
 			}
 		}
-		:global(.line:first-child) {
-			@apply rounded-t-xl;
-		}
 		@variant md {
 			:global(.column-d) {
 				grid-column: 1;
