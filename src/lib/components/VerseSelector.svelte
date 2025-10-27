@@ -9,18 +9,23 @@
 	//TODO: use preloadData as soon as valid data is entered
 
 	/**
-	 * @type {HTMLInputElement}
+	 * @type {HTMLInputElement | undefined}
 	 */
 	let thirties = $state();
 	/**
-	 * @type {HTMLInputElement}
+	 * @type {HTMLInputElement | undefined}
 	 */
 	let verse = $state();
 
-	let additional = $state('');
+	/**
+	 * @type {HTMLInputElement | undefined}
+	 */
+	let additional = $state();
 
 	let thirtiesVal = $derived(Number(coordinates[0]));
-	let verseVal = $derived(Number(coordinates[1]));
+	let verseParts = $derived(String(coordinates[1]).split('-'));
+	let verseVal = $derived(Number(verseParts[0]));
+	let additionalVal = $derived(verseParts.slice(1).join('-'));
 
 	function handleInput(/** @type {Event} */ e) {
 		if (e.target instanceof HTMLInputElement) {
@@ -50,9 +55,9 @@
 	class="flex max-w-full items-baseline gap-1 my-3"
 	onsubmit={(e) => {
 		e.preventDefault();
-		if (validateMinMax(thirties) && validateMinMax(verse)) {
+		if (thirties && verse && validateMinMax(thirties) && validateMinMax(verse)) {
 			goto(
-				`${base}${targetPath}/${thirties.value}/${verse.value}${additional ? '-' + additional : ''}`
+				`${base}${targetPath}/${thirties?.value}/${verse?.value}${additional?.value ? '-' + additional?.value : ''}`
 			);
 		}
 	}}
@@ -77,11 +82,14 @@
 			oninput={handleInput}
 			bind:this={verse}
 			value={verseVal}
-		/>-<input type="text" placeholder="Zusatz" class="input max-w-20" bind:value={additional} />
-		<button
-			aria-label="suchen"
-			class="btn-icon preset-filled btn-icon-sm flex-shrink-0 flex-grow-0"
-		>
+		/>-<input
+			type="text"
+			placeholder="Zusatz"
+			class="input max-w-20"
+			bind:this={additional}
+			value={additionalVal}
+		/>
+		<button aria-label="suchen" class="btn-icon preset-filled btn-icon-sm shrink-0 grow-0">
 			<i class="fa-solid fa-magnifying-glass"></i></button
 		>
 	{/if}
