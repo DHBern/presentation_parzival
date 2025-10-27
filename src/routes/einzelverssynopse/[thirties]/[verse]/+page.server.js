@@ -44,9 +44,69 @@ export async function load({ fetch, params }) {
 
 	// Convert array back to object
 	const resolvedPublisherDataObject = Object.fromEntries(resolvedPublisherData);
+	/** @type {{siglum:string, thirties: string, verse: string}[]} */
+	let startobj = []; //This is just for typing purposes
 	const filteredVerses = /** @type {{siglum:string, thirties: string, verse: string}[]} */ (
 		await verses
-	).filter((v) => !v.siglum.includes('fr'));
+	)
+		.filter((v) => !v.siglum.includes('fr'))
+		// de-duplicate by thirties+verse (keep first occurrence)
+		.reduce(
+			(acc, curr) => {
+				const key = `${curr.thirties}|${curr.verse}`;
+				if (!acc.seen.has(key)) {
+					acc.seen.add(key);
+					acc.items.push(curr);
+				}
+				return acc;
+			},
+			{ seen: new Set(), items: startobj }
+		)
+		.items // sort: by thirties (numeric), then verse with hierarchical dashes:
+		.sort((a, b) => {
+			const thA = Number(a.thirties);
+			const thB = Number(b.thirties);
+			if (thA !== thB) return thA - thB;
+
+			// parse "12", "12-1", "12-a", "12-a-2", etc.
+			const parse = (/** @type {string} */ s) => {
+				const parts = String(s).split('-');
+				const base = Number(parts.shift());
+				const tokens = parts.map((p) => {
+					// numeric tokens first, then alpha tokens
+					if (/^\d+$/.test(p)) return { t: 'num', v: Number(p) };
+					return { t: 'str', v: p.toLowerCase() };
+				});
+				return { base, tokens };
+			};
+
+			const A = parse(a.verse);
+			const B = parse(b.verse);
+
+			if (A.base !== B.base) return A.base - B.base;
+
+			const len = Math.max(A.tokens.length, B.tokens.length);
+			for (let i = 0; i < len; i++) {
+				const ta = A.tokens[i];
+				const tb = B.tokens[i];
+				// shorter (no further suffix) comes first: e.g., 12 < 12-1 or 12-a
+				if (ta === undefined) return -1;
+				if (tb === undefined) return 1;
+
+				if (ta.t === tb.t) {
+					if (ta.t === 'num') {
+						if (ta.v !== tb.v) return Number(ta.v) - Number(tb.v); // 12-1 < 12-2
+					} else {
+						const cmp = String(ta.v).localeCompare(String(tb.v)); // 12-a < 12-b
+						if (cmp !== 0) return cmp;
+					}
+				} else {
+					// numbers before strings at the same level: 12-1 < 12-a
+					return ta.t === 'num' ? -1 : 1;
+				}
+			}
+			return 0;
+		});
 	const index = filteredVerses.findIndex((v) => v?.thirties === thirties && v?.verse === verse);
 	const prevVerse = index > 0 ? filteredVerses[index - 1] : null;
 

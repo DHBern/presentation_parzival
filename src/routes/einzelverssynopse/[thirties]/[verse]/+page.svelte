@@ -2,28 +2,26 @@
 	import { Switch } from '@skeletonlabs/skeleton-svelte';
 	import VerseSelector from '$lib/components/VerseSelector.svelte';
 	import { base } from '$app/paths';
-	import { NUMBER_OF_PAGES } from '$lib/constants';
 	import { goto } from '$app/navigation';
 
 	/** @type {{data: import('./$types').PageData}} */
 	let { data } = $props();
-	$inspect(data.metadata.next);
 
 	let { thirties, verse, metadata, publisherData, loss } = $derived(data);
 	// remove leading zeros in verse
-	let verseNoZero = $derived(verse.slice(0, -2) + Number(verse.slice(-2)));
+	let verseNoZero = $derived(verse.replace(/^0+/, ''));
 	let hyparchetypesSlider = $state(false);
 
-	//! This is a temporary fix (not all thirties have exactly 30 verses!)
-	let highestVerseNumber = $derived(Number(thirties) === 257 ? 32 : 30);
-	let highestVerseNumberPrev = $derived(Number(thirties) === 258 ? 32 : 30);
-
 	let prevVerseURL = $derived(
-		`${base}/einzelverssynopse/${data.metadata.prev.thirties}/${data.metadata.prev.verse}`
+		data?.metadata?.prev
+			? `${base}/einzelverssynopse/${data?.metadata?.prev?.thirties}/${data?.metadata?.prev?.verse}`
+			: ''
 	);
 
 	let nextVerseURL = $derived(
-		`${base}/einzelverssynopse/${data.metadata.next.thirties}/${data.metadata.next.verse}`
+		data?.metadata?.next
+			? `${base}/einzelverssynopse/${data?.metadata?.next?.thirties}/${data?.metadata?.next?.verse}`
+			: ''
 	);
 
 	/**
@@ -94,10 +92,10 @@
 		<h2 class="h2 my-7">Zu Vers springen:</h2>
 		<VerseSelector targetPath="/einzelverssynopse" coordinates={[thirties, verse]} />
 		<div class="flex justify-between">
-			{#if !(parseInt(thirties) === 1 && parseInt(verse) === 1)}
+			{#if data?.metadata?.prev}
 				<a class="anchor" href={prevVerseURL}> vorheriger Vers </a>
 			{/if}
-			{#if !(parseInt(thirties) === NUMBER_OF_PAGES && parseInt(verse) >= highestVerseNumber)}
+			{#if data?.metadata?.next}
 				<a class="anchor" href={nextVerseURL}> nächster Vers </a>
 			{/if}
 		</div>
