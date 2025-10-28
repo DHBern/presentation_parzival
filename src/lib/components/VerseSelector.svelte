@@ -2,6 +2,7 @@
 	import { goto, preloadData } from '$app/navigation';
 	import { base } from '$app/paths';
 	import { NUMBER_OF_PAGES } from '$lib/constants';
+	import { afterNavigate } from '$app/navigation';
 
 	/** @type {{targetPath?: string, coordinates?: [String | boolean, String | boolean]}} */
 	let { targetPath = '/einzelverssynopse', coordinates = ['1', '1'] } = $props();
@@ -25,7 +26,7 @@
 	let thirtiesVal = $derived(Number(coordinates[0]));
 	let verseParts = $derived(String(coordinates[1]).split('-'));
 	let verseVal = $derived(Number(verseParts[0]));
-	let additionalVal = $derived(verseParts.slice(1).join('-'));
+	// let additionalVal = $derived(verseParts.slice(1).join('-'));
 
 	function handleInput(/** @type {Event} */ e) {
 		if (e.target instanceof HTMLInputElement) {
@@ -49,6 +50,11 @@
 			}
 		}
 	};
+
+	afterNavigate(() => {
+		//reset additional field after navigation
+		if (additional) additional.value = '';
+	});
 </script>
 
 <form
@@ -82,13 +88,7 @@
 			oninput={handleInput}
 			bind:this={verse}
 			value={verseVal}
-		/>-<input
-			type="text"
-			placeholder="Zusatz"
-			class="input max-w-20"
-			bind:this={additional}
-			value={additionalVal}
-		/>
+		/>-<input type="text" placeholder="Zusatz" class="input max-w-20" bind:this={additional} />
 		<button aria-label="suchen" class="btn-icon preset-filled btn-icon-sm shrink-0 grow-0">
 			<i class="fa-solid fa-magnifying-glass"></i></button
 		>
