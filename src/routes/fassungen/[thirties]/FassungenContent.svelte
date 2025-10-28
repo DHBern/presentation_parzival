@@ -44,30 +44,20 @@
 			};
 		});
 	};
-
-	const setSyncedScroll = (/** @type {HTMLDivElement} */ node) => {
-		$effect(() => {
-			if (scrolltop && node.scrollTop !== scrolltop) {
-				node.scrollTo({ top: scrolltop, behavior: 'instant' });
-			}
-		});
-	};
 </script>
 
-<div class="mb-4">
+<div class="mb-4 lg:min-h-24">
 	<h2 class="h2 inline">{title}</h2>
 	<div class="inline [&_ul,&_li]:inline [&_li]:mr-1">
 		{@html distribution[activeThirties.value]}
 	</div>
 </div>
 <div
-	class="max-h-[70vh] overflow-y-auto bg-gray-100 dark:preset-filled-surface-500 rounded-xl"
+	class="max-h-[70vh] overflow-y-auto bg-gray-100 dark:preset-filled-surface-500"
 	bind:this={scrollContainer}
-	onscroll={(/** @type {{ target: { scrollTop: any; }; }} */ o) => {
-		scrolltop = o?.target?.scrollTop;
+	onscroll={() => {
 		resetPopup();
 	}}
-	use:setSyncedScroll
 >
 	{#if pages[0][0] > 1}
 		{@render nextPrevButton(false, pages[0][0] - 1)}
