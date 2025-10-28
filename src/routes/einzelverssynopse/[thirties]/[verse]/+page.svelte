@@ -2,34 +2,31 @@
 	import { Switch } from '@skeletonlabs/skeleton-svelte';
 	import VerseSelector from '$lib/components/VerseSelector.svelte';
 	import { base } from '$app/paths';
-	import { NUMBER_OF_PAGES } from '$lib/constants';
 	import { goto } from '$app/navigation';
-	import { onMount } from 'svelte';
 
 	/** @type {{data: import('./$types').PageData}} */
 	let { data } = $props();
 
 	let { thirties, verse, metadata, publisherData, loss } = $derived(data);
 	// remove leading zeros in verse
-	let verseNoZero = $derived(verse.slice(0, -2) + Number(verse.slice(-2)));
+	let verseNoZero = $derived(verse.replace(/^0+/, ''));
 	let hyparchetypesSlider = $state(false);
 
-	//! This is a temporary fix (not all thirties have exactly 30 verses!)
-	let highestVerseNumber = $derived(Number(thirties) === 257 ? 32 : 30);
-	let highestVerseNumberPrev = $derived(Number(thirties) === 258 ? 32 : 30);
-
 	let prevVerseURL = $derived(
-		`${base}/einzelverssynopse/${
-			parseInt(verse) === 1 ? parseInt(thirties) - 1 : thirties
-		}/${parseInt(verse) === 1 ? highestVerseNumberPrev : parseInt(verse) - 1}`
+		data?.metadata?.prev
+			? `${base}/einzelverssynopse/${data?.metadata?.prev?.thirties}/${data?.metadata?.prev?.verse}`
+			: ''
 	);
 
 	let nextVerseURL = $derived(
-		`${base}/einzelverssynopse/${
-			parseInt(verse) >= highestVerseNumber ? parseInt(thirties) + 1 : thirties
-		}/${parseInt(verse) >= highestVerseNumber ? 1 : parseInt(verse) + 1}`
+		data?.metadata?.next
+			? `${base}/einzelverssynopse/${data?.metadata?.next?.thirties}/${data?.metadata?.next?.verse}`
+			: ''
 	);
 
+	/**
+	 * @param { KeyboardEvent } ev
+	 */
 	function handleKeyDown(ev) {
 		if (ev.key === 'ArrowRight') {
 			goto(nextVerseURL);
@@ -64,7 +61,8 @@
 				{#each archetype.witnesses as witness}
 					{#if publisherData[witness]?.content}
 						<dt class="pr-4 pt-2 {hyparchetypesSlider ? 'ml-5' : ''}">
-							{metadata.codices.find((c) => c.handle === witness)?.sigil}
+							{metadata.codices.find((/** @type {{ handle: any; }} */ c) => c.handle === witness)
+								?.sigil}
 						</dt>
 						<dd class="border-l-2 border-current {hyparchetypesSlider ? 'ml-5' : ''} pl-4 py-1">
 							{@html publisherData[witness]?.content}
@@ -94,10 +92,10 @@
 		<h2 class="h2 my-7">Zu Vers springen:</h2>
 		<VerseSelector targetPath="/einzelverssynopse" coordinates={[thirties, verse]} />
 		<div class="flex justify-between">
-			{#if !(parseInt(thirties) === 1 && parseInt(verse) === 1)}
+			{#if data?.metadata?.prev}
 				<a class="anchor" href={prevVerseURL}> vorheriger Vers </a>
 			{/if}
-			{#if !(parseInt(thirties) === NUMBER_OF_PAGES && parseInt(verse) >= highestVerseNumber)}
+			{#if data?.metadata?.next}
 				<a class="anchor" href={nextVerseURL}> nächster Vers </a>
 			{/if}
 		</div>

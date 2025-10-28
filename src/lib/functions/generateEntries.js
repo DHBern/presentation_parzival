@@ -1,4 +1,4 @@
-import { URL_STATIC_API } from '$lib/constants';
+import { verses } from '$lib/data/verses';
 
 /**
  * Generate all 827 Dreissiger with 1-30 verses for all sigla
@@ -8,22 +8,21 @@ import { URL_STATIC_API } from '$lib/constants';
 
 export async function generateEntries(sigla) {
 	/** @type {{verses: {thirties: string, verse: string}[]}} */
-	const { verses } = await fetch(`${URL_STATIC_API}/json/metadata-ms-verses.json`).then((r) =>
-		r.json()
-	);
 	if (sigla) {
-		return verses;
+		return await verses;
 	} else {
 		/** @type {{thirties: string, verse: string}[]} */
 		let returnArray = [];
 		let uniqueVerses = new Set();
-		verses.forEach((/** @type {{thirties: string, verse: string}} */ { thirties, verse }) => {
-			const key = `${thirties}-${verse}`;
-			if (!uniqueVerses.has(key)) {
-				uniqueVerses.add(key);
-				returnArray.push({ thirties, verse });
+		(await verses).forEach(
+			(/** @type {{thirties: string, verse: string}} */ { thirties, verse }) => {
+				const key = `${thirties}-${verse}`;
+				if (!uniqueVerses.has(key)) {
+					uniqueVerses.add(key);
+					returnArray.push({ thirties, verse });
+				}
 			}
-		});
+		);
 		return returnArray;
 	}
 }
