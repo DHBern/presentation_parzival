@@ -10,7 +10,14 @@ export async function load({ fetch, params }) {
 	const publisherData = {};
 
 	const thirties = params.thirties ?? '1';
-	const verse = params.verse?.padStart(2, '0') ?? '01';
+	const verseparts = params?.verse?.split('-');
+	let verse = '01';
+
+	if (verseparts.length > 1) {
+		verse = verseparts[0].padStart(2, '0') + '-' + verseparts.slice(1).join('-');
+	} else if (verseparts.length === 1) {
+		verse = verseparts[0].padStart(2, '0');
+	}
 
 	// Fetch the textzeugen
 	(await metadata).codices.forEach((/** @type {{ handle: string | number; }} */ element) => {
