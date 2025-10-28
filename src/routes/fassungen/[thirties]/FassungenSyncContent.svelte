@@ -45,7 +45,7 @@
 	});
 </script>
 
-<div class="grid md:grid-cols-[repeat(auto-fit,minmax(100px,1fr))] gap-4 my-4">
+<div class="grid lg:grid-cols-4 gap-4 my-4">
 	{#each content as _fassung, i}
 		<div>
 			<h2 class="h2 inline">{titles[i]}</h2>
@@ -56,7 +56,7 @@
 	{/each}
 </div>
 <div
-	class="grid md:grid-cols-[repeat(auto-fit,minmax(100px,1fr))] gap-x-4 my-4 tei-content synced grid-flow-dense max-h-[70vh] overflow-y-auto"
+	class="grid lg:grid-cols-4 gap-x-4 my-4 tei-content synced grid-flow-dense max-h-[70vh] overflow-y-auto"
 	bind:this={scrollContainer}
 	onscroll={() => {
 		resetPopup();
@@ -94,7 +94,7 @@
 				@apply ml-1;
 			}
 		}
-		@variant md {
+		@variant lg {
 			:global(.column-d) {
 				grid-column: 1;
 			}
@@ -106,18 +106,6 @@
 			}
 			:global(.column-T) {
 				grid-column: 4;
-			}
-			:global(:nth-child(1 of .column-T)),
-			:global(:nth-child(1 of .column-G)),
-			:global(:nth-child(1 of .column-m)),
-			:global(:nth-child(1 of .column-d)) {
-				@apply rounded-t-xl;
-			}
-			:global(:nth-last-child(1 of .column-T)),
-			:global(:nth-last-child(1 of .column-G)),
-			:global(:nth-last-child(1 of .column-m)),
-			:global(:nth-last-child(1 of .column-d)) {
-				@apply rounded-b-xl;
 			}
 		}
 	}

@@ -46,7 +46,7 @@
 	};
 </script>
 
-<div class="mb-4 min-h-24">
+<div class="mb-4 lg:min-h-24">
 	<h2 class="h2 inline">{title}</h2>
 	<div class="inline [&_ul,&_li]:inline [&_li]:mr-1">
 		{@html distribution[activeThirties.value]}

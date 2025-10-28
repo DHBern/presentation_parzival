@@ -204,7 +204,7 @@
 		if (typeof styles === 'object') {
 			return (
 				windowWidth / (16 * Number(styles.getPropertyValue('--text-scaling'))) >=
-				parseInt(styles.getPropertyValue('--breakpoint-md'))
+				parseInt(styles.getPropertyValue('--breakpoint-lg'))
 			);
 		}
 		return false;
@@ -450,7 +450,7 @@
 			{nextPrevButton}
 		/>
 	{:else}
-		<div class="grid md:grid-cols-[repeat(auto-fit,minmax(100px,1fr))] gap-4 my-4">
+		<div class="grid lg:grid-cols-4 gap-4 my-4">
 			{#each localPages.pages as fassung, i}
 				<div>
 					{#if fassung.length >= 2}
