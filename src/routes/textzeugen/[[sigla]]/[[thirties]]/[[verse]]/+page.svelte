@@ -163,8 +163,10 @@
 						controlInactive="bg-surface-100"
 						name="synchro"
 						checked={synchro}
-						onCheckedChange={(e) => (synchro = e.checked)}>Synchrones scrollen</Switch
+						onCheckedChange={(e) => (synchro = e.checked)}
 					>
+						synchron scrollen
+					</Switch>
 				</div>
 			{/if}
 		</div>
