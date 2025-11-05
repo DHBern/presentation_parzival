@@ -38,6 +38,9 @@
 }
 
 .tei-content {
+	.image {
+		@apply italic;
+	}
 	.sr {
 		color: green;
 	}
