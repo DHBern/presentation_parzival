@@ -38,14 +38,30 @@ export async function load({ fetch, params }) {
 	// Wait for all promises to resolve and filter those with status 200
 	const resolvedPublisherData = await Promise.all(
 		Object.entries(publisherData).map(async ([key, promise]) => {
-			const response = await promise;
+			let response = await promise;
+			let data = null;
 			if (response.status === 200) {
-				const data = await response.json();
-				return [key, data];
+				data = await response.json();
 			} else {
-				loss.push(key);
+				const response = await fetch(
+					`${URL_TEI_PB}/parts/${key}.xml/json?odd=parzival.odd&view=page&id=${key}_${thirties}.${verse}-a`
+				);
+				if (response.status === 200) {
+					data = await response.json();
+				} else {
+					const response = await fetch(
+						`${URL_TEI_PB}/parts/${key}.xml/json?odd=parzival.odd&view=page&id=${key}_${thirties}.${verse}-k`
+					);
+					if (response.status === 200) {
+						data = await response.json();
+					}
+				}
 			}
-			return null;
+			if (data === null) {
+				loss.push(key);
+				return null;
+			}
+			return [key, data];
 		})
 	).then((results) => results.filter((result) => result !== null));
 
