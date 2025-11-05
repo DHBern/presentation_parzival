@@ -89,8 +89,6 @@
 			bind:this={verse}
 			value={verseVal}
 		/>-<input type="text" placeholder="Zusatz" class="input max-w-20" bind:this={additional} />
-		<button aria-label="suchen" class="btn-icon preset-filled btn-icon-sm shrink-0 grow-0">
-			Anzeigen</button
-		>
+		<button aria-label="suchen" class="btn preset-filled btn-sm shrink-0 grow-0">Anzeigen</button>
 	{/if}
 </form>
