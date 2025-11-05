@@ -90,7 +90,7 @@
 			value={verseVal}
 		/>-<input type="text" placeholder="Zusatz" class="input max-w-20" bind:this={additional} />
 		<button aria-label="suchen" class="btn-icon preset-filled btn-icon-sm shrink-0 grow-0">
-			<i class="fa-solid fa-magnifying-glass"></i></button
+			Anzeigen</button
 		>
 	{/if}
 </form>
