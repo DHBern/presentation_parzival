@@ -5,4 +5,3 @@ import { base } from '$app/paths';
 export async function load() {
 	return redirect(302, `${base}/einzelverssynopse/1/1`);
 }
-export const prerender = false;
