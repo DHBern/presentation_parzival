@@ -11,9 +11,9 @@
 	 */
 	let localTarget;
 	/**
-	 * @type {number | null}
+	 * @type {number | undefined}
 	 */
-	let timer = $state(null);
+	let timer = $state(undefined);
 
 	let scrollContainer = $state();
 	/**
@@ -29,7 +29,9 @@
 						if (programmaticScroll) {
 							return;
 						}
-						localPageChange(entry.target.dataset);
+						if (entry.target instanceof HTMLElement) {
+							localPageChange(entry.target.dataset);
+						}
 					}
 				});
 			},
@@ -80,7 +82,7 @@
 						}
 					}
 				}
-				timer = null;
+				timer = undefined;
 			}, 200);
 		}
 	};
