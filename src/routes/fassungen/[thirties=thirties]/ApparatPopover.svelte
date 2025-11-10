@@ -94,4 +94,7 @@
 	.fassungen_popover :global(a) {
 		@apply text-primary-800 font-bold;
 	}
+	:global(.note) {
+		@apply italic;
+	}
 </style>
