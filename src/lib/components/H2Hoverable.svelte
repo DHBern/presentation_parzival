@@ -27,7 +27,7 @@
 	}
 	h2::after {
 		content: '\f0c1';
-		font-family: 'Font Awesome 6 Free';
+		font-family: 'Font Awesome 7 Free';
 		font-weight: 900;
 		-webkit-font-smoothing: antialiased;
 		margin-left: 0.5em;
