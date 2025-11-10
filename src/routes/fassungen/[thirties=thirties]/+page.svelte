@@ -88,9 +88,9 @@
 									href="#fasskomm-${fasskomm_info.dreissiger}.${verse}"
 									data-commentary="${encodeURIComponent(fasskomm_info.commentary ? fasskomm_info.commentary : '')}"
 									data-dreissiger=${fasskomm_info.dreissiger}
-									data-verse=${verse.replace(/^0+/, '')}
+									data-verse=${verse}
 									data-id=${fasskomm_info.id}
-									data-title="${composureTitlesByColumn[column] + ' ' + fasskomm_info.dreissiger + verse.replace(/^0+/, '')}"
+									data-title="${composureTitlesByColumn[column] + ' ' + fasskomm_info.dreissiger + verse.replace(/^0+/, '').replace(/-(.+)$/, (_, match) => `<sup>${match}</sup>`)}"
 									>K</a></sup>`;
 							}
 						}
@@ -110,8 +110,8 @@
 									data-structure_info="${encodeURIComponent(structure_info ? structure_info : '')}"
 									data-reading_info="${encodeURIComponent(reading_info ? reading_info : '')}"
 									data-dreissiger=${parts[0]}
-									data-verse=${verse.replace(/^0+/, '')}
-									data-title="${composureTitlesByColumn[column] + ' ' + beforeDot + verse.replace(/^0+/, '')}"
+									data-verse=${verse}
+									data-title="${composureTitlesByColumn[column] + ' ' + beforeDot + verse.replace(/^0+/, '').replace(/-(.+)$/, (_, match) => `<sup>${match}</sup>`)}"
 									>${afterDot}</a>`;
 								} else {
 									verseNode.innerHTML = `<a class="anchor" href="#verse-${verse}">${verseNode.innerHTML}</a>`;

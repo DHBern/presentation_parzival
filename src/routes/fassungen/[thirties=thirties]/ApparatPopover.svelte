@@ -68,7 +68,7 @@
 	bind:this={elPopover}
 >
 	<div class="py-2 px-4 flex gap-4 justify-between items-center bg-primary-500">
-		<h1 class="h6">{title}</h1>
+		<h1 class="h6">{@html title}</h1>
 		<button
 			class="close_button cursor-pointer"
 			onclick={resetPopup}
@@ -76,7 +76,7 @@
 			tabindex="0"><i class="fa-solid fa-xmark"></i></button
 		>
 	</div>
-	<div class="p-4 pt-6">
+	<div class="p-4 pt-1">
 		{#if structure_info}
 			<h2 class="h5">Apparat 1</h2>
 			<p class="mb-2">{@html structure_info}</p>
