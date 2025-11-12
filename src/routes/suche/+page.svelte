@@ -81,7 +81,7 @@
 				- Marks all matches in the content by wrapping them in <strong> tags.
 			*/
 			results.map((r) => {
-				r.humanReadableSigil = siglaFromHandle(r.sigla);
+				r.sigil = siglaFromHandle(r.sigla);
 				const matches = Object.keys(r.match);
 				if (r.content_all !== r.content) {
 					r.content_all = highlightDifferences(r.content_all, r.content);
