@@ -2,22 +2,26 @@ import { json } from '@sveltejs/kit';
 import { NUMBER_OF_PAGES, URL_TEI_PB, URL_STATIC_API } from '$lib/constants';
 import { metadata } from '$lib/data/metadata';
 import { fasskomm } from '$lib/data/fasskomm';
-import handleFromSigla from '$lib/functions/handleFromSigla';
+import handleFromSigil from '$lib/functions/handleFromSigla';
 
 /** @type {import('./$types').RequestHandler} */
 export async function GET({ params, fetch }) {
 	// Import pre-fetched metadata and fasskomm that are not split into dreissiger
 	const { hyparchetypes } = await metadata;
-	const {commentary} = await fasskomm;
+	const { commentary } = await fasskomm;
 
 	// --------------------
 	// Fassungskommentare
 	// --------------------
 	// fetch and restructure data
-	let fasskommData = commentary.map(({ vers, ...rest }) => {
-		let [dreissiger, verse] = vers.split('.');
-		return { dreissiger, verse, ...rest };
-	}).filter((item)=>{return Number(item.dreissiger) === Number(params.thirties)});
+	let fasskommData = commentary
+		.map(({ vers, ...rest }) => {
+			let [dreissiger, verse] = vers.split('.');
+			return { dreissiger, verse, ...rest };
+		})
+		.filter((item) => {
+			return Number(item.dreissiger) === Number(params.thirties);
+		});
 
 	// --------------------
 	// Apparatus
@@ -32,7 +36,7 @@ export async function GET({ params, fetch }) {
 	// Populate Anchor Tags in apparatus
 	function populateAnchorTags(string, verse) {
 		return string.replace(/<a>(.*?)<\/a>/g, (match, p1) => {
-			return `<a href='/textzeugen/${handleFromSigla(p1)}/${params.thirties}/${verse}'>${p1}</a>`;
+			return `<a href='/textzeugen/${handleFromSigil(p1)}/${params.thirties}/${verse}'>${p1}</a>`;
 		});
 	}
 	apparatusData.forEach((i) => {
@@ -62,7 +66,9 @@ export async function GET({ params, fetch }) {
 		return {
 			content: (await r.json()).content,
 			// only use fasskomm and apparatus that match hyparchetype
-			fasskomm: fasskommData.filter((/** @type {{ handle: string; }} */ f) => f.fassung_targets.includes(h.handle.replace('*',''))),
+			fasskomm: fasskommData.filter((/** @type {{ handle: string; }} */ f) =>
+				f.fassung_targets.includes(h.handle.replace('*', ''))
+			),
 			apparat: apparatusData.find((/** @type {{ handle: string; }} */ a) => a.handle === h.handle)
 		};
 	});

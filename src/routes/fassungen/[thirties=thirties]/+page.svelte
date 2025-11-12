@@ -9,7 +9,7 @@
 	import { onMount, tick } from 'svelte';
 	import { goto } from '$app/navigation';
 	import ApparatPopover from './ApparatPopover.svelte';
-	import handleFromSigla from '$lib/functions/handleFromSigla';
+	import handleFromSigil from '$lib/functions/handleFromSigla';
 
 	/** @type {{data: import('./$types').PageData}} */
 	let { data } = $props();
@@ -128,7 +128,7 @@
 					preparedDistribution: info.apparat.distribution.replace(
 						/<a\s+data-thirties="([0-9]+)">([^<]+)<\/a>/g,
 						(_match, p1, p2) => {
-							return `<a href="${base}/textzeugen/${handleFromSigla(p2)}/${p1}">${p2}</a>`;
+							return `<a href="${base}/textzeugen/${handleFromSigil(p2)}/${p1}">${p2}</a>`;
 						}
 					)
 				};

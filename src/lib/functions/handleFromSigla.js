@@ -5,7 +5,7 @@ const { fragments, codices, hyparchetypes } = await metadata;
  * @param {string} sigil
  * @returns {string}
  */
-export default function handleFromSigla(sigil) {
+export default function handleFromSigil(sigil) {
 	/**@type {{fragments: {handle: String, sigil: String}[], codices: {handle: String, sigil: String}[]}} */
 	if (sigil.includes('Fr')) {
 		return fragments.find(({ sigil: s }) => s.endsWith(sigil.split('Fr')[1]))?.handle ?? sigil; // Splitting the sigil to just get the fragment number might produce false results, but we don't need to use a regex
