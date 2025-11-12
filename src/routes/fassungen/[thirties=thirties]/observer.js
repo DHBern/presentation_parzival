@@ -23,8 +23,8 @@ export default function createObserver(isSync, scrollContainer, page, activeThir
 			debounceTimeout = setTimeout(() => {
 				entries.forEach((entry) => {
 					if (entry.isIntersecting) {
+						let verse;
 						if (isSync) {
-							let verse;
 							if (scrolledDown) {
 								verse = entry.target.nextElementSibling
 									?.querySelector(`[data-verse]`)
@@ -34,35 +34,27 @@ export default function createObserver(isSync, scrollContainer, page, activeThir
 									?.querySelector(`[data-verse]`)
 									?.attributes['data-verse']?.value.split('.')[0];
 							}
-							if (entry.target && verse && verse !== page.data.thirties) {
-								goto(`${base}/fassungen/${verse}`, {
-									noScroll: true,
-									keepFocus: true,
-									replaceState: true
-								});
-							}
 						} else {
-							let verse = entry.target
+							verse = entry.target
 								.querySelector(`[data-verse]`)
 								?.attributes['data-verse']?.value.split('.')[0];
-							if (entry.target && verse && verse !== page.data.thirties) {
-								if (activeThirties) {
-									activeThirties.value = verse;
-								}
-								goto(`${base}/fassungen/${verse}`, {
-									noScroll: true,
-									keepFocus: true,
-									replaceState: true
-								});
+							if (activeThirties) {
+								activeThirties.value = verse;
 							}
+						}
+						if (entry.target && verse && verse !== page.data.thirties) {
+							goto(`${base}/fassungen/${verse}`, {
+								noScroll: true,
+								keepFocus: true,
+								replaceState: true
+							});
 						}
 					}
 				});
-			}, 100); // Adjust the debounce delay as needed}, 100); // Adjust the debounce delay as needed
+			}, 100); // Adjust the debounce delay as needed
 		},
 		{
 			root: scrollContainer,
-			// rootMargin: '-60px',
 			threshold: [0, 1]
 		}
 	);
