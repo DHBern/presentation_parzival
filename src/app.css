@@ -37,6 +37,13 @@
 	}
 }
 
+.fasskommanchor.single {
+	@apply text-green-600 z-10;
+}
+.fasskommanchor.multi {
+	@apply text-red-500 z-10;
+}
+
 .tei-content {
 	.image {
 		@apply italic;
