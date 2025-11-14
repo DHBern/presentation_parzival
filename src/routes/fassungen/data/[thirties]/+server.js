@@ -3,7 +3,7 @@ import { NUMBER_OF_PAGES, URL_TEI_PB, URL_STATIC_API } from '$lib/constants';
 import { metadata } from '$lib/data/metadata';
 import { fasskomm } from '$lib/data/fasskomm';
 import { base } from '$app/paths';
-import handleFromSigil from '$lib/functions/handleFromSigla';
+import handleFromSigil from '$lib/functions/handleFromSigil';
 
 /** @type {import('./$types').RequestHandler} */
 export async function GET({ params, fetch }) {

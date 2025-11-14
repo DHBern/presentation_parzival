@@ -1,6 +1,6 @@
 <script>
 	import { minisearches, processTerm } from '$lib/minisearch.svelte';
-	import siglaFromHandle from '$lib/functions/sigilFromHandle';
+	import sigilFromHandle from '$lib/functions/sigilFromHandle';
 	import Datatable from './Datatable.svelte';
 	import { Segment } from '@skeletonlabs/skeleton-svelte';
 	let hasDocuments = $state(!!minisearches[0].documentCount);
@@ -81,7 +81,7 @@
 				- Marks all matches in the content by wrapping them in <strong> tags.
 			*/
 			results.map((r) => {
-				r.sigil = siglaFromHandle(r.sigla);
+				r.sigil = sigilFromHandle(r.sigla);
 				const matches = Object.keys(r.match);
 				if (r.content_all !== r.content) {
 					r.content_all = highlightDifferences(r.content_all, r.content);

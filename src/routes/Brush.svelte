@@ -1,8 +1,7 @@
 <script>
 	import * as d3 from 'd3';
 	import { DATA_MIN, DATA_MAX } from './Devilstable_DEFAULTS.json';
-	import siglaFromHandle from '$lib/functions/sigilFromHandle';
-	import { onMount } from 'svelte';
+	import sigilFromHandle from '$lib/functions/sigilFromHandle';
 
 	let marginTop = 20;
 	let marginRight = 0;
@@ -186,13 +185,13 @@
 	);
 	$effect.pre(() => {
 		mobile
-			? d3.select(gy).call(d3.axisLeft(y).tickFormat((d) => siglaFromHandle(d)))
+			? d3.select(gy).call(d3.axisLeft(y).tickFormat((d) => sigilFromHandle(d)))
 			: d3.select(gy).call(d3.axisLeft(y));
 	});
 	$effect.pre(() => {
 		mobile
 			? d3.select(gx).call(d3.axisBottom(x))
-			: d3.select(gx).call(d3.axisTop(x).tickFormat((d) => siglaFromHandle(d)));
+			: d3.select(gx).call(d3.axisTop(x).tickFormat((d) => sigilFromHandle(d)));
 	});
 
 	$effect(() => {
