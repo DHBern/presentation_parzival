@@ -38,7 +38,7 @@
 
 <AppBar classes="px-4 py-0">
 	{#snippet lead()}
-		<a class="text-xl uppercase font-bold hover:text-primary-700" href={`${base}/`}>Parzival</a>
+		<a class="text-xl uppercase font-bold hover:text-primary-700 self-center" href={`${base}/`}>Parzival</a>
 	{/snippet}
 	<nav class="">
 		<ul class="hidden items-center flex-none lg:flex lg:flex-wrap">
