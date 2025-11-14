@@ -499,14 +499,3 @@
 		</div>
 	{/if}
 </section>
-
-<style lang="postcss">
-	@reference "tailwindcss";
-	@reference "@skeletonlabs/skeleton";
-	:global(.fasskommanchor.single) {
-		@apply text-green-600 z-10;
-	}
-	:global(.fasskommanchor.multi) {
-		@apply text-red-500 z-10;
-	}
-</style>

@@ -2,6 +2,7 @@ import { json } from '@sveltejs/kit';
 import { NUMBER_OF_PAGES, URL_TEI_PB, URL_STATIC_API } from '$lib/constants';
 import { metadata } from '$lib/data/metadata';
 import { fasskomm } from '$lib/data/fasskomm';
+import { base } from '$app/paths';
 import handleFromSigil from '$lib/functions/handleFromSigla';
 
 /** @type {import('./$types').RequestHandler} */
@@ -35,8 +36,8 @@ export async function GET({ params, fetch }) {
 
 	// Populate Anchor Tags in apparatus
 	function populateAnchorTags(string, verse) {
-		return string.replace(/<a>(.*?)<\/a>/g, (match, p1) => {
-			return `<a href='/textzeugen/${handleFromSigil(p1)}/${params.thirties}/${verse}'>${p1}</a>`;
+		return string.replace(/<a>(.*?)<\/a>/g, (_match, p1) => {
+			return `<a href='${base}/textzeugen/${handleFromSigil(p1)}/${params.thirties}/${verse}'>${p1}</a>`;
 		});
 	}
 	apparatusData.forEach((i) => {

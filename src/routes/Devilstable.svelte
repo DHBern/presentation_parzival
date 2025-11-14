@@ -184,7 +184,15 @@
 />
 
 <style>
+	@reference "tailwindcss";
+	@reference "@skeletonlabs/skeleton";
 	:global(.tick text) {
-		font-size: 0.75rem;
+		font-size: 0.6rem;
+	}
+
+	@media (min-width: 768px) {
+		:global(.tick text) {
+			font-size: 0.75rem;
+		}
 	}
 </style>
