@@ -67,6 +67,8 @@
 				const condensedReading = info.apparat.reading.reduce(reducer, {});
 				const condensedStructure = info.apparat.structure.reduce(reducer, {});
 
+				const formatVerseSup = (_, match) => `<sup>${match}</sup>`;
+
 				const lines = doc.querySelectorAll('div.line');
 				lines.forEach((line) => {
 					line.classList.add(`column-${column}`);
@@ -90,7 +92,7 @@
 									data-dreissiger=${fasskomm_info.dreissiger}
 									data-verse=${verse}
 									data-id=${fasskomm_info.id}
-									data-title="${composureTitlesByColumn[column] + ' ' + fasskomm_info.dreissiger + verse.replace(/^0+/, '').replace(/-(.+)$/, (_, match) => `<sup>${match}</sup>`)}"
+									data-title="${composureTitlesByColumn[column] + ' ' + fasskomm_info.dreissiger + verse.replace(/^0+/, '').replace(/-(.+)$/, formatVerseSup)}"
 									>K</a></sup>`;
 							}
 						}
@@ -111,7 +113,7 @@
 									data-reading_info="${encodeURIComponent(reading_info ? reading_info : '')}"
 									data-dreissiger=${parts[0]}
 									data-verse=${verse}
-									data-title="${composureTitlesByColumn[column] + ' ' + beforeDot + verse.replace(/^0+/, '').replace(/-(.+)$/, (_, match) => `<sup>${match}</sup>`)}"
+									data-title="${composureTitlesByColumn[column] + ' ' + beforeDot + verse.replace(/^0+/, '').replace(/-(.+)$/, formatVerseSup)}"
 									>${afterDot}</a>`;
 								} else {
 									verseNode.innerHTML = `<a class="anchor" href="#verse-${verse}">${verseNode.innerHTML}</a>`;
