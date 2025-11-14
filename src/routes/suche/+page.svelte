@@ -77,11 +77,11 @@
 		results = await Promise.all(
 			/*
 				Processes an array of search results, enriching each result with additional information:
-				- Adds a human-readable sigil to each result based on its 'sigla' property.
+				- Adds a human-readable sigil to each result based on its 'handle' property.
 				- Marks all matches in the content by wrapping them in <strong> tags.
 			*/
 			results.map((r) => {
-				r.sigil = sigilFromHandle(r.sigla);
+				r.sigil = sigilFromHandle(r.handle);
 				const matches = Object.keys(r.match);
 				if (r.content_all !== r.content) {
 					r.content_all = highlightDifferences(r.content_all, r.content);
@@ -170,6 +170,7 @@
 	<form
 		class="grid grid-cols-[4fr,1fr] gap-1 max-w-screen-md"
 		onsubmit={() => {
+			console.log('Searching for', searchtext);
 			searchResults = handleSearch(searchtext);
 			searchResults.then((r) => {
 				searchResultArray = r;
