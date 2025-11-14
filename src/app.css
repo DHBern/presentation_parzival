@@ -44,6 +44,7 @@
 	@apply text-red-500 z-10;
 }
 
+/* Transcriptions of Textzeugen */
 .tei-content {
 	.image {
 		@apply italic;
@@ -143,5 +144,15 @@
 	}
 	.deleted + .added::before {
 		content: ' ';
+	}
+}
+
+/* verssynopsis */
+div.content > div.tei-l:has( span.versechange) {
+	&::after {
+		content: '\2195';
+		@apply inline;
+		@apply h-4;
+		@apply ml-2;
 	}
 }
