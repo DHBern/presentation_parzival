@@ -5,7 +5,7 @@ const { fragments, codices, hyparchetypes } = await metadata;
  * @param {string} handle
  * @returns {string}
  */
-export default function siglaFromHandle(handle) {
+export default function sigilFromHandle(handle) {
 	/**@type {{fragments: {handle: String, sigil: String}[], codices: {handle: String, sigil: String}[]}} */
 	if (handle.includes('fr')) {
 		return fragments.find(({ handle: s }) => s === handle)?.sigil ?? handle;

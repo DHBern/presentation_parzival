@@ -2,7 +2,7 @@
 	import { NUMBER_OF_PAGES } from '$lib/constants';
 	import { onMount } from 'svelte';
 	import { toaster } from '$lib/components/toaster';
-	import siglaFromHandle from '$lib/functions/siglaFromHandle';
+	import sigilFromHandle from '$lib/functions/sigilFromHandle';
 
 	let { pages, localPageChange, localIiifChange, localVerseChange, targetverse, range, label } =
 		$props();
@@ -143,7 +143,7 @@
 				} else {
 					toaster.error({
 						title: 'Vers nicht überliefert',
-						description: `Der Vers ${target} ist im Textzeugen ${siglaFromHandle(label)} nicht enthalten. Es werden die nächsten verfügbaren Verse angezeigt.`,
+						description: `Der Vers ${target} ist im Textzeugen ${sigilFromHandle(label)} nicht enthalten. Es werden die nächsten verfügbaren Verse angezeigt.`,
 						duration: 60 * 5 * 1000
 					});
 					programmaticScroll = true;
