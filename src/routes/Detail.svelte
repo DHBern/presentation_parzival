@@ -218,7 +218,18 @@
 							.paddingOuter(0.1)
 							.paddingInner(0.2)
 					)
-					.tickFormat((d) => (d === 'fr' ? fragmentLabel : d))
+					.tickFormat((d) => {
+						if (width < 600) {
+							if (d === summaryLabel) {
+								return 'Fass.';
+							}
+						} else {
+							if (d === 'fr') {
+								return fragmentLabel;
+							}
+						}
+						return d;
+					})
 			)
 			.selectAll('.tick text')
 			.call((g) => {
