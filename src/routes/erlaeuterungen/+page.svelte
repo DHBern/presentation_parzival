@@ -158,13 +158,61 @@
 		Strich (|) markiert. Worttrennungen mit Trennungszeichen werden mit =| wiedergegeben.
 	</p>
 
-	<p>Initialen: rot, größere Schrift (z. B.: <span class="tei-seg9 initial">W</span>an).</p>
+	<div>
+		<h4 class="h4">Initialen</h4>
+		<p>
+			Initialen: rot, größere Schrift.
+		</p>
 
-	<p>
-		Prachtinitialen: rot, größere Schrift, Goldhintergrund (z. B.: <span
-			class="tei-seg8 glory-initial">W</span
-		>an).
-	</p>
+		<div class="relative border rounded-xl p-4 bg-surface-50 shadow-sm mt-6">
+
+			<!-- link label -->
+			<a
+				href="https://dhbern.github.io/presentation_parzival/textzeugen/d/5/29?"
+				target="_blank"
+				class="absolute -top-3 left-4 bg-surface-50 px-2 text-primary-600 text-sm font-medium rounded-md border border-primary-200 shadow-sm"
+			>
+				D 5.29
+			</a>
+
+			<div class="mt-2">
+			<span class="tei-content">
+				<span class="content">
+					<span class="tei-seg9 initial Farbe: rot">D</span>o clagete man in ſere.
+				</span>
+			</span>
+			</div>
+
+		</div>
+	</div>
+
+	<div>
+		<h4 class="h4">Prachtinitialen</h4>
+		<p>
+			Prachtinitialen: rot, größere Schrift, Goldhintergrund.
+		</p>
+
+		<div class="relative border rounded-xl p-4 bg-surface-50 shadow-sm mt-6">
+
+			<!-- link label -->
+			<a
+				href="https://dhbern.github.io/presentation_parzival/textzeugen/d/1/01-01?"
+				target="_blank"
+				class="absolute -top-3 left-4 bg-surface-50 px-2 text-primary-600 text-sm font-medium rounded-md border border-primary-200 shadow-sm"
+			>
+				D 1.1
+			</a>
+
+			<div class="mt-2">
+			<span class="tei-content">
+				<span class="content">
+					<span class="tei-seg8 glory-initial">I</span>ST zwiuel h<span class="tei-choice1">(er)</span>zen nahgebur
+				</span>
+			</span>
+			</div>
+
+		</div>
+	</div>
 
 	<p>
 		Nicht ausgeführte Initialen: rot, kleinere Schrift. Hat der Schreiber den Initialbuchstaben
@@ -186,15 +234,36 @@
 
 	<p>Überschriften: rotfarbig (z. B.: <span class="tei-hi1 red rot">Her parcifal</span>).</p>
 
-	<p>
-		Vom Schreiber ausgeführte Korrekturen: Das korrigierte Wort weist hellgraue Farbe auf (für
-		unlesbare Buchstaben steht *), das Korrekturresultat wird in grüner Farbe angezeigt (z. B.:
-		<span class="tei-subst1 subst_ls"
-			><span class="tei-del2 deleted">begin*</span><span class="tei-add2 added"
-				><span class="tei-hi3 rasure rasur"><span class="tei-gap5 gap">begind</span></span></span
-			></span
-		>).
-	</p>
+	<div>
+		<h4 class="h4">Vom Schreiber ausgeführte Korrekturen</h4>
+		<p>Das korrigierte Wort weist hellgraue Farbe auf (für
+			unlesbare Buchstaben steht *), das Korrekturresultat wird in grüner Farbe angezeigt.
+		</p>
+
+		<div class="relative border rounded-xl p-4 bg-surface-50 shadow-sm mt-6">
+
+			<a
+				href="https://dhbern.github.io/presentation_parzival/textzeugen/d/747/18?"
+				target="_blank"
+				class="absolute -top-3 left-4 bg-surface-50 px-2 text-primary-600 text-sm font-medium rounded-md border border-primary-200 shadow-sm"
+			>
+				D 747.18
+			</a>
+			<div class="mt-2">
+		<span class="tei-content">
+			<span class="content">
+				<span class="tei-subst2 subst_sr">
+					<span class="tei-del2 deleted">daz</span>
+					<span class="tei-add2 added">
+						da<span class="tei-hi3 rasure rasur"><span class="tei-gap5 gap">-*-</span></span>
+					</span>
+				</span>
+				mvͦz glichiv ſcanze ſten.
+			</span>
+		</span>
+			</div>
+		</div>
+	</div>
 
 	<p>
 		Von einem späteren Korrektor ausgeführte Korrekturen: Das korrigierte Wort weist hellgraue Farbe
