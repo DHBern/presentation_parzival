@@ -7,7 +7,7 @@
 </script>
 
 <div>
-	<div class="flex gap-1 my-3">
+	<div class="flex gap-6 my-3">
 		{#each Array.from({ length: 2 }) as _, i}
 			<label>
 				Textzeuge: <select class="select my-2" bind:value={selection[i]}>

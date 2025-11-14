@@ -5,7 +5,7 @@
 	import { fragmentLabel, summaryLabel } from '$lib/constants';
 	import { ZOOM_INCREMENT } from './Devilstable_DEFAULTS.json';
 
-	import siglaFromHandle from '$lib/functions/siglaFromHandle';
+	import sigilFromHandle from '$lib/functions/sigilFromHandle';
 	import metadataFromHandle from '$lib/functions/metadataFromHandle';
 
 	/** @type {{codices: any, width?: number, height?: number,data?: {values: boolean[], label: string}[],  selection: {start: number, end: number}, modifySelection: function}} */
@@ -218,7 +218,18 @@
 							.paddingOuter(0.1)
 							.paddingInner(0.2)
 					)
-					.tickFormat((d) => (d === 'fr' ? fragmentLabel : d))
+					.tickFormat((d) => {
+						if (width < 600) {
+							if (d === summaryLabel) {
+								return 'Fass.';
+							}
+						} else {
+							if (d === 'fr') {
+								return fragmentLabel;
+							}
+						}
+						return d;
+					})
 			)
 			.selectAll('.tick text')
 			.call((g) => {
@@ -271,7 +282,7 @@
 				<li>
 					<!-- These links are not clickable since it's not possible to put the cursor over it, but it might be possible to access the links with ARIA means. -->
 					<a href={`${base}/textzeugen/${mHandle}/${verse}`} class="hover:text-secondary-900">
-						{@html siglaFromHandle(mHandle)}: {verse}
+						{@html sigilFromHandle(mHandle)}: {verse}
 					</a>
 				</li>
 			{/each}
@@ -281,7 +292,7 @@
 	{:else if manuscriptHandles === 'fr'}
 		<p>Fragment {verse}</p>
 	{:else}
-		<p>{@html siglaFromHandle(String(manuscriptHandles))}: {verse}</p>
+		<p>{@html sigilFromHandle(String(manuscriptHandles))}: {verse}</p>
 	{/if}
 </div>
 <!-- clickable popups on column labels -->
@@ -308,7 +319,7 @@
 				{#each fragment as handle}
 					<li>
 						<a href={`${base}/textzeugen/${handle}/${verse}`} class="hover:text-secondary-900">
-							{@html siglaFromHandle(handle)}
+							{@html sigilFromHandle(handle)}
 							{verse}
 						</a>
 					</li>

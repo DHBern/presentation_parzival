@@ -11,7 +11,7 @@
 		return String(entry).startsWith(String(value));
 	};
 	let filter = [
-		table.createFilter('humanReadableSigil', caseSensitiveCheck),
+		table.createFilter('sigil', caseSensitiveCheck),
 		table.createFilter('d'),
 		table.createFilter('verse'),
 		table.createFilter('content')
@@ -22,7 +22,7 @@
 	<table class="table">
 		<thead>
 			<tr>
-				<ThSort {table} field="humanReadableSigil">Sigle</ThSort>
+				<ThSort {table} field="sigil">Sigle</ThSort>
 				<ThSort {table} field={(r) => Number(r.d)}>Dreißiger</ThSort>
 				<ThSort {table} field={(r) => Number(r.verse)}>Vers</ThSort>
 				<ThSort {table} field="content">Inhalt</ThSort>
@@ -44,7 +44,7 @@
 		<tbody>
 			{#each table?.rows as row (row.id)}
 				<tr>
-					<td class="table-cell-fit">{@html row?.humanReadableSigil}</td>
+					<td class="table-cell-fit">{@html row?.sigil}</td>
 					<td class="table-cell-fit">{row?.d}</td>
 					<td class="table-cell-fit">{row?.verse}</td>
 					<td class="content">
