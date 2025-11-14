@@ -9,7 +9,7 @@
 	import { URL_STATIC_API, URL_IIIF } from '$lib/constants';
 	import filenameFromHandleAndId from '$lib/functions/filenameFromHandleAndId';
 	import Popover from '$lib/components/Popover.svelte';
-	import siglaFromHandle from '$lib/functions/siglaFromHandle';
+	import sigilFromHandle from '$lib/functions/sigilFromHandle';
 	import metadataFromHandle from '$lib/functions/metadataFromHandle';
 
 	/** @type {{data: import('./$types').PageData}} */
@@ -142,7 +142,7 @@
 					? 'werden'
 					: 'wird'}
 				{@html data?.content
-					? selectedSigla.map((handle) => siglaFromHandle(handle)).join(' und ')
+					? selectedSigla.map((handle) => sigilFromHandle(handle)).join(' und ')
 					: 'keine Textzeugen'} angezeigt. Mit dem Selektor können Sie die Textzeugen wechseln.
 			</p>
 			{#if data.content?.length > 1}
@@ -178,13 +178,13 @@
 							Textzeuge:
 							<Popover>
 								{#snippet trigger()}
-									{siglaFromHandle(info.sigla)}
+									{sigilFromHandle(info.sigla)}
 								{/snippet}
 								{#snippet content()}
 									{@html metadataFromHandle(info.sigla)['info-h2']}
 									(<a
 										class="anchor text-primary-100"
-										href="{base}/hsverz#{siglaFromHandle(info.sigla)}"
+										href="{base}/hsverz#{sigilFromHandle(info.sigla)}"
 										>zum Verzeichnis
 									</a>)
 								{/snippet}
