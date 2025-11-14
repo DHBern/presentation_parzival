@@ -1,7 +1,7 @@
 import { URL_TEI_PB } from '$lib/constants';
 import { generateEntries } from '$lib/functions/generateEntries';
 import { metadata } from '$lib/data/metadata';
-import siglaFromHandle from '$lib/functions/siglaFromHandle';
+import sigilFromHandle from '$lib/functions/sigilFromHandle';
 import { verses } from '$lib/data/verses';
 
 /** @type {import('./$types').PageServerLoad} */
@@ -124,7 +124,7 @@ export async function load({ fetch, params }) {
 		verse,
 		metadata: { ...(await metadata), next: nextVerse, prev: prevVerse },
 		publisherData: resolvedPublisherDataObject,
-		loss: loss.map((/** @type {string} */ element) => siglaFromHandle(element))
+		loss: loss.map((/** @type {string} */ element) => sigilFromHandle(element))
 	};
 }
 
