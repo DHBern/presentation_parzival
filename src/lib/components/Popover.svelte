@@ -67,3 +67,12 @@
 		</div>
 	{/if}
 </span>
+
+<style lang="postcss">
+	@reference "tailwindcss";
+	@reference "@skeletonlabs/skeleton";
+
+	:global(a) {
+		@apply anchor text-primary-100;
+	}
+</style>
