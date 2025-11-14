@@ -1,6 +1,6 @@
 <script>
 	import { minisearches, processTerm } from '$lib/minisearch.svelte';
-	import siglaFromHandle from '$lib/functions/siglaFromHandle';
+	import siglaFromHandle from '$lib/functions/sigilFromHandle';
 	import Datatable from './Datatable.svelte';
 	import { Segment } from '@skeletonlabs/skeleton-svelte';
 	let hasDocuments = $state(!!minisearches[0].documentCount);

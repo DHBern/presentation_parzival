@@ -9,7 +9,7 @@
 	import { onMount, tick } from 'svelte';
 	import { goto } from '$app/navigation';
 	import ApparatPopover from './ApparatPopover.svelte';
-	import handleFromSigil from '$lib/functions/handleFromSigla';
+	import handleFromSigil from '$lib/functions/handleFromSigil';
 
 	/** @type {{data: import('./$types').PageData}} */
 	let { data } = $props();

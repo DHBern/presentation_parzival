@@ -2,7 +2,7 @@
 	import { NUMBER_OF_PAGES } from '$lib/constants';
 	import { onMount } from 'svelte';
 	import { toaster } from '$lib/components/toaster';
-	import siglaFromHandle from '$lib/functions/siglaFromHandle';
+	import siglaFromHandle from '$lib/functions/sigilFromHandle';
 
 	let { pages, localPageChange, localIiifChange, localVerseChange, targetverse, range, label } =
 		$props();

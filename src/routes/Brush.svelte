@@ -1,7 +1,7 @@
 <script>
 	import * as d3 from 'd3';
 	import { DATA_MIN, DATA_MAX } from './Devilstable_DEFAULTS.json';
-	import siglaFromHandle from '$lib/functions/siglaFromHandle';
+	import siglaFromHandle from '$lib/functions/sigilFromHandle';
 	import { onMount } from 'svelte';
 
 	let marginTop = 20;

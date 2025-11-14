@@ -5,7 +5,7 @@
 	import { fragmentLabel, summaryLabel } from '$lib/constants';
 	import { ZOOM_INCREMENT } from './Devilstable_DEFAULTS.json';
 
-	import siglaFromHandle from '$lib/functions/siglaFromHandle';
+	import siglaFromHandle from '$lib/functions/sigilFromHandle';
 	import metadataFromHandle from '$lib/functions/metadataFromHandle';
 
 	/** @type {{codices: any, width?: number, height?: number,data?: {values: boolean[], label: string}[],  selection: {start: number, end: number}, modifySelection: function}} */
