@@ -170,7 +170,6 @@
 	<form
 		class="grid grid-cols-[4fr,1fr] gap-1 max-w-screen-md"
 		onsubmit={() => {
-			console.log('Searching for', searchtext);
 			searchResults = handleSearch(searchtext);
 			searchResults.then((r) => {
 				searchResultArray = r;
