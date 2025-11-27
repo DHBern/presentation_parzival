@@ -127,6 +127,18 @@
 		}
 	}
 
+	.verse + .content:has(.verse-change) {
+		&::after {
+			content: "\21E1" "\A" "\21E3"; /* forces single content concat */
+			white-space: pre-line;
+			display: inline-block;
+			line-height: 1;
+			font-size: 0.5em;
+			@apply h-4;
+			@apply ml-2;
+		}
+	}
+
 	.not-executed {
 		@apply text-red-500;
 		&::before {
