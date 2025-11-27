@@ -1,3 +1,4 @@
+@import '../oldvintage.css';
 @import 'tailwindcss';
 @import '@skeletonlabs/skeleton';
 
@@ -5,15 +6,41 @@
 
 @source "../node_modules/@skeletonlabs/skeleton-svelte/dist";
 
+
 @tailwind utilities;
 
 @font-face {
-	/* Reference name */
-	font-family: 'Abril Fatface';
-	src: url('/fonts/AbrilFatface-Regular.ttf');
+	font-family: "Cormorant Garamond";
+	src: url("/static/fonts/Cormorant-Regular.ttf") format("truetype");
+	font-style: normal;
+	font-weight: 400;
 	font-display: swap;
 }
-@import '../oldvintage.css';
+
+@font-face {
+	font-family: "Cormorant Garamond";
+	src: url("/static/fonts/Cormorant-Italic.ttf") format("truetype");
+	font-style: italic;
+	font-weight: 400;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: "Cormorant Garamond";
+	src: url("/static/fonts/Cormorant-Bold.ttf") format("truetype");
+	font-style: normal;
+	font-weight: 700;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: "Cormorant Garamond";
+	src: url("/static/fonts/Cormorant-BoldItalic.ttf") format("truetype");
+	font-style: italic;
+	font-weight: 700;
+	font-display: swap;
+}
+
 
 .typography {
 	h1:not(:where([class~='unstyled'], [class~='unstyled'] *)) {
@@ -110,7 +137,7 @@
 	.majuscule,
 	.large-variant {
 		@apply font-black;
-		@apply text-xl;
+		@apply text-base;
 	}
 
 	.glory-initial {
