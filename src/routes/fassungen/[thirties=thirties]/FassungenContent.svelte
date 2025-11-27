@@ -88,7 +88,7 @@
 			}
 		}
 		:global(.tei-cb) {
-			@apply text-right mr-2;
+			@apply text-right mr-2 z-10;
 		}
 		:global(.tei-cb:not(.tei-cb:first-child)) {
 			@apply border-primary-300 border-solid border-t-4;

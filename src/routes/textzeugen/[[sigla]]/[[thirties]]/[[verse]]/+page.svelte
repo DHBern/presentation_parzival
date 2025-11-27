@@ -8,27 +8,15 @@
 	import { goto, replaceState } from '$app/navigation';
 	import { URL_STATIC_API, URL_IIIF } from '$lib/constants';
 	import filenameFromHandleAndId from '$lib/functions/filenameFromHandleAndId';
+	import Popover from '$lib/components/Popover.svelte';
+	import sigilFromHandle from '$lib/functions/sigilFromHandle';
+	import metadataFromHandle from '$lib/functions/metadataFromHandle';
 
 	/** @type {{data: import('./$types').PageData}} */
 	let { data } = $props();
 	let synchro = $state(true);
 
 	let selectedSigla = $derived(data.content ? data.content.map((c) => c.sigla) : []);
-
-	const generateLabel = (/** @type {String[]} */ sigla) => {
-		const info = [...data.codices, ...data.fragments];
-		sigla = sigla.map((s) => {
-			const found = info.find((i) => i.handle === s);
-			if (found) {
-				const { sigil, loc, cod } = found;
-				const location = loc ? `Standort: ${loc}` : '';
-				const codex = cod ? `Codex: ${cod}` : '';
-				return `<abbr title='${[location, codex].join(', ')}'>${sigil}</abbr>`;
-			}
-			return s;
-		});
-		return sigla.join(' und ');
-	};
 
 	const generateCloseLink = (/** @type {String} */ sigla) => {
 		const siglas = selectedSigla.filter((e) => e !== sigla);
@@ -153,8 +141,9 @@
 				Dies ist die Textzeugenansicht. Derzeit {Number(data.content?.length) > 1
 					? 'werden'
 					: 'wird'}
-				{@html data?.content ? generateLabel(selectedSigla) : 'keine Textzeugen'} angezeigt. Mit dem
-				Selektor können Sie die Textzeugen wechseln.
+				{@html data?.content
+					? selectedSigla.map((handle) => sigilFromHandle(handle)).join(' und ')
+					: 'keine Textzeugen'} angezeigt. Mit dem Selektor können Sie die Textzeugen wechseln.
 			</p>
 			{#if data.content?.length > 1}
 				<div>
@@ -179,13 +168,28 @@
 </section>
 {#if data.content}
 	<div class="grid grid-cols-[repeat(auto-fit,minmax(550px,1fr))] gap-4">
-		{#each data.content as content, i (content.sigla)}
+		{#each data.content as info, i (info.sigla)}
 			<article
 				class="grid grid-cols-[repeat(auto-fit,minmax(500px,1fr))] gap-4 preset-filled-surface-500 my-4 py-4 px-8 rounded-xl"
 			>
 				<section>
 					<div class="mb-4 relative">
-						<h2 class="h2">Textzeuge: {@html generateLabel([content.sigla])}</h2>
+						<h2 class="h2">
+							Textzeuge:
+							<Popover>
+								{#snippet trigger()}
+									{sigilFromHandle(info.sigla)}
+								{/snippet}
+								{#snippet content()}
+									{@html metadataFromHandle(info.sigla)['info-h2']}
+									(<a
+										class="anchor text-primary-100"
+										href="{base}/hsverz#{sigilFromHandle(info.sigla)}"
+										>zum Verzeichnis
+									</a>)
+								{/snippet}
+							</Popover>
+						</h2>
 						{#if localVerses[i]}
 							<p>
 								Vers: {localVerses[i].slice(0, -2)}{Number(localVerses[i].slice(-2))}
@@ -211,7 +215,7 @@
 							{/if}
 							<a
 								class="btn btn-icon"
-								href={generateCloseLink(content.sigla)}
+								href={generateCloseLink(info.sigla)}
 								aria-label="Ansicht schließen"
 							>
 								<i class="fa-solid fa-x"></i>
@@ -242,11 +246,11 @@
 								localPageChange={(
 									/** @type {{ id: string; previous: string; next: string; }} */ pageinfo
 								) => {
-									checklocalPages(pageinfo, i, content.sigla);
+									checklocalPages(pageinfo, i, info.sigla);
 								}}
 								localIiifChange={(/** @type {Object} */ e) => (currentIiif[i] = e)}
-								range={data.ranges.find((r) => r.label === content.sigla).values}
-								label={content.sigla}
+								range={data.ranges.find((r) => r.label === info.sigla).values}
+								label={info.sigla}
 							/>
 						{:else}
 							<p class="text-error-500">
