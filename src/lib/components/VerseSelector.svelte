@@ -28,11 +28,18 @@
 	let verseVal = $derived(Number(verseParts[0]));
 	// let additionalVal = $derived(verseParts.slice(1).join('-'));
 
-	function handleInput(/** @type {Event} */ e) {
-		if (e.target instanceof HTMLInputElement) {
-			validateMinMax(e.target);
+	let targetUrl = $derived(
+		`${base}${targetPath}/${thirties.value}/${verse.value.padStart(2, '0')}${
+			additional?.value ? '-' + additional.value : ''
+		}`
+	);
+
+	//preload data on valid input
+	const preload = () => {
+		if (thirties && verse && validateMinMax(thirties) && validateMinMax(verse)) {
+			preloadData(targetUrl);
 		}
-	}
+	};
 
 	const validateMinMax = (/** @type {HTMLInputElement} */ i) => {
 		//validate if input is a Number
@@ -51,6 +58,14 @@
 		}
 	};
 
+	function handleInput(/** @type {Event} */ e) {
+		if (e.target instanceof HTMLInputElement) {
+			if (validateMinMax(e.target)) {
+				preload();
+			}
+		}
+	}
+
 	afterNavigate(() => {
 		//reset additional field after navigation
 		if (additional) additional.value = '';
@@ -62,9 +77,7 @@
 	onsubmit={(e) => {
 		e.preventDefault();
 		if (thirties && verse && validateMinMax(thirties) && validateMinMax(verse)) {
-			goto(
-				`${base}${targetPath}/${thirties?.value}/${verse?.value}${additional?.value ? '-' + additional?.value : ''}`
-			);
+			goto(targetUrl);
 		}
 	}}
 >
