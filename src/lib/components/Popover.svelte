@@ -72,7 +72,9 @@
 	@reference "tailwindcss";
 	@reference "@skeletonlabs/skeleton";
 
-	:global(a) {
-		@apply anchor text-primary-100;
+	.card {
+		:global(a) {
+			@apply anchor text-primary-100;
+		}
 	}
 </style>
