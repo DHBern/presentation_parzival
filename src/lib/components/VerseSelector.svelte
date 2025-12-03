@@ -28,16 +28,14 @@
 	let verseVal = $derived(Number(verseParts[0]));
 	// let additionalVal = $derived(verseParts.slice(1).join('-'));
 
-	let targetUrl = $derived(
-		`${base}${targetPath}/${thirties.value}/${verse.value.padStart(2, '0')}${
+	let getTargetUrl = () =>
+		`${base}${targetPath}/${thirties?.value}/${verse?.value.padStart(2, '0')}${
 			additional?.value ? '-' + additional.value : ''
-		}`
-	);
-
+		}`;
 	//preload data on valid input
 	const preload = () => {
 		if (thirties && verse && validateMinMax(thirties) && validateMinMax(verse)) {
-			preloadData(targetUrl);
+			preloadData(getTargetUrl());
 		}
 	};
 
@@ -77,7 +75,7 @@
 	onsubmit={(e) => {
 		e.preventDefault();
 		if (thirties && verse && validateMinMax(thirties) && validateMinMax(verse)) {
-			goto(targetUrl);
+			goto(getTargetUrl());
 		}
 	}}
 >
