@@ -13,6 +13,42 @@
 	src: url('/fonts/AbrilFatface-Regular.ttf');
 	font-display: swap;
 }
+@font-face {
+	/* Reference name */
+	font-family: 'Noto Sans';
+	src: url('/fonts/NotoSans-VariableFont_wdth,wght.ttf');
+	font-display: swap;
+	font-style: normal;
+	font-weight: 100 900;
+	font-stretch: 62.5% 100%;
+}
+@font-face {
+	/* Reference name */
+	font-family: 'Noto Serif';
+	src: url('/fonts/NotoSerif-VariableFont_wdth,wght.ttf');
+	font-display: swap;
+	font-style: normal;
+	font-weight: 100 900;
+	font-stretch: 62.5% 100%;
+}
+@font-face {
+	/* Reference name */
+	font-family: 'Noto Sans';
+	src: url('/fonts/NotoSans-Italic-VariableFont_wdth,wght.ttf');
+	font-display: swap;
+	font-style: italic;
+	font-weight: 100 900;
+	font-stretch: 62.5% 100%;
+}
+@font-face {
+	/* Reference name */
+	font-family: 'Noto Serif';
+	src: url('/fonts/NotoSerif-Italic-VariableFont_wdth,wght.ttf');
+	font-display: swap;
+	font-style: italic;
+	font-weight: 100 900;
+	font-stretch: 62.5% 100%;
+}
 @import '../oldvintage.css';
 
 .typography {
