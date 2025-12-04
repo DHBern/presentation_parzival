@@ -80,6 +80,7 @@
 	@apply text-red-500 z-10;
 }
 
+/* Transcriptions of Textzeugen */
 .tei-content {
 	.image {
 		@apply italic;
@@ -162,6 +163,18 @@
 		}
 	}
 
+	.verse + .content:has(.verse-change) {
+		&::after {
+			content: "\21E1" "\A" "\21E3"; /* forces single content concat */
+			white-space: pre-line;
+			display: inline-block;
+			line-height: 1;
+			font-size: 0.5em;
+			@apply h-4;
+			@apply ml-2;
+		}
+	}
+
 	.not-executed {
 		@apply text-red-500;
 		&::before {
@@ -179,5 +192,15 @@
 	}
 	.deleted + .added::before {
 		content: ' ';
+	}
+}
+
+/* verssynopsis */
+div.content > div.tei-l:has( span.versechange) {
+	&::after {
+		content: '\2195';
+		@apply inline;
+		@apply h-4;
+		@apply ml-2;
 	}
 }
