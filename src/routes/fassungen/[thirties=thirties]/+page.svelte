@@ -219,6 +219,8 @@
 
 	let localPages = new localPageClass();
 	$effect(() => {
+		// when the page number changes, fetch the corresponding data
+		// we need to untrack here to avoid infinite loops, because fetchPage changes localPages.
 		data.thirties;
 		untrack(() => localPages.fetchPage(Number(data.thirties)));
 	});
