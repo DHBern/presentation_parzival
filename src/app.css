@@ -50,6 +50,7 @@
 	font-stretch: 62.5% 100%;
 }
 @import '../oldvintage.css';
+@custom-variant dark (&:where(.dark, .dark *));
 
 .typography {
 	h1:not(:where([class~='unstyled'], [class~='unstyled'] *)) {
@@ -165,7 +166,7 @@
 
 	.verse + .content:has(.verse-change) {
 		&::after {
-			content: "\21E1" "\A" "\21E3"; /* forces single content concat */
+			content: '\21E1' '\A' '\21E3'; /* forces single content concat */
 			white-space: pre-line;
 			display: inline-block;
 			line-height: 1;
@@ -196,7 +197,7 @@
 }
 
 /* verssynopsis */
-div.content > div.tei-l:has( span.versechange) {
+div.content > div.tei-l:has(span.versechange) {
 	&::after {
 		content: '\2195';
 		@apply inline;
