@@ -48,7 +48,6 @@
 		 * @returns {Promise<void>} - A promise that resolves when the data is fetched.
 		 */
 		fetchPage = async (/** @type {Number} */ page) => {
-			console.log('fetchPage called for page', page);
 			const prepareHTML = (
 				/** @type {{ content: string; apparat: { reading: any[]; structure: any[]; distribution: string; }; fasskomm: any[]; }} */ info,
 				/** @type {string} */ column
@@ -418,7 +417,7 @@
 	<h1 class="h1 my-4">Fassungsansicht</h1>
 	<div class="grid gap-6 md:grid-cols-2 md:my-8">
 		<p>
-			{localPages.books[localPages.thirties.indexOf(Number(data.thirties))]}
+			{localPages.books[localPages.thirties.indexOf(Number(data.thirties))]}, Dreißiger {data.thirties}
 			<br />
 			<a
 				class="anchor"
