@@ -6,7 +6,7 @@
 	import { NUMBER_OF_PAGES } from '$lib/constants';
 	import { Switch } from '@skeletonlabs/skeleton-svelte';
 	import { page } from '$app/state';
-	import { onMount, tick } from 'svelte';
+	import { onMount, tick, untrack } from 'svelte';
 	import { goto } from '$app/navigation';
 	import ApparatPopover from './ApparatPopover.svelte';
 	import handleFromSigil from '$lib/functions/handleFromSigil';
@@ -29,7 +29,13 @@
 		/**
 		 * @type {Number[]}
 		 */
-		thirties = [];
+		thirties = $state([]);
+		// thirties = [];
+
+		/**
+		 * @type {String[]}
+		 */
+		books = $state([]);
 
 		reset = () => {
 			this.pages = [[], [], [], []];
@@ -42,6 +48,7 @@
 		 * @returns {Promise<void>} - A promise that resolves when the data is fetched.
 		 */
 		fetchPage = async (/** @type {Number} */ page) => {
+			console.log('fetchPage called for page', page);
 			const prepareHTML = (
 				/** @type {{ content: string; apparat: { reading: any[]; structure: any[]; distribution: string; }; fasskomm: any[]; }} */ info,
 				/** @type {string} */ column
@@ -139,37 +146,40 @@
 			// if the page is not already loaded
 			if (!this.thirties.length) {
 				/**
-				 * @type {{ content: string; apparat: { reading: any[]; structure: any[]; distribution: string; }; fasskomm: any[]; }[]}
+				 * @type {{meta:{book: string}, content:{ content: string; apparat: { reading: any[]; structure: any[]; distribution: string; }; fasskomm: any[]; }[]}}
 				 */
 				let info;
 				// fetch the page before the current one if the current one is not the first
 				if (page > 1) {
 					info = await fetch(`${base}/fassungen/data/${page - 1}`).then((r) => r.json());
 					labels.forEach((label, index) => {
-						const { preparedHTML, preparedDistribution } = prepareHTML(info[index], label);
+						const { preparedHTML, preparedDistribution } = prepareHTML(info.content[index], label);
 						this.pages[index].push([page - 1, preparedHTML]);
 						this.distributions[index][page - 1] = preparedDistribution;
 					});
+					this.books.push(info.meta.book);
 					this.thirties.push(page - 1);
 				}
 				// fetch the current page
 				if (page <= NUMBER_OF_PAGES) {
 					info = await fetch(`${base}/fassungen/data/${page}`).then((r) => r.json());
 					labels.forEach((label, index) => {
-						const { preparedHTML, preparedDistribution } = prepareHTML(info[index], label);
+						const { preparedHTML, preparedDistribution } = prepareHTML(info.content[index], label);
 						this.pages[index].push([page, preparedHTML]);
 						this.distributions[index][page] = preparedDistribution;
 					});
+					this.books.push(info.meta.book);
 					this.thirties.push(page);
 				}
 				// fetch the page after the current one if the current one is not the last
 				if (page !== NUMBER_OF_PAGES) {
 					info = await fetch(`${base}/fassungen/data/${page + 1}`).then((r) => r.json());
 					labels.forEach((label, index) => {
-						const { preparedHTML, preparedDistribution } = prepareHTML(info[index], label);
+						const { preparedHTML, preparedDistribution } = prepareHTML(info.content[index], label);
 						this.pages[index].push([page + 1, preparedHTML]);
 						this.distributions[index][page + 1] = preparedDistribution;
 					});
+					this.books.push(info.meta.book);
 					this.thirties.push(page + 1);
 				}
 				if (page > NUMBER_OF_PAGES) {
@@ -179,18 +189,20 @@
 				if (page < this.thirties[0] && !this.thirties.includes(page)) {
 					let info = await fetch(`${base}/fassungen/data/${page}`).then((r) => r.json());
 					labels.forEach((label, index) => {
-						const { preparedHTML, preparedDistribution } = prepareHTML(info[index], label);
+						const { preparedHTML, preparedDistribution } = prepareHTML(info.content[index], label);
 						this.pages[index].unshift([page, preparedHTML]);
 						this.distributions[index][page] = preparedDistribution;
 					});
+					this.books.unshift(info.meta.book);
 					this.thirties.unshift(page);
 				} else if (page > this.thirties[this.thirties.length - 1]) {
 					let info = await fetch(`${base}/fassungen/data/${page}`).then((r) => r.json());
 					labels.forEach((label, index) => {
-						const { preparedHTML, preparedDistribution } = prepareHTML(info[index], label);
+						const { preparedHTML, preparedDistribution } = prepareHTML(info.content[index], label);
 						this.pages[index].push([page, preparedHTML]);
 						this.distributions[index][page] = preparedDistribution;
 					});
+					this.books.push(info.meta.book);
 					this.thirties.push(page);
 				} else if (page === this.thirties[0] && page > 1) {
 					this.fetchPage(page - 1);
@@ -208,7 +220,8 @@
 
 	let localPages = new localPageClass();
 	$effect(() => {
-		localPages.fetchPage(Number(data.thirties));
+		data.thirties;
+		untrack(() => localPages.fetchPage(Number(data.thirties)));
 	});
 	let synchro = $state(true);
 	let windowWidth = $state(0);
@@ -405,13 +418,15 @@
 	<h1 class="h1 my-4">Fassungsansicht</h1>
 	<div class="grid gap-6 md:grid-cols-2 md:my-8">
 		<p>
-			Finden Sie hier den Monotext als PDF: <a
+			{localPages.books[localPages.thirties.indexOf(Number(data.thirties))]}
+			<br />
+			<a
 				class="anchor"
 				target="_blank"
 				href="https://dhbern.github.io/parzival-static-api/api/export/pdf/monopsen.pdf#page={data.thirties}"
 			>
-				Dreißiger {data.thirties}
-			</a>
+				Hier
+			</a> Monotext (PDF) öffnen.
 		</p>
 
 		{#if mobileBreakpoint}
