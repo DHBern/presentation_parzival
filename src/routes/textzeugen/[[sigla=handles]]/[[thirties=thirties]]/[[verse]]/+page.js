@@ -2,9 +2,13 @@ import { URL_STATIC_API } from '$lib/constants';
 import { base } from '$app/paths';
 import { metadata } from '$lib/data/metadata';
 import filenameFromHandleAndId from '$lib/functions/filenameFromHandleAndId';
+import { error } from '@sveltejs/kit';
 
 /** @type {import('./$types').PageLoad} */
 export async function load({ fetch, params }) {
+	if (!params.sigla) {
+		return error(404, params.verse);
+	}
 	const { codices, fragments } = await metadata;
 	const sigla = params.sigla?.split('-');
 
@@ -63,7 +67,7 @@ export async function load({ fetch, params }) {
 				// loop through the l array of all pages and find the page that contains the thirties that is closest to the requested thirties
 				const closestPages = data[handle].reduce(
 					(closest, current, i, array) => {
-						const lowestThirties = Number(current.l[0].split('.')[0]);
+						const lowestThirties = Number(current.l[0]?.split('.')[0]);
 						if (lowestThirties < Number(thirties)) {
 							let returnArray = [];
 							if (i > 0) {
