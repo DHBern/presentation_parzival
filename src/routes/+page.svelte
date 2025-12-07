@@ -60,7 +60,7 @@
 			danach die Zahl des Verses.
 		</p>
 		<div>
-			<TextzeugenSelector sigla={[...data.codices, ...data.fragments]} />
+			<TextzeugenSelector />
 		</div>
 	</section>
 	<section class="col-span-full">
