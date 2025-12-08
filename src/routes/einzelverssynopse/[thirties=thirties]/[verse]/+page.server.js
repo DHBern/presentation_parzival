@@ -4,6 +4,10 @@ import { metadata } from '$lib/data/metadata';
 import sigilFromHandle from '$lib/functions/sigilFromHandle';
 import { verses } from '$lib/data/verses';
 
+//idea: since we have access to ALL the verses: we don't need to make fetchrequests to all the suffixes but can check in the verses whether they exist.
+//  this should make the build-process much faster. and also we can display if there are more verses with this verse-number (Zusatzverse)
+// so at the start find out whether we need to fetch the suffixes and if there are additional verses
+
 /** @type {import('./$types').PageServerLoad} */
 export async function load({ fetch, params }) {
 	/** @type {{ [key: string]: Promise<any> }} */
@@ -31,9 +35,6 @@ export async function load({ fetch, params }) {
 			];
 		} else {
 			publisherData[element.handle] = suffixes.map((suffix) => {
-				console.log(
-					`${URL_TEI_PB}/parts/${element.handle}.xml/json?odd=parzival.odd&view=page&id=${element.handle}_${thirties}.${verse}${suffix}`
-				);
 				return fetch(
 					`${URL_TEI_PB}/parts/${element.handle}.xml/json?odd=parzival.odd&view=page&id=${element.handle}_${thirties}.${verse}${suffix}`
 				);
@@ -56,7 +57,6 @@ export async function load({ fetch, params }) {
 	const resolvedPublisherData = await Promise.all(
 		Object.entries(publisherData).map(async ([key, promiseArray]) => {
 			let responses = await Promise.all(promiseArray);
-			// console.log(responses);
 			let data = null;
 			if (responses.some((res) => res.status === 200)) {
 				data = await Promise.all(
@@ -67,7 +67,6 @@ export async function load({ fetch, params }) {
 				loss.push(key);
 				return null;
 			}
-			// console.log(data);
 			return [key, data];
 		})
 	).then((results) => results.filter((result) => result !== null));
