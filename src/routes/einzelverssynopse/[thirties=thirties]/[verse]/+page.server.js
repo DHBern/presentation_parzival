@@ -20,47 +20,54 @@ export async function load({ fetch, params }) {
 	}
 
 	// Fetch the textzeugen
+	const suffixes = ['', '-a', '-k', '-r'];
+	const hasSuffix = verseparts[1]?.match(/^[^\d]*$/); // check if second part is non-numeric --> indicates a suffix
 	(await metadata).codices.forEach((/** @type {{ handle: string | number; }} */ element) => {
-		publisherData[element.handle] = fetch(
-			`${URL_TEI_PB}/parts/${element.handle}.xml/json?odd=parzival.odd&view=page&id=${element.handle}_${thirties}.${verse}`
-		);
+		if (hasSuffix) {
+			publisherData[element.handle] = [
+				fetch(
+					`${URL_TEI_PB}/parts/${element.handle}.xml/json?odd=parzival.odd&view=page&id=${element.handle}_${thirties}.${verse}`
+				)
+			];
+		} else {
+			publisherData[element.handle] = suffixes.map((suffix) => {
+				console.log(
+					`${URL_TEI_PB}/parts/${element.handle}.xml/json?odd=parzival.odd&view=page&id=${element.handle}_${thirties}.${verse}${suffix}`
+				);
+				return fetch(
+					`${URL_TEI_PB}/parts/${element.handle}.xml/json?odd=parzival.odd&view=page&id=${element.handle}_${thirties}.${verse}${suffix}`
+				);
+			});
+		}
 	});
 
 	// Fetch fassungen
 	(await metadata).hyparchetypes.forEach((/** @type {{ handle: string | number; }} */ element) => {
-		publisherData[element.handle] = fetch(
-			`${URL_TEI_PB}/parts/syn${thirties}.xml/json?odd=parzival.odd&view=single&xpath=//l[@n=%27${element.handle}%20${thirties}.${verse}%27]`
-		);
+		publisherData[element.handle] = [
+			fetch(
+				`${URL_TEI_PB}/parts/syn${thirties}.xml/json?odd=parzival.odd&view=single&xpath=//l[@n=%27${element.handle}%20${thirties}.${verse}%27]`
+			)
+		];
 	});
 
 	/** @type {string[]} */
 	let loss = [];
 	// Wait for all promises to resolve and filter those with status 200
 	const resolvedPublisherData = await Promise.all(
-		Object.entries(publisherData).map(async ([key, promise]) => {
-			let response = await promise;
+		Object.entries(publisherData).map(async ([key, promiseArray]) => {
+			let responses = await Promise.all(promiseArray);
+			// console.log(responses);
 			let data = null;
-			if (response.status === 200) {
-				data = await response.json();
-			} else {
-				const response = await fetch(
-					`${URL_TEI_PB}/parts/${key}.xml/json?odd=parzival.odd&view=page&id=${key}_${thirties}.${verse}-a`
+			if (responses.some((res) => res.status === 200)) {
+				data = await Promise.all(
+					responses.filter((res) => res.status === 200).map(async (res) => await res.json())
 				);
-				if (response.status === 200) {
-					data = await response.json();
-				} else {
-					const response = await fetch(
-						`${URL_TEI_PB}/parts/${key}.xml/json?odd=parzival.odd&view=page&id=${key}_${thirties}.${verse}-k`
-					);
-					if (response.status === 200) {
-						data = await response.json();
-					}
-				}
 			}
 			if (data === null) {
 				loss.push(key);
 				return null;
 			}
+			// console.log(data);
 			return [key, data];
 		})
 	).then((results) => results.filter((result) => result !== null));
