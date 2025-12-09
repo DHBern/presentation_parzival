@@ -7,5 +7,5 @@ const possibleHandles = (await metadata).codices.map((c) => c.handle);
  * @satisfies {import('@sveltejs/kit').ParamMatcher}
  */
 export const match = (param) => {
-	return possibleHandles.includes(param);
+	return param.split('-').some((v) => possibleHandles.includes(v));
 };
