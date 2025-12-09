@@ -3,7 +3,7 @@
 	import { page } from '$app/state';
 	import TextzeugenSelector from '$lib/components/TextzeugenSelector.svelte';
 
-	let message = $derived(page.error?.message.split('/') || []);
+	let message = $derived(page.error?.message.split('/') || ['Unbekannter Textzeuge']);
 </script>
 
 <h2 class="h2 pb-6">Ungültige Adresse</h2>
