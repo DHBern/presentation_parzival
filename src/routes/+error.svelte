@@ -3,7 +3,7 @@
 	import { base } from '$app/paths';
 </script>
 
-<div class="container mx-auto typography">
+<div class="container pt-10 mx-auto typography">
 	{#if page.status === 404}
 		<h1>{page.status}: Seite nicht gefunden</h1>
 		<p>Die angeforderte Seite existiert nicht. <a href="{base}/">Zur Startseite</a></p>
