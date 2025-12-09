@@ -8,6 +8,8 @@ import { error } from '@sveltejs/kit';
 export async function load({ fetch, params }) {
 	if (!params.sigla) {
 		return error(404, params.verse);
+	} else if (!params.thirties) {
+		return error(404, [params.sigla, params.verse].join('/'));
 	}
 	const { codices, fragments } = await metadata;
 	const sigla = params.sigla?.split('-');

@@ -1,7 +1,6 @@
 <script>
 	import { base } from '$app/paths';
 	import { page } from '$app/state';
-	import { NUMBER_OF_PAGES } from '$lib/constants';
 	import TextzeugenSelector from '$lib/components/TextzeugenSelector.svelte';
 
 	let message = $derived(page.error?.message.split('/') || []);
