@@ -76,7 +76,7 @@
 					{#each archetype.witnesses as witness}
 						{#each publisherData[witness] as witnessData}
 							{#if witnessData?.content}
-								{@const verseWithAdd = witnessData?.id.split('.').pop()}
+								{@const verseWithAdd = witnessData?.id.split('.').pop().replace(/^0+/, '')}
 								<tr>
 									<td class={`pr-4 pt-2 ${hyparchetypesSlider ? 'pl-5' : ''}`}>
 										{thirties}.{verseWithAdd}
