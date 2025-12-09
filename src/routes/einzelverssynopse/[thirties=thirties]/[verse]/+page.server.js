@@ -3,6 +3,7 @@ import { generateEntries } from '$lib/functions/generateEntries';
 import { metadata } from '$lib/data/metadata';
 import sigilFromHandle from '$lib/functions/sigilFromHandle';
 import { verses } from '$lib/data/verses';
+import { error } from '@sveltejs/kit';
 
 /** @type {import('./$types').PageServerLoad} */
 export async function load({ fetch, params }) {
@@ -67,6 +68,12 @@ export async function load({ fetch, params }) {
 
 	// Convert array back to object
 	const resolvedPublisherDataObject = Object.fromEntries(resolvedPublisherData);
+	if (Object.keys(resolvedPublisherDataObject).length === 0) {
+		return error(
+			404,
+			'Keine Daten für diese Stelle vorhanden. Möglicherweise existiert sie nicht.'
+		);
+	}
 	/** @type {{siglum:string, thirties: string, verse: string}[]} */
 	let startobj = []; //This is just for typing purposes
 	const filteredVerses = /** @type {{siglum:string, thirties: string, verse: string}[]} */ (
