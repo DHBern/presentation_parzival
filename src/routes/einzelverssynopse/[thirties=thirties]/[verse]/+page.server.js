@@ -9,7 +9,7 @@ export async function load({ fetch, params }) {
 	/** @type {{ [key: string]: Promise<any> }} */
 	const publisherData = {};
 
-	const thirties = params.thirties ?? '1';
+	const thirties = Number(params.thirties)?.toString() ?? '1';
 	const verseparts = params?.verse?.split('-');
 	let verse = '01';
 
