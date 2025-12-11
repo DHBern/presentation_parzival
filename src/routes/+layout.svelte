@@ -60,7 +60,7 @@
 					{#each aboutProjectPages as page}
 						<a
 							href={`${base}${page.path}`}
-							class="block px-4 py-2 text-sm hover:bg-primary-100 text-black {classesActive(page.path)}"
+							class="block px-4 py-2 text-sm hover:text-primary-600 text-black {classesActive(page.path)}"
 						>
 							{page.slug}
 						</a>
