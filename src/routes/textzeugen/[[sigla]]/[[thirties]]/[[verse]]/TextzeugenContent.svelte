@@ -26,7 +26,10 @@
 			(entries) => {
 				entries.forEach((entry) => {
 					if (entry.isIntersecting) {
-						if (programmaticScroll) {
+						const isOnBottom =
+							scrollContainer.scrollHeight - scrollContainer.clientHeight ===
+							scrollContainer.scrollTop;
+						if (programmaticScroll || isOnBottom) {
 							return;
 						}
 						if (entry.target instanceof HTMLElement) {
@@ -182,7 +185,7 @@
 				scrollContainer.scrollTop
 			) {
 				const dataset = verse.closest('.page').dataset;
-				if (dataset) {
+				if (dataset?.next) {
 					await localPageChange(dataset);
 				}
 			}
