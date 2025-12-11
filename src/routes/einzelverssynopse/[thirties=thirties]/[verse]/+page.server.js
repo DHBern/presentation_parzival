@@ -79,7 +79,8 @@ export async function load({ fetch, params }) {
 	const filteredVerses = /** @type {{siglum:string, thirties: string, verse: string}[]} */ (
 		await verses
 	)
-		.filter((v) => !v.siglum.includes('fr'))
+		// .filter((v) => !v.siglum.includes('fr'))
+		.filter((v) => !v.siglum.includes('fr') && !v.verse.includes('-')) // exclude Zusatzverse for navigation
 		// de-duplicate by thirties+verse (keep first occurrence)
 		.reduce(
 			(acc, curr) => {
@@ -92,7 +93,7 @@ export async function load({ fetch, params }) {
 			},
 			{ seen: new Set(), items: startobj }
 		)
-		.items // sort: by thirties (numeric), then verse with hierarchical dashes:
+		.items // sort: by thirties (numeric), then verse with hierarchical dashes: // this could be made drastically simpler because we are ignoring dash-verses now, but we keep it in since the sentiment might change.
 		.sort((a, b) => {
 			const thA = Number(a.thirties);
 			const thB = Number(b.thirties);
