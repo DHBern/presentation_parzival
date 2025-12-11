@@ -55,7 +55,7 @@
 					<span class="text-xs">▾</span>
 				</button>
 				<nav
-					class="invisible opacity-0 group-hover:visible group-hover:opacity-100 absolute left-0 mt-2 rounded-lg bg-surface-100 shadow-lg min-w-[14rem] py-2 transition"
+					class="invisible opacity-0 group-hover:visible group-hover:opacity-100 absolute left-0 mt-2 rounded-lg bg-surface-100 shadow-lg min-w-[14rem] py-2 transition text-left"
 				>
 					{#each aboutProjectPages as page}
 						<a
