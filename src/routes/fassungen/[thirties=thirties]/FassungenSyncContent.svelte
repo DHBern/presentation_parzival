@@ -49,7 +49,7 @@
 	{#each content as _fassung, i}
 		<div>
 			<h2 class="h2 inline">{titles[i]}</h2>
-			<div class="inline [&_ul,&_li]:inline [&_li]:mr-1">
+			<div class="inline [&_ul,&_li]:inline [&_li]:mr-1 anchor">
 				{@html distributions[i][page.data.thirties]}
 			</div>
 		</div>

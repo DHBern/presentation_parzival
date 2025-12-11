@@ -72,10 +72,6 @@
 			@apply mb-2;
 		}
 	}
-
-	li > a {
-		@apply anchor;
-	}
 }
 
 .fasskommanchor.single {
