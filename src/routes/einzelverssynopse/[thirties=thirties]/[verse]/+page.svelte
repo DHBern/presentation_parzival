@@ -63,9 +63,9 @@
 							{#await publisherData[archetype.handle]}
 								<td class="border-l-2 border-current pl-4 py-1 font-sans"></td>
 							{:then value}
-								{#if value?.content}
+								{#if value[0]?.content}
 									<td class="border-l-2 border-current pl-4 py-1 font-sans"
-										>{@html value?.content}</td
+										>{@html value[0]?.content}</td
 									>
 								{:else}
 									<td class="border-l-2 border-current pl-4 py-1 font-sans"></td>
@@ -74,26 +74,28 @@
 						</tr>
 					{/if}
 					{#each archetype.witnesses as witness}
-						{#if publisherData[witness]?.content}
-							{@const verseWithAdd = publisherData[witness]?.id.split('.').pop()}
-							<tr>
-								<td class={`pr-4 pt-2 ${hyparchetypesSlider ? 'pl-5' : ''}`}>
-									{thirties}.{verseWithAdd}
-								</td>
-								<td class={`pr-4 pt-2 ${hyparchetypesSlider ? 'pl-5' : ''}`}>
-									<a class="anchor" href="{base}/textzeugen/{witness}/{thirties}/{verseWithAdd}"
-										>{metadata.codices.find(
-											(/** @type {{ handle: any }} */ c) => c.handle === witness
-										)?.sigil}</a
+						{#each publisherData[witness] as witnessData}
+							{#if witnessData?.content}
+								{@const verseWithAdd = witnessData?.id.split('.').pop().replace(/^0+/, '')}
+								<tr>
+									<td class={`pr-4 pt-2 ${hyparchetypesSlider ? 'pl-5' : ''}`}>
+										{thirties}.{verseWithAdd}
+									</td>
+									<td class={`pr-4 pt-2 ${hyparchetypesSlider ? 'pl-5' : ''}`}>
+										<a class="anchor" href="{base}/textzeugen/{witness}/{thirties}/{verseWithAdd}"
+											>{metadata.codices.find(
+												(/** @type {{ handle: any }} */ c) => c.handle === witness
+											)?.sigil}</a
+										>
+									</td>
+									<td
+										class={`border-l-2 border-current ${hyparchetypesSlider ? 'pl-5' : ''} pl-4 py-1`}
 									>
-								</td>
-								<td
-									class={`border-l-2 border-current ${hyparchetypesSlider ? 'pl-5' : ''} pl-4 py-1`}
-								>
-									{@html publisherData[witness]?.content}
-								</td>
-							</tr>
-						{/if}
+										{@html witnessData?.content}
+									</td>
+								</tr>
+							{/if}
+						{/each}
 					{/each}
 				{/each}
 			</tbody>
