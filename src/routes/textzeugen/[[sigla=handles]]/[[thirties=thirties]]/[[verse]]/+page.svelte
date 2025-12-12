@@ -134,7 +134,7 @@
 </script>
 
 <section class="w-full">
-	<h1 class="h1 my-4">Textzeugen</h1>
+	<h1 class="h1 my-4">Transkriptionen</h1>
 	<div class="grid gap-6 md:grid-cols-2 md:my-8">
 		<div class="flex flex-col gap-6">
 			{#if data.content?.length > 1}
