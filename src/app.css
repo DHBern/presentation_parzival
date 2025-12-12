@@ -148,7 +148,7 @@
 	.majuscule,
 	.large-variant {
 		@apply font-black;
-		@apply text-xl;
+		@apply text-base;
 	}
 
 	.glory-initial {
