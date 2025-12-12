@@ -16,8 +16,13 @@
 	<div class="flex gap-6 my-3">
 		{#each Array.from({ length: 2 }) as _, i}
 			<label>
-				Textzeuge: <select class="select my-2" bind:value={selection[i]}>
-					{#if i !== 0}<option value="">kein Textzeuge</option>{/if}
+				{#if i === 0}Textzeuge{:else}Textzeugenvergleich{/if}:
+				<select class="select my-2" bind:value={selection[i]}>
+					{#if i !== 0}
+						<option value="">
+							kein Textzeuge
+						</option>
+					{/if}
 					{#await sigla then resolvedSigla}
 						{#each resolvedSigla as { sigil, handle }}
 							<option value={handle}>{@html sigil}</option>
