@@ -25,7 +25,7 @@
 	const aboutProjectPages = [
 		{ slug: 'Projektpräsentationen', path: '/projektpraesentationen' },
 		{ slug: 'English Presentation', path: '/englishpresentation' },
-		{ slug: 'Mitarbeitende', path: '/mitarbeitende' },
+		{ slug: 'Mitarbeitende', path: '/mitarbeitende' }
 		// { slug: 'Erläuterungen', path: '/erl' },
 		// { slug: 'Fassungsprofile', path: '/fassungsprofile' },
 		// { slug: 'Editionsgrundsätze', path: '/editionsgrundsaetze' },
@@ -45,14 +45,16 @@
 
 <AppBar classes="px-4 py-0 relative z-50">
 	{#snippet lead()}
-		<a class="text-xl uppercase font-bold hover:text-primary-700 self-center" href={`${base}/`}>Parzival</a>
+		<a class="text-xl uppercase font-bold hover:text-primary-700 self-center" href={`${base}/`}
+			>Parzival</a
+		>
 	{/snippet}
 	<nav class="">
 		<div class="hidden items-center flex-none lg:flex lg:flex-wrap">
 			<nav class="relative list-nav-item inline-block h-full p-4 group">
 				<button class="flex items-center gap-1 hover:text-primary-600">
 					Über das Projekt
-					<span class="text-xs">▾</span>
+					<i class="fa-solid fa-caret-down fa-2xs"></i>
 				</button>
 				<nav
 					class="invisible opacity-0 group-hover:visible group-hover:opacity-100 absolute left-0 mt-2 rounded-lg bg-surface-100 shadow-lg min-w-[14rem] py-2 transition text-left"
@@ -60,7 +62,9 @@
 					{#each aboutProjectPages as page}
 						<a
 							href={`${base}${page.path}`}
-							class="block px-4 py-2 text-sm hover:text-primary-600 text-black {classesActive(page.path)}"
+							class="block px-4 py-2 text-sm hover:text-primary-600 text-black {classesActive(
+								page.path
+							)}"
 						>
 							{page.slug}
 						</a>
