@@ -40,6 +40,8 @@
 		reset = () => {
 			this.pages = [[], [], [], []];
 			this.thirties = [];
+			this.distributions = [{}, {}, {}, {}];
+			this.books = [];
 		};
 
 		/**
@@ -218,6 +220,8 @@
 	}
 
 	let localPages = new localPageClass();
+	$inspect(localPages.books);
+	$inspect(localPages.pages);
 	$effect(() => {
 		// when the page number changes, fetch the corresponding data
 		// we need to untrack here to avoid infinite loops, because fetchPage changes localPages.
