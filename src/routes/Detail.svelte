@@ -116,13 +116,13 @@
 		};
 	}
 
-	const popupFragments = $state({});
+	let popupFragments = $state();
 	const popupLabels = $state({});
 	const openPopupFragments = (e, verseNumber) => {
 		e.preventDefault();
 		e.stopPropagation();
 		const reference = e.currentTarget;
-		const popup = popupFragments[verseNumber];
+		const popup = popupFragments;
 		if (popup && reference) {
 			popup.style.display = 'block';
 			computePosition(reference, popup, {
@@ -186,7 +186,7 @@
 	let frValues = $derived(data.find((d) => d.label === 'fr')?.values);
 	let manuscriptHandles = $derived(
 		scaleBandInvert(x)(mousePos[0]) === 'fr'
-			? frValues?.[verse - selection.start] || 'fr'
+			? frValues?.[verse - Math.round(selection.start)] || 'fr'
 			: scaleBandInvert(x)(mousePos[0])
 	);
 	$effect(() => {
@@ -308,26 +308,21 @@
 	</div>
 {/each}
 <!-- popups for fragments -->
-{#each frValues || [] as fragment, i}
-	{#if Array.isArray(fragment)}
-		{@const verse = i + selection.start}
-		<div
-			class="card p-1 preset-filled-primary-500 top-0 left-0 w-max absolute opacity-0 hidden"
-			bind:this={popupFragments[verse]}
-		>
-			<ul>
-				{#each fragment as handle}
-					<li>
-						<a href={`${base}/textzeugen/${handle}/${verse}`} class="hover:text-secondary-900">
-							{@html sigilFromHandle(handle)}
-							{verse}
-						</a>
-					</li>
-				{/each}
-			</ul>
-		</div>
-	{/if}
-{/each}
+<div
+	class="card p-1 preset-filled-primary-500 top-0 left-0 w-max absolute opacity-0 hidden"
+	bind:this={popupFragments}
+>
+	<ul>
+		{#each manuscriptHandles as handle}
+			<li>
+				<a href={`${base}/textzeugen/${handle}/${verse}`} class="hover:text-secondary-900">
+					{@html sigilFromHandle(handle)}
+					{verse}
+				</a>
+			</li>
+		{/each}
+	</ul>
+</div>
 <div
 	onwheel={handleWheel}
 	onmousemove={handleMouseMove}
@@ -348,8 +343,7 @@
 				{#each sigla.values as values, i}
 					{#if values}
 						{#if isNaN(values[1])}
-							{@const verseNumber = i + selection.start}
-							{@debug values}
+							{@const verseNumber = i + Math.round(selection.start)}
 							{#if values?.length === 1}
 								<a
 									href={`${base}/textzeugen/${values[0]}/${verseNumber}`}
@@ -376,8 +370,10 @@
 									}}
 									aria-label={`Mehrere Fr in Vers ${verseNumber}`}
 									onblur={() => {
-										popupFragments[verseNumber].style.display = 'none';
-										popupFragments[verseNumber].style.opacity = '0';
+										if (popupFragments[verseNumber]) {
+											popupFragments[verseNumber].style.display = 'none';
+											popupFragments[verseNumber].style.opacity = '0';
+										}
 									}}
 								>
 									<rect
