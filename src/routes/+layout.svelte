@@ -22,8 +22,6 @@
 		openState = false;
 	}
 
-	let aboutMenu;
-
 	const aboutProjectPages = [
 		{ slug: 'Projektpräsentationen', path: '/projektpraesentationen' },
 		{ slug: 'English Presentation', path: '/englishpresentation' },
@@ -52,48 +50,33 @@
 		>
 	{/snippet}
 	<nav class="list-nav-item w-full p-4 justify-start hidden lg:flex lg:flex-wrap">
-		<button
-			id="about-btn"
-			type="button"
-			popovertarget="about-menu"
-			aria-label="Über das Projekt Menü öffnen"
-			aria-haspopup="true"
-			aria-expanded={aboutMenu?.matches(':popover-open')}
-			aria-controls="about-menu"
-			class="flex items-center gap-1 hover:text-primary-600 hidden lg:flex lg:flex-wrap"
-		>
-			Über das Projekt <i class="fa-solid fa-chevron-down"></i>
-		</button>
+		<ul class="contents">
+			<li class="relative group list-nav-item inline-block h-full p-4">
+				<a href={`${base}#`}>Über das Projekt <i class="fa-solid fa-chevron-down"></i></a>
+				<ul
+					class="absolute top-full left-0 w-48 preset-filled border border-gray-200 rounded-md shadow-lg z-10 hidden group-hover:block group-focus-within:block"
+				>
+					{#each aboutProjectPages as page, i}
+						<li>
+							<a
+								href={`${base}${page.path}`}
+								class="block px-4 py-2 text-sm hover:text-primary-600 text-black {classesActive(
+									page.path
+								)}"
+							>
+								{page.slug}
+							</a>
+						</li>
+					{/each}
+				</ul>
+			</li>
 
-		<div
-			bind:this={aboutMenu}
-			id="about-menu"
-			popover
-			aria-label="Über das Projekt Menü"
-			class="rounded-lg bg-surface-100 shadow-lg min-w-[14rem] py-2 text-left"
-			onfocusout={(e) => !aboutMenu.contains(e.relatedTarget) && aboutMenu.hidePopover()
-}
-		>
-			{#each aboutProjectPages as page, i}
-				<div>
-					<a
-						href={`${base}${page.path}`}
-						onclick={() => aboutMenu.hidePopover()}
-						popovertarget="about-menu"
-						popovertargetaction="hide"
-						autofocus={i === 0}
-						class="block px-4 py-2 text-sm hover:text-primary-600 text-black {classesActive(page.path)}"
-					>
-						{page.slug}
-					</a>
-				</div>
+			{#each mainPages as page}
+				<li class="list-nav-item inline-block h-full p-4 {classesActive(page.path)}">
+					<a href={`${base}${page.path}`}>{page.slug}</a>
+				</li>
 			{/each}
-		</div>
-		{#each mainPages as page}
-			<div class="list-nav-item inline-block h-full p-4 {classesActive(page.path)}">
-				<a href={`${base}${page.path}`}>{page.slug}</a>
-			</div>
-		{/each}
+		</ul>
 	</nav>
 	{#snippet trail()}
 		<Modal
