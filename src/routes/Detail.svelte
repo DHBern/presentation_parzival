@@ -123,8 +123,8 @@
 		e.stopPropagation();
 		const reference = e.currentTarget;
 		const popup = popupFragments[verseNumber];
-		popup.style.display = 'block';
 		if (popup && reference) {
+			popup.style.display = 'block';
 			computePosition(reference, popup, {
 				placement: 'top'
 			}).then(({ x, y }) => {
@@ -349,7 +349,8 @@
 					{#if values}
 						{#if isNaN(values[1])}
 							{@const verseNumber = i + selection.start}
-							{#if values?.lenth === 1}
+							{@debug values}
+							{#if values?.length === 1}
 								<a
 									href={`${base}/textzeugen/${values[0]}/${verseNumber}`}
 									aria-label={`${values[0]}.${verseNumber}`}
