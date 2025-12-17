@@ -1,5 +1,8 @@
 import { metadata } from '$lib/data/metadata';
-const possibleHandles = (await metadata).codices.map((c) => c.handle);
+const possibleHandles = [
+	...(await metadata).codices.map((c) => c.handle),
+	...(await metadata).fragments.map((f) => f.handle)
+];
 
 /**
  * @param {string} param

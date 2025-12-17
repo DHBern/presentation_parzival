@@ -49,7 +49,7 @@
 	{#each content as _fassung, i}
 		<div>
 			<h2 class="h2 inline">{titles[i]}</h2>
-			<div class="inline [&_ul,&_li]:inline [&_li]:mr-1">
+			<div class="inline [&_ul,&_li]:inline [&_li]:mr-1 anchor">
 				{@html distributions[i][page.data.thirties]}
 			</div>
 		</div>
@@ -89,7 +89,7 @@
 	.synced {
 		:global(.line) {
 			@apply grid grid-cols-(--verse-width) grid-flow-col items-center-safe;
-			@apply bg-gray-100 dark:preset-filled-surface-500;
+			@apply preset-filled-surface-500;
 			:global(.verse) {
 				@apply ml-1;
 			}

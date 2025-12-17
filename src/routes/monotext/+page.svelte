@@ -4,10 +4,10 @@
 </script>
 
 <div class="container mx-auto typography">
-	<h1>Monotext</h1>
+	<h1>Eintextedition</h1>
 
 	<p>
-		Der Monotext stellt den Text des Parzival in einer einzigen, durchgehenden Ansicht im PDF Format
+		Die Eintextedition stellt den Text des Parzival in einer einzigen, durchgehenden Ansicht im PDF Format
 		dar.
 	</p>
 

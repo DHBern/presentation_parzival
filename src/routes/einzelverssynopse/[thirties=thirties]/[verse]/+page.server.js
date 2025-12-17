@@ -20,60 +20,6 @@ export async function load({ fetch, params }) {
 		verse = verseparts[0].padStart(2, '0');
 	}
 
-	// Fetch the textzeugen
-	(await metadata).codices.forEach((/** @type {{ handle: string | number; }} */ element) => {
-		publisherData[element.handle] = fetch(
-			`${URL_TEI_PB}/parts/${element.handle}.xml/json?odd=parzival.odd&view=page&id=${element.handle}_${thirties}.${verse}`
-		);
-	});
-
-	// Fetch fassungen
-	(await metadata).hyparchetypes.forEach((/** @type {{ handle: string | number; }} */ element) => {
-		publisherData[element.handle] = fetch(
-			`${URL_TEI_PB}/parts/syn${thirties}.xml/json?odd=parzival.odd&view=single&xpath=//l[@n=%27${element.handle}%20${thirties}.${verse}%27]`
-		);
-	});
-
-	/** @type {string[]} */
-	let loss = [];
-	// Wait for all promises to resolve and filter those with status 200
-	const resolvedPublisherData = await Promise.all(
-		Object.entries(publisherData).map(async ([key, promise]) => {
-			let response = await promise;
-			let data = null;
-			if (response.status === 200) {
-				data = await response.json();
-			} else {
-				const response = await fetch(
-					`${URL_TEI_PB}/parts/${key}.xml/json?odd=parzival.odd&view=page&id=${key}_${thirties}.${verse}-a`
-				);
-				if (response.status === 200) {
-					data = await response.json();
-				} else {
-					const response = await fetch(
-						`${URL_TEI_PB}/parts/${key}.xml/json?odd=parzival.odd&view=page&id=${key}_${thirties}.${verse}-k`
-					);
-					if (response.status === 200) {
-						data = await response.json();
-					}
-				}
-			}
-			if (data === null) {
-				loss.push(key);
-				return null;
-			}
-			return [key, data];
-		})
-	).then((results) => results.filter((result) => result !== null));
-
-	// Convert array back to object
-	const resolvedPublisherDataObject = Object.fromEntries(resolvedPublisherData);
-	if (Object.keys(resolvedPublisherDataObject).length === 0) {
-		return error(
-			404,
-			'Keine Daten für diese Stelle vorhanden. Möglicherweise existiert sie nicht.'
-		);
-	}
 	/** @type {{siglum:string, thirties: string, verse: string}[]} */
 	let startobj = []; //This is just for typing purposes
 	const filteredVerses = /** @type {{siglum:string, thirties: string, verse: string}[]} */ (
@@ -142,6 +88,63 @@ export async function load({ fetch, params }) {
 	const prevVerse = index > 0 ? filteredVerses[index - 1] : null;
 
 	const nextVerse = index < filteredVerses.length - 1 ? filteredVerses[index + 1] : null;
+
+	// Fetch the textzeugen
+	const hasSuffix = verseparts[1]; // check if there is a suffix in the URL
+	(await metadata).codices.forEach(async (/** @type {{ handle: string | number; }} */ element) => {
+		if (hasSuffix) {
+			publisherData[element.handle] = [
+				fetch(
+					`${URL_TEI_PB}/parts/${element.handle}.xml/json?odd=parzival.odd&view=page&id=${element.handle}_${thirties}.${verse}`
+				)
+			];
+		} else {
+			const versesToFetch = (await verses).filter(
+				(v) =>
+					v.siglum.toLowerCase() === element.handle &&
+					v.thirties === thirties &&
+					v.verse.startsWith(verse)
+			);
+
+			publisherData[element.handle] = versesToFetch.map((verseObject) => {
+				return fetch(
+					`${URL_TEI_PB}/parts/${element.handle}.xml/json?odd=parzival.odd&view=page&id=${element.handle}_${thirties}.${verseObject.verse}`
+				);
+			});
+		}
+	});
+
+	// Fetch fassungen
+	(await metadata).hyparchetypes.forEach((/** @type {{ handle: string | number; }} */ element) => {
+		publisherData[element.handle] = [
+			fetch(
+				`${URL_TEI_PB}/parts/syn${thirties}.xml/json?odd=parzival.odd&view=single&xpath=//l[@n=%27${element.handle}%20${thirties}.${verse}%27]`
+			)
+		];
+	});
+
+	/** @type {string[]} */
+	let loss = [];
+	// Wait for all promises to resolve and filter those with status 200
+	const resolvedPublisherData = await Promise.all(
+		Object.entries(publisherData).map(async ([key, promiseArray]) => {
+			let responses = await Promise.all(promiseArray);
+			let data = null;
+			if (responses.some((res) => res.status === 200)) {
+				data = await Promise.all(
+					responses.filter((res) => res.status === 200).map(async (res) => await res.json())
+				);
+			}
+			if (data === null) {
+				loss.push(key);
+				return null;
+			}
+			return [key, data];
+		})
+	).then((results) => results.filter((result) => result !== null));
+
+	// Convert array back to object
+	const resolvedPublisherDataObject = Object.fromEntries(resolvedPublisherData);
 
 	return {
 		thirties,

@@ -134,17 +134,9 @@
 </script>
 
 <section class="w-full">
-	<h1 class="h1 my-4">Textzeugen</h1>
+	<h1 class="h1 my-4">Transkriptionen</h1>
 	<div class="grid gap-6 md:grid-cols-2 md:my-8">
 		<div class="flex flex-col gap-6">
-			<p>
-				Dies ist die Textzeugenansicht. Derzeit {Number(data.content?.length) > 1
-					? 'werden'
-					: 'wird'}
-				{@html data?.content
-					? selectedSigla.map((handle) => sigilFromHandle(handle)).join(' und ')
-					: 'keine Textzeugen'} angezeigt. Mit dem Selektor können Sie die Textzeugen wechseln.
-			</p>
 			{#if data.content?.length > 1}
 				<div>
 					<Switch
@@ -181,12 +173,14 @@
 									{sigilFromHandle(info.sigla)}
 								{/snippet}
 								{#snippet content()}
-									{@html metadataFromHandle(info.sigla)['info-h2']}
-									(<a
-										class="anchor text-primary-100"
-										href="{base}/hsverz#{sigilFromHandle(info.sigla)}"
+									<div class="h6">
+										{@html metadataFromHandle(info.sigla)['info-h2']}
+										<a
+											class="anchor text-primary-100"
+											href="{base}/hsverz#{sigilFromHandle(info.sigla)}"
 										>zum Verzeichnis
-									</a>)
+										</a>
+									</div>
 								{/snippet}
 							</Popover>
 						</h2>

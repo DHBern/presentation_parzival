@@ -28,6 +28,10 @@
 	 * @param { KeyboardEvent } ev
 	 */
 	function handleKeyDown(ev) {
+		// Ignore if modifier keys are pressed
+		if (ev.altKey || ev.ctrlKey || ev.metaKey || ev.shiftKey) {
+			return;
+		}
 		if (ev.key === 'ArrowRight') {
 			goto(nextVerseURL);
 		}

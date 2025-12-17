@@ -3,7 +3,6 @@
 	import TextzeugenSelector from '$lib/components/TextzeugenSelector.svelte';
 	import Devilstable from './Devilstable.svelte';
 	import H2Hoverable from '$lib/components/H2Hoverable.svelte';
-	import { base } from '$app/paths';
 
 	/** @type {{data: import('./$types').PageData}} */
 	let { data } = $props();

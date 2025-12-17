@@ -53,7 +53,7 @@
 	</div>
 </div>
 <div
-	class="max-h-[70vh] overflow-y-auto bg-gray-100 dark:preset-filled-surface-500"
+	class="max-h-[70vh] overflow-y-auto preset-filled-surface-500"
 	bind:this={scrollContainer}
 	onscroll={() => {
 		resetPopup();

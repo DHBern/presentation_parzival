@@ -131,10 +131,11 @@
 {#await iiif.manifest then imageObject}
 	<div id={'viewer-' + uuid} class="w-full h-full" use:generateViewer={imageObject}></div>
 {/await}
+
 <img
 	id={'overlay-' + uuid}
 	class="max-w-none max-h-none"
 	src={iiif.overlay}
-	alt="overlay"
+	alt=""
 	bind:this={overlayEl}
 />
