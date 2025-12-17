@@ -11,8 +11,8 @@
 	let { children } = $props();
 
 	let classesActive = $derived((/** @type {string} */ href) =>
-		base + href === `/${page.url.pathname.split('/')[1]}`
-			? 'bg-primary-300 hover:bg-primary-300 hover:text-primary-700 text-primary-900'
+		href.split('/')[1] === page.url.pathname.split('/')[1] || href.split('/')[1] === page.url.hash
+	? 'bg-primary-300 hover:bg-primary-300 hover:text-primary-700 text-primary-900'
 			: 'hover:text-primary-600'
 	);
 
