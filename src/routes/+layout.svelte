@@ -51,7 +51,7 @@
 			>Parzival</a
 		>
 	{/snippet}
-	<nav class="list-nav-item inline-block h-full w-full p-4 justify-start hidden lg:flex lg:flex-wrap">
+	<nav class="list-nav-item w-full p-4 justify-start hidden lg:flex lg:flex-wrap">
 		<button
 			id="about-btn"
 			type="button"
@@ -60,12 +60,12 @@
 			aria-haspopup="true"
 			aria-expanded={aboutMenu?.matches(':popover-open')}
 			aria-controls="about-menu"
-			class="flex items-center gap-1 hover:text-primary-600"
+			class="flex items-center gap-1 hover:text-primary-600 hidden lg:flex lg:flex-wrap"
 		>
 			Über das Projekt <i class="fa-solid fa-chevron-down"></i>
 		</button>
 
-		<ul
+		<div
 			bind:this={aboutMenu}
 			id="about-menu"
 			popover
@@ -75,7 +75,7 @@
 }
 		>
 			{#each aboutProjectPages as page, i}
-				<li>
+				<div>
 					<a
 						href={`${base}${page.path}`}
 						onclick={() => aboutMenu.hidePopover()}
@@ -86,16 +86,14 @@
 					>
 						{page.slug}
 					</a>
-				</li>
+				</div>
 			{/each}
-		</ul>
-		<ul>
-			{#each mainPages as page}
-				<li class="list-nav-item inline-block h-full p-4 {classesActive(page.path)}">
-					<a href={`${base}${page.path}`}>{page.slug}</a>
-				</li>
-			{/each}
-		</ul>
+		</div>
+		{#each mainPages as page}
+			<div class="list-nav-item inline-block h-full p-4 {classesActive(page.path)}">
+				<a href={`${base}${page.path}`}>{page.slug}</a>
+			</div>
+		{/each}
 	</nav>
 	{#snippet trail()}
 		<Modal
