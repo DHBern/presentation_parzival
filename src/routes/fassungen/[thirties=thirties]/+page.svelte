@@ -420,17 +420,18 @@
 	{/snippet}
 	<h1 class="h1 my-4">Fassungsansicht</h1>
 	<div class="grid gap-6 md:grid-cols-2 md:my-8">
-		<p>
-			{localPages.books[localPages.thirties.indexOf(Number(data.thirties))]}, Dreißiger {data.thirties}
-			<br />
-			<a
+		<div>
+			<h3 class="h3 my-4">{localPages.books[localPages.thirties.indexOf(Number(data.thirties))]}, Dreißiger {data.thirties}</h3>
+			<p>
+				Eintextedition als <a
 				class="anchor"
 				target="_blank"
 				href="https://dhbern.github.io/parzival-static-api/api/export/pdf/monopsen.pdf#page={data.thirties}"
 			>
-				Hier
-			</a> Monotext (PDF) öffnen.
-		</p>
+				PDF
+			</a> aufrufen
+			</p>
+		</div>
 
 		{#if mobileBreakpoint}
 			<Switch
@@ -452,7 +453,7 @@
 			class="col-start-2"
 		>
 			<label for="goto-thirties" class="block text-lg font-bold font-serif mb-2"
-				>Zu Dreißiger springen</label
+				>Dreißiger wählen</label
 			>
 			<input
 				id="goto-thirties"
