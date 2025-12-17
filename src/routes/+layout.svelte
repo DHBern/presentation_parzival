@@ -22,6 +22,8 @@
 		openState = false;
 	}
 
+	let aboutMenu;
+
 	const aboutProjectPages = [
 		{ slug: 'Projektpräsentationen', path: '/projektpraesentationen' },
 		{ slug: 'English Presentation', path: '/englishpresentation' },
@@ -49,35 +51,51 @@
 			>Parzival</a
 		>
 	{/snippet}
-	<nav class="">
-		<div class="hidden items-center flex-none lg:flex lg:flex-wrap">
-			<nav class="relative list-nav-item inline-block h-full p-4 group">
-				<button class="flex items-center gap-1 hover:text-primary-600">
-					Über das Projekt
-					<i class="fa-solid fa-caret-down fa-2xs"></i>
-				</button>
-				<nav
-					class="invisible opacity-0 group-hover:visible group-hover:opacity-100 absolute left-0 mt-2 rounded-lg bg-surface-100 shadow-lg min-w-[14rem] py-2 transition text-left"
-				>
-					{#each aboutProjectPages as page}
-						<a
-							href={`${base}${page.path}`}
-							class="block px-4 py-2 text-sm hover:text-primary-600 text-black {classesActive(
-								page.path
-							)}"
-						>
-							{page.slug}
-						</a>
-					{/each}
-				</nav>
-			</nav>
+	<nav class="list-nav-item inline-block h-full w-full p-4 justify-start hidden lg:flex lg:flex-wrap">
+		<button
+			id="about-btn"
+			type="button"
+			popovertarget="about-menu"
+			aria-label="Über das Projekt Menü öffnen"
+			aria-haspopup="true"
+			aria-expanded={aboutMenu?.matches(':popover-open')}
+			aria-controls="about-menu"
+			class="flex items-center gap-1 hover:text-primary-600"
+		>
+			Über das Projekt <i class="fa-solid fa-chevron-down"></i>
+		</button>
 
-			{#each mainPages as page}
-				<nav class="list-nav-item inline-block h-full p-4 {classesActive(page.path)}">
-					<a href={`${base}${page.path}`}>{page.slug}</a>
-				</nav>
+		<ul
+			bind:this={aboutMenu}
+			id="about-menu"
+			popover
+			aria-label="Über das Projekt Menü"
+			class="rounded-lg bg-surface-100 shadow-lg min-w-[14rem] py-2 text-left"
+			onfocusout={(e) => !aboutMenu.contains(e.relatedTarget) && aboutMenu.hidePopover()
+}
+		>
+			{#each aboutProjectPages as page, i}
+				<li>
+					<a
+						href={`${base}${page.path}`}
+						onclick={() => aboutMenu.hidePopover()}
+						popovertarget="about-menu"
+						popovertargetaction="hide"
+						autofocus={i === 0}
+						class="block px-4 py-2 text-sm hover:text-primary-600 text-black {classesActive(page.path)}"
+					>
+						{page.slug}
+					</a>
+				</li>
 			{/each}
-		</div>
+		</ul>
+		<ul>
+			{#each mainPages as page}
+				<li class="list-nav-item inline-block h-full p-4 {classesActive(page.path)}">
+					<a href={`${base}${page.path}`}>{page.slug}</a>
+				</li>
+			{/each}
+		</ul>
 	</nav>
 	{#snippet trail()}
 		<Modal

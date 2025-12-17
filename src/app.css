@@ -205,3 +205,14 @@ div.content > div.tei-l:has(span.versechange) {
 		@apply ml-2;
 	}
 }
+
+#about-btn {
+	anchor-name: --about-btn;
+}
+
+#about-menu {
+	position-anchor: --about-btn;
+	top: anchor(bottom);
+	left: anchor(left);
+	margin-top: 0.5rem;
+}
