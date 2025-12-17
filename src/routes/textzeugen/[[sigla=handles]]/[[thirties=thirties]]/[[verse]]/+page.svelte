@@ -173,12 +173,14 @@
 									{sigilFromHandle(info.sigla)}
 								{/snippet}
 								{#snippet content()}
-									{@html metadataFromHandle(info.sigla)['info-h2']}
-									(<a
-										class="anchor text-primary-100"
-										href="{base}/hsverz#{sigilFromHandle(info.sigla)}"
+									<div class="h6">
+										{@html metadataFromHandle(info.sigla)['info-h2']}
+										<a
+											class="anchor text-primary-100"
+											href="{base}/hsverz#{sigilFromHandle(info.sigla)}"
 										>zum Verzeichnis
-									</a>)
+										</a>
+									</div>
 								{/snippet}
 							</Popover>
 						</h2>
