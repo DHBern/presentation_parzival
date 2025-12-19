@@ -120,8 +120,9 @@
 			class="relative border rounded-xl p-4 bg-gray-100 dark:preset-filled-surface-500 shadow-sm mt-6 w-[25em] ml-8"
 		>
 			<a
-				href="https://dhbern.github.io/presentation_parzival/textzeugen/d/8/1"
+				href="/textzeugen/d/8/1"
 				target="_blank"
+				rel="noopener noreferrer"
 				class="absolute -top-3 left-4 bg-gray-100 dark:preset-filled-surface-500 px-2 text-primary-600 text-sm font-medium rounded-md border border-primary-200 shadow-sm"
 				>D 8.1</a
 			>
@@ -155,8 +156,9 @@
 			class="relative border rounded-xl p-4 bg-gray-100 dark:preset-filled-surface-500 shadow-sm mt-6 w-[25em] ml-8"
 		>
 			<a
-				href="https://dhbern.github.io/presentation_parzival/textzeugen/g/460/25?"
+				href="/textzeugen/g/460/25?"
 				target="_blank"
+				rel="noopener noreferrer"
 				class="absolute -top-3 left-4 bg-gray-100 dark:preset-filled-surface-500 px-2 text-primary-600 text-sm font-medium rounded-md border border-primary-200 shadow-sm"
 			>
 				G 460.25
@@ -183,8 +185,9 @@
 			class="relative border rounded-xl p-4 bg-gray-100 dark:preset-filled-surface-500 shadow-sm mt-6 w-[25em] ml-8"
 		>
 			<a
-				href="https://dhbern.github.io/presentation_parzival/textzeugen/d/5/29?"
+				href="/textzeugen/d/5/29?"
 				target="_blank"
+				rel="noopener noreferrer"
 				class="absolute -top-3 left-4 bg-gray-100 dark:preset-filled-surface-500 px-2 text-primary-600 text-sm font-medium rounded-md border border-primary-200 shadow-sm"
 			>
 				D 5.29
@@ -204,8 +207,9 @@
 			class="relative border rounded-xl p-4 bg-gray-100 dark:preset-filled-surface-500 shadow-sm mt-6 w-[25em] ml-8"
 		>
 			<a
-				href="https://dhbern.github.io/presentation_parzival/textzeugen/d/1/01-01?"
+				href="/textzeugen/d/1/01-01?"
 				target="_blank"
+				rel="noopener noreferrer"
 				class="absolute -top-3 left-4 bg-gray-100 dark:preset-filled-surface-500 px-2 text-primary-600 text-sm font-medium rounded-md border border-primary-200 shadow-sm"
 			>
 				D 1.1
@@ -232,8 +236,9 @@
 			class="relative border rounded-xl p-4 bg-gray-100 dark:preset-filled-surface-500 shadow-sm mt-6 w-[25em] ml-8"
 		>
 			<a
-				href="https://dhbern.github.io/presentation_parzival/textzeugen/fr31/446/1"
+				href="/textzeugen/fr31/446/1"
 				target="_blank"
+				rel="noopener noreferrer"
 				class="absolute -top-3 left-4 bg-gray-100 dark:preset-filled-surface-500 px-2 text-primary-600 text-sm font-medium rounded-md border border-primary-200 shadow-sm"
 			>
 				Fr. 31 446.1
@@ -257,8 +262,9 @@
 			class="relative border rounded-xl p-4 bg-gray-100 dark:preset-filled-surface-500 shadow-sm mt-6 w-[25em] ml-8"
 		>
 			<a
-				href="https://dhbern.github.io/presentation_parzival/textzeugen/u/731/13"
+				href="/textzeugen/u/731/13"
 				target="_blank"
+				rel="noopener noreferrer"
 				class="absolute -top-3 left-4 bg-gray-100 dark:preset-filled-surface-500 px-2 text-primary-600 text-sm font-medium rounded-md border border-primary-200 shadow-sm"
 				>U 731.13</a
 			>
@@ -290,8 +296,9 @@
 			class="relative border rounded-xl p-4 bg-gray-100 dark:preset-filled-surface-500 shadow-sm mt-6 w-[25em] ml-8"
 		>
 			<a
-				href="https://dhbern.github.io/presentation_parzival/textzeugen/d/747/18?"
+				href="/textzeugen/d/747/18?"
 				target="_blank"
+				rel="noopener noreferrer"
 				class="absolute -top-3 left-4 bg-gray-100 dark:preset-filled-surface-500 px-2 text-primary-600 text-sm font-medium rounded-md border border-primary-200 shadow-sm"
 			>
 				D 747.18
@@ -317,8 +324,9 @@
 			class="relative border rounded-xl p-4 bg-gray-100 dark:preset-filled-surface-500 shadow-sm mt-6 w-[25em] ml-8"
 		>
 			<a
-				href="https://dhbern.github.io/presentation_parzival/textzeugen/u/731/12"
+				href="/textzeugen/u/731/12"
 				target="_blank"
+				rel="noopener noreferrer"
 				class="absolute -top-3 left-4 bg-gray-100 dark:preset-filled-surface-500 px-2 text-primary-600 text-sm font-medium rounded-md border border-primary-200 shadow-sm"
 			>
 				U 731.12
@@ -340,8 +348,9 @@
 			class="relative border rounded-xl p-4 bg-gray-100 dark:preset-filled-surface-500 shadow-sm mt-6 w-[25em] ml-8"
 		>
 			<a
-				href="https://dhbern.github.io/presentation_parzival/textzeugen/d/53/18"
+				href="/textzeugen/d/53/18"
 				target="_blank"
+				rel="noopener noreferrer"
 				class="absolute -top-3 left-4 bg-gray-100 dark:preset-filled-surface-500 px-2 text-primary-600 text-sm font-medium rounded-md border border-primary-200 shadow-sm"
 				>D 53.18</a
 			>
@@ -377,8 +386,9 @@
 			class="relative border rounded-xl p-4 bg-gray-100 dark:preset-filled-surface-500 shadow-sm mt-6 w-[25em] ml-8"
 		>
 			<a
-				href="https://dhbern.github.io/presentation_parzival/textzeugen/v/731/12"
+				href="/textzeugen/v/731/12"
 				target="_blank"
+				rel="noopener noreferrer"
 				class="absolute -top-3 left-4 bg-gray-100 dark:preset-filled-surface-500 px-2 text-primary-600 text-sm font-medium rounded-md border border-primary-200 shadow-sm"
 				>V 731.12</a
 			>
@@ -414,8 +424,9 @@
 			class="relative border rounded-xl p-3 bg-gray-100 dark:preset-filled-surface-500 shadow-sm mt-6 w-[25em] ml-8"
 		>
 			<a
-				href="https://dhbern.github.io/presentation_parzival/textzeugen/v/141/16"
+				href="/textzeugen/v/141/16"
 				target="_blank"
+				rel="noopener noreferrer"
 				class="absolute -top-3 left-4 bg-gray-100 dark:preset-filled-surface-500 px-2 text-primary-600 text-sm font-medium rounded-md border border-primary-200 shadow-sm"
 			>
 				V 141.16
@@ -449,8 +460,9 @@
 			class="relative border rounded-xl p-4 bg-gray-100 dark:preset-filled-surface-500 shadow-sm mt-6 w-[25em] ml-8"
 		>
 			<a
-				href="https://dhbern.github.io/presentation_parzival/textzeugen/l/8/05"
+				href="/textzeugen/l/8/05"
 				target="_blank"
+				rel="noopener noreferrer"
 				class="absolute -top-3 left-4 bg-gray-100 dark:preset-filled-surface-500 px-2 text-primary-600 text-sm font-medium rounded-md border border-primary-200 shadow-sm"
 			>
 				L 8.05
@@ -470,8 +482,9 @@
 			class="relative border rounded-xl p-4 bg-gray-100 dark:preset-filled-surface-500 shadow-sm mt-6 w-[25em] ml-8"
 		>
 			<a
-				href="https://dhbern.github.io/presentation_parzival/textzeugen/d/3/27"
+				href="/textzeugen/d/3/27"
 				target="_blank"
+				rel="noopener noreferrer"
 				class="absolute -top-3 left-4 bg-gray-100 dark:preset-filled-surface-500 px-2 text-primary-600 text-sm font-medium rounded-md border border-primary-200 shadow-sm"
 			>
 				D 3.27
@@ -489,8 +502,9 @@
 	<p>
 		Wenn der materielle Befund des Textzeugen von der Darstellung der digitalen Reproduktion
 		abweicht, wird ersterer in der Transkription berücksichtigt (z. B. in <a
-			href="https://dhbern.github.io/presentation_parzival/textzeugen/fr5/446/03?"
-			target="_blank">Fragment 5, Bl. 4rc, Vers 446.3</a
+			href="/textzeugen/fr5/446/03?"
+			target="_blank"
+			rel="noopener noreferrer">Fragment 5, Bl. 4rc, Vers 446.3</a
 		>, wo das Reimwort <i>zal</i> in der Reproduktion auf einem umgeklappten Seitenteil steht und nicht
 		sichtbar ist).
 	</p>
