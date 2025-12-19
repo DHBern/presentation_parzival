@@ -491,7 +491,7 @@
 		abweicht, wird ersterer in der Transkription berücksichtigt (z. B. in <a
 			href="https://dhbern.github.io/presentation_parzival/textzeugen/fr5/446/03?"
 			target="_blank">Fragment 5, Bl. 4rc, Vers 446.3</a
-		>, wo das Reimwart <i>zal</i> in der Reproduktion auf einem umgeklappten Seitenteil steht und nicht
+		>, wo das Reimwort <i>zal</i> in der Reproduktion auf einem umgeklappten Seitenteil steht und nicht
 		sichtbar ist).
 	</p>
 
