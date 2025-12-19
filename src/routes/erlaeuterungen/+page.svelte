@@ -147,8 +147,10 @@
 		darstellen.
 	</p>
 	<div class="mb-6">
-		Verse, die Teil einer Versumstellung sind, werden am Versende mit einem vertikalen Doppelpfeil
-		(↕) markiert.
+		<p>
+			Verse, die Teil einer Versumstellung sind, werden am Versende mit einem vertikalen Doppelpfeil
+			(↕) markiert.
+		</p>
 		<div
 			class="relative border rounded-xl p-4 bg-gray-100 dark:preset-filled-surface-500 shadow-sm mt-6 w-[25em] ml-8"
 		>
