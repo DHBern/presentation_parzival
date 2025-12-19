@@ -421,7 +421,8 @@
 	<h1 class="h1 my-4">Fassungsansicht</h1>
 	<div class="grid gap-6 md:grid-cols-2 md:my-8">
 		<div>
-			<h3 class="h3 my-4">{localPages.books[localPages.thirties.indexOf(Number(data.thirties))]}, Dreißiger {data.thirties}</h3>
+			<h5 class="h5">{localPages.books[localPages.thirties.indexOf(Number(data.thirties))]}</h5>
+			<h3 class="h3 my-4">Dreißiger {data.thirties}</h3>
 			<p>
 				Eintextedition als <a
 				class="anchor"
