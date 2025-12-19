@@ -205,3 +205,10 @@ div.content > div.tei-l:has(span.versechange) {
 		@apply ml-2;
 	}
 }
+
+.buch-icon {
+	display: inline-block;
+	vertical-align: middle;
+	height: 1em;
+}
+
