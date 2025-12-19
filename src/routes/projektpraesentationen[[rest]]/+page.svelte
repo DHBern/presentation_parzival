@@ -1,5 +1,6 @@
 <script>
 	import H2Hoverable from '$lib/components/H2Hoverable.svelte';
+	import { base } from '$app/paths';
 </script>
 
 <div class="container mx-auto typography">
@@ -17,7 +18,7 @@
 			target="_blank">Parzival im Manuskript</a
 		>. Profile der Parzival–Überlieferung am Beispiel von fünf Handschriften des 13. bis 15.
 		Jahrhunderts. Mit einem Beitrag von Richard F. Fasching, Basel 2020 [419 S.] [<a
-			href="/4086_8_Titelflyer_Stolz_Parzival.pdf"
+			href="{base}/4086_8_Titelflyer_Stolz_Parzival.pdf"
 			title="Flyer Parzival im Manuskript"
 			target="_blank">Flyer</a
 		>]
@@ -49,7 +50,7 @@
 		›Parzival‹, in: Überlieferungsgeschichte transdisziplinär. Neue Perspektiven auf ein
 		germanistisches Forschungsparadigma, in Verbindung mit Horst Brunner und Freimut Löser
 		herausgegeben von Dorothea Klein, Wiesbaden 2016 (Wissensliteratur im Mittelalter 52), S.
-		353–388 <a href="/Stolz_Eintext16_SD-1.pdf" target="_blank">[Text]</a>
+		353–388 <a href="{base}/Stolz_Eintext16_SD-1.pdf" target="_blank">[Text]</a>
 	</p>
 
 	<p>
@@ -57,7 +58,7 @@
 		Überlieferung und textkritische Erschließung, in: Wolframs Parzival-Roman im europäischen
 		Kontext. Tübinger Kolloquium 2012, in Verbindung mit Susanne Köbele und Eckart Conrad Lutz hg.
 		von Klaus Ridder, Berlin 2014 (Wolfram-Studien 23), S. 431–478 <a
-			href="/Stolz_Wolfr12_SD.pdf"
+			href="{base}/Stolz_Wolfr12_SD.pdf"
 			target="_blank">[Text]</a
 		>
 	</p>
@@ -138,7 +139,7 @@
 	<p>
 		Die Berner Parzival-Handschrift (Burgerbibliothek, Cod. AA 91) mit Volltranskription und einer
 		Einführung von Michael Stolz. DVD mit einem Begleitheft. Konzept von Michael Stolz, Simbach/Inn
-		2009 [<a href="/FlyerCodAA91_zweiseitig.pdf" target="_blank">weitere Informationen</a>] [<a
+		2009 [<a href="{base}/FlyerCodAA91_zweiseitig.pdf" target="_blank">weitere Informationen</a>] [<a
 			href="http://www.parzival.unibe.ch/support/index1.html"
 			target="_blank">Supportseite</a
 		>]
@@ -146,7 +147,7 @@
 
 	<p>
 		Die Münchner Wolfram-Handschrift Cgm 19. DVD mit einem Begleitheft. Konzept und Einführung von
-		Michael Stolz, Simbach/Inn 2008 [<a href="/FlyerCgm19_einseitig.pdf" target="_blank"
+		Michael Stolz, Simbach/Inn 2008 [<a href="{base}/FlyerCgm19_einseitig.pdf" target="_blank"
 			>weitere Informationen</a
 		>] [<a href="http://www.parzival.unibe.ch/support/index1.html" target="_blank">Supportseite</a>]
 	</p>
@@ -256,14 +257,14 @@
 		Verwiesen sei ferner auf:<br />
 		Christoph Dieffenbacher, Der elektronische ›Parzival‹, in: Uni Nova. Wissenschaftsmagazin der Universität
 		Basel, Nr. 92: Sprache und Identität, Nov. 2002, S. 29f. [<a
-			href="/uninova92.pdf"
+			href="{base}/uninova92.pdf"
 			target="_blank">Text</a
 		>]
 	</p>
 
 	<p>
 		Geneviève Lüscher, Ritter Parzival und der Zeitgeist, in: NZZ am Sonntag, 29. Februar 2004, S.
-		65 [<a href="/NZZ_Art.jpg" target="_blank">Text</a>]
+		65 [<a href="{base}/NZZ_Art.jpg" target="_blank">Text</a>]
 	</p>
 
 	<br />
@@ -400,8 +401,9 @@
 
 		<li>
 			Universität Tübingen, Tagung der Wolfram von Eschenbach-Gesellschaft "Wolframs Parzival-Roman
-			im europäischen Kontext", 23. September 2012 <a href="/Stolz_Wolfr12_SD.pdf" target="_blank"
-				>[Text]</a
+			im europäischen Kontext", 23. September 2012 <a
+				href="{base}/Stolz_Wolfr12_SD.pdf"
+				target="_blank">[Text]</a
 			>
 		</li>
 
