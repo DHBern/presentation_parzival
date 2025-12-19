@@ -25,7 +25,8 @@
 				if (targetVerse) {
 					targetVerse?.scrollIntoView({
 						behavior: 'instant',
-						block: 'start'
+						block: 'start',
+						inline: 'nearest'
 					});
 					correctPos = true;
 				}
