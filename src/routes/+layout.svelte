@@ -39,6 +39,7 @@
 		{ slug: 'Fassungsedition', path: '/fassungen' },
 		{ slug: 'Transkriptionen', path: '/textzeugen/d/1/01' },
 		{ slug: 'Eintextedition', path: '/monotext' },
+		{ slug: 'Erläuterungen', path: '/erlaeuterungen' },
 		{ slug: 'Suche', path: '/suche' }
 	];
 </script>
