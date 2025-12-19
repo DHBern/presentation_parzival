@@ -77,11 +77,11 @@
 		results = await Promise.all(
 			/*
 				Processes an array of search results, enriching each result with additional information:
-				- Adds a human-readable sigil to each result based on its 'sigla' property.
+				- Adds a human-readable sigil to each result based on its 'handle' property.
 				- Marks all matches in the content by wrapping them in <strong> tags.
 			*/
 			results.map((r) => {
-				r.sigil = sigilFromHandle(r.sigla);
+				r.sigil = sigilFromHandle(r.handle);
 				const matches = Object.keys(r.match);
 				if (r.content_all !== r.content) {
 					r.content_all = highlightDifferences(r.content_all, r.content);
@@ -146,31 +146,22 @@
 	<div>
 		<h2 class="h2">Suchoptionen</h2>
 		<div class="flex flex-col w-fit gap-2">
-			<Segment active="preset-filled-primary-500">
-				<Segment.Item bind:group={useExactSearch} name="Suchvariante" value={true}
-					>exakte Suche</Segment.Item
-				>
-				<Segment.Item bind:group={useExactSearch} name="Suchvariante" value={false}>
-					unscharfe Suche
-				</Segment.Item>
+			<Segment
+				name="Suchvariante"
+				onValueChange={(e) => (useExactSearch = e.value === 'true')}
+				value={useExactSearch.toString()}
+			>
+				<Segment.Item value="true">exakte Suche</Segment.Item>
+				<Segment.Item value="false">unscharfe Suche</Segment.Item>
 			</Segment>
-			<Segment active="preset-filled-primary-500">
-				<Segment.Item
-					bind:group={corpus}
-					name="korpus"
-					value={'fassungen'}
-					disabled={!hasDocuments}
-				>
-					Fassungen (1.67MB)
-				</Segment.Item>
-				<Segment.Item
-					bind:group={corpus}
-					name="korpus"
-					value={'textzeugen'}
-					disabled={!hasDocuments}
-				>
-					Textzeugen (9.96MB)
-				</Segment.Item>
+			<Segment
+				name="korpus"
+				value={corpus}
+				onValueChange={(e) => (corpus = e.value)}
+				disabled={!hasDocuments}
+			>
+				<Segment.Item value="fassungen">Fassungen (1.67MB)</Segment.Item>
+				<Segment.Item value="textzeugen">Textzeugen (9.96MB)</Segment.Item>
 			</Segment>
 		</div>
 	</div>

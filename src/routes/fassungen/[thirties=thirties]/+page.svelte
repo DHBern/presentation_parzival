@@ -6,7 +6,7 @@
 	import { NUMBER_OF_PAGES } from '$lib/constants';
 	import { Switch } from '@skeletonlabs/skeleton-svelte';
 	import { page } from '$app/state';
-	import { onMount, tick } from 'svelte';
+	import { onMount, tick, untrack } from 'svelte';
 	import { goto } from '$app/navigation';
 	import ApparatPopover from './ApparatPopover.svelte';
 	import handleFromSigil from '$lib/functions/handleFromSigil';
@@ -29,11 +29,19 @@
 		/**
 		 * @type {Number[]}
 		 */
-		thirties = [];
+		thirties = $state([]);
+		// thirties = [];
+
+		/**
+		 * @type {String[]}
+		 */
+		books = $state([]);
 
 		reset = () => {
 			this.pages = [[], [], [], []];
 			this.thirties = [];
+			this.distributions = [{}, {}, {}, {}];
+			this.books = [];
 		};
 
 		/**
@@ -67,6 +75,8 @@
 				const condensedReading = info.apparat.reading.reduce(reducer, {});
 				const condensedStructure = info.apparat.structure.reduce(reducer, {});
 
+				const formatVerseSup = (_, match) => `<sup>${match}</sup>`;
+
 				const lines = doc.querySelectorAll('div.line');
 				lines.forEach((line) => {
 					line.classList.add(`column-${column}`);
@@ -88,9 +98,9 @@
 									href="#fasskomm-${fasskomm_info.dreissiger}.${verse}"
 									data-commentary="${encodeURIComponent(fasskomm_info.commentary ? fasskomm_info.commentary : '')}"
 									data-dreissiger=${fasskomm_info.dreissiger}
-									data-verse=${verse.replace(/^0+/, '')}
+									data-verse=${verse}
 									data-id=${fasskomm_info.id}
-									data-title="${composureTitlesByColumn[column] + ' ' + fasskomm_info.dreissiger + verse.replace(/^0+/, '')}"
+									data-title="${composureTitlesByColumn[column] + ' ' + fasskomm_info.dreissiger + verse.replace(/^0+/, '').replace(/-(.+)$/, formatVerseSup)}"
 									>K</a></sup>`;
 							}
 						}
@@ -110,8 +120,8 @@
 									data-structure_info="${encodeURIComponent(structure_info ? structure_info : '')}"
 									data-reading_info="${encodeURIComponent(reading_info ? reading_info : '')}"
 									data-dreissiger=${parts[0]}
-									data-verse=${verse.replace(/^0+/, '')}
-									data-title="${composureTitlesByColumn[column] + ' ' + beforeDot + verse.replace(/^0+/, '')}"
+									data-verse=${verse}
+									data-title="${composureTitlesByColumn[column] + ' ' + beforeDot + verse.replace(/^0+/, '').replace(/-(.+)$/, formatVerseSup)}"
 									>${afterDot}</a>`;
 								} else {
 									verseNode.innerHTML = `<a class="anchor" href="#verse-${verse}">${verseNode.innerHTML}</a>`;
@@ -137,37 +147,40 @@
 			// if the page is not already loaded
 			if (!this.thirties.length) {
 				/**
-				 * @type {{ content: string; apparat: { reading: any[]; structure: any[]; distribution: string; }; fasskomm: any[]; }[]}
+				 * @type {{meta:{book: string}, content:{ content: string; apparat: { reading: any[]; structure: any[]; distribution: string; }; fasskomm: any[]; }[]}}
 				 */
 				let info;
 				// fetch the page before the current one if the current one is not the first
 				if (page > 1) {
 					info = await fetch(`${base}/fassungen/data/${page - 1}`).then((r) => r.json());
 					labels.forEach((label, index) => {
-						const { preparedHTML, preparedDistribution } = prepareHTML(info[index], label);
+						const { preparedHTML, preparedDistribution } = prepareHTML(info.content[index], label);
 						this.pages[index].push([page - 1, preparedHTML]);
 						this.distributions[index][page - 1] = preparedDistribution;
 					});
+					this.books.push(info.meta.book);
 					this.thirties.push(page - 1);
 				}
 				// fetch the current page
 				if (page <= NUMBER_OF_PAGES) {
 					info = await fetch(`${base}/fassungen/data/${page}`).then((r) => r.json());
 					labels.forEach((label, index) => {
-						const { preparedHTML, preparedDistribution } = prepareHTML(info[index], label);
+						const { preparedHTML, preparedDistribution } = prepareHTML(info.content[index], label);
 						this.pages[index].push([page, preparedHTML]);
 						this.distributions[index][page] = preparedDistribution;
 					});
+					this.books.push(info.meta.book);
 					this.thirties.push(page);
 				}
 				// fetch the page after the current one if the current one is not the last
 				if (page !== NUMBER_OF_PAGES) {
 					info = await fetch(`${base}/fassungen/data/${page + 1}`).then((r) => r.json());
 					labels.forEach((label, index) => {
-						const { preparedHTML, preparedDistribution } = prepareHTML(info[index], label);
+						const { preparedHTML, preparedDistribution } = prepareHTML(info.content[index], label);
 						this.pages[index].push([page + 1, preparedHTML]);
 						this.distributions[index][page + 1] = preparedDistribution;
 					});
+					this.books.push(info.meta.book);
 					this.thirties.push(page + 1);
 				}
 				if (page > NUMBER_OF_PAGES) {
@@ -177,18 +190,20 @@
 				if (page < this.thirties[0] && !this.thirties.includes(page)) {
 					let info = await fetch(`${base}/fassungen/data/${page}`).then((r) => r.json());
 					labels.forEach((label, index) => {
-						const { preparedHTML, preparedDistribution } = prepareHTML(info[index], label);
+						const { preparedHTML, preparedDistribution } = prepareHTML(info.content[index], label);
 						this.pages[index].unshift([page, preparedHTML]);
 						this.distributions[index][page] = preparedDistribution;
 					});
+					this.books.unshift(info.meta.book);
 					this.thirties.unshift(page);
 				} else if (page > this.thirties[this.thirties.length - 1]) {
 					let info = await fetch(`${base}/fassungen/data/${page}`).then((r) => r.json());
 					labels.forEach((label, index) => {
-						const { preparedHTML, preparedDistribution } = prepareHTML(info[index], label);
+						const { preparedHTML, preparedDistribution } = prepareHTML(info.content[index], label);
 						this.pages[index].push([page, preparedHTML]);
 						this.distributions[index][page] = preparedDistribution;
 					});
+					this.books.push(info.meta.book);
 					this.thirties.push(page);
 				} else if (page === this.thirties[0] && page > 1) {
 					this.fetchPage(page - 1);
@@ -206,7 +221,10 @@
 
 	let localPages = new localPageClass();
 	$effect(() => {
-		localPages.fetchPage(Number(data.thirties));
+		// when the page number changes, fetch the corresponding data
+		// we need to untrack here to avoid infinite loops, because fetchPage changes localPages.
+		data.thirties;
+		untrack(() => localPages.fetchPage(Number(data.thirties)));
 	});
 	let synchro = $state(true);
 	let windowWidth = $state(0);
@@ -402,15 +420,18 @@
 	{/snippet}
 	<h1 class="h1 my-4">Fassungsansicht</h1>
 	<div class="grid gap-6 md:grid-cols-2 md:my-8">
-		<p>
-			Finden Sie hier den Monotext als PDF: <a
+		<div>
+			<h3 class="h3 my-4">{localPages.books[localPages.thirties.indexOf(Number(data.thirties))]}, Dreißiger {data.thirties}</h3>
+			<p>
+				Eintextedition als <a
 				class="anchor"
 				target="_blank"
 				href="https://dhbern.github.io/parzival-static-api/api/export/pdf/monopsen.pdf#page={data.thirties}"
 			>
-				Dreißiger {data.thirties}
-			</a>
-		</p>
+				PDF
+			</a> aufrufen
+			</p>
+		</div>
 
 		{#if mobileBreakpoint}
 			<Switch
@@ -432,7 +453,7 @@
 			class="col-start-2"
 		>
 			<label for="goto-thirties" class="block text-lg font-bold font-serif mb-2"
-				>Zu Dreißiger springen</label
+				>Dreißiger wählen</label
 			>
 			<input
 				id="goto-thirties"

@@ -53,7 +53,7 @@
 	</div>
 </div>
 <div
-	class="max-h-[70vh] overflow-y-auto bg-gray-100 dark:preset-filled-surface-500"
+	class="max-h-[70vh] overflow-y-auto preset-filled-surface-500"
 	bind:this={scrollContainer}
 	onscroll={() => {
 		resetPopup();
@@ -88,7 +88,7 @@
 			}
 		}
 		:global(.tei-cb) {
-			@apply text-right mr-2;
+			@apply text-right mr-2 z-10;
 		}
 		:global(.tei-cb:not(.tei-cb:first-child)) {
 			@apply border-primary-300 border-solid border-t-4;

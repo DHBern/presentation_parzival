@@ -11,9 +11,9 @@
 	 */
 	let localTarget;
 	/**
-	 * @type {number | null}
+	 * @type {number | undefined}
 	 */
-	let timer = $state(null);
+	let timer = $state(undefined);
 
 	let scrollContainer = $state();
 	/**
@@ -26,10 +26,15 @@
 			(entries) => {
 				entries.forEach((entry) => {
 					if (entry.isIntersecting) {
-						if (programmaticScroll) {
+						const isOnBottom =
+							scrollContainer.scrollHeight - scrollContainer.clientHeight ===
+							scrollContainer.scrollTop;
+						if (programmaticScroll || isOnBottom) {
 							return;
 						}
-						localPageChange(entry.target.dataset);
+						if (entry.target instanceof HTMLElement) {
+							localPageChange(entry.target.dataset);
+						}
 					}
 				});
 			},
@@ -80,7 +85,7 @@
 						}
 					}
 				}
-				timer = null;
+				timer = undefined;
 			}, 200);
 		}
 	};
@@ -121,9 +126,9 @@
 						await scroll(target);
 					}
 				};
-				const firstThirtyNumber = Number(firstVerse.dataset.verse.slice(0, -2));
-				const lastThirtyNumber = Number(lastVerse.dataset.verse.slice(0, -2));
-				const targetThirtyNumber = Number(target.slice(0, -2));
+				const firstThirtyNumber = Number(firstVerse.dataset.verse.split('.')[0]);
+				const lastThirtyNumber = Number(lastVerse.dataset.verse.split('.')[0]);
+				const targetThirtyNumber = Number(target.split('.')[0]);
 				//check for targetThirtyNumber being in the set of available verses at all
 				let inRange = false;
 				range.forEach((/** @type {number[]} */ r) => {
@@ -149,10 +154,10 @@
 					programmaticScroll = true;
 					// find the verse that is closest to the target verse
 					const closestVerse = Array.from(verses).reduce((closest, current) => {
-						const currentThirtyNumber = Number(current.dataset.verse.slice(0, -2));
+						const currentThirtyNumber = Number(current.dataset.verse.split('.')[0]);
 						if (
 							Math.abs(currentThirtyNumber - targetThirtyNumber) <
-							Math.abs(Number(closest.dataset.verse.slice(0, -2)) - targetThirtyNumber)
+							Math.abs(Number(closest.dataset.verse.split('.')[0]) - targetThirtyNumber)
 						) {
 							return current;
 						}
@@ -180,7 +185,7 @@
 				scrollContainer.scrollTop
 			) {
 				const dataset = verse.closest('.page').dataset;
-				if (dataset) {
+				if (dataset?.next) {
 					await localPageChange(dataset);
 				}
 			}

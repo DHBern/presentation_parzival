@@ -28,6 +28,10 @@
 	 * @param { KeyboardEvent } ev
 	 */
 	function handleKeyDown(ev) {
+		// Ignore if modifier keys are pressed
+		if (ev.altKey || ev.ctrlKey || ev.metaKey || ev.shiftKey) {
+			return;
+		}
 		if (ev.key === 'ArrowRight') {
 			goto(nextVerseURL);
 		}
@@ -42,35 +46,64 @@
 <div class="container mx-auto p-4 flex flex-wrap justify-between gap-9">
 	<h1 class="h1 w-full">Verssynopse zu {thirties}.{verseNoZero}</h1>
 	<div class="tei-content">
-		<dl class="grid grid-cols-[auto_1fr] justify-between h-fit mb-4 w-fit">
-			<dt class="font-bold font-heading-token pr-4">Handschrift</dt>
-			<dd class="font-bold font-heading-token border-l-2 border-current pl-4">Wortlaut</dd>
-			{#each metadata.hyparchetypes as archetype (archetype.handle)}
-				{#if hyparchetypesSlider}
-					<dt class="pr-4 py-1 font-sans">{archetype.sigil}</dt>
-					{#await publisherData[archetype.handle]}
-						<dd class="border-l-2 border-current pl-4 py-1 font-sans"></dd>
-					{:then value}
-						{#if value?.content}
-							<dd class="border-l-2 border-current pl-4 py-1 font-sans">{@html value?.content}</dd>
-						{:else}
-							<dd class="border-l-2 border-current pl-4 py-1"></dd>
-						{/if}
-					{/await}
-				{/if}
-				{#each archetype.witnesses as witness}
-					{#if publisherData[witness]?.content}
-						<dt class="pr-4 pt-2 {hyparchetypesSlider ? 'ml-5' : ''}">
-							{metadata.codices.find((/** @type {{ handle: any; }} */ c) => c.handle === witness)
-								?.sigil}
-						</dt>
-						<dd class="border-l-2 border-current {hyparchetypesSlider ? 'ml-5' : ''} pl-4 py-1">
-							{@html publisherData[witness]?.content}
-						</dd>
+		<table class="table-auto h-fit mb-4 w-fit">
+			<thead>
+				<tr>
+					<th class="font-bold font-heading-token pr-4 text-left">Versziffer</th>
+					<th class="font-bold font-heading-token pr-4 text-left">Handschrift</th>
+					<th class="font-bold font-heading-token border-l-2 border-current pl-4 text-left"
+						>Wortlaut</th
+					>
+				</tr>
+			</thead>
+			<tbody>
+				{#each metadata.hyparchetypes as archetype (archetype.handle)}
+					{#if hyparchetypesSlider}
+						<tr>
+							<td class="pr-4 py-1 font-sans">{thirties}.{verseNoZero}</td>
+							<td class="pr-4 py-1 font-sans"
+								><a class="anchor" href="{base}/fassungen/{thirties}">{archetype.sigil}</a></td
+							>
+							{#await publisherData[archetype.handle]}
+								<td class="border-l-2 border-current pl-4 py-1 font-sans"></td>
+							{:then value}
+								{#if value[0]?.content}
+									<td class="border-l-2 border-current pl-4 py-1 font-sans"
+										>{@html value[0]?.content}</td
+									>
+								{:else}
+									<td class="border-l-2 border-current pl-4 py-1 font-sans"></td>
+								{/if}
+							{/await}
+						</tr>
 					{/if}
+					{#each archetype.witnesses as witness}
+						{#each publisherData[witness] as witnessData}
+							{#if witnessData?.content}
+								{@const verseWithAdd = witnessData?.id.split('.').pop().replace(/^0+/, '')}
+								<tr>
+									<td class={`pr-4 pt-2 ${hyparchetypesSlider ? 'pl-5' : ''}`}>
+										{thirties}.{verseWithAdd}
+									</td>
+									<td class={`pr-4 pt-2 ${hyparchetypesSlider ? 'pl-5' : ''}`}>
+										<a class="anchor" href="{base}/textzeugen/{witness}/{thirties}/{verseWithAdd}"
+											>{metadata.codices.find(
+												(/** @type {{ handle: any }} */ c) => c.handle === witness
+											)?.sigil}</a
+										>
+									</td>
+									<td
+										class={`border-l-2 border-current ${hyparchetypesSlider ? 'pl-5' : ''} pl-4 py-1`}
+									>
+										{@html witnessData?.content}
+									</td>
+								</tr>
+							{/if}
+						{/each}
+					{/each}
 				{/each}
-			{/each}
-		</dl>
+			</tbody>
+		</table>
 		{#if loss.length > 0}
 			<p class="max-w-sm">
 				Der Vers {thirties}.{verseNoZero} fehlt in folgenden Handschriften aufgrund eines umfangreichen

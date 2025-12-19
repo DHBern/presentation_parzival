@@ -67,3 +67,14 @@
 		</div>
 	{/if}
 </span>
+
+<style lang="postcss">
+	@reference "tailwindcss";
+	@reference "@skeletonlabs/skeleton";
+
+	.card {
+		:global(a) {
+			@apply anchor text-primary-100;
+		}
+	}
+</style>

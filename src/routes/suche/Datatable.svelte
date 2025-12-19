@@ -49,7 +49,7 @@
 					<td class="table-cell-fit">{row?.verse}</td>
 					<td class="content">
 						{#if korpus === 'textzeugen'}
-							<a href={`${base}/textzeugen/${row.sigla}/${row.d}/${row.verse}`}>
+							<a href={`${base}/textzeugen/${row.sigil}/${row.d}/${row.verse}`}>
 								{@html row?.content_all}
 							</a>
 						{:else}
