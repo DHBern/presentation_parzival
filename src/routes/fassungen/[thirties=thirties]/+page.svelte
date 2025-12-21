@@ -421,7 +421,7 @@
 	<h1 class="h1 my-4">Fassungsedition</h1>
 	<div class="grid gap-6 md:grid-cols-2 md:my-8">
 		<div>
-			<h5 class="h5">{localPages.books[localPages.thirties.indexOf(Number(data.thirties))]}</h5>
+			<h2 class="h5">{localPages.books[localPages.thirties.indexOf(Number(data.thirties))]}</h2>
 			<h3 class="h3 my-4">Dreißiger {data.thirties}</h3>
 			<p>
 				Eintextedition als <a
