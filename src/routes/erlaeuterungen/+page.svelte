@@ -1,5 +1,6 @@
 <script>
 	import H2Hoverable from '$lib/components/H2Hoverable.svelte';
+	import { base } from '$app/paths';
 </script>
 
 <div class="container mx-auto typography tei-content">
@@ -120,7 +121,7 @@
 			class="relative border rounded-xl p-4 bg-gray-100 dark:preset-filled-surface-500 shadow-sm mt-6 w-[25em] ml-8"
 		>
 			<a
-				href="/textzeugen/d/8/1"
+				href="{base}/textzeugen/d/8/1"
 				target="_blank"
 				rel="noopener noreferrer"
 				class="absolute -top-3 left-4 bg-gray-100 dark:preset-filled-surface-500 px-2 text-primary-600 text-sm font-medium rounded-md border border-primary-200 shadow-sm"
@@ -156,7 +157,7 @@
 			class="relative border rounded-xl p-4 bg-gray-100 dark:preset-filled-surface-500 shadow-sm mt-6 w-[25em] ml-8"
 		>
 			<a
-				href="/textzeugen/g/460/25?"
+				href="{base}/textzeugen/g/460/25?"
 				target="_blank"
 				rel="noopener noreferrer"
 				class="absolute -top-3 left-4 bg-gray-100 dark:preset-filled-surface-500 px-2 text-primary-600 text-sm font-medium rounded-md border border-primary-200 shadow-sm"
@@ -185,7 +186,7 @@
 			class="relative border rounded-xl p-4 bg-gray-100 dark:preset-filled-surface-500 shadow-sm mt-6 w-[25em] ml-8"
 		>
 			<a
-				href="/textzeugen/d/5/29?"
+				href="{base}/textzeugen/d/5/29?"
 				target="_blank"
 				rel="noopener noreferrer"
 				class="absolute -top-3 left-4 bg-gray-100 dark:preset-filled-surface-500 px-2 text-primary-600 text-sm font-medium rounded-md border border-primary-200 shadow-sm"
@@ -207,7 +208,7 @@
 			class="relative border rounded-xl p-4 bg-gray-100 dark:preset-filled-surface-500 shadow-sm mt-6 w-[25em] ml-8"
 		>
 			<a
-				href="/textzeugen/d/1/01-01?"
+				href="{base}/textzeugen/d/1/01-01?"
 				target="_blank"
 				rel="noopener noreferrer"
 				class="absolute -top-3 left-4 bg-gray-100 dark:preset-filled-surface-500 px-2 text-primary-600 text-sm font-medium rounded-md border border-primary-200 shadow-sm"
@@ -236,7 +237,7 @@
 			class="relative border rounded-xl p-4 bg-gray-100 dark:preset-filled-surface-500 shadow-sm mt-6 w-[25em] ml-8"
 		>
 			<a
-				href="/textzeugen/fr31/446/1"
+				href="{base}/textzeugen/fr31/446/1"
 				target="_blank"
 				rel="noopener noreferrer"
 				class="absolute -top-3 left-4 bg-gray-100 dark:preset-filled-surface-500 px-2 text-primary-600 text-sm font-medium rounded-md border border-primary-200 shadow-sm"
@@ -262,7 +263,7 @@
 			class="relative border rounded-xl p-4 bg-gray-100 dark:preset-filled-surface-500 shadow-sm mt-6 w-[25em] ml-8"
 		>
 			<a
-				href="/textzeugen/u/731/13"
+				href="{base}/textzeugen/u/731/13"
 				target="_blank"
 				rel="noopener noreferrer"
 				class="absolute -top-3 left-4 bg-gray-100 dark:preset-filled-surface-500 px-2 text-primary-600 text-sm font-medium rounded-md border border-primary-200 shadow-sm"
@@ -296,7 +297,7 @@
 			class="relative border rounded-xl p-4 bg-gray-100 dark:preset-filled-surface-500 shadow-sm mt-6 w-[25em] ml-8"
 		>
 			<a
-				href="/textzeugen/d/747/18?"
+				href="{base}/textzeugen/d/747/18?"
 				target="_blank"
 				rel="noopener noreferrer"
 				class="absolute -top-3 left-4 bg-gray-100 dark:preset-filled-surface-500 px-2 text-primary-600 text-sm font-medium rounded-md border border-primary-200 shadow-sm"
@@ -324,7 +325,7 @@
 			class="relative border rounded-xl p-4 bg-gray-100 dark:preset-filled-surface-500 shadow-sm mt-6 w-[25em] ml-8"
 		>
 			<a
-				href="/textzeugen/u/731/12"
+				href="{base}/textzeugen/u/731/12"
 				target="_blank"
 				rel="noopener noreferrer"
 				class="absolute -top-3 left-4 bg-gray-100 dark:preset-filled-surface-500 px-2 text-primary-600 text-sm font-medium rounded-md border border-primary-200 shadow-sm"
@@ -348,7 +349,7 @@
 			class="relative border rounded-xl p-4 bg-gray-100 dark:preset-filled-surface-500 shadow-sm mt-6 w-[25em] ml-8"
 		>
 			<a
-				href="/textzeugen/d/53/18"
+				href="{base}/textzeugen/d/53/18"
 				target="_blank"
 				rel="noopener noreferrer"
 				class="absolute -top-3 left-4 bg-gray-100 dark:preset-filled-surface-500 px-2 text-primary-600 text-sm font-medium rounded-md border border-primary-200 shadow-sm"
@@ -386,7 +387,7 @@
 			class="relative border rounded-xl p-4 bg-gray-100 dark:preset-filled-surface-500 shadow-sm mt-6 w-[25em] ml-8"
 		>
 			<a
-				href="/textzeugen/v/731/12"
+				href="{base}/textzeugen/v/731/12"
 				target="_blank"
 				rel="noopener noreferrer"
 				class="absolute -top-3 left-4 bg-gray-100 dark:preset-filled-surface-500 px-2 text-primary-600 text-sm font-medium rounded-md border border-primary-200 shadow-sm"
@@ -424,7 +425,7 @@
 			class="relative border rounded-xl p-3 bg-gray-100 dark:preset-filled-surface-500 shadow-sm mt-6 w-[25em] ml-8"
 		>
 			<a
-				href="/textzeugen/v/141/16"
+				href="{base}/textzeugen/v/141/16"
 				target="_blank"
 				rel="noopener noreferrer"
 				class="absolute -top-3 left-4 bg-gray-100 dark:preset-filled-surface-500 px-2 text-primary-600 text-sm font-medium rounded-md border border-primary-200 shadow-sm"
@@ -460,7 +461,7 @@
 			class="relative border rounded-xl p-4 bg-gray-100 dark:preset-filled-surface-500 shadow-sm mt-6 w-[25em] ml-8"
 		>
 			<a
-				href="/textzeugen/l/8/05"
+				href="{base}/textzeugen/l/8/05"
 				target="_blank"
 				rel="noopener noreferrer"
 				class="absolute -top-3 left-4 bg-gray-100 dark:preset-filled-surface-500 px-2 text-primary-600 text-sm font-medium rounded-md border border-primary-200 shadow-sm"
@@ -482,7 +483,7 @@
 			class="relative border rounded-xl p-4 bg-gray-100 dark:preset-filled-surface-500 shadow-sm mt-6 w-[25em] ml-8"
 		>
 			<a
-				href="/textzeugen/d/3/27"
+				href="{base}/textzeugen/d/3/27"
 				target="_blank"
 				rel="noopener noreferrer"
 				class="absolute -top-3 left-4 bg-gray-100 dark:preset-filled-surface-500 px-2 text-primary-600 text-sm font-medium rounded-md border border-primary-200 shadow-sm"
@@ -502,7 +503,7 @@
 	<p>
 		Wenn der materielle Befund des Textzeugen von der Darstellung der digitalen Reproduktion
 		abweicht, wird ersterer in der Transkription berücksichtigt (z. B. in <a
-			href="/textzeugen/fr5/446/03?"
+			href="{base}/textzeugen/fr5/446/03?"
 			target="_blank"
 			rel="noopener noreferrer">Fragment 5, Bl. 4rc, Vers 446.3</a
 		>, wo das Reimwort <i>zal</i> in der Reproduktion auf einem umgeklappten Seitenteil steht und nicht
