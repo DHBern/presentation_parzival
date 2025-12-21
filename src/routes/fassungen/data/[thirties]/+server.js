@@ -59,7 +59,7 @@ export async function GET({ params, fetch }) {
 	// --------------------
 	const teipbData = hyparchetypes.map(async (h) => {
 		const r = await fetch(
-			`${URL_TEI_PB}/parts/syn${params.thirties}.xml/json?&view=single&odd=parzival-verse.odd&xpath=//div[@subtype=%27${h.handle.replace('*', '')}%27 and @type=%27Textteil%27]`
+			`${URL_TEI_PB}/parts/syn${params.thirties}.xml/json?&view=single&odd=parzival-verse.odd&xpath=//div[(@subtype=%27${h.handle.replace('*', '')}%27 or @subtype=%27${h.handle.replace('*', '').toLowerCase()}%27) and @type=%27Textteil%27]`
 		);
 		if (!r.ok) {
 			console.log('Failed to fetch tpData', r);
