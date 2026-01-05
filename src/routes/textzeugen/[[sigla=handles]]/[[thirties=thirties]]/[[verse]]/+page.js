@@ -136,7 +136,7 @@ export async function load({ fetch, params }) {
 		ranges: ranges['contiguous-ranges'].filter((r) => sigla?.includes(r.label)),
 		pageMeta: (await Promise.all(pageMeta)).map((data, i) => {
 			return data[sigla[i]].map((page) => {
-				return { id: page.id, l: page.l };
+				return { id: page.id, l: page.l[0] };
 			});
 		})
 	};

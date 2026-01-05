@@ -83,7 +83,6 @@
 			return 'null';
 		})
 	);
-	$inspect('activePages', activePages);
 	const generateIiifFromData = (d) => {
 		return d?.map(async (c) => {
 			if (typeof c.meta === 'object') {
@@ -200,15 +199,21 @@
 								{/snippet}
 							</Popover>
 						</h2>
-						{#if localVerses[i]}
-							<p>
-								Vers: {localVerses[i].slice(0, -2)}{Number(localVerses[i].slice(-2))}
-							</p>
-						{/if}
-						{#await activePages[i] then pageId}
-							<PageSelector targetPath="/textzeugen/" {pageId} meta={data.pageMeta[i]}
-							></PageSelector>
-						{/await}
+						<div class="flex gap-4 mt-2">
+							{#if localVerses[i]}
+								<p class="self-center">
+									Vers: {localVerses[i].slice(0, -2)}{Number(localVerses[i].slice(-2))}
+								</p>
+							{/if}
+
+							{#await activePages[i] then pageId}
+								<PageSelector
+									targetPath={`/textzeugen/${data.content.map((c) => c.sigla).join('-')}`}
+									{pageId}
+									meta={data.pageMeta[i]}
+								></PageSelector>
+							{/await}
+						</div>
 						<div class="absolute top-0 right-0">
 							{#if !(page.url.searchParams.get('iiif')?.split('-')[i] === 'false')}
 								<a
@@ -260,7 +265,6 @@
 								localPageChange={(
 									/** @type {{ id: string; previous: string; next: string; }} */ pageinfo
 								) => {
-									console.log('page change', pageinfo);
 									checklocalPages(pageinfo, i, info.sigla);
 								}}
 								localIiifChange={(/** @type {Object} */ e) => (currentIiif[i] = e)}
