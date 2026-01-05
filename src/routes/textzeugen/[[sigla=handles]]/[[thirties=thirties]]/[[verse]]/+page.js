@@ -22,15 +22,15 @@ export async function load({ fetch, params }) {
 	const ranges = await fetch(`${URL_STATIC_API}/json/contiguous_ranges.json`).then((res) =>
 		res.json()
 	);
+	const pageMeta = sigla?.map((handle) => {
+		return fetch(`${URL_STATIC_API}/json/metadata-ms-page/${handle}.json`).then((r) => r.json());
+	});
 
 	// if params.thirties is not defined, we need to find the lowest thirty & verse that exists in all siglas
 	if (sigla?.length === 1) {
-		const lowestPromises = fetch(`${URL_STATIC_API}/json/metadata-ms-page/${sigla[0]}.json`).then(
-			(r) => r.json()
-		);
 		if (!params.thirties) {
 			thirties = false;
-			(await lowestPromises)[sigla[0]].forEach((/** @type {{id: String, l: String[]}} **/ page) => {
+			(await pageMeta[0])[sigla[0]].forEach((/** @type {{id: String, l: String[]}} **/ page) => {
 				if (page.id.includes(`${sigla[0]}001`)) {
 					const [tThirty, tVerse] = page.l[0].split('.');
 					if (!thirties || Number(tThirty) < Number(thirties)) {
@@ -41,7 +41,7 @@ export async function load({ fetch, params }) {
 			});
 		} else if (!params.verse && typeof thirties === 'string') {
 			verse = false;
-			(await lowestPromises)[sigla[0]].some((/** @type {{id: String, l: String[]}} **/ page) => {
+			(await pageMeta[0])[sigla[0]].some((/** @type {{id: String, l: String[]}} **/ page) => {
 				const newVerse = page.l
 					.find((/** @type {String} **/ l) => l?.startsWith(String(thirties)))
 					?.split('.')[1];
@@ -53,10 +53,8 @@ export async function load({ fetch, params }) {
 		}
 	}
 
-	const meta = sigla?.map(async (handle) => {
-		const data = await fetch(`${URL_STATIC_API}/json/metadata-ms-page/${handle}.json`).then((r) =>
-			r.json()
-		);
+	const meta = sigla?.map(async (handle, i) => {
+		const data = await pageMeta[i];
 		/**  @type {{ iiif: string | Promise<any>, id: string, tpData: Promise<{content: string}>, overlay: string }[]} */
 		let returnObjects = [];
 		if (thirties) {
@@ -135,6 +133,11 @@ export async function load({ fetch, params }) {
 				meta: meta ? meta[i] : false
 			};
 		}),
-		ranges: ranges['contiguous-ranges'].filter((r) => sigla?.includes(r.label))
+		ranges: ranges['contiguous-ranges'].filter((r) => sigla?.includes(r.label)),
+		pageMeta: (await Promise.all(pageMeta)).map((data, i) => {
+			return data[sigla[i]].map((page) => {
+				return { id: page.id, l: page.l };
+			});
+		})
 	};
 }
