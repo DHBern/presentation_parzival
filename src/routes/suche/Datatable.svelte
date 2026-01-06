@@ -1,8 +1,10 @@
 <script>
 	import { TableHandler, ThSort } from '@vincjo/datatables';
+	import { untrack } from 'svelte';
 	import { base } from '$app/paths';
-	let { searchResults, korpus } = $props();
+	let { searchResults, korpus, exact = true } = $props();
 	const table = new TableHandler(searchResults, { rowsPerPage: 100 });
+	const sort = table.createSort((row) => Number(row.d));
 
 	/**
 	 * @type {import('@vincjo/datatables').Check}
@@ -16,6 +18,13 @@
 		table.createFilter('verse'),
 		table.createFilter('content')
 	];
+
+	$effect(() => {
+		// When exact search is enabled, sort by Dreissiger field
+		if (exact) {
+			untrack(() => sort.set());
+		}
+	});
 </script>
 
 <div class="table-container">

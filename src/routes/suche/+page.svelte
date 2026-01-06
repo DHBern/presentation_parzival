@@ -201,7 +201,7 @@
 		<p>Suche läuft...</p>
 	{:then r}
 		{#if r.length != 0}
-			<Datatable searchResults={r} korpus={corpus} />
+			<Datatable searchResults={r} korpus={corpus} exact={useExactSearch} />
 		{:else}
 			<p>Keine Ergebnisse</p>
 		{/if}
