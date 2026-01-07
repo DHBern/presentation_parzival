@@ -23,10 +23,10 @@
 	}
 
 	const aboutProjectPages = [
+		{ slug: 'Einführung', path: '/einfuehrung' },
 		{ slug: 'Projektpräsentationen', path: '/projektpraesentationen' },
 		{ slug: 'English Presentation', path: '/englishpresentation' },
 		{ slug: 'Mitarbeitende', path: '/mitarbeitende' }
-		// { slug: 'Erläuterungen', path: '/erl' },
 		// { slug: 'Fassungsprofile', path: '/fassungsprofile' },
 		// { slug: 'Editionsgrundsätze', path: '/editionsgrundsaetze' },
 		// { slug: 'Transkriptionsrichtlinien', path: '/transkriptionsrichtlinien' }
