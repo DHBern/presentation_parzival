@@ -1,5 +1,6 @@
 <script>
 	import TextzeugenSelector from '$lib/components/TextzeugenSelector.svelte';
+	import PageSelector from '$lib/components/PageSelector.svelte';
 	import IIIFViewer from '$lib/components/IIIFViewer.svelte';
 	import TextzeugenContent from './TextzeugenContent.svelte';
 	import { Switch } from '@skeletonlabs/skeleton-svelte';
@@ -69,6 +70,19 @@
 	};
 
 	let localPages = $state(generateLocalPagesFromData(data.content));
+
+	/** @type (Promise<string> | string)[] */
+	let activePages = $state(
+		data.content?.map((c) => {
+			if (typeof c.meta === 'object') {
+				return c.meta.then((meta) => {
+					let active = meta.find((m) => m.active);
+					return /** @type string */ active?.id;
+				});
+			}
+			return 'null';
+		})
+	);
 	const generateIiifFromData = (d) => {
 		return d?.map(async (c) => {
 			if (typeof c.meta === 'object') {
@@ -95,6 +109,7 @@
 		/** @type {number} */ i,
 		/** @type {string} */ sigla
 	) => {
+		activePages[i] = pageInfo.id;
 		const indexCurrent = (await localPages[i]).findIndex(
 			(/** @type {{ id: string; }} */ p) => p.id === pageInfo.id
 		);
@@ -178,17 +193,27 @@
 										<a
 											class="anchor text-primary-100"
 											href="{base}/hsverz#{sigilFromHandle(info.sigla)}"
-										>zum Verzeichnis
+											>zum Verzeichnis
 										</a>
 									</div>
 								{/snippet}
 							</Popover>
 						</h2>
-						{#if localVerses[i]}
-							<p>
-								Vers: {localVerses[i].slice(0, -2)}{Number(localVerses[i].slice(-2))}
-							</p>
-						{/if}
+						<div class="flex gap-4 mt-2">
+							{#if localVerses[i]}
+								<p class="self-center">
+									Vers: {localVerses[i].slice(0, -2)}{Number(localVerses[i].slice(-2))}
+								</p>
+							{/if}
+
+							{#await activePages[i] then pageId}
+								<PageSelector
+									targetPath={`/textzeugen/${data.content.map((c) => c.sigla).join('-')}`}
+									{pageId}
+									meta={data.pageMeta[i]}
+								></PageSelector>
+							{/await}
+						</div>
 						<div class="absolute top-0 right-0">
 							{#if !(page.url.searchParams.get('iiif')?.split('-')[i] === 'false')}
 								<a
