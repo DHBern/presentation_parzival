@@ -425,12 +425,12 @@
 			<h3 class="h3 my-4">Dreißiger {data.thirties}</h3>
 			<p>
 				Eintextedition als <a
-				class="anchor"
-				target="_blank"
-				href="https://dhbern.github.io/parzival-static-api/api/export/pdf/monopsen.pdf#page={data.thirties}"
-			>
-				PDF
-			</a> aufrufen
+					class="anchor"
+					target="_blank"
+					href="https://dhbern.github.io/parzival-static-api/api/pdf/eintextedition.pdf#page={data.thirties}"
+				>
+					PDF
+				</a> aufrufen
 			</p>
 		</div>
 
