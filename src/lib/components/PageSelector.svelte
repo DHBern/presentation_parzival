@@ -23,11 +23,9 @@
 			);
 			if (found?.l) {
 				return found?.l.replace('.', '/');
-			} else {
-				return false;
 			}
 		}
-		return '';
+		return false;
 	};
 
 	let getTargetUrl = async () => {
@@ -68,5 +66,4 @@
 			pageField?.validity.customError && pageField.setCustomValidity('');
 		}}
 	/>
-	<!-- <button aria-label="anzeigen" class="btn preset-filled btn-sm shrink-0 grow-0">Anzeigen</button> -->
 </form>
