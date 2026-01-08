@@ -4,7 +4,7 @@
 
 <p>
 	<span>
-		Die Eintextedition (im PDF-Format) stellt die synoptischen Fassungsedition des ›Parzival‹
+		Die Eintextedition (im PDF-Format) stellt die synoptische Fassungsedition des ›Parzival‹
 		kondensiert auf den kritischen Text nach Fassung *D dar (auf der Grundlage von Leiths. D). Die
 		fett markierten Fassungsvarianten in *G und *T der synoptischen Edition sind in einer etwas
 		kleineren Schrifttype rechts neben dem *D-Text übernommen; Fassungsvarianten von *m sind im
