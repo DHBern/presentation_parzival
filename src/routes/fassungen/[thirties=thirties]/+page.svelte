@@ -1,6 +1,5 @@
 <script>
-	import ErlaeuterungenFassungsedition
-		from '$lib/components/erlaeuterungen-components/ErlaeuterungenFassungsedition.svelte';
+	import ErlaeuterungenFassungsedition from '$lib/components/erlaeuterungen-components/ErlaeuterungenFassungsedition.svelte';
 	import ExpandableContent from '$lib/components/ExpandableContent.svelte';
 	import FassungenSyncContent from './FassungenSyncContent.svelte';
 	import FassungenContent from './FassungenContent.svelte';
@@ -422,7 +421,7 @@
 		</button>
 	{/snippet}
 	<h1 class="h1 my-4">Fassungsedition</h1>
-	<ExpandableContent clampClass = 'line-clamp-2' class="mb-4">
+	<ExpandableContent clampClass="line-clamp-2" class="mb-4">
 		<ErlaeuterungenFassungsedition />
 	</ExpandableContent>
 	<div class="grid gap-6 md:grid-cols-2 md:my-8">

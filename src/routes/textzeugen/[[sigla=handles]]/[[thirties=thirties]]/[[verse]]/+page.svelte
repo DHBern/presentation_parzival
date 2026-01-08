@@ -158,8 +158,8 @@
 					rel="noopener noreferrer"
 					href="/erlaeuterungen#transkriptionen-auch-relevant-fuer-die-darstellung-in-der-verssynopse"
 					class="anchor"
-					aria-label="Erläuterungen (öffnet in neuem Tab)"
-				>Erläuterungen</a>
+					aria-label="Erläuterungen (öffnet in neuem Tab)">Erläuterungen</a
+				>
 				zu den Transkriptionen
 			</div>
 			{#if data.content?.length > 1}

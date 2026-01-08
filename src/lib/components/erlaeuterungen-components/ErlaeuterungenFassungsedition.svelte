@@ -12,10 +12,10 @@
 	Zugang zu benachbarten bzw. beliebigen Dreißigern sowie ein Link zur Startseite.
 </p>
 <p>
-	In den Spalten der synoptisch geordneten Fassungstexte bietet eine Siglenleiste Angaben zu den
-	der jeweilgen Fassung zugeordneten Textzeugen; bei den Fragmenten sind über einen Mausklick
-	Hinweise zu den gegebenenfalls nur partiell erhaltenen Versen abrufbar. Optional lassen sich die
-	einzelnen Fassungen auch ausblenden.
+	In den Spalten der synoptisch geordneten Fassungstexte bietet eine Siglenleiste Angaben zu den der
+	jeweilgen Fassung zugeordneten Textzeugen; bei den Fragmenten sind über einen Mausklick Hinweise
+	zu den gegebenenfalls nur partiell erhaltenen Versen abrufbar. Optional lassen sich die einzelnen
+	Fassungen auch ausblenden.
 </p>
 <p>
 	Die Fassungstexte sind in normalisierter Form nach der jeweiligen Leithandschrift eingerichtet:
@@ -29,10 +29,10 @@
 	(Q).
 </p>
 <p>
-	Textänderungen gegenüber der Leithandschrift sind durch Kursivierung bezeichnet.
-	Gliederungsmittel der Leithandschrift wie Initialen (rot, fett, größere Schrift, z. B.: <span
-	class="tei-seg9 initial Farbe: rot">W</span
->an), Versalien (schwarz, fett, größere Schrift, z. B.: <span class="large-variant">D</span>iz)
+	Textänderungen gegenüber der Leithandschrift sind durch Kursivierung bezeichnet. Gliederungsmittel
+	der Leithandschrift wie Initialen (rot, fett, größere Schrift, z. B.: <span
+		class="tei-seg9 initial Farbe: rot">W</span
+	>an), Versalien (schwarz, fett, größere Schrift, z. B.: <span class="large-variant">D</span>iz)
 	oder Majuskeln (Großschreibung) werden auch im normalisierten Text wiedergegeben.
 </p>
 <p>Die zwischen den Fassungstexten bestehenden Varianten sind durch Fettmarkierung angezeigt.</p>

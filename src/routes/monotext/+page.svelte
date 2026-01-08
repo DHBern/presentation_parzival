@@ -1,12 +1,11 @@
 <script>
 	import ExpandableContent from '$lib/components/ExpandableContent.svelte';
-	import ErlaeuterungenEintextEdition
-		from '$lib/components/erlaeuterungen-components/ErlaeuterungenEintextEdition.svelte';
+	import ErlaeuterungenEintextEdition from '$lib/components/erlaeuterungen-components/ErlaeuterungenEintextEdition.svelte';
 </script>
 
 <div class="container mx-auto typography">
 	<h1>Eintextedition</h1>
-	<ExpandableContent clampClass = 'line-clamp-2'  class="mb-8">
+	<ExpandableContent clampClass="line-clamp-2" class="mb-8">
 		<ErlaeuterungenEintextEdition />
 	</ExpandableContent>
 	<embed

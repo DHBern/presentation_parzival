@@ -1,5 +1,5 @@
 <script>
-import buch from '$lib/assets/buch.jpg';
+	import buch from '$lib/assets/buch.jpg';
 </script>
 
 <p>
@@ -25,11 +25,11 @@ import buch from '$lib/assets/buch.jpg';
 	<span>
 		) in Kombination mit dem Hinweispfeil (↓) macht auf Besonderheiten im Verhältnis von Wolframs
 		›Parzival‹ zu den altfranzösischen Vorlagen aufmerksam; dies betrifft die Hss. L und vor allem
-		V. Plusverse in Hs. V werden bis zu einem Umfang von 54 Versen aufgeführt und die Plusverse
-		bei längeren Blöcken mit hochgestellten Exponenten in 5er-Schritten durchnummeriert. Sowohl
-		auf den Einschub von 496 Versen nach 112.12 als auch auf den Einschub von 74 Versen nach
-		772.30 verweist jeweils ein Link (in blauer Farbe) auf die Transkription von Hs. V, Bl.
-		17vb–20rb bzw. 308rb–va. Per Mausklick auf die jeweils blau gefärbte Dreißigerziffer links
-		neben dem *D-Text führt zurück zur synoptischen Fassungsedition.
+		V. Plusverse in Hs. V werden bis zu einem Umfang von 54 Versen aufgeführt und die Plusverse bei
+		längeren Blöcken mit hochgestellten Exponenten in 5er-Schritten durchnummeriert. Sowohl auf den
+		Einschub von 496 Versen nach 112.12 als auch auf den Einschub von 74 Versen nach 772.30 verweist
+		jeweils ein Link (in blauer Farbe) auf die Transkription von Hs. V, Bl. 17vb–20rb bzw. 308rb–va.
+		Per Mausklick auf die jeweils blau gefärbte Dreißigerziffer links neben dem *D-Text führt zurück
+		zur synoptischen Fassungsedition.
 	</span>
 </p>

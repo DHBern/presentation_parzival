@@ -1,5 +1,5 @@
 <script>
-	export let clampClass = 'line-clamp-3';  // pass any Tailwind CSS clamp class to clamp content
+	export let clampClass = 'line-clamp-3'; // pass any Tailwind CSS clamp class to clamp content
 
 	$: ({ class: hostClass = '', ...rest } = $$restProps);
 
@@ -17,11 +17,7 @@
 </script>
 
 <div class={`w-full ${hostClass}`} {...rest}>
-	<div
-		id={contentId}
-		class={`${clampClass}`}
-		class:line-clamp-none={open}
-	>
+	<div id={contentId} class={`${clampClass}`} class:line-clamp-none={open}>
 		<slot />
 	</div>
 	<button
@@ -29,7 +25,7 @@
 		class="mt-4 text-sm font-semibold anchor-font-color"
 		aria-controls={contentId}
 		aria-expanded={open}
-		aria-label= "Textausschnitt erweitern/reduzieren"
+		aria-label="Textausschnitt erweitern/reduzieren"
 		on:click={() => (open = !open)}
 	>
 		{open ? labelLess : labelMore}
