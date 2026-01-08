@@ -457,7 +457,6 @@
 					localPages.reset();
 					goto(`${base}/fassungen/${gotoThirties}`);
 				}}
-				class="col-start-2"
 			>
 				<label for="goto-thirties" class="block text-lg font-bold font-serif mb-2"
 					>Dreißiger wählen</label
