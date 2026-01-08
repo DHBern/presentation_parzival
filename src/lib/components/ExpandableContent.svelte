@@ -29,6 +29,7 @@
 		class="mt-4 text-sm font-semibold anchor-font-color"
 		aria-controls={contentId}
 		aria-expanded={open}
+		aria-label= "Textausschnitt erweitern/reduzieren"
 		on:click={() => (open = !open)}
 	>
 		{open ? labelLess : labelMore}
