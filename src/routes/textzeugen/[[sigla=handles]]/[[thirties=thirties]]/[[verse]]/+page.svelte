@@ -152,6 +152,15 @@
 	<h1 class="h1 my-4">Transkriptionen</h1>
 	<div class="grid gap-6 md:grid-cols-2 md:my-8">
 		<div class="flex flex-col gap-6">
+			<div>
+				<a
+				target="_blank"
+				rel="noopener noreferrer"
+				href="/erlaeuterungen#transkriptionen-auch-relevant-fuer-die-darstellung-in-der-verssynopse"
+				class="anchor"
+			>Erläuterungen</a>
+				zu den Transkriptionen
+			</div>
 			{#if data.content?.length > 1}
 				<div>
 					<Switch
