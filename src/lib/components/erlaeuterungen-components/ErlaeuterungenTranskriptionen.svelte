@@ -29,7 +29,7 @@
 	Verse, die Teil einer Versumstellung sind, werden am Versende mit einem vertikalen Doppelpfeil (↕)
 	markiert.
 </p>
-<ErlaeuterungenExample href="textzeugen/g/460/25?" label="G 460.25">
+<ErlaeuterungenExample href="/textzeugen/g/460/25?" label="G 460.25">
 	<span class="verse" data-verse="460.25"> </span>
 	<span class="content">
 		<span class="tei-milestone1 versechange"></span>
