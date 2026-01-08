@@ -12,8 +12,6 @@
 		typeof crypto !== 'undefined' && crypto.randomUUID
 			? `expandable-${crypto.randomUUID()}`
 			: `expandable-${Math.random().toString(36).slice(2)}`;
-
-	$: ({ class: hostClass = '', ...rest } = $$restProps);
 </script>
 
 <div class={`w-full ${hostClass}`} {...rest}>
