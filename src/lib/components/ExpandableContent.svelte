@@ -1,11 +1,11 @@
 <script>
-	export let clampClass = 'line-clamp-3'; // pass any Tailwind CSS clamp class to clamp content
-
-	$: ({ class: hostClass = '', ...rest } = $$restProps);
-
-	export let labelMore = 'Mehr anzeigen';
-	export let labelLess = 'Weniger anzeigen';
-
+	let {
+		clampClass = 'line-clamp-3', // pass any Tailwind CSS clamp class to clamp content
+		class: hostClass = '',
+		labelMore = 'Mehr anzeigen',
+		labelLess = 'Weniger anzeigen',
+		...rest
+	} = $props();
 	let open = false;
 
 	const contentId =
