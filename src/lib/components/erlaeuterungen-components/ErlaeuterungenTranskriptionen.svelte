@@ -10,7 +10,7 @@
 </p>
 <p>Paratexte wie Notizen, Marginalien, Kustoden und Reklamanten werden kursiviert wiedergegeben.</p>
 <ErlaeuterungenExample href="/textzeugen/d/8/1" label="D 8.1">
-	><span class="tei-name"
+	<span class="tei-name"
 		><span data-ref="regp:p0094"><span class="tei-seg9 initial Farbe: blau">G</span>Ahmvͦreth</span
 		></span
 	>
