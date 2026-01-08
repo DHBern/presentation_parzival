@@ -9,17 +9,20 @@
 	onOpenChange={() => (openState = false)}
 	classes="fassungskommentar_modal"
 	triggerBase="btn preset-tonal"
-	contentBase="w-[80vw] card bg-surface-100-900 p-4 space-y-4 shadow-xl max-w-screen-lg"
+	contentBase="w-[80vw] card preset-filled border border-gray-400 rounded-md text-black space-y-4 shadow-xl max-w-screen-lg"
 	base=""
-	backdropClasses="backdrop-blur-sm"
->
+	backdropClasses="bg-black/[0.03]">
 	{#snippet content()}
-		<header
-			class={['flex justify-between p-1 px-2', id[2] !== 'A' ? 'bg-green-600 ' : 'bg-red-700 ']}
-		>
-			<h1 class="h5 text-surface-50">Editorischer Kommentar</h1>
+		<header class="flex items-center justify-center px-4 py-4 bg-gray-400 rounded-t-md">
+			<h1
+				class={`text-md uppercase tracking-wider ${
+			id[2] !== 'A' ? 'text-green-900' : 'text-red-800'
+		}`}
+			>
+				Editorischer Kommentar
+			</h1>
 		</header>
-		<article class="fk-modal-content max-h-[80vh] overflow-auto">
+		<article class="p-4 fk-modal-content max-h-[80vh] overflow-auto">
 			{#if content}
 				{@html commentary}
 			{/if}
@@ -32,22 +35,22 @@
 	@reference "@skeletonlabs/skeleton";
 	.fk-modal-content {
 		:global(.fassungs-kommentar a) {
-			@apply text-primary-800 font-bold;
+			@apply anchor font-bold;
 		}
 		:global(.fk-title) {
-			@apply h3;
+			@apply h3 text-black;
 		}
 		:global(.fk-content) {
 			@apply my-3;
 		}
 		:global(.fk-commentary) {
-			@apply mb-1 text-lg;
+			@apply mb-1 text-sm;
 		}
 		:global(.fk-content + .fk-literatur) {
 			@apply mt-8;
 		}
 		:global(.fk-literatur .fk-commentary) {
-			@apply my-3  text-sm;
+			@apply my-3  text-xs;
 		}
 		:global(.fk-bold) {
 			@apply font-bold;
@@ -59,4 +62,26 @@
 			@apply [font-variant:small-caps];
 		}
 	}
+  .fk-modal-content {
+      scrollbar-width: thin;
+      scrollbar-color: rgba(0,0,0,0.3) transparent;
+  }
+
+  /* WebKit */
+  .fk-modal-content::-webkit-scrollbar {
+      width: 8px;
+  }
+
+  .fk-modal-content::-webkit-scrollbar-track {
+      background: transparent;
+  }
+
+  .fk-modal-content::-webkit-scrollbar-thumb {
+      background-color: rgba(0,0,0,0.25);
+      border-radius: 9999px;
+  }
+
+  .fk-modal-content::-webkit-scrollbar-thumb:hover {
+      background-color: rgba(0,0,0,0.4);
+  }
 </style>
