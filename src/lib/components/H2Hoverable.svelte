@@ -24,6 +24,7 @@
 		display: flex;
 		align-items: center;
 		position: relative;
+		margin-top: 1em;
 	}
 	h2::after {
 		content: '\f0c1';
@@ -36,5 +37,6 @@
 
 	h2:hover::after {
 		visibility: visible;
+		opacity: 0.33;
 	}
 </style>
