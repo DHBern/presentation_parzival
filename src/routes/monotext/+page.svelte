@@ -6,7 +6,7 @@
 
 <div class="container mx-auto typography">
 	<h1>Eintextedition</h1>
-	<ExpandableContent clipAfterLines={3} class="mb-8">
+	<ExpandableContent clampClass = 'line-clamp-2'  class="mb-8">
 		<ErlaeuterungenEintextEdition />
 	</ExpandableContent>
 	<embed

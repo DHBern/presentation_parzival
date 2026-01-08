@@ -1,5 +1,8 @@
 <script>
-	export let clipAfterLines = 3;
+	export let clampClass = 'line-clamp-3';  // pass any Tailwind CSS clamp class to clamp content
+
+	$: ({ class: hostClass = '', ...rest } = $$restProps);
+
 	export let labelMore = 'Mehr anzeigen';
 	export let labelLess = 'Weniger anzeigen';
 
@@ -16,7 +19,7 @@
 <div class={`w-full ${hostClass}`} {...rest}>
 	<div
 		id={contentId}
-		class={`line-clamp-${clipAfterLines}`}
+		class={`${clampClass}`}
 		class:line-clamp-none={open}
 	>
 		<slot />
