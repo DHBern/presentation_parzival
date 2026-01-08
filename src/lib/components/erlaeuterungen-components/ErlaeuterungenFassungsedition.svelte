@@ -13,7 +13,7 @@
 </p>
 <p>
 	In den Spalten der synoptisch geordneten Fassungstexte bietet eine Siglenleiste Angaben zu den der
-	jeweilgen Fassung zugeordneten Textzeugen; bei den Fragmenten sind über einen Mausklick Hinweise
+	jeweiligen Fassung zugeordneten Textzeugen; bei den Fragmenten sind über einen Mausklick Hinweise
 	zu den gegebenenfalls nur partiell erhaltenen Versen abrufbar. Optional lassen sich die einzelnen
 	Fassungen auch ausblenden.
 </p>
