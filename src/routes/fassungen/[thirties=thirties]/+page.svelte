@@ -1,4 +1,7 @@
 <script>
+	import ErlaeuterungenFassungsedition
+		from '$lib/components/erlaeuterungen-components/ErlaeuterungenFassungsedition.svelte';
+	import ExpandableContent from '$lib/components/ExpandableContent.svelte';
 	import FassungenSyncContent from './FassungenSyncContent.svelte';
 	import FassungenContent from './FassungenContent.svelte';
 	import FassungskommentarModal from './FassungskommentarModal.svelte';
@@ -419,6 +422,9 @@
 		</button>
 	{/snippet}
 	<h1 class="h1 my-4">Fassungsedition</h1>
+	<ExpandableContent clipAfterLines={3} class="mb-4">
+		<ErlaeuterungenFassungsedition />
+	</ExpandableContent>
 	<div class="grid gap-6 md:grid-cols-2 md:my-8">
 		<div>
 			<h2 class="h5">{localPages.books[localPages.thirties.indexOf(Number(data.thirties))]}</h2>
@@ -433,40 +439,41 @@
 				</a> aufrufen
 			</p>
 		</div>
-
-		{#if mobileBreakpoint}
-			<Switch
-				thumbInactive="bg-surface-800"
-				controlInactive="bg-surface-100"
-				name="synchro"
-				checked={synchro}
-				onCheckedChange={(e) => (synchro = e.checked)}
+		<div>
+			{#if mobileBreakpoint}
+				<Switch
+					thumbInactive="bg-surface-800"
+					controlInactive="bg-surface-100"
+					name="synchro"
+					checked={synchro}
+					onCheckedChange={(e) => (synchro = e.checked)}
+				>
+					synchron scrollen
+				</Switch>
+			{/if}
+			<form
+				onsubmit={(e) => {
+					e.preventDefault();
+					localPages.reset();
+					goto(`${base}/fassungen/${gotoThirties}`);
+				}}
+				class="col-start-2"
 			>
-				synchron scrollen
-			</Switch>
-		{/if}
-		<form
-			onsubmit={(e) => {
-				e.preventDefault();
-				localPages.reset();
-				goto(`${base}/fassungen/${gotoThirties}`);
-			}}
-			class="col-start-2"
-		>
-			<label for="goto-thirties" class="block text-lg font-bold font-serif mb-2"
-				>Dreißiger wählen</label
-			>
-			<input
-				id="goto-thirties"
-				type="number"
-				placeholder="Dreißiger"
-				class="input inline max-w-28"
-				min="1"
-				max={NUMBER_OF_PAGES}
-				bind:value={gotoThirties}
-			/>
-			<button aria-label="suchen" class="btn preset-filled-primary-500">Anzeigen</button>
-		</form>
+				<label for="goto-thirties" class="block text-lg font-bold font-serif mb-2"
+					>Dreißiger wählen</label
+				>
+				<input
+					id="goto-thirties"
+					type="number"
+					placeholder="Dreißiger"
+					class="input inline max-w-28"
+					min="1"
+					max={NUMBER_OF_PAGES}
+					bind:value={gotoThirties}
+				/>
+				<button aria-label="suchen" class="btn preset-filled-primary-500">Anzeigen</button>
+			</form>
+		</div>
 	</div>
 
 	<!-- Modal for Fassungskommentar -->
