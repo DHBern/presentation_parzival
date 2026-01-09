@@ -57,7 +57,7 @@
 				href="https://parzival.unibe.ch/"
 				target="_blank"
 				rel="noopener noreferrer"
-				class="items-baseline gap-1 text-xs text-base hover:underline hidden lg:flex self-end hover:text-primary-700"
+				class="items-baseline gap-1 text-xs hover:underline hidden lg:flex self-end hover:text-primary-700"
 			>
 				<span>Archivversion</span>
 				<i
