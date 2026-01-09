@@ -4,9 +4,10 @@
 		class: hostClass = '',
 		labelMore = 'Mehr anzeigen',
 		labelLess = 'Weniger anzeigen',
+		children,
 		...rest
 	} = $props();
-	let open = false;
+	let open = $state(false);
 
 	const contentId =
 		typeof crypto !== 'undefined' && crypto.randomUUID
@@ -16,7 +17,7 @@
 
 <div class={`w-full ${hostClass}`} {...rest}>
 	<div id={contentId} class={`${clampClass}`} class:line-clamp-none={open}>
-		<slot />
+		{@render children()}
 	</div>
 	<button
 		type="button"
@@ -24,7 +25,7 @@
 		aria-controls={contentId}
 		aria-expanded={open}
 		aria-label="Textausschnitt erweitern/reduzieren"
-		on:click={() => (open = !open)}
+		onclick={() => (open = !open)}
 	>
 		{open ? labelLess : labelMore}
 	</button>
