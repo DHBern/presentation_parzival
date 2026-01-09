@@ -4,7 +4,7 @@
 </script>
 
 <div class="container mx-auto typography tei-content">
-	<h1 class="h1 mb-4">Erläuterungen zur Fassungsedition und zu den Transkriptionen</h1>
+	<h1 class="h1 mb-4">Erläuterungen zur Fassungsedition, Eintextedition und zu den Transkriptionen</h1>
 	<H2Hoverable name="Fassungsedition"></H2Hoverable>
 	<p>
 		Die Anlage der Fassungsedition ist an den von Karl Lachmann eingeführten Dreißigergruppen
@@ -56,7 +56,7 @@
 		auf editorische Kommentare, die über einen Mausklick abrufbar sind. Rote Farbe bezeichnet fassungsübergreifende
 		Kommentare, grüne Farbe fassungsinterne Kommentare.
 	</p>
-	<H2Hoverable name="Eintextedition (Krit. Edition im PDF-Format)"></H2Hoverable>
+	<H2Hoverable name="Eintextedition (Kritische Edition im PDF-Format)"></H2Hoverable>
 	<p>
 		Die Eintextedition stellt ein Kondensat der Fassungsedition dar; diese kann stets durch einen
 		Klick auf die Dreißigerziffer am linken oberen Rand erreicht werden. Der kritische Text ist nach
