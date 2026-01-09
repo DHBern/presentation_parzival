@@ -50,7 +50,7 @@
 			<a
 				class="inline-flex items-center gap-2 text-xl uppercase font-bold hover:text-primary-700"
 				href={`${base}/`}
-			>Parzival
+				>Parzival
 			</a>
 
 			<a
