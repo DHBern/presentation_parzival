@@ -11,13 +11,14 @@
 	triggerBase="btn preset-tonal"
 	contentBase="w-[80vw] card preset-filled border border-gray-400 rounded-md text-black space-y-4 shadow-xl max-w-screen-lg"
 	base=""
-	backdropClasses="bg-black/[0.03]">
+	backdropClasses="bg-black/[0.03]"
+>
 	{#snippet content()}
 		<header class="flex items-center justify-center px-4 py-4 bg-gray-400 rounded-t-md">
 			<h1
 				class={`text-md uppercase tracking-wider ${
-			id[2] !== 'A' ? 'text-green-900' : 'text-red-800'
-		}`}
+					id[2] !== 'A' ? 'text-green-900' : 'text-red-800'
+				}`}
 			>
 				Editorischer Kommentar
 			</h1>
@@ -62,26 +63,26 @@
 			@apply [font-variant:small-caps];
 		}
 	}
-  .fk-modal-content {
-      scrollbar-width: thin;
-      scrollbar-color: rgba(0,0,0,0.3) transparent;
-  }
+	.fk-modal-content {
+		scrollbar-width: thin;
+		scrollbar-color: rgba(0, 0, 0, 0.3) transparent;
+	}
 
-  /* WebKit */
-  .fk-modal-content::-webkit-scrollbar {
-      width: 8px;
-  }
+	/* WebKit */
+	.fk-modal-content::-webkit-scrollbar {
+		width: 8px;
+	}
 
-  .fk-modal-content::-webkit-scrollbar-track {
-      background: transparent;
-  }
+	.fk-modal-content::-webkit-scrollbar-track {
+		background: transparent;
+	}
 
-  .fk-modal-content::-webkit-scrollbar-thumb {
-      background-color: rgba(0,0,0,0.25);
-      border-radius: 9999px;
-  }
+	.fk-modal-content::-webkit-scrollbar-thumb {
+		background-color: rgba(0, 0, 0, 0.25);
+		border-radius: 9999px;
+	}
 
-  .fk-modal-content::-webkit-scrollbar-thumb:hover {
-      background-color: rgba(0,0,0,0.4);
-  }
+	.fk-modal-content::-webkit-scrollbar-thumb:hover {
+		background-color: rgba(0, 0, 0, 0.4);
+	}
 </style>
