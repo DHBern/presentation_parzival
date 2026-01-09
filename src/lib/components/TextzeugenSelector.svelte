@@ -20,7 +20,7 @@
 				<select class="select my-2" bind:value={selection[i]}>
 					{#if i !== 0}
 						<option value="">
-							kein Textzeuge
+							---
 						</option>
 					{/if}
 					{#await sigla then resolvedSigla}

@@ -33,7 +33,7 @@
 	];
 
 	const mainPages = [
-		{ slug: 'Textzeugenverzeichnis', path: '/hsverz' },
+		{ slug: 'Textzeugen', path: '/hsverz' },
 		{ slug: 'Verssynopse', path: '/einzelverssynopse' },
 		{ slug: 'Dreißiger-Tabelle', path: '/#edition-nach-dreissigern' },
 		{ slug: 'Fassungsedition', path: '/fassungen' },
