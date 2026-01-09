@@ -35,6 +35,8 @@
 	@reference "tailwindcss";
 	@reference "@skeletonlabs/skeleton";
 	.fk-modal-content {
+		scrollbar-width: thin;
+		scrollbar-color: rgba(0, 0, 0, 0.3) transparent;
 		:global(.fassungs-kommentar a) {
 			@apply anchor font-bold;
 		}
@@ -62,10 +64,6 @@
 		:global(.fk-small-caps) {
 			@apply [font-variant:small-caps];
 		}
-	}
-	.fk-modal-content {
-		scrollbar-width: thin;
-		scrollbar-color: rgba(0, 0, 0, 0.3) transparent;
 	}
 
 	/* WebKit */
