@@ -65,8 +65,7 @@
 	<section class="col-span-full">
 		<H2Hoverable name="Edition nach Dreißigern" classes="h2 my-10"></H2Hoverable>
 		<p class="my-5">
-			Aktuell befindet sich noch die Interpunktion in Überarbeitung (Dreißiger 201 bis 472). Die
-			Tabelle ermöglicht die Auswahl von Dreißigern der synoptischen FassungsEdition nach
+			Die Tabelle ermöglicht die Auswahl von Dreißigern der synoptischen FassungsEdition nach
 			Dreißigern) und Handschriftentranskriptionen (unter den einzelnen Siglen). Die Fragmente sind
 			in der Spalte rechts außen nach Dreißigern aufgeführt. Alle Textzeugen können auch einzeln
 			über das untenstehende Feld angewählt und entfernt werden.

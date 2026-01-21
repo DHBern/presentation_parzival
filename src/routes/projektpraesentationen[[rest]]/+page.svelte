@@ -5,7 +5,7 @@
 
 <div class="container mx-auto typography">
 	<h1>
-		Projektpräsentationen: <a href="#publikationen">Publikationen</a> und
+		Publikationen: <a href="#publikationen">Publikationen</a> und
 		<a href="#vortraege">Vorträge</a>
 	</h1>
 
