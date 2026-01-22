@@ -325,7 +325,7 @@
 
 		<p>
 			The possibilities offered by the synoptic representation of the manuscript sources on screen
-			are shown in th digital edition. <br />
+			are shown in the digital edition. <br />
 
 			There is no doubt that, on the digital screen, the variability postulated by New Philology can
 			be presented in much more lucid, visual terms than in conventional editions of texts. The
@@ -351,7 +351,7 @@
 			with developments in historiographical scholarship, which is devoting itself increasingly to mediality,
 			to the history of transmission, to discourse analysis, and to anthropological problems. Political
 			historiography, oriented towards great historical events, has given way to social historiography,
-			history defined in terms of human labour, but that is now in turn being succeded by a focus upon
+			history defined in terms of human labour, but that is now in turn being succeeded by a focus upon
 			mediality, transmission, and the preservation of historical data. Homo laborans is making way for
 			homo tradens of historical anthropology.
 		</p>
