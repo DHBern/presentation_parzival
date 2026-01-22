@@ -15,9 +15,12 @@
 			type="button"
 			class="btn btn-icon"
 			aria-label={lang === 'de' ? 'Switch to English' : 'Zur deutschen Version'}
+			title={lang === 'de' ? 'Switch to English' : 'Zur deutschen Version'}
 			on:click={toggleLang}
 		>
-			<i class="fa-solid fa-globe"></i>{lang}
+			<i class="fa-solid fa-globe" aria-hidden="true"></i>
+			<span aria-hidden="true">{lang.toUpperCase()}</span>
+			<span class="sr-only">{lang === 'de' ? 'Switch to English' : 'Zur deutschen Version'}</span>
 		</button>
 	</div>
 </div>
