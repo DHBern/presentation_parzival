@@ -88,7 +88,7 @@
 		<li>Livia Sandri M.A. (Berlin-Brandenburgische Akademie der Wissenschaften)</li>
 		<li>PD Dr. Robert Schöller (Universität Bern)</li>
 		<li>
-			Prof. Dr. Martin Schubert(Berlin-Brandenburgische Akademie der Wissenschaften, jetzt
+			Prof. Dr. Martin Schubert (Berlin-Brandenburgische Akademie der Wissenschaften, jetzt
 			Universität Duisburg-Essen)
 		</li>
 		<li>Christian Sonder M.A. (Universität Bern)</li>
