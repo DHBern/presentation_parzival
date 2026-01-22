@@ -12,7 +12,7 @@
 
 	let classesActive = $derived((/** @type {string} */ href) =>
 		href.split('/')[1] === page.url.pathname.split('/')[1] || href.split('/')[1] === page.url.hash
-	? 'bg-primary-300 hover:bg-primary-300 hover:text-primary-700 text-primary-900'
+			? 'bg-primary-300 hover:bg-primary-300 hover:text-primary-700 text-primary-900'
 			: 'hover:text-primary-600'
 	);
 
@@ -25,7 +25,6 @@
 	const aboutProjectPages = [
 		{ slug: 'Einführung', path: '/einfuehrung' },
 		{ slug: 'Projektpräsentationen', path: '/projektpraesentationen' },
-		{ slug: 'English Presentation', path: '/englishpresentation' },
 		{ slug: 'Mitarbeitende', path: '/mitarbeitende' }
 		// { slug: 'Fassungsprofile', path: '/fassungsprofile' },
 		// { slug: 'Editionsgrundsätze', path: '/editionsgrundsaetze' },
