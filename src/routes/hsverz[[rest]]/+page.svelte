@@ -79,8 +79,8 @@
 			handschriftlichen Überlieferung des Prologs, hg. von Uta Ulzen. Göppingen 1974 (Litterae 34).
 		</li>
 		<li>
-			Wolfram von Eschenbach von Karl Lachmann, 7. Ausgabe. Neu bearbei-tet und mit einem
-			Verzeichnis der Eigennamen und Stammtafeln versehen, Bd. 1: Lieder, Par-zival, Titurel, hg.
+			Wolfram von Eschenbach von Karl Lachmann, 7. Ausgabe. Neu bearbeitet und mit einem
+			Verzeichnis der Eigennamen und Stammtafeln versehen, Bd. 1: Lieder, Parzival, Titurel, hg.
 			von Eduard Hartl. Berlin 1952.
 		</li>
 
@@ -96,7 +96,7 @@
 			>
 				Handschriftencensus</a
 			>. Eine Bestandsaufnahme der handschriftlichen Überlieferung deutschsprachiger Texte des
-			Mittelalters
+			Mittelalters.
 		</li>
 	</ul>
 </div>
