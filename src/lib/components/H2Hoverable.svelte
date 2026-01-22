@@ -34,8 +34,8 @@
 		margin-left: 0.5em;
 		visibility: hidden;
 		opacity: 0;
-    transition: opacity 0.25s ease-in-out 0.25s;
-  }
+		transition: opacity 0.25s ease-in-out 0.25s;
+	}
 
 	h2:hover::after {
 		visibility: visible;

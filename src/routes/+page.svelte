@@ -29,8 +29,8 @@
 					class="w-full h-auto my-4 md:h-[20rem] md:w-auto"
 				/>
 				<p class="text-primary-500 font-bold pb-4 px-4">
-					Kritische Ausgabe nach Fassungen mit philologischen und phylogenetischen
-					Analyseverfahren mit Einbindung digitaler Faksimiles
+					Kritische Ausgabe nach Fassungen mit philologischen und phylogenetischen Analyseverfahren
+					mit Einbindung digitaler Faksimiles
 				</p>
 			</div>
 		</div>
