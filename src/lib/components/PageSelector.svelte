@@ -55,7 +55,7 @@
 		});
 	}}
 >
-	<p>{rvSuffix ? 'Bl.' : 'S.'}:</p>
+	<p>{rvSuffix ? 'Blatt' : 'Seite'}:</p>
 	<input
 		type="text"
 		placeholder="Seite oder Blatt"
