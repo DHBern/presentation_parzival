@@ -1,4 +1,6 @@
 <script>
+	import ErlaeuterungenFassungsedition from '$lib/components/erlaeuterungen-components/ErlaeuterungenFassungsedition.svelte';
+	import ExpandableContent from '$lib/components/ExpandableContent.svelte';
 	import FassungenSyncContent from './FassungenSyncContent.svelte';
 	import FassungenContent from './FassungenContent.svelte';
 	import FassungskommentarModal from './FassungskommentarModal.svelte';
@@ -6,7 +8,7 @@
 	import { NUMBER_OF_PAGES } from '$lib/constants';
 	import { Switch } from '@skeletonlabs/skeleton-svelte';
 	import { page } from '$app/state';
-	import { onMount, tick } from 'svelte';
+	import { onMount, tick, untrack } from 'svelte';
 	import { goto } from '$app/navigation';
 	import ApparatPopover from './ApparatPopover.svelte';
 	import handleFromSigil from '$lib/functions/handleFromSigil';
@@ -29,11 +31,19 @@
 		/**
 		 * @type {Number[]}
 		 */
-		thirties = [];
+		thirties = $state([]);
+		// thirties = [];
+
+		/**
+		 * @type {String[]}
+		 */
+		books = $state([]);
 
 		reset = () => {
 			this.pages = [[], [], [], []];
 			this.thirties = [];
+			this.distributions = [{}, {}, {}, {}];
+			this.books = [];
 		};
 
 		/**
@@ -139,37 +149,40 @@
 			// if the page is not already loaded
 			if (!this.thirties.length) {
 				/**
-				 * @type {{ content: string; apparat: { reading: any[]; structure: any[]; distribution: string; }; fasskomm: any[]; }[]}
+				 * @type {{meta:{book: string}, content:{ content: string; apparat: { reading: any[]; structure: any[]; distribution: string; }; fasskomm: any[]; }[]}}
 				 */
 				let info;
 				// fetch the page before the current one if the current one is not the first
 				if (page > 1) {
 					info = await fetch(`${base}/fassungen/data/${page - 1}`).then((r) => r.json());
 					labels.forEach((label, index) => {
-						const { preparedHTML, preparedDistribution } = prepareHTML(info[index], label);
+						const { preparedHTML, preparedDistribution } = prepareHTML(info.content[index], label);
 						this.pages[index].push([page - 1, preparedHTML]);
 						this.distributions[index][page - 1] = preparedDistribution;
 					});
+					this.books.push(info.meta.book);
 					this.thirties.push(page - 1);
 				}
 				// fetch the current page
 				if (page <= NUMBER_OF_PAGES) {
 					info = await fetch(`${base}/fassungen/data/${page}`).then((r) => r.json());
 					labels.forEach((label, index) => {
-						const { preparedHTML, preparedDistribution } = prepareHTML(info[index], label);
+						const { preparedHTML, preparedDistribution } = prepareHTML(info.content[index], label);
 						this.pages[index].push([page, preparedHTML]);
 						this.distributions[index][page] = preparedDistribution;
 					});
+					this.books.push(info.meta.book);
 					this.thirties.push(page);
 				}
 				// fetch the page after the current one if the current one is not the last
 				if (page !== NUMBER_OF_PAGES) {
 					info = await fetch(`${base}/fassungen/data/${page + 1}`).then((r) => r.json());
 					labels.forEach((label, index) => {
-						const { preparedHTML, preparedDistribution } = prepareHTML(info[index], label);
+						const { preparedHTML, preparedDistribution } = prepareHTML(info.content[index], label);
 						this.pages[index].push([page + 1, preparedHTML]);
 						this.distributions[index][page + 1] = preparedDistribution;
 					});
+					this.books.push(info.meta.book);
 					this.thirties.push(page + 1);
 				}
 				if (page > NUMBER_OF_PAGES) {
@@ -179,18 +192,20 @@
 				if (page < this.thirties[0] && !this.thirties.includes(page)) {
 					let info = await fetch(`${base}/fassungen/data/${page}`).then((r) => r.json());
 					labels.forEach((label, index) => {
-						const { preparedHTML, preparedDistribution } = prepareHTML(info[index], label);
+						const { preparedHTML, preparedDistribution } = prepareHTML(info.content[index], label);
 						this.pages[index].unshift([page, preparedHTML]);
 						this.distributions[index][page] = preparedDistribution;
 					});
+					this.books.unshift(info.meta.book);
 					this.thirties.unshift(page);
 				} else if (page > this.thirties[this.thirties.length - 1]) {
 					let info = await fetch(`${base}/fassungen/data/${page}`).then((r) => r.json());
 					labels.forEach((label, index) => {
-						const { preparedHTML, preparedDistribution } = prepareHTML(info[index], label);
+						const { preparedHTML, preparedDistribution } = prepareHTML(info.content[index], label);
 						this.pages[index].push([page, preparedHTML]);
 						this.distributions[index][page] = preparedDistribution;
 					});
+					this.books.push(info.meta.book);
 					this.thirties.push(page);
 				} else if (page === this.thirties[0] && page > 1) {
 					this.fetchPage(page - 1);
@@ -208,7 +223,10 @@
 
 	let localPages = new localPageClass();
 	$effect(() => {
-		localPages.fetchPage(Number(data.thirties));
+		// when the page number changes, fetch the corresponding data
+		// we need to untrack here to avoid infinite loops, because fetchPage changes localPages.
+		data.thirties;
+		untrack(() => localPages.fetchPage(Number(data.thirties)));
 	});
 	let synchro = $state(true);
 	let windowWidth = $state(0);
@@ -402,51 +420,58 @@
 			{next ? 'Nächsten Dreißiger anzeigen' : 'vorherigen Dreißiger anzeigen'}
 		</button>
 	{/snippet}
-	<h1 class="h1 my-4">Fassungsansicht</h1>
+	<h1 class="h1 my-4">Fassungsedition</h1>
+	<ExpandableContent clampClass="line-clamp-3" class="mb-4">
+		<ErlaeuterungenFassungsedition />
+	</ExpandableContent>
 	<div class="grid gap-6 md:grid-cols-2 md:my-8">
-		<p>
-			Finden Sie hier den Monotext als PDF: <a
-				class="anchor"
-				target="_blank"
-				href="https://dhbern.github.io/parzival-static-api/api/export/pdf/monopsen.pdf#page={data.thirties}"
+		<div>
+			<h2 class="h5">{localPages.books[localPages.thirties.indexOf(Number(data.thirties))]}</h2>
+			<h3 class="h3 my-4">Dreißiger {data.thirties}</h3>
+			<p>
+				Eintextedition als <a
+					class="anchor"
+					target="_blank"
+					href="https://dhbern.github.io/parzival-static-api/api/pdf/eintextedition.pdf#page={data.thirties}"
+				>
+					PDF
+				</a> aufrufen
+			</p>
+		</div>
+		<div>
+			{#if mobileBreakpoint}
+				<Switch
+					thumbInactive="bg-surface-800"
+					controlInactive="bg-surface-100"
+					name="synchro"
+					checked={synchro}
+					onCheckedChange={(e) => (synchro = e.checked)}
+				>
+					synchron scrollen
+				</Switch>
+			{/if}
+			<form
+				onsubmit={(e) => {
+					e.preventDefault();
+					localPages.reset();
+					goto(`${base}/fassungen/${gotoThirties}`);
+				}}
 			>
-				Dreißiger {data.thirties}
-			</a>
-		</p>
-
-		{#if mobileBreakpoint}
-			<Switch
-				thumbInactive="bg-surface-800"
-				controlInactive="bg-surface-100"
-				name="synchro"
-				checked={synchro}
-				onCheckedChange={(e) => (synchro = e.checked)}
-			>
-				synchron scrollen
-			</Switch>
-		{/if}
-		<form
-			onsubmit={(e) => {
-				e.preventDefault();
-				localPages.reset();
-				goto(`${base}/fassungen/${gotoThirties}`);
-			}}
-			class="col-start-2"
-		>
-			<label for="goto-thirties" class="block text-lg font-bold font-serif mb-2"
-				>Zu Dreißiger springen</label
-			>
-			<input
-				id="goto-thirties"
-				type="number"
-				placeholder="Dreißiger"
-				class="input inline max-w-28"
-				min="1"
-				max={NUMBER_OF_PAGES}
-				bind:value={gotoThirties}
-			/>
-			<button aria-label="suchen" class="btn preset-filled-primary-500">Anzeigen</button>
-		</form>
+				<label for="goto-thirties" class="block text-lg font-bold font-serif mb-2"
+					>Dreißiger wählen</label
+				>
+				<input
+					id="goto-thirties"
+					type="number"
+					placeholder="Dreißiger"
+					class="input inline max-w-28"
+					min="1"
+					max={NUMBER_OF_PAGES}
+					bind:value={gotoThirties}
+				/>
+				<button aria-label="suchen" class="btn preset-filled-primary-500">Anzeigen</button>
+			</form>
+		</div>
 	</div>
 
 	<!-- Modal for Fassungskommentar -->

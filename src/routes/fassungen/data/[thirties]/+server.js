@@ -2,6 +2,7 @@ import { json } from '@sveltejs/kit';
 import { NUMBER_OF_PAGES, URL_TEI_PB, URL_STATIC_API } from '$lib/constants';
 import { metadata } from '$lib/data/metadata';
 import { fasskomm } from '$lib/data/fasskomm';
+import { books } from '$lib/data/books';
 import { base } from '$app/paths';
 import handleFromSigil from '$lib/functions/handleFromSigil';
 
@@ -58,7 +59,7 @@ export async function GET({ params, fetch }) {
 	// --------------------
 	const teipbData = hyparchetypes.map(async (h) => {
 		const r = await fetch(
-			`${URL_TEI_PB}/parts/syn${params.thirties}.xml/json?&view=single&odd=parzival-verse.odd&xpath=//div[@subtype=%27${h.handle.replace('*', '')}%27 and @type=%27Textteil%27]`
+			`${URL_TEI_PB}/parts/syn${params.thirties}.xml/json?&view=single&odd=parzival-verse.odd&xpath=//div[(@subtype=%27${h.handle.replace('*', '')}%27 or @subtype=%27${h.handle.replace('*', '').toLowerCase()}%27) and @type=%27Textteil%27]`
 		);
 		if (!r.ok) {
 			console.log('Failed to fetch tpData', r);
@@ -74,7 +75,10 @@ export async function GET({ params, fetch }) {
 		};
 	});
 
-	return json(await Promise.all(teipbData));
+	return json({
+		meta: { book: (await books)[Number(params.thirties)] },
+		content: await Promise.all(teipbData)
+	});
 }
 
 /** @type {import('./$types').EntryGenerator} */

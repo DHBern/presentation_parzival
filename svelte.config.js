@@ -20,7 +20,8 @@ const config = {
 		},
 		prerender: {
 			handleHttpError: 'warn', //remove this for production
-			handleMissingId: 'warn' //remove this for production
+			handleMissingId: 'warn', //remove this for production
+			handleUnseenRoutes: 'warn' //remove this for production
 		}
 	}
 };

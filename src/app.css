@@ -11,7 +11,7 @@
 
 @font-face {
 	font-family: "Cormorant Garamond";
-	src: url("/static/fonts/Cormorant-Regular.ttf") format("truetype");
+	src: url("/fonts/Cormorant-Regular.ttf") format("truetype");
 	font-style: normal;
 	font-weight: 400;
 	font-display: swap;
@@ -19,7 +19,7 @@
 
 @font-face {
 	font-family: "Cormorant Garamond";
-	src: url("/static/fonts/Cormorant-Italic.ttf") format("truetype");
+	src: url("/fonts/Cormorant-Italic.ttf") format("truetype");
 	font-style: italic;
 	font-weight: 400;
 	font-display: swap;
@@ -27,7 +27,7 @@
 
 @font-face {
 	font-family: "Cormorant Garamond";
-	src: url("/static/fonts/Cormorant-Bold.ttf") format("truetype");
+	src: url("/fonts/Cormorant-Bold.ttf") format("truetype");
 	font-style: normal;
 	font-weight: 700;
 	font-display: swap;
@@ -35,12 +35,50 @@
 
 @font-face {
 	font-family: "Cormorant Garamond";
-	src: url("/static/fonts/Cormorant-BoldItalic.ttf") format("truetype");
+	src: url("/fonts/Cormorant-BoldItalic.ttf") format("truetype");
 	font-style: italic;
 	font-weight: 700;
 	font-display: swap;
 }
 
+@font-face {
+	/* Reference name */
+	font-family: 'Noto Sans';
+	src: url('/fonts/NotoSans-VariableFont_wdth,wght.ttf');
+	font-display: swap;
+	font-style: normal;
+	font-weight: 100 900;
+	font-stretch: 62.5% 100%;
+}
+@font-face {
+	/* Reference name */
+	font-family: 'Noto Serif';
+	src: url('/fonts/NotoSerif-VariableFont_wdth,wght.ttf');
+	font-display: swap;
+	font-style: normal;
+	font-weight: 100 900;
+	font-stretch: 62.5% 100%;
+}
+@font-face {
+	/* Reference name */
+	font-family: 'Noto Sans';
+	src: url('/fonts/NotoSans-Italic-VariableFont_wdth,wght.ttf');
+	font-display: swap;
+	font-style: italic;
+	font-weight: 100 900;
+	font-stretch: 62.5% 100%;
+}
+@font-face {
+	/* Reference name */
+	font-family: 'Noto Serif';
+	src: url('/fonts/NotoSerif-Italic-VariableFont_wdth,wght.ttf');
+	font-display: swap;
+	font-style: italic;
+	font-weight: 100 900;
+	font-stretch: 62.5% 100%;
+}
+@import '../oldvintage.css';
+@custom-variant dark (&:where(.dark, .dark *));
 
 .typography {
 	h1:not(:where([class~='unstyled'], [class~='unstyled'] *)) {
@@ -71,6 +109,7 @@
 	@apply text-red-500 z-10;
 }
 
+/* Transcriptions of Textzeugen */
 .tei-content {
 	.image {
 		@apply italic;
@@ -153,6 +192,18 @@
 		}
 	}
 
+	.verse + .content:has(.verse-change) {
+		&::after {
+			content: '\21E1' '\A' '\21E3'; /* forces single content concat */
+			white-space: pre-line;
+			display: inline-block;
+			line-height: 1;
+			font-size: 0.5em;
+			@apply h-4;
+			@apply ml-2;
+		}
+	}
+
 	.not-executed {
 		@apply text-red-500;
 		&::before {
@@ -172,3 +223,20 @@
 		content: ' ';
 	}
 }
+
+/* verssynopsis */
+div.content > div.tei-l:has(span.versechange) {
+	&::after {
+		content: '\2195';
+		@apply inline;
+		@apply h-4;
+		@apply ml-2;
+	}
+}
+
+.buch-icon {
+	display: inline-block;
+	vertical-align: middle;
+	height: 1em;
+}
+

@@ -176,21 +176,24 @@
 			});
 		}}
 	>
-		<label>
-			<input
-				class="input p-6 placeholder-primary-600"
-				type="text"
-				placeholder="Suchtext"
-				bind:value={searchtext}
-			/>
-		</label>
-		{#if hasDocuments}
-			<button class="btn preset-filled">Suchen</button>
-		{:else}
-			<button class="btn preset-filled-warning-500" disabled
-				>Lade Suche <i class="ml-1 fa-solid fa-spinner fa-spin"></i></button
-			>
-		{/if}
+		<div class="flex gap-4">
+			<label class="flex-1">
+				<input
+					class="input p-6 placeholder-primary-600 w-full"
+					type="text"
+					placeholder="..."
+					bind:value={searchtext}
+				/>
+			</label>
+
+			{#if hasDocuments}
+				<button class="btn preset-filled">Suchen</button>
+			{:else}
+				<button class="btn preset-filled-warning-500" disabled>
+					Lade Suche <i class="ml-1 fa-solid fa-spinner fa-spin"></i>
+				</button>
+			{/if}
+		</div>
 		{#await searchResults then r}
 			<p>{r.length === 1 ? '1 Ergebnis' : `${r.length} Ergebnisse`}</p>
 		{/await}
@@ -201,7 +204,7 @@
 		<p>Suche läuft...</p>
 	{:then r}
 		{#if r.length != 0}
-			<Datatable searchResults={r} korpus={corpus} />
+			<Datatable searchResults={r} korpus={corpus} exact={useExactSearch} />
 		{:else}
 			<p>Keine Ergebnisse</p>
 		{/if}

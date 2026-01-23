@@ -62,7 +62,7 @@ export default function createObserver(isSync, scrollContainer, page, activeThir
 		},
 		{
 			root: scrollContainer,
-			// rootMargin: '-60px',
+			rootMargin: '-13%',
 			threshold: [0, 1]
 		}
 	);

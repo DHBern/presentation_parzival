@@ -1,18 +1,15 @@
 <script>
-	/** @type {{data: import('./$types').PageData}} */
-	let { data } = $props();
+	import ExpandableContent from '$lib/components/ExpandableContent.svelte';
+	import ErlaeuterungenEintextEdition from '$lib/components/erlaeuterungen-components/ErlaeuterungenEintextEdition.svelte';
 </script>
 
 <div class="container mx-auto typography">
-	<h1>Monotext</h1>
-
-	<p>
-		Der Monotext stellt den Text des Parzival in einer einzigen, durchgehenden Ansicht im PDF Format
-		dar.
-	</p>
-
+	<h1>Eintextedition</h1>
+	<ExpandableContent clampClass="line-clamp-3" class="mb-8">
+		<ErlaeuterungenEintextEdition />
+	</ExpandableContent>
 	<embed
-		src="https://dhbern.github.io/parzival-static-api/api/export/pdf/monopsen.pdf"
+		src="https://dhbern.github.io/parzival-static-api/api/pdf/eintextedition.pdf"
 		width="100%"
 		height="800px"
 		type="application/pdf"
