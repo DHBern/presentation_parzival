@@ -20,7 +20,7 @@
 					id[2] !== 'A' ? 'text-green-900' : 'text-red-800'
 				}`}
 			>
-				Editorischer Kommentar
+				Editorischer Kommentar ({id[2] !== 'A' ? 'Fassungsübergreifend' : 'Fassungsintern'})
 			</h1>
 		</header>
 		<article class="p-4 fk-modal-content max-h-[80vh] overflow-auto">
