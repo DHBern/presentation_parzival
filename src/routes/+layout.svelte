@@ -25,20 +25,16 @@
 	const aboutProjectPages = [
 		{ slug: 'Einführung', path: '/einfuehrung' },
 		{ slug: 'Projektpräsentationen', path: '/projektpraesentationen' },
-		{ slug: 'English Presentation', path: '/englishpresentation' },
 		{ slug: 'Mitarbeitende', path: '/mitarbeitende' }
-		// { slug: 'Fassungsprofile', path: '/fassungsprofile' },
-		// { slug: 'Editionsgrundsätze', path: '/editionsgrundsaetze' },
-		// { slug: 'Transkriptionsrichtlinien', path: '/transkriptionsrichtlinien' }
 	];
 
 	const mainPages = [
 		{ slug: 'Textzeugen', path: '/hsverz' },
-		{ slug: 'Verssynopse', path: '/einzelverssynopse' },
 		{ slug: 'Dreißiger-Tabelle', path: '/#edition-nach-dreissigern' },
 		{ slug: 'Fassungsedition', path: '/fassungen' },
-		{ slug: 'Transkriptionen', path: '/textzeugen/d/1/01' },
 		{ slug: 'Eintextedition', path: '/monotext' },
+		{ slug: 'Transkriptionen', path: '/textzeugen/d/1/01' },
+		{ slug: 'Verssynopse', path: '/einzelverssynopse' },
 		{ slug: 'Erläuterungen', path: '/erlaeuterungen' },
 		{ slug: 'Suche', path: '/suche' }
 	];
