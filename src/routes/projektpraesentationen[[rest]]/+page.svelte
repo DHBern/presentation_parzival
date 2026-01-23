@@ -89,7 +89,7 @@
 
 	<p>
 		Richard F. Fasching: Neue Erkenntnisse zum ‘Nuwen Parzifal’ und zu einer ‘Epenwerkstatt’ des 14.
-		Jahrhunderts, in: eitschrift für deutsches Altertum und deutsche Literatur 147 (2018), S.
+		Jahrhunderts, in: Zeitschrift für deutsches Altertum und deutsche Literatur 147 (2018), S.
 		491–509
 	</p>
 
