@@ -1,9 +1,8 @@
-import { URL_TEI_PB } from '$lib/constants';
+import { URL_TEI_PB, URL_STATIC_API } from '$lib/constants';
 import { generateEntries } from '$lib/functions/generateEntries';
 import { metadata } from '$lib/data/metadata';
 import sigilFromHandle from '$lib/functions/sigilFromHandle';
 import { verses } from '$lib/data/verses';
-import { error } from '@sveltejs/kit';
 
 /** @type {import('./$types').PageServerLoad} */
 export async function load({ fetch, params }) {
@@ -146,10 +145,66 @@ export async function load({ fetch, params }) {
 	// Convert array back to object
 	const resolvedPublisherDataObject = Object.fromEntries(resolvedPublisherData);
 
+	// get distributions and enhance the metadata
+	const apparatus = await fetch(`${URL_STATIC_API}/json/syn/syn${thirties}.json`);
+	if (!apparatus.ok) {
+		console.log('Failed to fetch apparatus', apparatus);
+	}
+	let apparatusData = (await apparatus.json()).versions;
+
+	let enhancedMetadata = structuredClone(await metadata);
+	apparatusData.forEach((version) => {
+		const targetHyparchetype = enhancedMetadata.hyparchetypes.find(
+			(h) => h.handle === version.handle
+		);
+		if (targetHyparchetype) {
+			targetHyparchetype.witnesses = enhancedMetadata.codices
+				.filter((codex) => {
+					if (version.distribution.includes(`>${codex.sigil}</a>`)) {
+						// ------------------------
+						// GPT wrote this to work around not having a DOM-parser
+						const dist = version.distribution ?? '';
+						const sigil = codex.sigil;
+						const linkRegex = new RegExp(
+							`<a\\b[^>]*>([^<]*${sigil.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\\\$&')}[^<]*)<\\/a>`,
+							'i'
+						);
+						const linkMatch = dist.match(linkRegex);
+						const afterLink = linkMatch
+							? dist.slice(dist.indexOf(linkMatch[0]) + linkMatch[0].length)
+							: '';
+						const spanMatch = afterLink.match(/^\s*<span\b[^>]*>(.*?)<\/span>/i);
+						const nextSibling =
+							spanMatch && spanMatch[1] ? spanMatch[1].replace(/<[^>]*>/g, '').trim() : null;
+						// ------------------------
+						if (nextSibling) {
+							//parse the verse-info
+
+							const verseMinMax = nextSibling.match(/\.(\d{1,3})-(\d{1,3})/);
+							if (
+								verseMinMax &&
+								Number(verseparts[0]) >= Number(verseMinMax[1]) &&
+								Number(verseparts[0]) <= Number(verseMinMax[2])
+							) {
+								return true;
+							} else {
+								return false;
+							}
+						} else {
+							return true;
+						}
+					} else {
+						return false;
+					}
+				})
+				.map((codex) => codex.handle);
+		}
+	});
+
 	return {
 		thirties,
 		verse,
-		metadata: { ...(await metadata), next: nextVerse, prev: prevVerse },
+		metadata: { ...enhancedMetadata, next: nextVerse, prev: prevVerse },
 		publisherData: resolvedPublisherDataObject,
 		loss: loss.map((/** @type {string} */ element) => sigilFromHandle(element))
 	};
