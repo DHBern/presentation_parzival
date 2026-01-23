@@ -11,6 +11,7 @@
 	// remove leading zeros in verse
 	let verseNoZero = $derived(verse.replace(/^0+/, ''));
 	let hyparchetypesSlider = $state(false);
+	let additionsSlider = $state(false);
 
 	let prevVerseURL = $derived(
 		data?.metadata?.prev
@@ -81,23 +82,25 @@
 						{#each publisherData[witness] as witnessData}
 							{#if witnessData?.content}
 								{@const verseWithAdd = witnessData?.id.split('.').pop().replace(/^0+/, '')}
-								<tr>
-									<td class={`pr-4 pt-2 ${hyparchetypesSlider ? 'pl-5' : ''}`}>
-										{thirties}.{verseWithAdd}
-									</td>
-									<td class={`pr-4 pt-2 ${hyparchetypesSlider ? 'pl-5' : ''}`}>
-										<a class="anchor" href="{base}/textzeugen/{witness}/{thirties}/{verseWithAdd}"
-											>{metadata.codices.find(
-												(/** @type {{ handle: any }} */ c) => c.handle === witness
-											)?.sigil}</a
+								{#if additionsSlider || !verseWithAdd.match(/-\d/g)}
+									<tr>
+										<td class={`pr-4 pt-2 ${hyparchetypesSlider ? 'pl-5' : ''}`}>
+											{thirties}.{verseWithAdd}
+										</td>
+										<td class={`pr-4 pt-2 ${hyparchetypesSlider ? 'pl-5' : ''}`}>
+											<a class="anchor" href="{base}/textzeugen/{witness}/{thirties}/{verseWithAdd}"
+												>{metadata.codices.find(
+													(/** @type {{ handle: any }} */ c) => c.handle === witness
+												)?.sigil}</a
+											>
+										</td>
+										<td
+											class={`border-l-2 border-current ${hyparchetypesSlider ? 'pl-5' : ''} pl-4 py-1`}
 										>
-									</td>
-									<td
-										class={`border-l-2 border-current ${hyparchetypesSlider ? 'pl-5' : ''} pl-4 py-1`}
-									>
-										{@html witnessData?.content}
-									</td>
-								</tr>
+											{@html witnessData?.content}
+										</td>
+									</tr>
+								{/if}
 							{/if}
 						{/each}
 					{/each}
@@ -122,6 +125,18 @@
 		>
 			Fassungstexte ein-/ausblenden und nach Fassungen sortieren
 		</Switch>
+		{#if metadata.hasAdditions}
+			<br />
+			<Switch
+				name="additions-slider"
+				thumbInactive="bg-surface-800"
+				controlInactive="bg-surface-100"
+				checked={additionsSlider}
+				onCheckedChange={(e) => (additionsSlider = e.checked)}
+			>
+				Für diesen Vers sind Zusatzverse vorhanden. Ein-/ausblenden
+			</Switch>
+		{/if}
 		<h2 class="h2 my-7">Zu Vers springen:</h2>
 		<VerseSelector targetPath="/einzelverssynopse" coordinates={[thirties, verse]} />
 		<div class="flex justify-between">

@@ -13,6 +13,7 @@ export async function load({ fetch, params }) {
 	const thirties = Number(params.thirties)?.toString() ?? '1';
 	const verseparts = params?.verse?.split('-');
 	let verse = '01';
+	let hasAdditions = false;
 
 	if (verseparts.length > 1) {
 		verse = verseparts[0].padStart(2, '0') + '-' + verseparts.slice(1).join('-');
@@ -105,6 +106,12 @@ export async function load({ fetch, params }) {
 					v.thirties === thirties &&
 					v.verse.startsWith(verse)
 			);
+			if (versesToFetch.length >= 2) {
+				const regexp = new RegExp(`-\\d`);
+				if (versesToFetch.some((v) => regexp.test(v.verse))) {
+					hasAdditions = true;
+				}
+			}
 
 			publisherData[element.handle] = versesToFetch.map((verseObject) => {
 				return fetch(
@@ -149,7 +156,12 @@ export async function load({ fetch, params }) {
 	return {
 		thirties,
 		verse,
-		metadata: { ...(await metadata), next: nextVerse, prev: prevVerse },
+		metadata: {
+			...(await metadata),
+			next: nextVerse,
+			prev: prevVerse,
+			hasAdditions
+		},
 		publisherData: resolvedPublisherDataObject,
 		loss: loss.map((/** @type {string} */ element) => sigilFromHandle(element))
 	};
