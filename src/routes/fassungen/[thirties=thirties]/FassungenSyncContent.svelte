@@ -22,11 +22,13 @@
 				const targetVerse = node.parentElement?.querySelector(
 					`[data-verse="${page.data.thirties}.01"]`
 				);
-				if (targetVerse) {
-					targetVerse?.scrollIntoView({
-						behavior: 'instant',
-						block: 'start',
-						inline: 'nearest'
+				if (scrollContainer && targetVerse) {
+					scrollContainer?.scrollTo({
+						top:
+							scrollContainer?.scrollTop +
+							Number(targetVerse.parentElement?.getBoundingClientRect().top) -
+							scrollContainer?.getBoundingClientRect().top,
+						behavior: 'instant'
 					});
 					correctPos = true;
 				}
