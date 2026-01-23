@@ -1,7 +1,7 @@
 <script>
 	import Popover from '$lib/components/Popover.svelte';
 
-	let lang = 'de';
+	let lang = $state('de');
 	const toggleLang = () => (lang = lang === 'de' ? 'en' : 'de');
 </script>
 
@@ -16,7 +16,7 @@
 			class="btn btn-icon"
 			aria-label={lang === 'de' ? 'Switch to English' : 'Zur deutschen Version'}
 			title={lang === 'de' ? 'Switch to English' : 'Zur deutschen Version'}
-			on:click={toggleLang}
+			onclick={toggleLang}
 		>
 			<i class="fa-solid fa-globe" aria-hidden="true"></i>
 			<span aria-hidden="true">{lang.toUpperCase()}</span>
