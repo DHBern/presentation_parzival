@@ -135,11 +135,10 @@
 	<h6 class="h6">2014</h6>
 
 	<p>
-		Kathrin Chlench und Gabriel Viehhauser: Phylogenese und Textkritik der
-		Parzival-Überlieferung: Bioinformatische Anregungen zur Lösung genealogischer
-		Klassifizierungsprobleme in der Editionsphilologie, in: Internationalität und
-		Interdisziplinarität der Editionswissenschaft, hg. von Michael Stolz and Yen-Chun Chen,
-		Berlin/München/Boston 2014, S. 65-90
+		Kathrin Chlench und Gabriel Viehhauser: Phylogenese und Textkritik der Parzival-Überlieferung:
+		Bioinformatische Anregungen zur Lösung genealogischer Klassifizierungsprobleme in der
+		Editionsphilologie, in: Internationalität und Interdisziplinarität der Editionswissenschaft, hg.
+		von Michael Stolz and Yen-Chun Chen, Berlin/München/Boston 2014, S. 65-90
 	</p>
 
 	<p>
