@@ -24,17 +24,17 @@
 
 	const aboutProjectPages = [
 		{ slug: 'Einführung', path: '/einfuehrung' },
-		{ slug: 'Projektpräsentationen', path: '/projektpraesentationen' },
+		{ slug: 'Projektpräsentationen', path: '/presentation-parzival' },
 		{ slug: 'Mitarbeitende', path: '/mitarbeitende' }
 	];
 
 	const mainPages = [
-		{ slug: 'Textzeugen', path: '/hsverz' },
-		{ slug: 'Dreißiger-Tabelle', path: '/#edition-nach-dreissigern' },
+		{ slug: 'Textzeugen', path: '/textzeugen' },
+		{ slug: 'Dreißiger-Tabelle', path: '/#dreissigertabelle' },
 		{ slug: 'Fassungsedition', path: '/fassungen' },
-		{ slug: 'Eintextedition', path: '/monotext' },
-		{ slug: 'Transkriptionen', path: '/textzeugen/d/1/01' },
-		{ slug: 'Verssynopse', path: '/einzelverssynopse' },
+		{ slug: 'Eintextedition', path: '/eintextedition' },
+		{ slug: 'Transkriptionen', path: '/transkriptionen/d/1/01' },
+		{ slug: 'Verssynopse', path: '/verssynopse' },
 		{ slug: 'Erläuterungen', path: '/erlaeuterungen' },
 		{ slug: 'Suche', path: '/suche' }
 	];

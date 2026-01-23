@@ -105,7 +105,7 @@
 		if (!verse && scrollContainer) {
 			//check whether the verse should be there
 			// goto(
-			// 	`${base}/textzeugen/${$page.params.sigla}/${target.replace('.', '/')}?${$page.url.searchParams.toString()}`
+			// 	`${base}/transkriptionen/${$page.params.sigla}/${target.replace('.', '/')}?${$page.url.searchParams.toString()}`
 			// );
 			console.log('Verse not found.', target, scrollContainer);
 			//find out whether the verse to scroll to is smaller than the first verse in the scrollContainer or larger than the last verse in the scrollContainer

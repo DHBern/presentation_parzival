@@ -14,13 +14,13 @@
 
 	let prevVerseURL = $derived(
 		data?.metadata?.prev
-			? `${base}/einzelverssynopse/${data?.metadata?.prev?.thirties}/${data?.metadata?.prev?.verse}`
+			? `${base}/verssynopse/${data?.metadata?.prev?.thirties}/${data?.metadata?.prev?.verse}`
 			: ''
 	);
 
 	let nextVerseURL = $derived(
 		data?.metadata?.next
-			? `${base}/einzelverssynopse/${data?.metadata?.next?.thirties}/${data?.metadata?.next?.verse}`
+			? `${base}/verssynopse/${data?.metadata?.next?.thirties}/${data?.metadata?.next?.verse}`
 			: ''
 	);
 
@@ -86,7 +86,7 @@
 										{thirties}.{verseWithAdd}
 									</td>
 									<td class={`pr-4 pt-2 ${hyparchetypesSlider ? 'pl-5' : ''}`}>
-										<a class="anchor" href="{base}/textzeugen/{witness}/{thirties}/{verseWithAdd}"
+										<a class="anchor" href="{base}/transkriptionen/{witness}/{thirties}/{verseWithAdd}"
 											>{metadata.codices.find(
 												(/** @type {{ handle: any }} */ c) => c.handle === witness
 											)?.sigil}</a
@@ -123,7 +123,7 @@
 			Fassungstexte ein-/ausblenden und nach Fassungen sortieren
 		</Switch>
 		<h2 class="h2 my-7">Zu Vers springen:</h2>
-		<VerseSelector targetPath="/einzelverssynopse" coordinates={[thirties, verse]} />
+		<VerseSelector targetPath="/verssynopse" coordinates={[thirties, verse]} />
 		<div class="flex justify-between">
 			{#if data?.metadata?.prev}
 				<a class="anchor" href={prevVerseURL}> vorheriger Vers </a>

@@ -5,7 +5,7 @@
 	import { afterNavigate } from '$app/navigation';
 
 	/** @type {{targetPath?: string, coordinates?: [String | boolean, String | boolean]}} */
-	let { targetPath = '/einzelverssynopse', coordinates = ['1', '1'] } = $props();
+	let { targetPath = '/verssynopse', coordinates = ['1', '1'] } = $props();
 
 	//TODO: use preloadData as soon as valid data is entered
 
