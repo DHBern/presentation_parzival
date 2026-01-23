@@ -34,7 +34,7 @@
 	</div>
 	<div class="flex max-w-full items-baseline gap-1 my-3">
 		<VerseSelector
-			targetPath={`/textzeugen/${selection.filter((e) => !!e).join('-')}`}
+			targetPath={`/transkriptionen/${selection.filter((e) => !!e).join('-')}`}
 			{coordinates}
 		/>
 	</div>

@@ -281,7 +281,7 @@
 			{#each manuscriptHandles as mHandle}
 				<li>
 					<!-- These links are not clickable since it's not possible to put the cursor over it, but it might be possible to access the links with ARIA means. -->
-					<a href={`${base}/textzeugen/${mHandle}/${verse}`} class="hover:text-secondary-900">
+					<a href={`${base}/transkriptionen/${mHandle}/${verse}`} class="hover:text-secondary-900">
 						{@html sigilFromHandle(mHandle)}: {verse}
 					</a>
 				</li>
@@ -315,7 +315,7 @@
 	<ul>
 		{#each manuscriptHandles as handle}
 			<li>
-				<a href={`${base}/textzeugen/${handle}/${verse}`} class="hover:text-secondary-900">
+				<a href={`${base}/transkriptionen/${handle}/${verse}`} class="hover:text-secondary-900">
 					{@html sigilFromHandle(handle)}
 					{verse}
 				</a>
@@ -346,7 +346,7 @@
 							{@const verseNumber = i + Math.round(selection.start)}
 							{#if values?.length === 1}
 								<a
-									href={`${base}/textzeugen/${values[0]}/${verseNumber}`}
+									href={`${base}/transkriptionen/${values[0]}/${verseNumber}`}
 									aria-label={`${values[0]}.${verseNumber}`}
 								>
 									<rect
@@ -399,7 +399,7 @@
 							</a>
 						{:else}
 							<a
-								href={`${base}/textzeugen/${sigla.label}/${verse}`}
+								href={`${base}/transkriptionen/${sigla.label}/${verse}`}
 								aria-label={`${sigla.label}.${verse}`}
 							>
 								<rect

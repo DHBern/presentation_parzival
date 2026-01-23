@@ -21,7 +21,7 @@
 
 	const generateCloseLink = (/** @type {String} */ sigla) => {
 		const siglas = selectedSigla.filter((e) => e !== sigla);
-		let path = `${base}/textzeugen/${siglas.join('-')}`;
+		let path = `${base}/transkriptionen/${siglas.join('-')}`;
 		if (siglas.length) {
 			if (data.thirties) {
 				path += `/${data.thirties}`;
@@ -121,7 +121,7 @@
 		const createObject = (/** @type {string} */ id) => {
 			return {
 				id: id,
-				tpData: fetch(`${base}/textzeugen/data/${sigla}/${id}`).then((r) => r.json()),
+				tpData: fetch(`${base}/transkriptionen/data/${sigla}/${id}`).then((r) => r.json()),
 				// using id.toUpperCase() to match the iiif file naming convention - this might change in the future
 				iiif: fetch(`${URL_IIIF}/${id}.jpf/info.json`).then((r) => r.json()),
 				overlay: `${URL_STATIC_API}/svg/${filenameFromHandleAndId(sigla, id)}.svg`
@@ -218,7 +218,7 @@
 
 							{#await activePages[i] then pageId}
 								<PageSelector
-									targetPath={`/textzeugen/${data.content.map((c) => c.sigla).join('-')}`}
+									targetPath={`/transkriptionen/${data.content.map((c) => c.sigla).join('-')}`}
 									{pageId}
 									meta={data.pageMeta[i]}
 								></PageSelector>
@@ -268,7 +268,7 @@
 										}
 									}
 									replaceState(
-										`${base}/textzeugen/${page.params.sigla}/${verse.replace('.', '/')}?${page.url.searchParams.toString()}`,
+										`${base}/transkriptionen/${page.params.sigla}/${verse.replace('.', '/')}?${page.url.searchParams.toString()}`,
 										{}
 									);
 								}}
@@ -286,7 +286,7 @@
 								Keine Daten zum Vers gefunden. Möglicherweise existiert der Vers nicht? <button
 									onclick={() => {
 										goto(
-											`${base}/textzeugen/${page.params.sigla}/${localVerses[i].replace('.', '/')}?${page.url.searchParams.toString()}`
+											`${base}/transkriptionen/${page.params.sigla}/${localVerses[i].replace('.', '/')}?${page.url.searchParams.toString()}`
 										);
 									}}
 									class="btn">aktualisieren</button

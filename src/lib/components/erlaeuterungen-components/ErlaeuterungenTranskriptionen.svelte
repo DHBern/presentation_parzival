@@ -9,7 +9,7 @@
 	Überschriften mit -01 versehen sind.
 </p>
 <p>Paratexte wie Notizen, Marginalien, Kustoden und Reklamanten werden kursiviert wiedergegeben.</p>
-<ErlaeuterungenExample href="/textzeugen/d/8/1" label="D 8.1">
+<ErlaeuterungenExample href="/transkriptionen/d/8/1" label="D 8.1">
 	<span class="tei-name"
 		><span data-ref="regp:p0094"><span class="tei-seg9 initial Farbe: blau">G</span>Ahmvͦreth</span
 		></span
@@ -29,7 +29,7 @@
 	Verse, die Teil einer Versumstellung sind, werden am Versende mit einem vertikalen Doppelpfeil (↕)
 	markiert.
 </p>
-<ErlaeuterungenExample href="/textzeugen/g/460/25?" label="G 460.25">
+<ErlaeuterungenExample href="/transkriptionen/g/460/25?" label="G 460.25">
 	<span class="verse" data-verse="460.25"> </span>
 	<span class="content">
 		<span class="tei-milestone1 versechange"></span>
@@ -42,13 +42,13 @@
 	Strich (|) markiert. Worttrennungen mit Trennungszeichen werden mit =| wiedergegeben.
 </p>
 <p>Initialen: rot, größere Schrift.</p>
-<ErlaeuterungenExample href="/textzeugen/d/5/29?" label="D 5.29">
+<ErlaeuterungenExample href="/transkriptionen/d/5/29?" label="D 5.29">
 	<span class="content">
 		<span class="tei-seg9 initial Farbe: rot">D</span>o clagete man in ſere.
 	</span>
 </ErlaeuterungenExample>
 <p>Prachtinitialen: rot, größere Schrift, Goldhintergrund.</p>
-<ErlaeuterungenExample href="/textzeugen/d/1/01-01?" label="D 1.1">
+<ErlaeuterungenExample href="/transkriptionen/d/1/01-01?" label="D 1.1">
 	<span class="content">
 		<span class="tei-seg8 glory-initial">I</span>ST zwiuel h<span class="tei-choice1">(er)</span>zen
 		nahgebur
@@ -60,7 +60,7 @@
 		class="tei-seg1 not-executed">x</span
 	>.
 </p>
-<ErlaeuterungenExample href="/textzeugen/fr31/446/1" label="Fr. 31 446.1">
+<ErlaeuterungenExample href="/transkriptionen/fr31/446/1" label="Fr. 31 446.1">
 	<div class="tei-l" id="fr31_446.01">
 		<span class="verse" data-verse="446.01">446.1<sup></sup></span>
 		<span class="content">
@@ -69,7 +69,7 @@
 	</div>
 </ErlaeuterungenExample>
 <p>Auszeichnungen in den Handschriften (Rubrizierungen u. a.) werden orangefarbig wiedergegeben.</p>
-<ErlaeuterungenExample href="/textzeugen/u/731/13" label="U 731.13">
+<ErlaeuterungenExample href="/transkriptionen/u/731/13" label="U 731.13">
 	<span class="content">
 		Der kuͦnec
 		<span class="tei-name">
@@ -90,7 +90,7 @@
 	Vom Schreiber ausgeführte Korrekturen: Das korrigierte Wort weist hellgraue Farbe auf (für
 	unlesbare Buchstaben steht *), das Korrekturresultat wird in grüner Farbe angezeigt.
 </p>
-<ErlaeuterungenExample href="/textzeugen/d/747/18?" label="D 747.18">
+<ErlaeuterungenExample href="/transkriptionen/d/747/18?" label="D 747.18">
 	<span class="content">
 		<span class="tei-subst2 subst_sr">
 			<span class="tei-del2 deleted">daz</span>
@@ -102,14 +102,14 @@
 	</span>
 </ErlaeuterungenExample>
 <p>Vom Schreiber eingefügte Nachträge werden in grüner Farbe dargestellt.</p>
-<ErlaeuterungenExample href="/textzeugen/u/731/12" label="U 731.12">
+<ErlaeuterungenExample href="/transkriptionen/u/731/12" label="U 731.12">
 	<span class="content"><span class="tei-add1 sr">Der wuͦnſchte die nacht vor den dac</span></span>
 </ErlaeuterungenExample>
 <p>
 	Von einem späteren Korrektor ausgeführte Korrekturen: Das korrigierte Wort weist hellgraue Farbe
 	auf (für unlesbare Buchstaben steht *), das Korrekturresultat wird in türkiser Farbe angezeigt.
 </p>
-<ErlaeuterungenExample href="/textzeugen/d/53/18" label="D 53.18">
+<ErlaeuterungenExample href="/transkriptionen/d/53/18" label="D 53.18">
 	<span class="content">
 		alſ al die boͮme trvͦgent
 		<span class="tei-subst1 subst_ls">
@@ -125,7 +125,7 @@
 	Wenn die Korrekturen durch Rasur erfolgen, stehen die korrigierten Buchstaben und Wörter auf
 	dunkelgrauem Hintergrund.
 </p>
-<ErlaeuterungenExample href="/textzeugen/v/731/12" label="V 731.12">
+<ErlaeuterungenExample href="/transkriptionen/v/731/12" label="V 731.12">
 	<span class="content">
 		Der wúnſchet
 		<span class="tei-subst1 subst_ls">
@@ -149,7 +149,7 @@
 	</span>
 	steht für ein ersatzlos getilgtes Kreuz, das die Funktion einer Marginalie einnimmt.
 </p>
-<ErlaeuterungenExample href="/textzeugen/v/141/16" label="V 141.16" class="!p-3">
+<ErlaeuterungenExample href="/transkriptionen/v/141/16" label="V 141.16" class="!p-3">
 	<span class="content">
 		<span class="del_sr">hie</span>
 		<span class="tei-subst1 subst_ls">
@@ -169,7 +169,7 @@
 	Superskripte, die nicht eindeutig identifizierbar sind, werden als übergeschriebene „x“ (z. B.: uͯ)
 	wiedergegeben.
 </p>
-<ErlaeuterungenExample href="/textzeugen/l/8/05" label="L 8.05">
+<ErlaeuterungenExample href="/transkriptionen/l/8/05" label="L 8.05">
 	<span class="content">An guter zuͯht von hoher art</span>
 </ErlaeuterungenExample>
 <p>
@@ -177,7 +177,7 @@
 	unleserlichen Buchstaben angegeben. Textverlust aufgrund materieller Beeinträchtigung (z. B.
 	Fragmentverlust) wird in jedem Fall mit ::: bezeichnet.
 </p>
-<ErlaeuterungenExample href="/textzeugen/d/3/27" label="D 3.27">
+<ErlaeuterungenExample href="/transkriptionen/d/3/27" label="D 3.27">
 	<span class="content"
 		>da fv̂re e<span class="tei-gap1 gap">:</span>n l<span class="tei-gap2 gap">::</span>g<span
 			class="tei-gap4 gap">:::</span
@@ -188,7 +188,7 @@
 <p>
 	Wenn der materielle Befund des Textzeugen von der Darstellung der digitalen Reproduktion abweicht,
 	wird ersterer in der Transkription berücksichtigt (z. B. in <a
-		href="{base}/textzeugen/fr5/446/03?"
+		href="{base}/transkriptionen/fr5/446/03?"
 		target="_blank"
 		rel="noopener noreferrer">Fragment 5, Bl. 4rc, Vers 446.3</a
 	>, wo das Reimwort <i>zal</i> in der Reproduktion auf einem umgeklappten Seitenteil steht und nicht

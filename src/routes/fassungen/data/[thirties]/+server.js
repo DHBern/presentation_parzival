@@ -38,7 +38,7 @@ export async function GET({ params, fetch }) {
 	// Populate Anchor Tags in apparatus
 	function populateAnchorTags(string, verse) {
 		return string.replace(/<a>(.*?)<\/a>/g, (_match, p1) => {
-			return `<a href='${base}/textzeugen/${handleFromSigil(p1)}/${params.thirties}/${verse}'>${p1}</a>`;
+			return `<a href='${base}/transkriptionen/${handleFromSigil(p1)}/${params.thirties}/${verse}'>${p1}</a>`;
 		});
 	}
 	apparatusData.forEach((i) => {

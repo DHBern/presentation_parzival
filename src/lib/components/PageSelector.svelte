@@ -3,7 +3,7 @@
 	import { base } from '$app/paths';
 
 	/** @type {{targetPath?: string, coordinates?: [String | boolean, String | boolean]}} */
-	let { targetPath = '/textzeugen/d', pageId = 'd005', meta } = $props();
+	let { targetPath = '/transkriptionen/d', pageId = 'd005', meta } = $props();
 	/**
 	 * @type {HTMLInputElement | undefined}
 	 */
