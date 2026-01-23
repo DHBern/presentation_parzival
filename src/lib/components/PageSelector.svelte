@@ -55,8 +55,9 @@
 		});
 	}}
 >
-	<p>{rvSuffix ? 'Bl.' : 'S.'}:</p>
+	<label for="page-selector-input">{rvSuffix ? 'Blatt' : 'Seite'}:</label>
 	<input
+		id="page-selector-input"
 		type="text"
 		placeholder="Seite oder Blatt"
 		class="input max-w-20 invalid:bg-error-500"
