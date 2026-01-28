@@ -277,8 +277,14 @@
 	};
 	const openFasskomFromHash = () => {
 		const id = window.location.hash;
-		const el = document.querySelector(`a.fasskommanchor[href="${id}"]`);
-		if (el instanceof HTMLElement) el.click();
+		if (!id) return;
+		const anchors = document.querySelectorAll('a.fasskommanchor');
+		for (const el of anchors) {
+			if (el instanceof HTMLAnchorElement && el.getAttribute('href') === id) {
+				el.click();
+				break;
+			}
+		}
 	};
 
 	// Triggers
