@@ -216,7 +216,7 @@
 			tick().then(() => {
 				addApparatTriggerListeners();
 				addFasskommTriggerListeners();
-				openFasskomFromHash();
+				openFasskommFromHash();
 			});
 			return Promise.resolve();
 		};
@@ -275,7 +275,7 @@
 		FasskommStore.id = '';
 		FasskommStore.commentary = '';
 	};
-	const openFasskomFromHash = () => {
+	const openFasskommFromHash = () => {
 		const id = window.location.hash;
 		if (!id) return;
 		const anchors = document.querySelectorAll('a.fasskommanchor');
@@ -299,6 +299,7 @@
 			el.removeEventListener('click', onClickFasskommTrigger);
 		});
 	};
+	/** @param {MouseEvent} ev */
 	const onClickFasskommTrigger = (ev) => {
 		if (ev.target instanceof HTMLAnchorElement) {
 			history.replaceState(history.state, '', ev.target.getAttribute('href') ?? window.location.href);
