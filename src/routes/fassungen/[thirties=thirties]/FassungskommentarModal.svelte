@@ -17,10 +17,10 @@
 		<header class="flex items-center justify-center px-4 py-4 bg-gray-400 rounded-t-md">
 			<h1
 				class={`text-md uppercase tracking-wider ${
-					id[2] !== 'A' ? 'text-green-900' : 'text-red-800'
+					id[2] === 'A' ? 'text-red-800' :'text-green-900'
 				}`}
 			>
-				Editorischer Kommentar ({id[2] !== 'A' ? 'Fassungsübergreifend' : 'Fassungsintern'})
+				Editorischer Kommentar ({id[2] === 'A' ? 'Fassungsübergreifend':'Fassungsintern' })
 			</h1>
 		</header>
 		<article class="p-4 fk-modal-content max-h-[80vh] overflow-auto">
