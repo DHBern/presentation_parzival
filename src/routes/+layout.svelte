@@ -12,7 +12,7 @@
 
 	let classesActive = $derived((/** @type {string} */ href) =>
 		href.split('/')[1] === page.url.pathname.split('/')[1] || href.split('/')[1] === page.url.hash
-	? 'bg-primary-300 hover:bg-primary-300 hover:text-primary-700 text-primary-900'
+			? 'bg-primary-300 hover:bg-primary-300 hover:text-primary-700 text-primary-900'
 			: 'hover:text-primary-600'
 	);
 
@@ -46,9 +46,26 @@
 
 <AppBar classes="px-4 py-0 relative z-50">
 	{#snippet lead()}
-		<a class="text-xl uppercase font-bold hover:text-primary-700 self-center" href={`${base}/`}
-			>Parzival</a
-		>
+		<div class="flex flex-col self-center">
+			<a
+				class="inline-flex items-center gap-2 text-xl uppercase font-bold hover:text-primary-700"
+				href={`${base}/`}
+				>Parzival
+			</a>
+
+			<a
+				href="https://parzival.unibe.ch/"
+				target="_blank"
+				rel="noopener noreferrer"
+				class="items-baseline gap-1 text-xs hover:underline hidden lg:flex self-end hover:text-primary-700"
+			>
+				<span>Archivversion</span>
+				<i
+					class="fa-solid fa-arrow-up-right-from-square text-[0.65rem] opacity-60"
+					aria-hidden="true"
+				></i>
+			</a>
+		</div>
 	{/snippet}
 	<nav class="list-nav-item w-full p-4 justify-start hidden lg:flex lg:flex-wrap">
 		<ul class="contents">
@@ -99,7 +116,7 @@
 				</a>
 			{/snippet}
 			{#snippet content()}
-				<nav class="list-nav">
+				<nav>
 					<ul class="space-y-3">
 						<li>
 							<span class="font-semibold">Über das Projekt</span>
