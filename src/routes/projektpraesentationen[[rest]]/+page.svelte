@@ -8,6 +8,44 @@
 
 	<H2Hoverable id="publikationen">Publikationen (in Auswahl)</H2Hoverable>
 
+	<h6 class="h6">2024</h6>
+	<p>
+		Stefan Abel: Gahmuret = Stephanus? – Unbehagen am 'estre de la terre' in der ›Estoire de
+		Eracles‹ und 'Langeweile' bei Wolfram von Eschenbach, in: Zeitschrift für deutsches Altertum und
+		deutsche Literatur 153 (2024), Heft 1, S. 46-65
+	</p>
+
+	<h6 class="h6">2023</h6>
+
+	<p>
+		Stefan Abel: Paläographische Zugänge zu den altfranzösischen Vorlagen des ›Parzival‹ Wolframs
+		von Eschenbach, in: Paradigmen und Perspektiven einer Mediävistischen Komparatistik, Freiburger
+		Colloquium 2021, hg. von Cornelia Herberichs, Martin Rohde, Hugo O. Bizarri, Paolo Borsa,
+		Elisabeth Button und Marion Uhlig, Wiesbaden 2023 (Scrinium Friburgense 57), S. 71-84 und
+		241-243
+	</p>
+
+	<h6 class="h6">2022</h6>
+
+	<p>
+		Mirjam Geissbühler: Die ›Parzival‹-Handschrift L (Hamburg, Staats- und Universitätsbibliothek,
+		Cod. germ. 6): Entstehungsprozess, Sammelkonzept und textgeschichtliche Stellung, Berlin 2022
+		(Kultur, Wissenschaft, Literatur 37)
+	</p>
+
+	<p>
+		Jörg Klenk: Wolframs ›Parzival‹ und das kognitionsnarratologische Figurenmodell: Anwendung und
+		Erweiterung anhand einer Rezeption des Textes, Berlin 2022 (Kultur, Wissenschaft, Literatur 39)
+	</p>
+
+	<h6 class="h6">2020</h6>
+
+	<p>
+		Stefan Abel: Von Provenz in tiuschiu lant (›Parzival‹ 827,9) – Kontaktphänomene und
+		Rezeptionsspuren der Chrétien-Überlieferung in den mittelhochdeutschen Bearbeitungen um 1200,
+		Habilitationsschrift masch., Bern 2020
+	</p>
+
 	<p>
 		Michael Stolz: <a
 			href="https://schwabe.ch/Michael-Stolz-Parzival-im-Manuskript-978-3-7965-4223-7"
@@ -28,6 +66,35 @@
 		Herweg, Berlin 2020 (Wolfram-Studien 26), S. 469–491
 	</p>
 
+	<h6 class="h6">2018</h6>
+
+	<p>
+		Stefan Abel: Kontaktphänomene in Wort und Bild – Das Verhältnis der Erfurter und Leipziger
+		›Parzival‹-Fragmente zur Überlieferung des altfranzösischen ›Conte du Graal‹ und dessen ›Erster
+		Fortsetzung‹, in: Zeitschrift für deutsches Altertum und deutsche Literatur 147 (2018), S.
+		463-490
+	</p>
+
+	<p>
+		Stefan Abel: Spuren der Chrétien-Überlieferung in Hartmanns ›Iwein‹, Wolframs ›Parzival‹ und im
+		›Kliges‹ des Ulrich von Türheim, in: Der Kurzroman in den spätmittelalterlichen
+		Sammelhandschriften Europas, hg. von Miriam Edlich-Muth, Wiesbaden 2018 (Imagines Medii Aevi.
+		Interdisziplinäre Beiträge zur Mittelalterforschung 40), S. 19-40
+	</p>
+
+	<p>
+		Stefan Abel: Wolfram's Soltâne and Its Literary Traditions — On the Impossibility of an
+		Artificial Paradise, in: Oxford German Studies 47,2 (2018), S. 149-168
+	</p>
+
+	<p>
+		Richard F. Fasching: Neue Erkenntnisse zum ‘Nuwen Parzifal’ und zu einer ‘Epenwerkstatt’ des 14.
+		Jahrhunderts, in: Zeitschrift für deutsches Altertum und deutsche Literatur 147 (2018), S.
+		491–509
+	</p>
+
+	<h6 class="h6">2017</h6>
+
 	<p>
 		Michael Stolz: Copying, Emergence and Digital Reproduction. Transferring Medieval Manuscript
 		Culture into an Electronic Edition, erscheint in: Digital Philology and Medieval Studies in the
@@ -42,12 +109,42 @@
 		S. 99–130
 	</p>
 
+	<h6 class="h6">2016</h6>
+
 	<p>
 		Michael Stolz: Von den Fassungen zur Eintextedition. Eine neue Leseausgabe von Wolframs
 		›Parzival‹, in: Überlieferungsgeschichte transdisziplinär. Neue Perspektiven auf ein
 		germanistisches Forschungsparadigma, in Verbindung mit Horst Brunner und Freimut Löser
 		herausgegeben von Dorothea Klein, Wiesbaden 2016 (Wissensliteratur im Mittelalter 52), S.
 		353–388 <a href="{base}/Stolz_Eintext16_SD-1.pdf" target="_blank">[Text]</a>
+	</p>
+
+	<h6 class="h6">2015</h6>
+
+	<p>
+		Kathrin Chlench und Michael Stolz mit Michael Dragoun und Václav Bok: Ein neues
+		Parzival-Fragment in der Bibliothek des Nationalmuseums Prag (Sammlung Adolf Patera: 1 H A 144),
+		in: Zeitschrift für deutsches Altertum und deutsche Literatur 144 (2015), S. 77–90
+	</p>
+
+	<p>
+		Yen-Chun Chen: Ritter, Minne und der Gral. Komplementarität und Kohärenzprobleme im
+		›Rappoltsteiner Parzifal‹, Heidelberg 2015 (Studien zur historischen Poetik 18)
+	</p>
+
+	<h6 class="h6">2014</h6>
+
+	<p>
+		Kathrin Chlench und Gabriel Viehhauser: Phylogenese und Textkritik der Parzival-Überlieferung:
+		Bioinformatische Anregungen zur Lösung genealogischer Klassifizierungsprobleme in der
+		Editionsphilologie, in: Internationalität und Interdisziplinarität der Editionswissenschaft, hg.
+		von Michael Stolz and Yen-Chun Chen, Berlin/München/Boston 2014, S. 65-90
+	</p>
+
+	<p>
+		Mirjam Geissbühler mit Ira Rabin und Oliver Hahn: Combining Codiology and X-Ray Spectometry to
+		Unveil the History of Production of Codex germanicus 6, SUB Hamburg, in: manuscript cultures 7
+		(2014), S. 126–131
 	</p>
 
 	<p>
@@ -60,12 +157,12 @@
 		>
 	</p>
 
+	<h6 class="h6">2013</h6>
+
 	<p>
-		Viehhauser, Gabriel: Standardisierung und proprietäre Annotation im Berner Parzival-Projekt. In:
-		Jahrbuch für Computerphilologie – <a
-			href="http://computerphilologie.digital-humanities.de/jg09/viehhauser.html"
-			target="_blank">online</a
-		>. [25.9.2013]
+		Robert Schöller und Gabriel Viehhauser: Das Skriptorium des Sangallensis 857, in: Schreiborte
+		des deutschen Mittelalters. Skriptorien – Werke – Mäzene, hg. von Martin J. Schubert,
+		Berlin/Boston 2013, S. 691–716
 	</p>
 
 	<p>
@@ -84,11 +181,23 @@
 	</p>
 
 	<p>
+		Viehhauser, Gabriel: Standardisierung und proprietäre Annotation im Berner Parzival-Projekt. In:
+		Jahrbuch für Computerphilologie – <a
+			href="http://computerphilologie.digital-humanities.de/jg09/viehhauser.html"
+			target="_blank">online</a
+		>. [18.2.2026]
+	</p>
+
+	<h6 class="h6">2011</h6>
+
+	<p>
 		Michael Stolz: Benutzerführung in digitalen Editionen. Erfahrungen aus dem Parzival-Projekt, in:
 		Digitale Edition und Forschungsbibliothek. Beiträge der Fachtagung im Philosophicum der
 		Universität Mainz am 13. und 14. Januar 2011, hg. von Christiane Fritze u.a. [Bibliothek und
 		Wissenschaft 44 (2011)], S. 49–80
 	</p>
+
+	<h6 class="h6">2010</h6>
 
 	<p>
 		Michael Stolz: „A thing called the Grail“. Oriental ‚Spolia‘ in Wolfram’s ›Parzival‹ and its
@@ -113,6 +222,8 @@
 		in der Editionswissenschaft, hg. von Martin Schubert, Tübingen 2010 (Beihefte zu editio 32), S.
 		275–291
 	</p>
+
+	<h6 class="h6">2009</h6>
 
 	<p>
 		Michael Stolz: Intermediales Edieren am Beispiel des ›Parzival‹-Projekts, in: Wege zum Text.
@@ -142,12 +253,24 @@
 		>]
 	</p>
 
+	<h6 class="h6">2008</h6>
+
+	<p>
+		Thomas Franz Schneider und Gabriel Viehhauser: Zwei Neufunde zu Wolframs von Eschenbach
+		›Parzival‹. Teil 2: Das dreispaltige Solothurner Fragment F 69. Ein Vertreter der ‚Nebenfassung‘
+		*m, in: Reflexion und Inszenierung von Rationalität in der mittelalterlichen Literatur.
+		Blaubeurer Kolloquium 2006. In Verbindung mit Eckart Conrad Lutz und Susanne Köbele hg. von
+		Klaus Ridder, Berlin 2008 (Wolfram-Studien 20), S. 457–525
+	</p>
+
 	<p>
 		Die Münchner Wolfram-Handschrift Cgm 19. DVD mit einem Begleitheft. Konzept und Einführung von
 		Michael Stolz, Simbach/Inn 2008 [<a href="{base}/FlyerCgm19_einseitig.pdf" target="_blank"
 			>weitere Informationen</a
 		>] [<a href="http://www.parzival.unibe.ch/support/index1.html" target="_blank">Supportseite</a>]
 	</p>
+
+	<h6 class="h6">2007</h6>
 
 	<p>
 		Michael Stolz in Verbindung mit Robert Schöller und Gabriel Viehhauser:
@@ -167,8 +290,10 @@
 
 	<p>
 		Robert Schöller: Abenberc – Babenberc. Eine Minimalvariante im ›Parzival‹ (227,13) und ihr
-		Hintergrund, in: ZfdPh 126 (2007), S. 99 - 110
+		Hintergrund, in: ZfdPh 126 (2007), S. 99-110
 	</p>
+
+	<h6 class="h6">2006</h6>
 
 	<p>
 		Michael Stolz/ Friedrich Michael Dimpel: Computergestütztes Kollationieren und dynamische
@@ -181,7 +306,7 @@
 	<p>
 		Michael Stolz: Vernetze Varianz. Mittelalterliche Schriftlichkeit im digitalen Medium, in:
 		„System ohne General“. Schreibszenen im digitalen Zeitalter, hg. v. Davide Giuriato, Martin
-		Stingelin und Sandro Zanetti, München 2006 (Zur Genealogie des Schreibens 3), S. 217 - 244
+		Stingelin und Sandro Zanetti, München 2006 (Zur Genealogie des Schreibens 3), S. 217-244
 	</p>
 
 	<p>
@@ -189,12 +314,14 @@
 		›Parzival‹-Überlieferung als Spuren mittelalterlicher Textkultur, in: Text und Text in
 		lateinischer und volkssprachiger Überlieferung des Mittelalters. Freiburger Kolloquium 2004, in
 		Verbindung mit Wolfgang Haubrichs und Klaus Ridder hg. v. Eckart Conrad Lutz, Berlin 2006
-		(Wolfram-Studien 19), S. 317 - 351
+		(Wolfram-Studien 19), S. 317-351
 	</p>
+
+	<h6 class="h6">2005</h6>
 
 	<p>
 		Robert Schöller: In Trüdingen und anderswo. Varianz in den ›Parzival‹-Versen 184,1-185,20, in:
-		Zeitschrift für deutsches Altertum und deutsche Literatur 134 (2005), S. 416 - 441
+		Zeitschrift für deutsches Altertum und deutsche Literatur 134 (2005), S. 416-441
 	</p>
 
 	<p>
@@ -209,36 +336,32 @@
 		Michael Stolz: Texte des Mittelalters im Zeitalter der elektronischen Reproduzierbarkeit.
 		Erfahrungen und Perspektiven, in: Deutsche Texte des Mittelalters zwischen Handschriftennähe und
 		Rekonstruktion. Berliner Fachtagung 1.-3. April 2004, hg. v. Martin J. Schubert, Tübingen 2005
-		(Beihefte zu editio 23), S. 143 - 158
+		(Beihefte zu editio 23), S. 143-158
 	</p>
 
 	<p>
 		Michael Stolz: Autor - Schreiber - Editor. Versuch einer Feldvermessung, in: editio 19 (2005),
-		S. 23 - 42
+		S. 23-42
+	</p>
+
+	<h6 class="h6">2004</h6>
+
+	<p>
+		Geneviève Lüscher, Ritter Parzival und der Zeitgeist, in: NZZ am Sonntag, 29. Februar 2004, S.
+		65 [<a href="{base}/NZZ_Art.jpg" target="_blank">Text</a>]
 	</p>
 
 	<p>
 		Michael Stolz: Computergestütztes Kollationieren - ein Werkstattbericht aus dem Basler
 		Parzival-Projekt, in: Edieren in der elektronischen Ära, hg. v. Gottfried Reeg/ Martin Schubert,
-		Berlin 2004 (Informationstechnologie und Geisteswissenschaften 1), S. 113 - 126
+		Berlin 2004 (Informationstechnologie und Geisteswissenschaften 1), S. 113-126
 	</p>
 
-	<p>
-		Michael Stolz: Wolfram von Eschenbach, ›Parzival‹. Das Basler Projekt einer elektronischen
-		Teilausgabe, in: Zeitschrift für deutsches Altertum und deutsche Literatur 131 (2002), S. 407f.
-	</p>
-
-	<p>
-		Michael Stolz: Wolframs ›Parzival‹ als unfester Text. Möglichkeiten einer
-		überlieferungsgeschichtlichen Edition im Spannungsfeld traditioneller Textkritik und
-		elektronischer Darstellung, in: Wolfram von Eschenbach - Bilanzen und Perspektiven. Eichstätter
-		Colloquium 2000, hg. v. Wolfgang Haubrichs/ Eckart C. Lutz/ Klaus Ridder, Berlin 2002
-		(Wolfram-Studien 17), S. 294 - 321
-	</p>
+	<h6 class="h6">2003</h6>
 
 	<p>
 		Michael Stolz: New Philology and New Phylogeny. Aspects of a critical electronic edition of
-		Wolfram’s Parzival, in: Literary and Linguistic Computing 18,2 (2003), S. 139 - 150
+		Wolfram’s Parzival, in: Literary and Linguistic Computing 18,2 (2003), S. 139-150
 	</p>
 
 	<p>
@@ -250,6 +373,21 @@
 		>]
 	</p>
 
+	<h6 class="h6">2002</h6>
+
+	<p>
+		Michael Stolz: Wolfram von Eschenbach, ›Parzival‹. Das Basler Projekt einer elektronischen
+		Teilausgabe, in: Zeitschrift für deutsches Altertum und deutsche Literatur 131 (2002), S. 407f.
+	</p>
+
+	<p>
+		Michael Stolz: Wolframs ›Parzival‹ als unfester Text. Möglichkeiten einer
+		überlieferungsgeschichtlichen Edition im Spannungsfeld traditioneller Textkritik und
+		elektronischer Darstellung, in: Wolfram von Eschenbach - Bilanzen und Perspektiven. Eichstätter
+		Colloquium 2000, hg. v. Wolfgang Haubrichs/ Eckart C. Lutz/ Klaus Ridder, Berlin 2002
+		(Wolfram-Studien 17), S. 294-321
+	</p>
+
 	<p>
 		Verwiesen sei ferner auf:<br />
 		Christoph Dieffenbacher, Der elektronische ›Parzival‹, in: Uni Nova. Wissenschaftsmagazin der Universität
@@ -257,10 +395,5 @@
 			href="{base}/uninova92.pdf"
 			target="_blank">Text</a
 		>]
-	</p>
-
-	<p>
-		Geneviève Lüscher, Ritter Parzival und der Zeitgeist, in: NZZ am Sonntag, 29. Februar 2004, S.
-		65 [<a href="{base}/NZZ_Art.jpg" target="_blank">Text</a>]
 	</p>
 </div>
