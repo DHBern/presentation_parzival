@@ -216,6 +216,7 @@
 			tick().then(() => {
 				addApparatTriggerListeners();
 				addFasskommTriggerListeners();
+				openFasskomFromHash();
 			});
 			return Promise.resolve();
 		};
@@ -274,6 +275,11 @@
 		FasskommStore.id = '';
 		FasskommStore.commentary = '';
 	};
+	const openFasskomFromHash = () => {
+		const id = window.location.hash;
+		const el = document.querySelector(`a.fasskommanchor[href="${id}"]`);
+		if (el instanceof HTMLElement) el.click();
+	};
 
 	// Triggers
 	const addFasskommTriggerListeners = () => {
@@ -287,11 +293,13 @@
 			el.removeEventListener('click', onClickFasskommTrigger);
 		});
 	};
-	const onClickFasskommTrigger = (/** @type { Event } */ ev) => {
-		if (ev.target instanceof HTMLElement) {
+	const onClickFasskommTrigger = (ev) => {
+		if (ev.target instanceof HTMLAnchorElement) {
+			history.replaceState(history.state, '', ev.target.getAttribute('href') ?? window.location.href);
 			fillFasskommStore(ev.target, false);
 		}
 	};
+
 
 	// --------------------------------------
 	// Apparate
@@ -398,6 +406,17 @@
 			synchro = false;
 		}
 	});
+
+	let wasFasskommOpen = false;
+	$effect(() => {
+		if (typeof window === 'undefined') return;
+		const isOpen = !!FasskommStore.elTrigger;
+		if (wasFasskommOpen && !isOpen && window.location.hash.startsWith('#fasskomm-')) {
+			history.replaceState(history.state, '', window.location.pathname + window.location.search);
+		}
+		wasFasskommOpen = isOpen;
+	});
+
 	let gotoThirties = $state(Number(data.thirties));
 </script>
 
