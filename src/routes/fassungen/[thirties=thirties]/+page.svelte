@@ -78,7 +78,7 @@
 				const condensedStructure = info.apparat.structure.reduce(reducer, {});
 
 				const formatVerseSup = (_, match) => `<sup>${match}</sup>`;
-
+				const fasskomInfos = [...info.fasskomm]; // create a shallow copy to get track of alread printed ones
 				const lines = doc.querySelectorAll('div.line');
 				lines.forEach((line) => {
 					line.classList.add(`column-${column}`);
@@ -87,12 +87,14 @@
 					const verseNode = line.querySelector('[data-verse]');
 					if (verseNode) {
 						const verse = verseNode.getAttribute('data-verse')?.split('.')[1];
-
+						const dataVerse =  Number(verseNode.getAttribute('data-verse'));
 						// Fassungskommentar Triggers
 						const contentNode = line.querySelector('.content');
 						if (contentNode && verse) {
-							const fasskomm_info = info.fasskomm.find((f) => {
-								return Number(f.verse) === Number(verse);
+							// find whether the verse is in the range of a fasskomInfo
+							const fasskomm_info = fasskomInfos.find((f) => {
+								const startVerse = Number(`${f.dreissiger}.${f.verse}`);
+								return dataVerse >= startVerse && dataVerse <= Number(f.end_vers);
 							});
 							if (fasskomm_info) {
 								contentNode.innerHTML = `${contentNode.innerHTML}<sup><a
@@ -104,6 +106,8 @@
 									data-id=${fasskomm_info.id}
 									data-title="${composureTitlesByColumn[column] + ' ' + fasskomm_info.dreissiger + verse.replace(/^0+/, '').replace(/-(.+)$/, formatVerseSup)}"
 									>K</a></sup>`;
+								// remove the already used fasskomm_info from the array to avoid duplicate processing
+								fasskomInfos.splice(fasskomInfos.indexOf(fasskomm_info), 1);
 							}
 						}
 
