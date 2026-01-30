@@ -9,9 +9,10 @@
 	import { Switch } from '@skeletonlabs/skeleton-svelte';
 	import { page } from '$app/state';
 	import { onMount, tick, untrack } from 'svelte';
-	import { goto } from '$app/navigation';
+	import { goto, replaceState } from '$app/navigation';
 	import ApparatPopover from './ApparatPopover.svelte';
 	import handleFromSigil from '$lib/functions/handleFromSigil';
+	import { browser } from '$app/environment';
 
 	/** @type {{data: import('./$types').PageData}} */
 	let { data } = $props();
@@ -278,12 +279,9 @@
 	const openFasskommFromHash = () => {
 		const id = window.location.hash;
 		if (!id) return;
-		const anchors = document.querySelectorAll('a.fasskommanchor');
-		for (const el of anchors) {
-			if (el instanceof HTMLAnchorElement && el.getAttribute('href') === id) {
-				el.click();
-				break;
-			}
+		const el = document.querySelector(`a.fasskommanchor[href="${CSS.escape(id)}"]`);
+		if (el instanceof HTMLAnchorElement && el.href) {
+			el.click();
 		}
 	};
 
@@ -299,12 +297,16 @@
 			el.removeEventListener('click', onClickFasskommTrigger);
 		});
 	};
-	/** @param {MouseEvent} ev */
+
 	const onClickFasskommTrigger = (ev) => {
-		if (ev.target instanceof HTMLAnchorElement) {
-			history.replaceState(history.state, '', ev.target.getAttribute('href') ?? window.location.href);
-			fillFasskommStore(ev.target, false);
-		}
+		const a = ev.target instanceof HTMLAnchorElement ? ev.target : ev.target?.closest?.('a');
+		if (!a) return;
+
+		ev.preventDefault();
+
+		const href = a.getAttribute('href') ?? window.location.href;
+		replaceState(new URL(href, window.location.href).href, {});
+		fillFasskommStore(a, false);
 	};
 
 
@@ -416,11 +418,12 @@
 
 	let wasFasskommOpen = false;
 	$effect(() => {
-		if (typeof window === 'undefined') return;
 		const isOpen = !!FasskommStore.elTrigger;
-		if (wasFasskommOpen && !isOpen && window.location.hash.startsWith('#fasskomm-')) {
-			history.replaceState(history.state, '', window.location.pathname + window.location.search);
+
+		if (browser && wasFasskommOpen && !isOpen && page.url.hash.startsWith('#fasskomm-')) {
+			replaceState(`${page.url.pathname}${page.url.search}`, {});
 		}
+
 		wasFasskommOpen = isOpen;
 	});
 
