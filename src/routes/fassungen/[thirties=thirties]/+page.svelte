@@ -9,9 +9,10 @@
 	import { Switch } from '@skeletonlabs/skeleton-svelte';
 	import { page } from '$app/state';
 	import { onMount, tick, untrack } from 'svelte';
-	import { goto } from '$app/navigation';
+	import { goto, replaceState } from '$app/navigation';
 	import ApparatPopover from './ApparatPopover.svelte';
 	import handleFromSigil from '$lib/functions/handleFromSigil';
+	import { browser } from '$app/environment';
 
 	/** @type {{data: import('./$types').PageData}} */
 	let { data } = $props();
@@ -227,6 +228,7 @@
 			tick().then(() => {
 				addApparatTriggerListeners();
 				addFasskommTriggerListeners();
+				openFasskommFromHash();
 			});
 			return Promise.resolve();
 		};
@@ -285,6 +287,14 @@
 		FasskommStore.id = '';
 		FasskommStore.commentary = '';
 	};
+	const openFasskommFromHash = () => {
+		const id = window.location.hash;
+		if (!id) return;
+		const el = document.querySelector(`a.fasskommanchor[href="${CSS.escape(id)}"]`);
+		if (el instanceof HTMLAnchorElement && el.href) {
+			el.click();
+		}
+	};
 
 	// Triggers
 	const addFasskommTriggerListeners = () => {
@@ -298,11 +308,18 @@
 			el.removeEventListener('click', onClickFasskommTrigger);
 		});
 	};
-	const onClickFasskommTrigger = (/** @type { Event } */ ev) => {
-		if (ev.target instanceof HTMLElement) {
-			fillFasskommStore(ev.target, false);
-		}
+
+	const onClickFasskommTrigger = (ev) => {
+		const a = ev.target instanceof HTMLAnchorElement ? ev.target : ev.target?.closest?.('a');
+		if (!a) return;
+
+		ev.preventDefault();
+
+		const href = a.getAttribute('href') ?? window.location.href;
+		replaceState(new URL(href, window.location.href).href, {});
+		fillFasskommStore(a, false);
 	};
+
 
 	// --------------------------------------
 	// Apparate
@@ -409,6 +426,18 @@
 			synchro = false;
 		}
 	});
+
+	let wasFasskommOpen = false;
+	$effect(() => {
+		const isOpen = !!FasskommStore.elTrigger;
+
+		if (browser && wasFasskommOpen && !isOpen && page.url.hash.startsWith('#fasskomm-')) {
+			replaceState(`${page.url.pathname}${page.url.search}`, {});
+		}
+
+		wasFasskommOpen = isOpen;
+	});
+
 	let gotoThirties = $state(Number(data.thirties));
 </script>
 
