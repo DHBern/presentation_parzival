@@ -98,6 +98,7 @@ export async function load({ fetch, params }) {
 					`${URL_TEI_PB}/parts/${element.handle}.xml/json?odd=parzival.odd&view=page&id=${element.handle}_${thirties}.${verse}`
 				)
 			];
+			hasAdditions = true;
 		} else {
 			const versesToFetch = (await verses).filter(
 				(v) =>
