@@ -96,6 +96,10 @@
 							// find whether the verse is in the range of a fasskomInfo
 							// in order to set the link to the first matching verse
 							const fasskommInfo = fasskommInfos.find((f) => {
+								if (!f.end_vers) {
+									return Number(f.verse) === Number(verse)
+								}
+								// else there is a range over several dreissigers
 								const startVerse = Number(`${f.dreissiger}.${f.verse}`);
 								return dataVerse >= startVerse && dataVerse <= Number(f.end_vers);
 							});
