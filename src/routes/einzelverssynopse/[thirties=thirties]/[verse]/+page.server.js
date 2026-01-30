@@ -84,7 +84,9 @@ export async function load({ fetch, params }) {
 			}
 			return 0;
 		});
-	const index = filteredVerses.findIndex((v) => v?.thirties === thirties && v?.verse === verse);
+	const index = filteredVerses.findIndex(
+		(v) => v?.thirties === thirties && v?.verse === verse.split('-')[0]
+	);
 	const prevVerse = index > 0 ? filteredVerses[index - 1] : null;
 
 	const nextVerse = index < filteredVerses.length - 1 ? filteredVerses[index + 1] : null;
