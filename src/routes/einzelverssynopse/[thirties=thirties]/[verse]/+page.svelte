@@ -81,11 +81,11 @@
 					{#each archetype.witnesses as witness}
 						{#each publisherData[witness] as witnessData}
 							{#if witnessData?.content}
-								{@const verseWithAdd = witnessData?.id.split('.').pop().replace(/^0+/, '')}
+								{@const verseWithAdd = witnessData?.id.split('.').pop()}
 								{#if additionsSlider || !verseWithAdd.match(/-\d/g)}
 									<tr>
 										<td class={`pr-4 pt-2 ${hyparchetypesSlider ? 'pl-5' : ''}`}>
-											{thirties}.{verseWithAdd}
+											{thirties}.{verseWithAdd.replace(/^0+/, '')}
 										</td>
 										<td class={`pr-4 pt-2 ${hyparchetypesSlider ? 'pl-5' : ''}`}>
 											<a class="anchor" href="{base}/textzeugen/{witness}/{thirties}/{verseWithAdd}"
