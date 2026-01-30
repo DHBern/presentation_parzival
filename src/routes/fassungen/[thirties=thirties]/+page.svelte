@@ -78,7 +78,9 @@
 				const condensedStructure = info.apparat.structure.reduce(reducer, {});
 
 				const formatVerseSup = (_, match) => `<sup>${match}</sup>`;
-
+				// create a shallow copy of the fasskomInfos in order to splice already
+				// painted ones, so the fasskoms with a verse range are only painted once.
+				const fasskommInfos = [...info.fasskomm];
 				const lines = doc.querySelectorAll('div.line');
 				lines.forEach((line) => {
 					line.classList.add(`column-${column}`);
@@ -87,23 +89,32 @@
 					const verseNode = line.querySelector('[data-verse]');
 					if (verseNode) {
 						const verse = verseNode.getAttribute('data-verse')?.split('.')[1];
-
+						const dataVerse = Number(verseNode.getAttribute('data-verse'));
 						// Fassungskommentar Triggers
 						const contentNode = line.querySelector('.content');
 						if (contentNode && verse) {
-							const fasskomm_info = info.fasskomm.find((f) => {
-								return Number(f.verse) === Number(verse);
+							// find whether the verse is in the range of a fasskomInfo
+							// in order to set the link to the first matching verse
+							const fasskommInfo = fasskommInfos.find((f) => {
+								if (!f.end_vers) {
+									return Number(f.verse) === Number(verse)
+								}
+								// else there is a range over several dreissigers
+								const startVerse = Number(`${f.dreissiger}.${f.verse}`);
+								return dataVerse >= startVerse && dataVerse <= Number(f.end_vers);
 							});
-							if (fasskomm_info) {
+							if (fasskommInfo) {
 								contentNode.innerHTML = `${contentNode.innerHTML}<sup><a
-									class="fasskommanchor ${fasskomm_info.id[2] === 'A' ? 'multi' : 'single'}"
-									href="#fasskomm-${fasskomm_info.dreissiger}.${verse}"
-									data-commentary="${encodeURIComponent(fasskomm_info.commentary ? fasskomm_info.commentary : '')}"
-									data-dreissiger=${fasskomm_info.dreissiger}
+									class="fasskommanchor ${fasskommInfo.id[2] === 'A' ? 'multi' : 'single'}"
+									href="#fasskomm-${fasskommInfo.dreissiger}.${verse}"
+									data-commentary="${encodeURIComponent(fasskommInfo.commentary ? fasskommInfo.commentary : '')}"
+									data-dreissiger=${fasskommInfo.dreissiger}
 									data-verse=${verse}
-									data-id=${fasskomm_info.id}
-									data-title="${composureTitlesByColumn[column] + ' ' + fasskomm_info.dreissiger + verse.replace(/^0+/, '').replace(/-(.+)$/, formatVerseSup)}"
+									data-id=${fasskommInfo.id}
+									data-title="${composureTitlesByColumn[column] + ' ' + fasskommInfo.dreissiger + verse.replace(/^0+/, '').replace(/-(.+)$/, formatVerseSup)}"
 									>K</a></sup>`;
+								// remove the already used fasskomm_info to avoid duplicate processing
+								fasskommInfos.splice(fasskommInfos.indexOf(fasskommInfo), 1);
 							}
 						}
 
