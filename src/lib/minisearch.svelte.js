@@ -10,8 +10,7 @@ export function processTerm(term) {
 const miniSearchConfig = {
 	fields: ['content_all', 'content', 'terms'],
 	storeFields: ['content', 'content_all', 'verse', 'd', 'handle'],
-	processTerm,
-	tokenize: (s) => s.split(' ').reduce((ys, x) => ys.map((y) => y + ' ' + x).concat([x]), [])
+	processTerm
 };
 
 // Create two instances of MiniSearch because there are two different indices
