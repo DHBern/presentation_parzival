@@ -67,7 +67,7 @@
 							{#await publisherData[archetype.handle]}
 								<td class="border-l-2 border-current pl-4 py-1 font-sans"></td>
 							{:then value}
-								{#if value[0]?.content}
+								{#if value && value[0]?.content}
 									<td class="border-l-2 border-current pl-4 py-1 font-sans"
 										>{@html value[0]?.content}</td
 									>
