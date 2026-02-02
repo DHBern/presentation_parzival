@@ -12,6 +12,7 @@ export async function load({ fetch, params }) {
 	const thirties = Number(params.thirties)?.toString() ?? '1';
 	const verseparts = params?.verse?.split('-');
 	let verse = '01';
+	let hasAdditions = false;
 
 	if (verseparts.length > 1) {
 		verse = verseparts[0].padStart(2, '0') + '-' + verseparts.slice(1).join('-');
@@ -83,7 +84,9 @@ export async function load({ fetch, params }) {
 			}
 			return 0;
 		});
-	const index = filteredVerses.findIndex((v) => v?.thirties === thirties && v?.verse === verse);
+	const index = filteredVerses.findIndex(
+		(v) => v?.thirties === thirties && v?.verse === verse.split('-')[0]
+	);
 	const prevVerse = index > 0 ? filteredVerses[index - 1] : null;
 
 	const nextVerse = index < filteredVerses.length - 1 ? filteredVerses[index + 1] : null;
@@ -97,6 +100,7 @@ export async function load({ fetch, params }) {
 					`${URL_TEI_PB}/parts/${element.handle}.xml/json?odd=parzival.odd&view=page&id=${element.handle}_${thirties}.${verse}`
 				)
 			];
+			hasAdditions = true;
 		} else {
 			const versesToFetch = (await verses).filter(
 				(v) =>
@@ -104,6 +108,12 @@ export async function load({ fetch, params }) {
 					v.thirties === thirties &&
 					v.verse.startsWith(verse)
 			);
+			if (versesToFetch.length >= 2) {
+				const regexp = new RegExp(`-\\d`);
+				if (versesToFetch.some((v) => regexp.test(v.verse))) {
+					hasAdditions = true;
+				}
+			}
 
 			publisherData[element.handle] = versesToFetch.map((verseObject) => {
 				return fetch(
@@ -204,7 +214,12 @@ export async function load({ fetch, params }) {
 	return {
 		thirties,
 		verse,
-		metadata: { ...enhancedMetadata, next: nextVerse, prev: prevVerse },
+		metadata: {
+			...enhancedMetadata,
+			next: nextVerse,
+			prev: prevVerse,
+			hasAdditions
+		},
 		publisherData: resolvedPublisherDataObject,
 		loss: loss.map((/** @type {string} */ element) => sigilFromHandle(element))
 	};
