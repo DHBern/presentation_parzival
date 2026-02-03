@@ -50,10 +50,17 @@
 
 <div class="grid lg:grid-cols-4 gap-4 my-4">
 	{#each content as _fassung, i}
+		{@const distribution = distributions[i][page.data.thirties]}
+		{@const firstCapital = distribution?.match(/[TUQ]/)?.[0] || ''}
 		<div>
-			<h2 class="h2 inline">{titles[i]}</h2>
+			<h2 class="h2 inline">
+				{titles[i]}
+				{#if titles[i].includes('T') && firstCapital && firstCapital !== 'T'}
+					&nbsp;({firstCapital})
+				{/if}
+			</h2>
 			<div class="inline [&_ul,&_li]:inline [&_li]:mr-1 anchor">
-				{@html distributions[i][page.data.thirties]}
+				{@html distribution}
 			</div>
 		</div>
 	{/each}

@@ -44,12 +44,20 @@
 			};
 		});
 	};
+
+	let currentDistribution = $derived(distribution[activeThirties.value]);
+	let firstCapital = $derived(currentDistribution?.match(/[TUQ]/)?.[0] || '');
 </script>
 
 <div class="mb-4 lg:min-h-24">
-	<h2 class="h2 inline">{title}</h2>
+	<h2 class="h2 inline">
+		{title}
+		{#if title.includes('T') && firstCapital && firstCapital !== 'T'}
+			&nbsp;({firstCapital})
+		{/if}
+	</h2>
 	<div class="inline [&_ul,&_li]:inline [&_li]:mr-1">
-		{@html distribution[activeThirties.value]}
+		{@html currentDistribution}
 	</div>
 </div>
 <div

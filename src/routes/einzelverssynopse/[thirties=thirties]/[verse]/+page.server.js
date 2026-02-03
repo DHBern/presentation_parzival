@@ -168,6 +168,12 @@ export async function load({ fetch, params }) {
 			(h) => h.handle === version.handle
 		);
 		if (targetHyparchetype) {
+			if (targetHyparchetype.handle === '*T') {
+				const firstCapital = version.distribution?.match(/[TUQ]/)?.[0];
+				if (firstCapital && firstCapital !== 'T') {
+					targetHyparchetype.sigil = `*T (${firstCapital})`;
+				}
+			}
 			targetHyparchetype.witnesses = enhancedMetadata.codices
 				.filter((codex) => {
 					if (version.distribution.includes(`>${codex.sigil}</a>`)) {
