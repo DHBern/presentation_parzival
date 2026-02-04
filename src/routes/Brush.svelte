@@ -6,7 +6,6 @@
 	let marginTop = 20;
 	let marginRight = 0;
 	let marginBottom = 20;
-	// const optimalChunkWidth = 18;
 
 	/**
 	 * @type {SVGGElement}
@@ -69,22 +68,9 @@
 
 	let mobile = $derived(width > height);
 	let marginLeft = $derived(mobile ? 30 : 35);
-	let availableWidth = $derived(width - marginLeft - marginRight);
-	// let numChunks = $derived(
-	// 	mobile
-	// 		? Math.max(Math.floor(availableWidth / optimalChunkWidth), 1)
-	// 		: Math.max(Math.floor((height - marginTop - marginBottom) / optimalChunkWidth), 1)
-	// );
 
 	// create chunks: each chunk is a number counting the number of true values in the chunk
 	let sourcesDim = $derived(d3.scaleBand().domain(data.map((d) => d.label)));
-	// let xChunk = $derived(
-	// 	d3
-	// 		.scaleLinear()
-	// 		.clamp(true)
-	// 		.domain([0, numChunks])
-	// 		.range(mobile ? [marginLeft, width - marginRight] : [marginBottom, height - marginTop])
-	// );
 	let valuesDim = $derived(d3.scaleLinear().domain([DATA_MIN, DATA_MAX]).clamp(true));
 	/** @type any */
 	let x = $derived(
@@ -167,34 +153,6 @@
 				selection.end = Math.min(thirtiesTo, DATA_MAX);
 			});
 	});
-	// let chunkedData = $derived(
-	// 	data.map((dataObject) => {
-	// 		const chunked = new Array(numChunks).fill(0);
-	// 		const chunkedPresent = new Array(numChunks).fill(0);
-	// 		for (let i = 0; i < numChunks; i++) {
-	// 			const start = x(i);
-	// 			const end = x(i + 1);
-	// 			dataObject.values.forEach((present, valIndex) => {
-	// 				const pos = valuesDim(valIndex);
-	// 				if (pos >= start && pos < end) {
-	// 					chunked[i]++;
-	// 					if (present) {
-	// 						chunkedPresent[i]++;
-	// 					}
-	// 				} else if (pos >= end) {
-	// 					return;
-	// 				}
-	// 			});
-	// 		}
-
-	// 		return {
-	// 			label: dataObject.label,
-	// 			values: chunked.map((val, i) => {
-	// 				return chunkedPresent[i] / val;
-	// 			})
-	// 		};
-	// 	})
-	// );
 	$effect.pre(() => {
 		mobile
 			? d3.select(gy).call(d3.axisLeft(y).tickFormat((d) => sigilFromHandle(d)))
@@ -212,11 +170,6 @@
 			.call(brush)
 			.call(brush.move, [valuesDim(selection.start), valuesDim(selection.end)]);
 	});
-	// $effect(() => {
-	// 	// this effect ensures that the brush is snapped to a chunk
-	// 	selection.start = valuesDim.invert(x(Math.round(x.invert(valuesDim(selection.start)))));
-	// 	selection.end = valuesDim.invert(x(Math.round(x.invert(valuesDim(selection.end)))));
-	// });
 </script>
 
 <svg {width} {height} class="float-left" shape-rendering="crispEdges">
