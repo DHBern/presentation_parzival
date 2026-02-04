@@ -122,7 +122,7 @@
 										</td>
 										<td class={`pr-4 pt-2 ${hyparchetypesSlider ? 'pl-5' : ''}`}>
 											<a class="anchor" href="{base}/textzeugen/{witness}/{thirties}/{verseWithAdd}"
-												>{metadata.codices.find(
+												>{[...metadata.codices, ...metadata.fragments].find(
 													(/** @type {{ handle: any }} */ c) => c.handle === witness
 												)?.sigil}</a
 											>

@@ -26,7 +26,7 @@ export async function load({ fetch, params }) {
 		await verses
 	)
 		// .filter((v) => !v.siglum.includes('fr'))
-		.filter((v) => !v.siglum.includes('fr') && !v.verse.includes('-')) // exclude Zusatzverse for navigation
+		.filter((v) => !v.verse.includes('-')) // exclude Zusatzverse for navigation
 		// de-duplicate by thirties+verse (keep first occurrence)
 		.reduce(
 			(acc, curr) => {
@@ -93,35 +93,37 @@ export async function load({ fetch, params }) {
 
 	// Fetch the textzeugen
 	const hasSuffix = verseparts[1]; // check if there is a suffix in the URL
-	(await metadata).codices.forEach(async (/** @type {{ handle: string | number; }} */ element) => {
-		if (hasSuffix) {
-			publisherData[element.handle] = [
-				fetch(
-					`${URL_TEI_PB}/parts/${element.handle}.xml/json?odd=parzival.odd&view=page&id=${element.handle}_${thirties}.${verse}`
-				)
-			];
-			hasAdditions = true;
-		} else {
-			const versesToFetch = (await verses).filter(
-				(v) =>
-					v.siglum.toLowerCase() === element.handle &&
-					v.thirties === thirties &&
-					v.verse.startsWith(verse)
-			);
-			if (versesToFetch.length >= 2) {
-				const regexp = new RegExp(`-\\d`);
-				if (versesToFetch.some((v) => regexp.test(v.verse))) {
-					hasAdditions = true;
-				}
-			}
-
-			publisherData[element.handle] = versesToFetch.map((verseObject) => {
-				return fetch(
-					`${URL_TEI_PB}/parts/${element.handle}.xml/json?odd=parzival.odd&view=page&id=${element.handle}_${thirties}.${verseObject.verse}`
+	[...(await metadata).codices, ...(await metadata).fragments].forEach(
+		async (/** @type {{ handle: string | number; }} */ element) => {
+			if (hasSuffix) {
+				publisherData[element.handle] = [
+					fetch(
+						`${URL_TEI_PB}/parts/${element.handle}.xml/json?odd=parzival.odd&view=page&id=${element.handle}_${thirties}.${verse}`
+					)
+				];
+				hasAdditions = true;
+			} else {
+				const versesToFetch = (await verses).filter(
+					(v) =>
+						v.siglum.toLowerCase() === element.handle &&
+						v.thirties === thirties &&
+						v.verse.startsWith(verse)
 				);
-			});
+				if (versesToFetch.length >= 2) {
+					const regexp = new RegExp(`-\\d`);
+					if (versesToFetch.some((v) => regexp.test(v.verse))) {
+						hasAdditions = true;
+					}
+				}
+
+				publisherData[element.handle] = versesToFetch.map((verseObject) => {
+					return fetch(
+						`${URL_TEI_PB}/parts/${element.handle}.xml/json?odd=parzival.odd&view=page&id=${element.handle}_${thirties}.${verseObject.verse}`
+					);
+				});
+			}
 		}
-	});
+	);
 
 	// Fetch fassungen
 	(await metadata).hyparchetypes.forEach((/** @type {{ handle: string | number; }} */ element) => {
@@ -144,7 +146,7 @@ export async function load({ fetch, params }) {
 					responses.filter((res) => res.status === 200).map(async (res) => await res.json())
 				);
 			}
-			if (data === null) {
+			if (data === null && !key.includes('fr')) {
 				loss.push(key);
 				return null;
 			}
@@ -179,8 +181,11 @@ export async function load({ fetch, params }) {
 					targetHyparchetype.sigil = `*T(Q)`;
 				}
 			}
-			targetHyparchetype.witnesses = enhancedMetadata.codices
+			targetHyparchetype.witnesses = [...enhancedMetadata.codices, ...enhancedMetadata.fragments]
 				.filter((codex) => {
+					if (codex.sigil.includes('Fr')) {
+						codex.sigil = codex.sigil.replace('. ', '');
+					}
 					if (version.distribution.includes(`>${codex.sigil}</a>`)) {
 						// ------------------------
 						// GPT wrote this to work around not having a DOM-parser
