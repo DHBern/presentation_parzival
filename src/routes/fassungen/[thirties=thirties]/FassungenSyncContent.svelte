@@ -5,6 +5,7 @@
 	import createObserver from './observer';
 
 	let { content, titles, nextPrevButton, distributions, resetPopup = () => {} } = $props();
+	const thirtiesNum = $derived(Number(page.data.thirties));
 
 	let scrollContainer = $state();
 	/**
@@ -51,7 +52,16 @@
 <div class="grid lg:grid-cols-4 gap-4 my-4">
 	{#each content as _fassung, i}
 		<div>
-			<h2 class="h2 inline">{titles[i]}</h2>
+			<h2 class="h2 inline-flex">
+				{titles[i]}
+				{#if titles[i].includes('T')}
+					{#if thirtiesNum >= 36 && thirtiesNum <= 157}
+						<span>(U)</span>
+					{:else if (thirtiesNum >= 573 && thirtiesNum <= 599) || (thirtiesNum >= 643 && thirtiesNum <= 678)}
+						<span>(Q)</span>
+					{/if}
+				{/if}
+			</h2>
 			<div class="inline [&_ul,&_li]:inline [&_li]:mr-1 anchor">
 				{@html distributions[i][page.data.thirties]}
 			</div>

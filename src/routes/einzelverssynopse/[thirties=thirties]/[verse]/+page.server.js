@@ -170,6 +170,17 @@ export async function load({ fetch, params }) {
 			(h) => h.handle === version.handle
 		);
 		if (targetHyparchetype) {
+			if (targetHyparchetype.handle === '*T') {
+				const thirtiesNum = Number(thirties);
+				if (thirtiesNum >= 36 && thirtiesNum <= 157) {
+					targetHyparchetype.sigil = `*T(U)`;
+				} else if (
+					(thirtiesNum >= 573 && thirtiesNum <= 599) ||
+					(thirtiesNum >= 643 && thirtiesNum <= 678)
+				) {
+					targetHyparchetype.sigil = `*T(Q)`;
+				}
+			}
 			targetHyparchetype.witnesses = [...enhancedMetadata.codices, ...enhancedMetadata.fragments]
 				.filter((codex) => {
 					if (codex.sigil.includes('Fr')) {
