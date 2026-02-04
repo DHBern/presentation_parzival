@@ -277,7 +277,7 @@
 		FasskommStore.commentary = '';
 	};
 	const openFasskommFromHash = () => {
-		const id = window.location.hash;
+		const id = page.url.hash;
 		if (!id) return;
 		const el = document.querySelector(`a.fasskommanchor[href="${CSS.escape(id)}"]`);
 		if (el instanceof HTMLAnchorElement && el.href) {
@@ -421,12 +421,11 @@
 
 	let wasFasskommOpen = false;
 	$effect(() => {
+		if (typeof window === 'undefined') return;
 		const isOpen = !!FasskommStore.elTrigger;
-
-		if (browser && wasFasskommOpen && !isOpen && page.url.hash.startsWith('#fasskomm-')) {
+		if (wasFasskommOpen && !isOpen && window.location.hash.startsWith('#fasskomm-')) {
 			replaceState(`${page.url.pathname}${page.url.search}`, {});
 		}
-
 		wasFasskommOpen = isOpen;
 	});
 
