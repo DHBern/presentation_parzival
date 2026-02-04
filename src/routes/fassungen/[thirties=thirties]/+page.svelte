@@ -303,9 +303,12 @@
 		if (!a) return;
 
 		ev.preventDefault();
+		const href = a.getAttribute('href');
 
-		const href = a.getAttribute('href') ?? window.location.href;
-		replaceState(new URL(href, window.location.href).href, {});
+		if (browser && href) {
+			const next = new URL(href, page.url);
+			replaceState(next.href, {});
+		}
 		fillFasskommStore(a, false);
 	};
 
