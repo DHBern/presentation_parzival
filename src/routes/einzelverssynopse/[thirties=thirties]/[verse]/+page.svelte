@@ -40,6 +40,17 @@
 			goto(prevVerseURL);
 		}
 	}
+
+	function flatSortedWitnesses(hyparchetypes) {
+		const all = hyparchetypes.flatMap((a) => a.witnesses ?? []);
+		const nonFr = all.filter((w) => !w.toLowerCase().startsWith('fr'));
+		const fr = all
+			.filter((w) => w.toLowerCase().startsWith('fr'))
+			.sort();
+
+		return [...nonFr, ...fr];
+	}
+
 </script>
 
 <svelte:window onkeydown={handleKeyDown} />
@@ -91,8 +102,8 @@
 				</tr>
 			</thead>
 			<tbody>
-				{#each metadata.hyparchetypes as archetype (archetype.handle)}
 					{#if hyparchetypesSlider}
+						{#each metadata.hyparchetypes as archetype (archetype.handle)}
 						<tr>
 							<td class="pr-4 py-1 font-sans">{thirties}.{verseNoZero}</td>
 							<td class="pr-4 py-1 font-sans"
@@ -110,34 +121,53 @@
 								{/if}
 							{/await}
 						</tr>
-					{/if}
-					{#each archetype.witnesses as witness}
-						{#each publisherData[witness] as witnessData}
-							{#if witnessData?.content}
-								{@const verseWithAdd = witnessData?.id.split('.').pop()}
-								{#if additionsSlider || !verseWithAdd.match(/-\d/g)}
-									<tr>
-										<td class={`pr-4 pt-2 ${hyparchetypesSlider ? 'pl-5' : ''}`}>
-											{thirties}.{verseWithAdd.replace(/^0+/, '')}
-										</td>
-										<td class={`pr-4 pt-2 ${hyparchetypesSlider ? 'pl-5' : ''}`}>
-											<a class="anchor" href="{base}/textzeugen/{witness}/{thirties}/{verseWithAdd}"
-												>{[...metadata.codices, ...metadata.fragments].find(
-													(/** @type {{ handle: any }} */ c) => c.handle === witness
-												)?.sigil}</a
-											>
-										</td>
-										<td
-											class={`border-l-2 border-current ${hyparchetypesSlider ? 'pl-5' : ''} pl-4 py-1`}
-										>
-											{@html witnessData?.content}
-										</td>
-									</tr>
-								{/if}
-							{/if}
+							{#each (archetype.witnesses) as witness}
+								{#each publisherData[witness] as witnessData}
+									{#if witnessData?.content}
+										{@const verseWithAdd = witnessData?.id.split('.').pop()}
+										{#if additionsSlider || !verseWithAdd.match(/-\d/g)}
+											<tr>
+												<td class="pr-4 pt-2 pl-5">
+													{thirties}.{verseWithAdd.replace(/^0+/, '')}
+												</td>
+												<td class="pr-4 pt-2 pl-5">
+													<a class="anchor" href="{base}/textzeugen/{witness}/{thirties}/{verseWithAdd}">
+														{[...metadata.codices, ...metadata.fragments].find((c) => c.handle === witness)?.sigil}
+													</a>
+												</td>
+												<td class="border-l-2 border-current pl-5 pl-4 py-1">
+													{@html witnessData?.content}
+												</td>
+											</tr>
+										{/if}
+									{/if}
+								{/each}
+							{/each}
 						{/each}
-					{/each}
-				{/each}
+					{:else}
+						{#each flatSortedWitnesses(metadata.hyparchetypes) as witness}
+							{#each publisherData[witness] as witnessData}
+								{#if witnessData?.content}
+									{@const verseWithAdd = witnessData?.id.split('.').pop()}
+									{#if additionsSlider || !verseWithAdd.match(/-\d/g)}
+										<tr>
+											<td class="pr-4 pt-2">
+												{thirties}.{verseWithAdd.replace(/^0+/, '')}
+											</td>
+											<td class="pr-4 pt-2">
+												<a class="anchor" href="{base}/textzeugen/{witness}/{thirties}/{verseWithAdd}">
+													{[...metadata.codices, ...metadata.fragments].find((c) => c.handle === witness)?.sigil}
+												</a>
+											</td>
+											<td class="border-l-2 border-current pl-4 py-1">
+												{@html witnessData?.content}
+											</td>
+										</tr>
+									{/if}
+								{/if}
+							{/each}
+						{/each}
+					{/if}
 			</tbody>
 		</table>
 		{#if loss.length > 0}
