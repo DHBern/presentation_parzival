@@ -97,9 +97,7 @@ export async function load({ fetch, params }) {
 		async (/** @type {{ handle: string | number; }} */ element) => {
 			if (hasSuffix) {
 				publisherData[element.handle] = [
-					fetch(
-						`${URL_TEI_PB}/parts/${element.handle}.xml/json?odd=parzival.odd&view=page&id=${element.handle}_${thirties}.${verse}`
-					)
+					fetch(`/einzelverssynopse/data/${element.handle}/${thirties}/${verse}`)
 				];
 				hasAdditions = true;
 			} else {
@@ -118,7 +116,8 @@ export async function load({ fetch, params }) {
 
 				publisherData[element.handle] = versesToFetch.map((verseObject) => {
 					return fetch(
-						`${URL_TEI_PB}/parts/${element.handle}.xml/json?odd=parzival.odd&view=page&id=${element.handle}_${thirties}.${verseObject.verse}`
+						// `${URL_TEI_PB}/parts/${element.handle}.xml/json?odd=parzival.odd&view=page&id=${element.handle}_${thirties}.${verseObject.verse}`
+						`/einzelverssynopse/data/${element.handle}/${thirties}/${verseObject.verse}`
 					);
 				});
 			}
@@ -129,7 +128,9 @@ export async function load({ fetch, params }) {
 	(await metadata).hyparchetypes.forEach((/** @type {{ handle: string | number; }} */ element) => {
 		publisherData[element.handle] = [
 			fetch(
-				`${URL_TEI_PB}/parts/syn${thirties}.xml/json?odd=parzival.odd&view=single&xpath=//l[@n=%27${element.handle}%20${thirties}.${verse}%27]`
+				// `${URL_TEI_PB}/parts/syn${thirties}.xml/json?odd=parzival.odd&view=single&xpath=//l[@n=%27${element.handle}%20${thirties}.${verse}%27]`
+				`/einzelverssynopse/data/fassungen/${thirties}/${element.handle}/${thirties}/${verse}`
+				// `/einzelverssynopse/data/${element.handle}/${thirties}/${verse}`
 			)
 		];
 	});
