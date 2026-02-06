@@ -65,7 +65,7 @@
 			checked={hyparchetypesSlider}
 			onCheckedChange={(e) => (hyparchetypesSlider = e.checked)}
 		>
-			Fassungstexte ein-/ausblenden und nach Fassungen sortieren
+			Fassungstexte ein-/ausblenden und nach Fassungen sortieren.
 		</Switch>
 		{#if metadata?.hasAdditions}
 			<br />
@@ -76,7 +76,7 @@
 				checked={additionsSlider}
 				onCheckedChange={(e) => (additionsSlider = e.checked)}
 			>
-				Für diesen Vers sind Zusatzverse vorhanden. Ein-/ausblenden
+				Für diesen Vers sind Zusatzverse vorhanden: ein-/ausblenden.
 			</Switch>
 		{/if}
 		<h2 class="h2 my-7">Zu Vers springen:</h2>
