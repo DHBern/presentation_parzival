@@ -2,12 +2,14 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: ['main', 'dev']
+    branches: ["main", "dev"]
   workflow_dispatch:
 
 jobs:
   build_site:
-    runs-on: ubuntu-latest
+    runs-on:
+      group: parzival
+      labels: Feirefiz
     services:
       existdb:
         image: existdb/existdb:6.2.0
@@ -28,9 +30,9 @@ jobs:
 
       - name: start docker
         env:
-          EXISTDB_USER: 'admin'
-          EXISTDB_PASS: ''
-          EXISTDB_SERVER: 'http://127.0.0.1:8081'
+          EXISTDB_USER: "admin"
+          EXISTDB_PASS: ""
+          EXISTDB_SERVER: "http://127.0.0.1:8081"
         run: |
           npm run installXar
 
@@ -52,15 +54,15 @@ jobs:
 
       - name: build
         env:
-          BASE_PATH: '/${{ github.event.repository.name }}'
-          NODE_OPTIONS: '--max_old_space_size=9000'
+          BASE_PATH: "/${{ github.event.repository.name }}"
+          NODE_OPTIONS: "--max_old_space_size=9000"
         run: |
           npm run build
 
       - name: Upload Artifacts
         uses: actions/upload-pages-artifact@v3
         with:
-          path: 'build/'
+          path: "build/"
 
   deploy:
     needs: build_site
