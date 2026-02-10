@@ -100,10 +100,11 @@
 	);
 
 	modifySelection = (/** @type {number} */ modifier, /** @type {any} */ move) => {
+		const axis = mobile ? x : y;
 		const startVal = valuesDim.invert(
-			y(y.invert(valuesDim(selection.start)) + (move ? modifier : -modifier))
+			axis(axis.invert(valuesDim(selection.start)) + (move ? modifier : -modifier))
 		);
-		const endVal = valuesDim.invert(y(y.invert(valuesDim(selection.end)) + modifier));
+		const endVal = valuesDim.invert(axis(axis.invert(valuesDim(selection.end)) + modifier));
 		if (
 			startVal > endVal ||
 			(move && selection.end >= DATA_MAX && endVal >= DATA_MAX) ||
@@ -136,17 +137,18 @@
 				}
 			})
 			.on('end', (/** @type {{ selection: [number, number]; }} */ e) => {
+				const axis = mobile ? x : y;
 				// Return if not triggered by user interaction
 				if (!e.sourceEvent || !e.selection) return;
 
 				// Snap the selection to the nearest step
-				let [from, to] = e.selection.map((d) => Math.round(y.invert(d)));
+				let [from, to] = e.selection.map((d) => Math.round(axis.invert(d)));
 				if (to <= from) {
 					to = from + 1; // Ensure to is always greater than from
 				}
 
-				const thirtiesTo = valuesDim.invert(y(to));
-				const thirtiesFrom = valuesDim.invert(y(from));
+				const thirtiesTo = valuesDim.invert(axis(to));
+				const thirtiesFrom = valuesDim.invert(axis(from));
 
 				// Update range in Details
 				selection.start = thirtiesFrom || DATA_MIN;
@@ -173,14 +175,14 @@
 </script>
 
 <svg {width} {height} class="float-left" shape-rendering="crispEdges">
-	<g bind:this={gy} transform="translate({marginLeft - 5} ,0)" />
-	<g bind:this={gx} transform="translate(0,{mobile ? height - marginBottom : marginTop - 1})" />
-	{#key y | x}
+	{#key y | x | height | width}
+		<g bind:this={gy} transform="translate({marginLeft - 5} ,0)" />
+		<g bind:this={gx} transform="translate(0,{mobile ? height - marginBottom : marginTop - 1})" />
 		{#each contigousData as d}
 			<g>
-				{#each d.values as v, j}
-					{@const start = y(v[0])}
-					{@const end = y(v[1])}
+				{#each d.values as v}
+					{@const start = mobile ? x(v[0]) : y(v[0])}
+					{@const end = mobile ? x(v[1]) : y(v[1])}
 					<rect
 						x={mobile ? start : x(d.label)}
 						y={mobile ? y(d.label) : start}
@@ -191,6 +193,6 @@
 				{/each}
 			</g>
 		{/each}
+		<g bind:this={gBrush} transform="translate(0,{mobile ? marginTop : 0})" />
 	{/key}
-	<g bind:this={gBrush} transform="translate(0,{mobile ? marginTop : 0})" />
 </svg>
