@@ -40,6 +40,17 @@
 			goto(prevVerseURL);
 		}
 	}
+
+	/**
+	 * @param {any[]} hyparchetypes
+	 */
+	function flatSortedWitnesses(hyparchetypes) {
+		const all = hyparchetypes.flatMap((a) => a.witnesses ?? []);
+		const nonFr = all.filter((w) => !w.toLowerCase().startsWith('fr'));
+		const fr = all.filter((w) => w.toLowerCase().startsWith('fr')).sort();
+
+		return [...nonFr, ...fr];
+	}
 </script>
 
 <svelte:window onkeydown={handleKeyDown} />
@@ -54,7 +65,7 @@
 			checked={hyparchetypesSlider}
 			onCheckedChange={(e) => (hyparchetypesSlider = e.checked)}
 		>
-			Fassungstexte ein-/ausblenden und nach Fassungen sortieren
+			Fassungstexte ein-/ausblenden und nach Fassungen sortieren.
 		</Switch>
 		{#if metadata?.hasAdditions}
 			<br />
@@ -65,7 +76,7 @@
 				checked={additionsSlider}
 				onCheckedChange={(e) => (additionsSlider = e.checked)}
 			>
-				Für diesen Vers sind Zusatzverse vorhanden. Ein-/ausblenden
+				Für diesen Vers sind Zusatzverse vorhanden: ein-/ausblenden.
 			</Switch>
 		{/if}
 		<h2 class="h2 my-7">Zu Vers springen:</h2>
@@ -91,8 +102,8 @@
 				</tr>
 			</thead>
 			<tbody>
-				{#each metadata.hyparchetypes as archetype (archetype.handle)}
-					{#if hyparchetypesSlider}
+				{#if hyparchetypesSlider}
+					{#each metadata.hyparchetypes as archetype (archetype.handle)}
 						<tr>
 							<td class="pr-4 py-1 font-sans">{thirties}.{verseNoZero}</td>
 							<td class="pr-4 py-1 font-sans"
@@ -110,26 +121,55 @@
 								{/if}
 							{/await}
 						</tr>
-					{/if}
-					{#each archetype.witnesses as witness}
+						{#each archetype.witnesses as witness}
+							{#each publisherData[witness] as witnessData}
+								{#if witnessData?.content}
+									{@const verseWithAdd = witnessData?.id.split('.').pop()}
+									{#if additionsSlider || !verseWithAdd.match(/-\d/g)}
+										<tr>
+											<td class="pr-4 pt-2 pl-5">
+												{thirties}.{verseWithAdd.replace(/^0+/, '')}
+											</td>
+											<td class="pr-4 pt-2 pl-5">
+												<a
+													class="anchor"
+													href="{base}/textzeugen/{witness}/{thirties}/{verseWithAdd}"
+												>
+													{[...metadata.codices, ...metadata.fragments].find(
+														(c) => c.handle === witness
+													)?.sigil}
+												</a>
+											</td>
+											<td class="border-l-2 border-current pl-5 pl-4 py-1">
+												{@html witnessData?.content}
+											</td>
+										</tr>
+									{/if}
+								{/if}
+							{/each}
+						{/each}
+					{/each}
+				{:else}
+					{#each flatSortedWitnesses(metadata.hyparchetypes) as witness}
 						{#each publisherData[witness] as witnessData}
 							{#if witnessData?.content}
 								{@const verseWithAdd = witnessData?.id.split('.').pop()}
 								{#if additionsSlider || !verseWithAdd.match(/-\d/g)}
 									<tr>
-										<td class={`pr-4 pt-2 ${hyparchetypesSlider ? 'pl-5' : ''}`}>
+										<td class="pr-4 pt-2">
 											{thirties}.{verseWithAdd.replace(/^0+/, '')}
 										</td>
-										<td class={`pr-4 pt-2 ${hyparchetypesSlider ? 'pl-5' : ''}`}>
-											<a class="anchor" href="{base}/textzeugen/{witness}/{thirties}/{verseWithAdd}"
-												>{[...metadata.codices, ...metadata.fragments].find(
-													(/** @type {{ handle: any }} */ c) => c.handle === witness
-												)?.sigil}</a
+										<td class="pr-4 pt-2">
+											<a
+												class="anchor"
+												href="{base}/textzeugen/{witness}/{thirties}/{verseWithAdd}"
 											>
+												{[...metadata.codices, ...metadata.fragments].find(
+													(c) => c.handle === witness
+												)?.sigil}
+											</a>
 										</td>
-										<td
-											class={`border-l-2 border-current ${hyparchetypesSlider ? 'pl-5' : ''} pl-4 py-1`}
-										>
+										<td class="border-l-2 border-current pl-4 py-1">
 											{@html witnessData?.content}
 										</td>
 									</tr>
@@ -137,7 +177,7 @@
 							{/if}
 						{/each}
 					{/each}
-				{/each}
+				{/if}
 			</tbody>
 		</table>
 		{#if loss.length > 0}
