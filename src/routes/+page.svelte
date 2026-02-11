@@ -79,9 +79,9 @@
 			Transkriptionen der Textzeugen des ›Parzival‹ (unter den einzelnen Siglen). Die Fragmente sind
 			in der Spalte rechts außen nach Dreißigern aufgeführt. Textzeugen und Fragmente können über
 			Mausklick auf das ‚x‘ rechts neben den Siglen aus der Tabelle entfernt werden. Um einen
-			Textzeugen hinzuzufügen, wird die Sigle des Textzeugen eingegeben, z. B. ‚D‘ bzw. bei Fragmenten
-			‚fr‘, gefolgt vom Index des Fragments (1–72), z. B. fr32; die Eingabe ‚fr‘ fügt alle Fragmente
-			in einer Spalte hinzu.
+			Textzeugen hinzuzufügen, wird die Sigle des Textzeugen eingegeben, z. B. ‚D‘ bzw. bei
+			Fragmenten ‚fr‘, gefolgt vom Index des Fragments (1–72), z. B. fr32; die Eingabe ‚fr‘ fügt
+			alle Fragmente in einer Spalte hinzu.
 		</p>
 		<div
 			class="w-[calc(100vw-4rem)] mx-[calc(50%-50vw+2rem)] h-[90vh]"
