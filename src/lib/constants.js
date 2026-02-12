@@ -1,4 +1,4 @@
-export const URL_STATIC_API = `https://dhbern.github.io/parzival-static-api/api`;
+export const URL_STATIC_API = `https://data.parzival.digitaleditions.ch/api`;
 
 export const URL_TEI_PB = `http://localhost:8081/exist/apps/parzival/api`;
 
