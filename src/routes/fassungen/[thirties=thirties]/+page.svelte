@@ -474,7 +474,7 @@
 				Eintextedition als <a
 					class="anchor"
 					target="_blank"
-					href="https://dhbern.github.io/parzival-static-api/api/pdf/eintextedition.pdf#page={data.thirties}"
+					href="https://data.parzival.digitaleditions.ch/api/pdf/eintextedition.pdf#page={data.thirties}"
 				>
 					PDF
 				</a> aufrufen

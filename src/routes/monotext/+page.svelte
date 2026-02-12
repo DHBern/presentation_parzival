@@ -9,7 +9,7 @@
 		<ErlaeuterungenEintextEdition />
 	</ExpandableContent>
 	<embed
-		src="https://dhbern.github.io/parzival-static-api/api/pdf/eintextedition.pdf"
+		src="https://data.parzival.digitaleditions.ch/api/pdf/eintextedition.pdf"
 		width="100%"
 		height="800px"
 		type="application/pdf"
