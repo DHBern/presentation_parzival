@@ -95,9 +95,10 @@ export async function load({ fetch, params }) {
 	const hasSuffix = verseparts[1]; // check if there is a suffix in the URL
 	[...(await metadata).codices, ...(await metadata).fragments].forEach(
 		async (/** @type {{ handle: string | number; }} */ element) => {
+			const handlePath = encodeURIComponent(String(element.handle));
 			if (hasSuffix) {
 				publisherData[element.handle] = [
-					fetch(`/einzelverssynopse/data/${element.handle}/${thirties}/${verse}`)
+					fetch(`/einzelverssynopse/data/${handlePath}/${thirties}/${verse}`)
 				];
 				hasAdditions = true;
 			} else {
@@ -115,9 +116,7 @@ export async function load({ fetch, params }) {
 				}
 
 				publisherData[element.handle] = versesToFetch.map((verseObject) => {
-					return fetch(
-						`/einzelverssynopse/data/${element.handle}/${thirties}/${verseObject.verse}`
-					);
+					return fetch(`/einzelverssynopse/data/${handlePath}/${thirties}/${verseObject.verse}`);
 				});
 			}
 		}
@@ -125,8 +124,9 @@ export async function load({ fetch, params }) {
 
 	// Fetch fassungen
 	(await metadata).hyparchetypes.forEach((/** @type {{ handle: string | number; }} */ element) => {
+		const handlePath = encodeURIComponent(String(element.handle));
 		publisherData[element.handle] = [
-			fetch(`/einzelverssynopse/data/fassungen/${element.handle}/${thirties}/${verse}`)
+			fetch(`/einzelverssynopse/data/fassungen/${handlePath}/${thirties}/${verse ?? '01'}`)
 		];
 	});
 
@@ -139,7 +139,7 @@ export async function load({ fetch, params }) {
 			let data = null;
 			if (responses.some((res) => res.status === 200)) {
 				data = await Promise.all(
-					responses.filter((res) => res.status === 200).map(async (res) => await res.json())
+					responses.filter((res) => res.status === 200).map(async (res) => await res.clone().json())
 				);
 			}
 			if (data === null && !key.includes('fr')) {
