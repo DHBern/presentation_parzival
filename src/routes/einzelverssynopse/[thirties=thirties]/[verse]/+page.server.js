@@ -6,6 +6,7 @@ import { verses } from '$lib/data/verses';
 
 /** @type {import('./$types').PageServerLoad} */
 export async function load({ fetch, params }) {
+	console.log('einzelvers', params);
 	/** @type {{ [key: string]: Promise<any> }} */
 	const publisherData = {};
 
@@ -104,9 +105,9 @@ export async function load({ fetch, params }) {
 						v.verse === verse
 				);
 
-				publisherData[element.handle] = versesToFetch.map((verseObject) => {
-					return fetch(`/einzelverssynopse/data/${handlePath}/${thirties}/${verseObject.verse}`);
-				});
+				// publisherData[element.handle] = versesToFetch.map((verseObject) => {
+				// 	return fetch(`/einzelverssynopse/data/${handlePath}/${thirties}/${verseObject.verse}`);
+				// });
 				hasAdditions = true;
 			} else {
 				const versesToFetch = (await verses).filter(
@@ -122,9 +123,9 @@ export async function load({ fetch, params }) {
 					}
 				}
 
-				publisherData[element.handle] = versesToFetch.map((verseObject) => {
-					return fetch(`/einzelverssynopse/data/${handlePath}/${thirties}/${verseObject.verse}`);
-				});
+				// publisherData[element.handle] = versesToFetch.map((verseObject) => {
+				// 	return fetch(`/einzelverssynopse/data/${handlePath}/${thirties}/${verseObject.verse}`);
+				// });
 			}
 		}
 	);
@@ -134,9 +135,9 @@ export async function load({ fetch, params }) {
 		(await metadata).hyparchetypes.forEach(
 			(/** @type {{ handle: string | number; }} */ element) => {
 				const handlePath = encodeURIComponent(String(element.handle));
-				publisherData[element.handle] = [
-					fetch(`/einzelverssynopse/data/fassungen/${handlePath}/${thirties}/${verse ?? '01'}`)
-				];
+				// publisherData[element.handle] = [
+				// 	fetch(`/einzelverssynopse/data/fassungen/${handlePath}/${thirties}/${verse ?? '01'}`)
+				// ];
 			}
 		);
 	}
