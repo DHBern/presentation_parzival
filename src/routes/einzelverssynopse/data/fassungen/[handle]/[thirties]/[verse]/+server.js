@@ -8,5 +8,7 @@ export async function GET({ fetch, params }) {
 	);
 
 	const item = await res.json();
-	return json(item);
+	return json(item, { status: res.status });
 }
+
+export const prerender = true;
