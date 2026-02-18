@@ -9,7 +9,7 @@ export async function GET({ fetch, params }) {
 
 	const item = await res.json();
 
-	return json(item, { status: res.clone().status });
+	return json(item, { status: res.status });
 }
 
 export const prerender = true;
