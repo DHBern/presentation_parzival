@@ -97,9 +97,16 @@ export async function load({ fetch, params }) {
 		async (/** @type {{ handle: string | number; }} */ element) => {
 			const handlePath = encodeURIComponent(String(element.handle));
 			if (hasSuffix) {
-				publisherData[element.handle] = [
-					fetch(`/einzelverssynopse/data/${handlePath}/${thirties}/${verse}`)
-				];
+				const versesToFetch = (await verses).filter(
+					(v) =>
+						v.siglum.toLowerCase() === element.handle &&
+						v.thirties === thirties &&
+						v.verse === verse
+				);
+
+				publisherData[element.handle] = versesToFetch.map((verseObject) => {
+					return fetch(`/einzelverssynopse/data/${handlePath}/${thirties}/${verseObject.verse}`);
+				});
 				hasAdditions = true;
 			} else {
 				const versesToFetch = (await verses).filter(
