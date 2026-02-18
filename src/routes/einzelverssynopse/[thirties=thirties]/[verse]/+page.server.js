@@ -105,9 +105,9 @@ export async function load({ fetch, params }) {
 						v.verse === verse
 				);
 
-				// publisherData[element.handle] = versesToFetch.map((verseObject) => {
-				// 	return fetch(`/einzelverssynopse/data/${handlePath}/${thirties}/${verseObject.verse}`);
-				// });
+				publisherData[element.handle] = versesToFetch.map((verseObject) => {
+					return fetch(`/einzelverssynopse/data/${handlePath}/${thirties}/${verseObject.verse}`);
+				});
 				hasAdditions = true;
 			} else {
 				const versesToFetch = (await verses).filter(
