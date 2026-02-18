@@ -94,40 +94,42 @@ export async function load({ fetch, params }) {
 
 	// Fetch the textzeugen
 	const hasSuffix = verseparts[1]; // check if there is a suffix in the URL
-	[...(await metadata).codices, ...(await metadata).fragments].forEach(
-		async (/** @type {{ handle: string | number; }} */ element) => {
-			const handlePath = encodeURIComponent(String(element.handle));
-			if (hasSuffix) {
-				const versesToFetch = (await verses).filter(
-					(v) =>
-						v.siglum.toLowerCase() === element.handle &&
-						v.thirties === thirties &&
-						v.verse === verse
-				);
+	await Promise.all(
+		[...(await metadata).codices, ...(await metadata).fragments].map(
+			async (/** @type {{ handle: string | number; }} */ element) => {
+				const handlePath = encodeURIComponent(String(element.handle));
+				if (hasSuffix) {
+					const versesToFetch = (await verses).filter(
+						(v) =>
+							v.siglum.toLowerCase() === element.handle &&
+							v.thirties === thirties &&
+							v.verse === verse
+					);
 
-				publisherData[element.handle] = versesToFetch.map((verseObject) => {
-					return fetch(`/einzelverssynopse/data/${handlePath}/${thirties}/${verseObject.verse}`);
-				});
-				hasAdditions = true;
-			} else {
-				const versesToFetch = (await verses).filter(
-					(v) =>
-						v.siglum.toLowerCase() === element.handle &&
-						v.thirties === thirties &&
-						v.verse.startsWith(verse)
-				);
-				if (versesToFetch.length >= 2) {
-					const regexp = new RegExp(`-\\d`);
-					if (versesToFetch.some((v) => regexp.test(v.verse))) {
-						hasAdditions = true;
+					publisherData[element.handle] = versesToFetch.map((verseObject) => {
+						return fetch(`/einzelverssynopse/data/${handlePath}/${thirties}/${verseObject.verse}`);
+					});
+					hasAdditions = true;
+				} else {
+					const versesToFetch = (await verses).filter(
+						(v) =>
+							v.siglum.toLowerCase() === element.handle &&
+							v.thirties === thirties &&
+							v.verse.startsWith(verse)
+					);
+					if (versesToFetch.length >= 2) {
+						const regexp = new RegExp(`-\\d`);
+						if (versesToFetch.some((v) => regexp.test(v.verse))) {
+							hasAdditions = true;
+						}
 					}
-				}
 
-				publisherData[element.handle] = versesToFetch.map((verseObject) => {
-					return fetch(`/einzelverssynopse/data/${handlePath}/${thirties}/${verseObject.verse}`);
-				});
+					publisherData[element.handle] = versesToFetch.map((verseObject) => {
+						return fetch(`/einzelverssynopse/data/${handlePath}/${thirties}/${verseObject.verse}`);
+					});
+				}
 			}
-		}
+		)
 	);
 
 	// Fetch fassungen
