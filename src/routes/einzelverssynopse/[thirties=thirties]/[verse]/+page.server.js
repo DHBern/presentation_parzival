@@ -135,9 +135,9 @@ export async function load({ fetch, params }) {
 		(await metadata).hyparchetypes.forEach(
 			(/** @type {{ handle: string | number; }} */ element) => {
 				const handlePath = encodeURIComponent(String(element.handle));
-				// publisherData[element.handle] = [
-				// 	fetch(`/einzelverssynopse/data/fassungen/${handlePath}/${thirties}/${verse ?? '01'}`)
-				// ];
+				publisherData[element.handle] = [
+					fetch(`/einzelverssynopse/data/fassungen/${handlePath}/${thirties}/${verse ?? '01'}`)
+				];
 			}
 		);
 	}
