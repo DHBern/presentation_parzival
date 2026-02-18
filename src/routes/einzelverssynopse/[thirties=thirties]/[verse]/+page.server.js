@@ -123,9 +123,9 @@ export async function load({ fetch, params }) {
 					}
 				}
 
-				// publisherData[element.handle] = versesToFetch.map((verseObject) => {
-				// 	return fetch(`/einzelverssynopse/data/${handlePath}/${thirties}/${verseObject.verse}`);
-				// });
+				publisherData[element.handle] = versesToFetch.map((verseObject) => {
+					return fetch(`/einzelverssynopse/data/${handlePath}/${thirties}/${verseObject.verse}`);
+				});
 			}
 		}
 	);
