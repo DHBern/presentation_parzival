@@ -130,16 +130,21 @@ export async function load({ fetch, params }) {
 	);
 
 	// Fetch fassungen
-	(await metadata).hyparchetypes.forEach((/** @type {{ handle: string | number; }} */ element) => {
-		const handlePath = encodeURIComponent(String(element.handle));
-		publisherData[element.handle] = [
-			fetch(`/einzelverssynopse/data/fassungen/${handlePath}/${thirties}/${verse ?? '01'}`)
-		];
-	});
+	if (!hasSuffix) {
+		(await metadata).hyparchetypes.forEach(
+			(/** @type {{ handle: string | number; }} */ element) => {
+				const handlePath = encodeURIComponent(String(element.handle));
+				publisherData[element.handle] = [
+					fetch(`/einzelverssynopse/data/fassungen/${handlePath}/${thirties}/${verse ?? '01'}`)
+				];
+			}
+		);
+	}
 
 	/** @type {string[]} */
 	let loss = [];
 	// Wait for all promises to resolve and filter those with status 200
+	await metadata;
 	const resolvedPublisherData = await Promise.all(
 		Object.entries(publisherData).map(async ([key, promiseArray]) => {
 			let responses = await Promise.all(promiseArray);
