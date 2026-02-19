@@ -1,4 +1,4 @@
-import { URL_STATIC_API } from '$lib/constants';
+import { URL_STATIC_API, URL_TEI_PB } from '$lib/constants';
 import { generateEntries } from '$lib/functions/generateEntries';
 import { metadata } from '$lib/data/metadata';
 import sigilFromHandle from '$lib/functions/sigilFromHandle';
@@ -107,7 +107,9 @@ export async function load({ fetch, params }) {
 					);
 
 					publisherData[element.handle] = versesToFetch.map((verseObject) => {
-						return fetch(`/einzelverssynopse/data/${handlePath}/${thirties}/${verseObject.verse}`);
+						return fetch(
+							`${URL_TEI_PB}/parts/${element.handle}.xml/json?odd=parzival.odd&view=page&id=${element.handle}_${thirties}.${verseObject.verse}`
+						);
 					});
 					hasAdditions = true;
 				} else {
@@ -125,7 +127,9 @@ export async function load({ fetch, params }) {
 					}
 
 					publisherData[element.handle] = versesToFetch.map((verseObject) => {
-						return fetch(`/einzelverssynopse/data/${handlePath}/${thirties}/${verseObject.verse}`);
+						return fetch(
+							`${URL_TEI_PB}/parts/${element.handle}.xml/json?odd=parzival.odd&view=page&id=${element.handle}_${thirties}.${verseObject.verse}`
+						);
 					});
 				}
 			}
@@ -138,7 +142,7 @@ export async function load({ fetch, params }) {
 			(/** @type {{ handle: string | number; }} */ element) => {
 				const handlePath = encodeURIComponent(String(element.handle));
 				publisherData[element.handle] = [
-					fetch(`/einzelverssynopse/data/fassungen/${handlePath}/${thirties}/${verse ?? '01'}`)
+					fetch(`${URL_TEI_PB}/parts/fassungen/${handlePath}/${thirties}/${verse ?? '01'}.json`)
 				];
 			}
 		);
