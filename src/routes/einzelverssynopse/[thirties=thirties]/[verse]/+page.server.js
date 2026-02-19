@@ -3,6 +3,8 @@ import { generateEntries } from '$lib/functions/generateEntries';
 import { metadata } from '$lib/data/metadata';
 import sigilFromHandle from '$lib/functions/sigilFromHandle';
 import { verses } from '$lib/data/verses';
+import pLimit from 'p-limit';
+const limit = pLimit(10);
 
 // ---------------------------------------------------------------------------
 // Module-level caches – computed once on first access, reused across all pages
@@ -155,8 +157,10 @@ export async function load({ fetch, params }) {
 				}
 
 				publisherData[element.handle] = versesToFetch.map((verseObject) => {
-					return fetch(
-						`${URL_TEI_PB}/parts/${element.handle}.xml/json?odd=parzival.odd&view=page&id=${element.handle}_${thirties}.${verseObject.verse}`
+					return limit(() =>
+						fetch(
+							`${URL_TEI_PB}/parts/${element.handle}.xml/json?odd=parzival.odd&view=page&id=${element.handle}_${thirties}.${verseObject.verse}`
+						)
 					);
 				});
 			}
@@ -169,7 +173,9 @@ export async function load({ fetch, params }) {
 			(/** @type {{ handle: string | number; }} */ element) => {
 				const handlePath = encodeURIComponent(String(element.handle));
 				publisherData[element.handle] = [
-					fetch(`${URL_TEI_PB}/parts/fassungen/${handlePath}/${thirties}/${verse ?? '01'}.json`)
+					limit(() =>
+						fetch(`${URL_TEI_PB}/parts/fassungen/${handlePath}/${thirties}/${verse ?? '01'}.json`)
+					)
 				];
 			}
 		);
