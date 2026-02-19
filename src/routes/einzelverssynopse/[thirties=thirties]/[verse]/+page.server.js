@@ -4,6 +4,101 @@ import { metadata } from '$lib/data/metadata';
 import sigilFromHandle from '$lib/functions/sigilFromHandle';
 import { verses } from '$lib/data/verses';
 
+// ---------------------------------------------------------------------------
+// Module-level caches – computed once on first access, reused across all pages
+// ---------------------------------------------------------------------------
+
+/** @type {Map<string, {siglum:string, thirties:string, verse:string}[]> | null} */
+let _verseIndex = null;
+
+/**
+ * Build a lookup index keyed by "handle|thirties" → array of verse objects.
+ * Replaces the per-page O(V × W) filter with an O(1) Map lookup.
+ */
+async function getVerseIndex() {
+	if (!_verseIndex) {
+		_verseIndex = new Map();
+		for (const v of await verses) {
+			const key = `${v.siglum.toLowerCase()}|${v.thirties}`;
+			if (!_verseIndex.has(key)) _verseIndex.set(key, []);
+			_verseIndex.get(key).push(v);
+		}
+	}
+	return _verseIndex;
+}
+
+/** @type {{siglum:string, thirties: string, verse: string}[] | null} */
+let _sortedNavVerses = null;
+
+/**
+ * Compute the sorted, deduplicated verse list used for prev/next navigation.
+ * This is identical for every page, so we cache it at module level.
+ */
+async function getSortedNavVerses() {
+	if (!_sortedNavVerses) {
+		/** @type {{siglum:string, thirties: string, verse: string}[]} */
+		let startobj = []; // typing helper
+		_sortedNavVerses = /** @type {{siglum:string, thirties: string, verse: string}[]} */ (
+			await verses
+		)
+			.filter((v) => !v.verse.includes('-')) // exclude Zusatzverse for navigation
+			// de-duplicate by thirties+verse (keep first occurrence)
+			.reduce(
+				(acc, curr) => {
+					const key = `${curr.thirties}|${curr.verse}`;
+					if (!acc.seen.has(key)) {
+						acc.seen.add(key);
+						acc.items.push(curr);
+					}
+					return acc;
+				},
+				{ seen: new Set(), items: startobj }
+			)
+			.items // sort: by thirties (numeric), then verse with hierarchical dashes
+			.sort((a, b) => {
+				const thA = Number(a.thirties);
+				const thB = Number(b.thirties);
+				if (thA !== thB) return thA - thB;
+
+				const parse = (/** @type {string} */ s) => {
+					const parts = String(s).split('-');
+					const base = Number(parts.shift());
+					const tokens = parts.map((p) => {
+						if (/^\d+$/.test(p)) return { t: 'num', v: Number(p) };
+						return { t: 'str', v: p.toLowerCase() };
+					});
+					return { base, tokens };
+				};
+
+				const A = parse(a.verse);
+				const B = parse(b.verse);
+
+				if (A.base !== B.base) return A.base - B.base;
+
+				const len = Math.max(A.tokens.length, B.tokens.length);
+				for (let i = 0; i < len; i++) {
+					const ta = A.tokens[i];
+					const tb = B.tokens[i];
+					if (ta === undefined) return -1;
+					if (tb === undefined) return 1;
+
+					if (ta.t === tb.t) {
+						if (ta.t === 'num') {
+							if (ta.v !== tb.v) return Number(ta.v) - Number(tb.v);
+						} else {
+							const cmp = String(ta.v).localeCompare(String(tb.v));
+							if (cmp !== 0) return cmp;
+						}
+					} else {
+						return ta.t === 'num' ? -1 : 1;
+					}
+				}
+				return 0;
+			});
+	}
+	return _sortedNavVerses;
+}
+
 /** @type {import('./$types').PageServerLoad} */
 export async function load({ fetch, params }) {
 	console.log('einzelvers', params);
@@ -21,70 +116,8 @@ export async function load({ fetch, params }) {
 		verse = verseparts[0].padStart(2, '0');
 	}
 
-	/** @type {{siglum:string, thirties: string, verse: string}[]} */
-	let startobj = []; //This is just for typing purposes
-	const filteredVerses = /** @type {{siglum:string, thirties: string, verse: string}[]} */ (
-		await verses
-	)
-		// .filter((v) => !v.siglum.includes('fr'))
-		.filter((v) => !v.verse.includes('-')) // exclude Zusatzverse for navigation
-		// de-duplicate by thirties+verse (keep first occurrence)
-		.reduce(
-			(acc, curr) => {
-				const key = `${curr.thirties}|${curr.verse}`;
-				if (!acc.seen.has(key)) {
-					acc.seen.add(key);
-					acc.items.push(curr);
-				}
-				return acc;
-			},
-			{ seen: new Set(), items: startobj }
-		)
-		.items // sort: by thirties (numeric), then verse with hierarchical dashes: // this could be made drastically simpler because we are ignoring dash-verses now, but we keep it in since the sentiment might change.
-		.sort((a, b) => {
-			const thA = Number(a.thirties);
-			const thB = Number(b.thirties);
-			if (thA !== thB) return thA - thB;
-
-			// parse "12", "12-1", "12-a", "12-a-2", etc.
-			const parse = (/** @type {string} */ s) => {
-				const parts = String(s).split('-');
-				const base = Number(parts.shift());
-				const tokens = parts.map((p) => {
-					// numeric tokens first, then alpha tokens
-					if (/^\d+$/.test(p)) return { t: 'num', v: Number(p) };
-					return { t: 'str', v: p.toLowerCase() };
-				});
-				return { base, tokens };
-			};
-
-			const A = parse(a.verse);
-			const B = parse(b.verse);
-
-			if (A.base !== B.base) return A.base - B.base;
-
-			const len = Math.max(A.tokens.length, B.tokens.length);
-			for (let i = 0; i < len; i++) {
-				const ta = A.tokens[i];
-				const tb = B.tokens[i];
-				// shorter (no further suffix) comes first: e.g., 12 < 12-1 or 12-a
-				if (ta === undefined) return -1;
-				if (tb === undefined) return 1;
-
-				if (ta.t === tb.t) {
-					if (ta.t === 'num') {
-						if (ta.v !== tb.v) return Number(ta.v) - Number(tb.v); // 12-1 < 12-2
-					} else {
-						const cmp = String(ta.v).localeCompare(String(tb.v)); // 12-a < 12-b
-						if (cmp !== 0) return cmp;
-					}
-				} else {
-					// numbers before strings at the same level: 12-1 < 12-a
-					return ta.t === 'num' ? -1 : 1;
-				}
-			}
-			return 0;
-		});
+	// Use cached sorted verse list for prev/next navigation (computed once)
+	const filteredVerses = await getSortedNavVerses();
 	const index = filteredVerses.findIndex(
 		(v) => v?.thirties === thirties && v?.verse === verse.split('-')[0]
 	);
@@ -92,46 +125,40 @@ export async function load({ fetch, params }) {
 
 	const nextVerse = index < filteredVerses.length - 1 ? filteredVerses[index + 1] : null;
 
-	// Fetch the textzeugen
+	// Fetch the textzeugen – use the pre-built index for O(1) lookups
+	const verseIndex = await getVerseIndex();
 	const hasSuffix = verseparts[1]; // check if there is a suffix in the URL
 	await Promise.all(
 		[...(await metadata).codices, ...(await metadata).fragments].map(
 			async (/** @type {{ handle: string | number; }} */ element) => {
-				const handlePath = encodeURIComponent(String(element.handle));
+				// O(1) index lookup instead of filtering the entire verses array
+				const witnessVerses = verseIndex.get(`${element.handle}|${thirties}`) ?? [];
+
+				/** @type {{siglum:string, thirties:string, verse:string}[]} */
+				let versesToFetch;
 				if (hasSuffix) {
-					const versesToFetch = (await verses).filter(
-						(v) =>
-							v.siglum.toLowerCase() === element.handle &&
-							v.thirties === thirties &&
-							v.verse === verse
-					);
-
-					publisherData[element.handle] = versesToFetch.map((verseObject) => {
-						return fetch(
-							`${URL_TEI_PB}/parts/${element.handle}.xml/json?odd=parzival.odd&view=page&id=${element.handle}_${thirties}.${verseObject.verse}`
-						);
-					});
-					hasAdditions = true;
+					versesToFetch = witnessVerses.filter((v) => v.verse === verse);
 				} else {
-					const versesToFetch = (await verses).filter(
-						(v) =>
-							v.siglum.toLowerCase() === element.handle &&
-							v.thirties === thirties &&
-							v.verse.startsWith(verse)
-					);
-					if (versesToFetch.length >= 2) {
-						const regexp = new RegExp(`-\\d`);
-						if (versesToFetch.some((v) => regexp.test(v.verse))) {
-							hasAdditions = true;
-						}
-					}
-
-					publisherData[element.handle] = versesToFetch.map((verseObject) => {
-						return fetch(
-							`${URL_TEI_PB}/parts/${element.handle}.xml/json?odd=parzival.odd&view=page&id=${element.handle}_${thirties}.${verseObject.verse}`
-						);
-					});
+					versesToFetch = witnessVerses.filter((v) => v.verse.startsWith(verse));
 				}
+
+				// Skip witnesses that have no matching verses – avoids unnecessary work
+				if (versesToFetch.length === 0) return;
+
+				if (hasSuffix) {
+					hasAdditions = true;
+				} else if (versesToFetch.length >= 2) {
+					const regexp = new RegExp(`-\\d`);
+					if (versesToFetch.some((v) => regexp.test(v.verse))) {
+						hasAdditions = true;
+					}
+				}
+
+				publisherData[element.handle] = versesToFetch.map((verseObject) => {
+					return fetch(
+						`${URL_TEI_PB}/parts/${element.handle}.xml/json?odd=parzival.odd&view=page&id=${element.handle}_${thirties}.${verseObject.verse}`
+					);
+				});
 			}
 		)
 	);
