@@ -24,7 +24,7 @@
 
 	const aboutProjectPages = [
 		{ slug: 'Einführung', path: '/einfuehrung' },
-		{ slug: 'Projektpräsentationen', path: '/projektpraesentationen' },
+		{ slug: 'Publikationen', path: '/projektpraesentationen' },
 		{ slug: 'Mitarbeitende', path: '/mitarbeitende' }
 		// { slug: 'Fassungsprofile', path: '/fassungsprofile' },
 		// { slug: 'Editionsgrundsätze', path: '/editionsgrundsaetze' },
