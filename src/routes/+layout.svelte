@@ -53,7 +53,7 @@
 			</a>
 
 			<a
-				href="https://parzival.unibe.ch/"
+				href="https://parzdb.parzival.unibe.ch/"
 				target="_blank"
 				rel="noopener noreferrer"
 				class="items-baseline gap-1 text-xs hover:underline hidden lg:flex self-end hover:text-primary-700"
