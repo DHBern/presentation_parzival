@@ -1,8 +1,6 @@
 <script>
 	import { page } from '$app/state';
-	let newLink = new URL(
-		`https://parzdb.parzival.unibe.ch${page.url.pathname.replace('/parzdb', '')}${page.url.search}`
-	);
+	let newLink = new URL(`https://parzdb.parzival.unibe.ch${page.url.pathname}${page.url.search}`);
 </script>
 
 <div class="container mx-auto typography">
