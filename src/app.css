@@ -52,6 +52,10 @@
 @import '../oldvintage.css';
 @custom-variant dark (&:where(.dark, .dark *));
 
+:root {
+	scrollbar-color: var(--color-surface-100) var(--color-surface-300) !important; /* thumb / track */
+}
+
 .typography {
 	h1:not(:where([class~='unstyled'], [class~='unstyled'] *)) {
 		@apply h1 mb-4;
