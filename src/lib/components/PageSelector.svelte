@@ -4,6 +4,7 @@
 
 	/** @type {{targetPath?: string, coordinates?: [String | boolean, String | boolean]}} */
 	let { targetPath = '/textzeugen/d', pageId = 'd005', meta } = $props();
+	$inspect(meta);
 	/**
 	 * @type {HTMLInputElement | undefined}
 	 */
@@ -16,11 +17,17 @@
 
 	const findVerse = async (/** @type {String | undefined} */ page) => {
 		if (page) {
-			const found = (await meta).find(
-				(pageMeta) =>
-					pageMeta.id ===
-					`${handle}${page.padStart(page[page.length - 1] === 'r' || page[page.length - 1] === 'v' ? 4 : 3, '0')}`
-			);
+			const found = (await meta).find((pageMeta) => {
+				if (rvSuffix) {
+					if (page.endsWith('r') || page.endsWith('v')) {
+						return pageMeta.id === `${handle}${page.padStart(4, '0')}`;
+					} else {
+						return pageMeta.id === `${handle}${page.padStart(3, '0')}r`;
+					}
+				} else {
+					return pageMeta.id === `${handle}${page.padStart(3, '0')}`;
+				}
+			});
 			if (found?.l) {
 				return found?.l.replace('.', '/');
 			}
