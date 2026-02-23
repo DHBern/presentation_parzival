@@ -26,7 +26,8 @@
 		{ slug: 'Einführung', path: '/einfuehrung' },
 		{ slug: 'Introduction', path: '/introduction' },
 		{ slug: 'Publikationen', path: '/projektpraesentationen' },
-		{ slug: 'Mitarbeitende', path: '/mitarbeitende' }
+		{ slug: 'Mitarbeitende', path: '/mitarbeitende' },
+		{ slug: 'Impressum', path: '/impressum' }
 		// { slug: 'Fassungsprofile', path: '/fassungsprofile' },
 		// { slug: 'Editionsgrundsätze', path: '/editionsgrundsaetze' },
 		// { slug: 'Transkriptionsrichtlinien', path: '/transkriptionsrichtlinien' }
