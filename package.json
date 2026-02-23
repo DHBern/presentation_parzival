@@ -2,6 +2,7 @@
 	"name": "presentation-parzival",
 	"version": "0.0.1",
 	"private": true,
+	"license": "MIT",
 	"scripts": {
 		"docker:start": "docker pull existdb/existdb:6.2.0 && docker run -d -p 8081:8080 -p 8444:8443 --name teipublisher existdb/existdb:6.2.0",
 		"installXar": "wget https://data.parzival.digitaleditions.ch/parzival-0.2.xar -O parzival-0.2.xar && xst package install parzival-0.2.xar && rm parzival-0.2.xar",
