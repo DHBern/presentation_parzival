@@ -117,7 +117,8 @@
 	</p>
 	<h3>Zitierempfehlung</h3>
 	<p>
-		Wolfram von Eschenbach, ›Parzival‹, Digitale Edition, Parzival-Projekt, parzival.unibe.ch
-		(Zugriff: [aktuelles Datum])
+		Wolfram von Eschenbach, ›Parzival‹, Digitale Ausgabe, hg. von Michael Stolz in Zusammenarbeit
+		mit Stefan Abel und einem Editionsteam an der Universität Bern, parzival.unibe.ch (Zugriff:
+		[aktuelles Datum])
 	</p>
 </div>
