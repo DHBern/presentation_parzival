@@ -11,26 +11,26 @@
 	} from './Devilstable_DEFAULTS.json';
 	import { offset, flip, shift, computePosition } from '@floating-ui/dom';
 
-	const brushDimension = 200;
+	const brushDimension = 205;
 	const brushDimensionWithSafetyPixel = brushDimension + 1; // fixes a glitch, where Brush and Detail don't fit next to each other on PageResize.
 
 	/** @type {{codices: any, width?: number, height?: number, data?: {values: number[][], label: string}[]}} */
 	let { codices, width = 400, height = 400, data = [] } = $props();
 
 	let mobile = $derived(width < 800);
-	const defaultChips = [summaryLabel, ...SIGLA_ORDER, 'fr'];
+	const defaultChips = [summaryLabel, ...SIGLA_ORDER, 'Fr'];
 	let inputChipValues = $state(defaultChips);
 	let inputChipValueLabels = $derived(
 		inputChipValues.map((v) => codices.find((c) => c.sigil === v)?.handle ?? v)
 	);
-	let fragments = $derived(data.filter((d) => d.label.includes('fr')));
+	let fragments = $derived(data.filter((d) => d.label.includes('Fr')));
 	/** @type {{label: string, values: boolean[]}} */
 	let allFragmentData = $derived.by(() => {
-		if (!inputChipValueLabels.includes('fr')) return {};
-		//combine all the fragments into one Object with the label 'fr'
+		if (!inputChipValueLabels.includes('Fr')) return {};
+		//combine all the fragments into one Object with the label 'Fr'
 		/** @type {{label: string, values: boolean[]|[boolean[],string]}} */
 		let fragmentData = {
-			label: 'fr',
+			label: 'Fr',
 			values: new Array(DATA_MAX).fill(false)
 		};
 		//loop DATA_MAX times and check if the value is in any of the fragments
@@ -53,7 +53,7 @@
 	/** @type {{label: string, values: boolean[]}[]} */
 	let boolData = $derived(
 		inputChipValueLabels.map((c) => {
-			if (c === 'fr') {
+			if (c === 'Fr') {
 				return allFragmentData;
 			} else if (c === summaryLabel) {
 				return {
@@ -115,9 +115,9 @@
 		Um einen Textzeugen hinzuzufügen, geben Sie die SIgle des Textzeugen ein. Z. B. <i>D</i>.
 	</p>
 	<p>
-		Um einzelne Fragmente hinzuzufügen geben sie <i>fr</i> gefolgt vom Index des Fragments (1-72)
+		Um einzelne Fragmente hinzuzufügen geben sie <i>Fr</i> gefolgt vom Index des Fragments (1-72)
 		ein. Z. B.
-		<i>fr32</i>. Um alle Fragmente in einer Spalte hinzuzufügen, geben Sie <i>fr</i> (ohne index) ein.
+		<i>Fr32</i>. Um alle Fragmente in einer Spalte hinzuzufügen, geben Sie <i>Fr</i> (ohne index) ein.
 	</p>
 	<div class="arrow preset-filled-primary-500"></div>
 </div>
@@ -134,7 +134,7 @@
 			if (
 				[
 					summaryLabel,
-					'fr',
+					'Fr',
 					...codices.map((/** @type {{ sigil: string; }} */ c) => c.sigil),
 					...fragments.map((/** @type {{ label: string; }} */ f) => f.label)
 				].includes(input.inputValue)
@@ -192,7 +192,7 @@
 
 	@media (min-width: 768px) {
 		:global(.tick text) {
-			font-size: 0.75rem;
+			font-size: 0.7rem;
 		}
 	}
 </style>
