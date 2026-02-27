@@ -98,7 +98,7 @@
 							// in order to set the link to the first matching verse
 							const fasskommInfo = fasskommInfos.find((f) => {
 								if (!f.end_vers) {
-									return Number(f.verse) === Number(verse)
+									return Number(f.verse) === Number(verse);
 								}
 								// else there is a range over several dreissigers
 								const startVerse = Number(`${f.dreissiger}.${f.verse}`);
@@ -323,7 +323,6 @@
 		fillFasskommStore(a, false);
 	};
 
-
 	// --------------------------------------
 	// Apparate
 	// --------------------------------------
@@ -474,7 +473,7 @@
 				Eintextedition als <a
 					class="anchor"
 					target="_blank"
-					href="https://data.parzival.digitaleditions.ch/api/pdf/eintextedition.pdf#page={data.thirties}"
+					href="https://data.parzival.digitaleditions.ch/api/pdf/Parzival_Eintextedition.pdf#page={data.thirties}"
 				>
 					PDF
 				</a> aufrufen
