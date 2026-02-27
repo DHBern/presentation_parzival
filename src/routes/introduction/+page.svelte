@@ -2,7 +2,7 @@
 	<div class="flex items-start justify-end m-2">
 		<a class="btn btn-icon" aria-label="Zur deutschen Version" href="/einfuehrung">
 			<i class="fa-solid fa-globe" aria-hidden="true"></i>
-			<span aria-hidden="true">EN</span>
+			<span aria-hidden="true">DE</span>
 			<span class="sr-only">Zur deutschen Version</span>
 		</a>
 	</div>

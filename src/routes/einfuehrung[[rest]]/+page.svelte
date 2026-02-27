@@ -6,7 +6,7 @@
 	<div class="flex items-start justify-end m-2">
 		<a class="btn btn-icon" href="/introduction" aria-label="Switch to English">
 			<i class="fa-solid fa-globe" aria-hidden="true"></i>
-			<span aria-hidden="true">DE</span>
+			<span aria-hidden="true">EN</span>
 			<span class="sr-only">Switch to English</span>
 		</a>
 	</div>
