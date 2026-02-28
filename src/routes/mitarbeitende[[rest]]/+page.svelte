@@ -83,6 +83,7 @@
 		<li>Dr. Judith Lange (Universität Bern)</li>
 		<li>Dr. Claudia Lingscheid (Universität Bern)</li>
 		<li>Dr. Agata Mazurek (Universität Bern)</li>
+		<li>Dr. Robert Mohr (Universität Bern)</li>
 		<li>Dr. Christoph Pretzer (Universität Bern)</li>
 		<li>Anett Rehner M.A. (Berlin-Brandenburgische Akademie der Wissenschaften)</li>
 		<li>Livia Sandri M.A. (Berlin-Brandenburgische Akademie der Wissenschaften)</li>
