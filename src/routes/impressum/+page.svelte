@@ -4,9 +4,8 @@
 
 <div class="container mx-auto typography">
 	<h1>Impressum</h1>
-
 	<p>
-		Die auf der Plattform parzival.unibe.ch realisierte digitale Ausgabe des ›Parzival‹-Romans
+		Die auf der Plattform <i>parzival.unibe.ch</i> realisierte digitale Ausgabe des ›Parzival‹-Romans
 		Wolframs von Eschenbach ist ein Projekt der Universität Bern, das parallel zur Konzeption einer
 		gedruckten Ausgabe entstanden ist.
 	</p>
@@ -42,53 +41,29 @@
 	<h2>Rechtliche Hinweise</h2>
 	<h3>1. Allgemeine Hinweise</h3>
 	<p>
-		Die Plattform parzival.unibe.ch kann ohne Registrierung und kostenlos besucht werden. Es werden
+		Die Plattform <i>parzival.unibe.ch</i> kann ohne Registrierung und kostenlos besucht werden. Es werden
 		keine personenbezogenen Daten wie Name, Adresse oder E-Mail erhoben. Durch die Nutzung dieser
 		Website erklären Sie sich mit der Erhebung, Verarbeitung und Nutzung von Daten gemäß der
 		nachfolgenden Beschreibung einverstanden.
 	</p>
-	<h3>2. Datenerhebung</h3>
-	<p>
-		beim Websitebesuch Bei jedem Besuch sendet der auf Ihrem Endgerät verwendete Browser automatisch
-		Informationen an den Server unserer Website (Github Pages). Diese Informationen werden temporär
-		in sogenannten Logfiles gespeichert.
-	</p>
-	<p>Folgende Informationen werden automatisch erfasst:</p>
-	<ul class="list-inside">
-		<li>IP-Adresse</li>
-		<li>Datum und Uhrzeit des Zugriffs</li>
-		<li>aufgerufene URL</li>
-		<li>Website, von welcher der Zugriff erfolgte</li>
-		<li>verwendeter Browser und das Betriebssystem Ihres Endgeräts</li>
-	</ul>
-	<p>Diese Daten werden verarbeitet, um:</p>
-	<ul class="list-inside">
-		<li>einen reibungslosen Verbindungsaufbau der Website zu gewährleisten,</li>
-		<li>die Systemsicherheit und -stabilität auszuwerten,</li>
-		<li>die Nutzung der Website technisch zu ermöglichen.</li>
-	</ul>
-	<p>
-		Die IP-Adresse wird nach Ihrem Besuch umgehend gelöscht oder anonymisiert, so dass keine
-		Rückschlüsse auf Ihre Person möglich sind.
-	</p>
-	<h3>3. Lokale Datenspeicherung</h3>
+	<h3>2. Lokale Datenspeicherung</h3>
 	<p>
 		Wir verwenden den sessionStorage Ihres Browsers zur lokalen Speicherung von funktionalen
 		Metadaten zum Betrieb der Applikation.
 	</p>
 	<p>Diese Daten verbleiben auf Ihrem Gerät und werden nicht an unsere Server übertragen.</p>
-	<h3>4. Keine Verwendung von Cookies oder Tracking</h3>
+	<h3>3. Keine Verwendung von Cookies oder Tracking</h3>
 	<p>
-		Die Plattform parzival.unibe.ch verwendet keine Cookies, keine externen Tracking-Dienste und
+		Die Plattform <i>parzival.unibe.ch</i> verwendet keine Cookies, keine externen Tracking-Dienste und
 		sammelt keine Aktivitäten außerhalb unserer eigenen Seiten.
 	</p>
-	<h3>5. Änderungen</h3>
+	<h3>4. Änderungen</h3>
 	<p>
 		Diese Datenschutzerklärung kann jederzeit angepasst werden, um aktuellen rechtlichen
 		Anforderungen zu entsprechen oder Änderungen unserer Dienste umzusetzen. Es gilt jeweils die zum
 		Zeitpunkt Ihres Besuchs veröffentlichte Version.
 	</p>
-	<h3>6. Lizenz</h3>
+	<h3>5. Lizenz</h3>
 	<p>
 		Alle Editionsinhalte (mit Ausnahme der Digitalisate) sind unter der Lizenz <a
 			href="https://creativecommons.org/licenses/by-nc-sa/4.0/"
@@ -98,27 +73,22 @@
 		zugänglich.
 	</p>
 	<img src={licenceIcon} alt="CC-BY-NC-SA 4.0" class="w-32 my-4" />
-	<h3>Bildnachweise</h3>
+	<h2>Bildnachweise</h2>
 	<p>
-		Die Bilddigitalisate werden dank der Kooperationen mit Bibliotheken und Archiven angezeigt, die
-		Bilddateien aus ihrem Bestand zur Verfügung gestellt haben. Voraussetzung für die Anzeige ist,
-		dass die Bilddaten nur zu wissenschaftlichen oder privaten, nicht aber zu kommerziellen Zwecken
-		genutzt werden und bei der Bildanzeige stets auf die bestandshaltende Institution und das
-		angezeigte Exemplar verwiesen wird. Eine Weiterverwendung von Bilddigitalisaten durch Dritte ist
-		nur mit Genehmigung der bestandshaltenden Institution bzw. gemäß den dort geltenden Bestimmungen
-		zulässig.
+		Die Bilddigitalisate werden dank der Kooperationen mit Bibliotheken und Archiven angezeigt, die dem Projektteam
+		Bilddateien aus ihrem Bestand zur Verfügung gestellt haben.
 	</p>
 	<p>
 		Die Rechte an den in der digitalen ›Parzival‹-Ausgabe angezeigten Bilddigitalisaten liegen bei
-		den bestandshaltenden Institutionen. Grundsätzlich gilt, dass Fragen zur Reproduktion der
-		Bilder, z. B. in Publikationen, an die bestandshaltenden Institutionen zu richten sind. Bei
+		den bestandshaltenden Institutionen. Entsprechend müssen Fragen zur Reproduktion und Weiterverwendung der
+		Bilder, z. B. in Publikationen, an die bestandshaltenden Institutionen zu gerichtet werden. Bei
 		Verweisen auf die im Rahmen der digitalen ›Parzival‹-Ausgabe angezeigten Bilddigitalisate sind
-		jeweils die bestandshaltende Institution und das konkrete Exemplar anzugeben.
+		jeweils die bestandshaltende Institution und das konkrete Exemplar (Signatur) anzugeben.
 	</p>
-	<h3>Zitierempfehlung</h3>
+	<h2>Zitierempfehlung</h2>
 	<p>
 		Wolfram von Eschenbach, ›Parzival‹, Digitale Ausgabe, hg. von Michael Stolz in Zusammenarbeit
-		mit Stefan Abel und einem Editionsteam an der Universität Bern, parzival.unibe.ch (Zugriff:
+		mit Stefan Abel und einem Editionsteam an der Universität Bern, <i>parzival.unibe.ch</i> (Zugriff:
 		[aktuelles Datum])
 	</p>
 </div>
