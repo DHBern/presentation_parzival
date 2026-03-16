@@ -19,6 +19,7 @@ const config = {
 			base: process.argv.includes('dev') ? '' : process.env.BASE_PATH
 		},
 		prerender: {
+			concurrency: 4,
 			handleHttpError: 'warn', //remove this for production
 			handleMissingId: 'warn', //remove this for production
 			handleUnseenRoutes: 'warn' //remove this for production

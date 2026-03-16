@@ -6,7 +6,6 @@
 	let marginTop = 20;
 	let marginRight = 0;
 	let marginBottom = 20;
-	const optimalChunkWidth = 18;
 
 	/**
 	 * @type {SVGGElement}
@@ -40,39 +39,38 @@
 		modifySelection = $bindable()
 	} = $props();
 
-	let mobile = $derived(width > height);
-	let marginLeft = $derived(mobile ? 30 : 35);
-	let availableWidth = $derived(width - marginLeft - marginRight);
-	let numChunks = $derived(
-		mobile
-			? Math.max(Math.floor(availableWidth / optimalChunkWidth), 1)
-			: Math.max(Math.floor((height - marginTop - marginBottom) / optimalChunkWidth), 1)
+	let contigousData = $derived(
+		data.map((d) => {
+			// init
+			let contiguousRanges = [];
+			let start = null;
+
+			//
+			for (let i = 0; i < d.values.length; i++) {
+				if (d.values[i] && start === null) {
+					// start a new range
+					start = i;
+				} else if (!d.values[i] && start !== null) {
+					contiguousRanges.push([start, i - 1]);
+					start = null; // reset start
+				}
+			}
+			// if range is still open at the end
+			if (start !== null) {
+				contiguousRanges.push([start, d.values.length - 1]);
+			}
+			return {
+				label: d.label,
+				values: contiguousRanges
+			};
+		})
 	);
 
-	// Set ColorScale and check for dark-mode
-	let colorScale = $derived(
-		d3.scaleThreshold(
-			[0.001, 1 / 4, 2 / 4, 3 / 4, 0.9999],
-			[
-				'fill-surface-50-950',
-				'fill-primary-400-600',
-				'fill-primary-500',
-				'fill-primary-600-400',
-				'fill-primary-800-200',
-				'fill-primary-950-50'
-			]
-		)
-	);
+	let mobile = $derived(width > height);
+	let marginLeft = $derived(mobile ? 30 : 35);
 
 	// create chunks: each chunk is a number counting the number of true values in the chunk
 	let sourcesDim = $derived(d3.scaleBand().domain(data.map((d) => d.label)));
-	let xChunk = $derived(
-		d3
-			.scaleLinear()
-			.clamp(true)
-			.domain([0, numChunks])
-			.range(mobile ? [marginLeft, width - marginRight] : [marginBottom, height - marginTop])
-	);
 	let valuesDim = $derived(d3.scaleLinear().domain([DATA_MIN, DATA_MAX]).clamp(true));
 	/** @type any */
 	let x = $derived(
@@ -102,10 +100,11 @@
 	);
 
 	modifySelection = (/** @type {number} */ modifier, /** @type {any} */ move) => {
+		const axis = mobile ? x : y;
 		const startVal = valuesDim.invert(
-			xChunk(xChunk.invert(valuesDim(selection.start)) + (move ? modifier : -modifier))
+			axis(axis.invert(valuesDim(selection.start)) + (move ? modifier : -modifier))
 		);
-		const endVal = valuesDim.invert(xChunk(xChunk.invert(valuesDim(selection.end)) + modifier));
+		const endVal = valuesDim.invert(axis(axis.invert(valuesDim(selection.end)) + modifier));
 		if (
 			startVal > endVal ||
 			(move && selection.end >= DATA_MAX && endVal >= DATA_MAX) ||
@@ -138,51 +137,24 @@
 				}
 			})
 			.on('end', (/** @type {{ selection: [number, number]; }} */ e) => {
+				const axis = mobile ? x : y;
 				// Return if not triggered by user interaction
 				if (!e.sourceEvent || !e.selection) return;
 
 				// Snap the selection to the nearest step
-				let [from, to] = e.selection.map((d) => Math.round(xChunk.invert(d)));
+				let [from, to] = e.selection.map((d) => Math.round(axis.invert(d)));
 				if (to <= from) {
 					to = from + 1; // Ensure to is always greater than from
 				}
 
-				const thirtiesTo = valuesDim.invert(xChunk(to));
-				const thirtiesFrom = valuesDim.invert(xChunk(from));
+				const thirtiesTo = valuesDim.invert(axis(to));
+				const thirtiesFrom = valuesDim.invert(axis(from));
 
 				// Update range in Details
 				selection.start = thirtiesFrom || DATA_MIN;
 				selection.end = Math.min(thirtiesTo, DATA_MAX);
 			});
 	});
-	let chunkedData = $derived(
-		data.map((dataObject) => {
-			const chunked = new Array(numChunks).fill(0);
-			const chunkedPresent = new Array(numChunks).fill(0);
-			for (let i = 0; i < numChunks; i++) {
-				const start = xChunk(i);
-				const end = xChunk(i + 1);
-				dataObject.values.forEach((present, valIndex) => {
-					const pos = valuesDim(valIndex);
-					if (pos >= start && pos < end) {
-						chunked[i]++;
-						if (present) {
-							chunkedPresent[i]++;
-						}
-					} else if (pos >= end) {
-						return;
-					}
-				});
-			}
-
-			return {
-				label: dataObject.label,
-				values: chunked.map((val, i) => {
-					return chunkedPresent[i] / val;
-				})
-			};
-		})
-	);
 	$effect.pre(() => {
 		mobile
 			? d3.select(gy).call(d3.axisLeft(y).tickFormat((d) => sigilFromHandle(d)))
@@ -200,34 +172,27 @@
 			.call(brush)
 			.call(brush.move, [valuesDim(selection.start), valuesDim(selection.end)]);
 	});
-	$effect(() => {
-		// this effect ensures that the brush is snapped to a chunk
-		selection.start = valuesDim.invert(
-			xChunk(Math.round(xChunk.invert(valuesDim(selection.start))))
-		);
-		selection.end = valuesDim.invert(xChunk(Math.round(xChunk.invert(valuesDim(selection.end)))));
-	});
 </script>
 
 <svg {width} {height} class="float-left" shape-rendering="crispEdges">
-	<g bind:this={gy} transform="translate({marginLeft - 5} ,0)" />
-	<g bind:this={gx} transform="translate(0,{mobile ? height - marginBottom : marginTop - 1})" />
-	{#key y | x}
-		{#each chunkedData as d}
+	{#key y | x | height | width}
+		<g bind:this={gy} transform="translate({marginLeft - 5} ,0)" />
+		<g bind:this={gx} transform="translate(0,{mobile ? height - marginBottom : marginTop - 1})" />
+		{#each contigousData as d}
 			<g>
-				{#each d.values as v, j}
-					{@const start = xChunk(j)}
-					{@const end = xChunk(j + 1)}
+				{#each d.values as v}
+					{@const start = mobile ? x(v[0]) : y(v[0])}
+					{@const end = mobile ? x(v[1]) : y(v[1])}
 					<rect
 						x={mobile ? start : x(d.label)}
 						y={mobile ? y(d.label) : start}
 						width={mobile ? end - start : x.bandwidth()}
 						height={mobile ? y.bandwidth() : end - start}
-						class={colorScale(v)}
+						class="fill-primary-950-50"
 					/>
 				{/each}
 			</g>
 		{/each}
+		<g bind:this={gBrush} transform="translate(0,{mobile ? marginTop : 0})" />
 	{/key}
-	<g bind:this={gBrush} transform="translate(0,{mobile ? marginTop : 0})" />
 </svg>

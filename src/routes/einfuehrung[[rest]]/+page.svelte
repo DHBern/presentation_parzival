@@ -1,18 +1,22 @@
 <script>
-	import H2Hoverable from '$lib/components/H2Hoverable.svelte';
 	import Popover from '$lib/components/Popover.svelte';
 </script>
 
-<!-- <div class="card m-8 p-4 preset-filled-primary-500" data-popup="popupClick">
-	<span bind:this={popupContent}>content</span>
-	<div class="arrow preset-filled-primary-500"></div>
-</div> -->
+<div class="container mx-auto typography">
+	<div class="flex items-start justify-end m-2">
+		<a class="btn btn-icon" href="/introduction" aria-label="Switch to English">
+			<i class="fa-solid fa-globe" aria-hidden="true"></i>
+			<span aria-hidden="true">EN</span>
+			<span class="sr-only">Switch to English</span>
+		</a>
+	</div>
+</div>
 
 <div class="container mx-auto typography">
 	<h1 class="h1 mb-4">
 		Wolfram von Eschenbach, ›Parzival‹.<br />Eine überlieferungskritische Ausgabe in digitaler Form
 	</h1>
-	<H2Hoverable name="Voraussetzungen"></H2Hoverable>
+	<h2>Voraussetzungen</h2>
 
 	<p>
 		Wolfram von Eschenbach hat mit seinem ›Parzival‹ einen der bedeutendsten Erzähltexte des
@@ -62,7 +66,7 @@
 		).
 	</p>
 
-	<H2Hoverable name="Methodischer Kontext"></H2Hoverable>
+	<h2>Methodischer Kontext</h2>
 	<p>
 		Dieses Desiderat findet sich auf zentrale Probleme in der philologischen Theoriediskussion der
 		germanistischen Mediävistik verwiesen. Zu nennen wären Phänomene wie das Verhältnis von
@@ -132,7 +136,7 @@
 		digitaler Form ist die unverzichtbare Voraussetzung für jede Neuedition des ›Parzival‹.
 	</p>
 
-	<H2Hoverable name="Das Parzival-Projekt"></H2Hoverable>
+	<h2>Das Parzival-Projekt</h2>
 
 	<p>
 		Im Rahmen eines vom Schweizerischen Nationalfonds und phasenweise von der Deutschen
@@ -192,80 +196,11 @@
 		23 (2014), bes. S. 459–465.
 	</p>
 
-	<H2Hoverable name="Editionsproben"></H2Hoverable>
+	<h2>Digitale Edition</h2>
 
 	<p>
 		Welche Möglichkeiten die synoptische Darstellung von Fassungen und Überlieferungsträgern am
-		Bildschirm bietet, zeigt die Abteilung Editionsproben auf dieser Website. Dort werden auch die
-		Verfahren der
-		<Popover>
-			{#snippet trigger()}Fassungsedition
-			{/snippet}
-			{#snippet content()}
-				Die Beispiele zeigen ein Editionskonzept nach den vier Fassungen *D *G *m und *T auf: Ein
-				Mausklick auf die links neben einer Versangabe befindliche Fassungssigle (z.B. *D) bringt
-				den entsprechenden Vers der jeweils folgenden Fassung (z.B. *G) in der obersten Zeile zur
-				Anzeige. Auf diese Weise kann durch fortgesetztes Anklicken der jeweils selben Versposition
-				rasch eine Konkordanz hergestellt werden. Die unter den Fassungstexten befindlichen Fenster
-				enthalten einen zweistöckigen Apparat. Die erste Etage ("Apparat 1") dokumentiert
-				Gliederungseinrichtungen der Handschriften, wie etwa Initialen, Überschriften und
-				Capitulumzeichen. Die zweite Etage ("Apparat 2") verzeichnet aussagerelevante Varianten in
-				der Textgestalt, etwa Wortersetzungen, Wortumstellungen, Änderungen bei morphologischen
-				Kompositionsteilen wie Präfixen und auch Wechsel der Flexionsklasse (Varianten, die nicht
-				aussagerelevant sind, können über die Einzeltranskriptionen erschlossen werden). In den
-				einzelnen Fassungstexten kann Apparat 1 durch einen Mausklick auf die Abschnittangabe (z.B.
-				den 'Dreißiger' 184) angesprungen werden; Apparat 2 wird mit einem Mausklick auf die daneben
-				stehende Versangabe (z.B. 01) erreicht. Der Link fehlt in den angegebenen Positionen jeweils
-				dann, wenn der betroffene Vers keine Varianten des einen oder anderen Typs aufweist. Über
-				die Handschriftensiglen der Apparate kann eine Volltranskription mit Digitalfaksimiles der
-				einzelnen Manuskripte angesteuert werden. Die Ansicht öffnet sich in einem neuen Fenster,
-				das verschiebbar und in seiner Größe beliebig veränderbar ist. Dies ermöglicht einen
-				direkten Vergleich zwischen den Transkriptionen und den Fassungstexten. Die Transkriptionen
-				folgen den unter "Editionsproben" angegebenen Konventionen. Die Transkriptionen der
-				Einzelhandschriften können zudem auch über die blauen Handschriftensiglen in der oberen
-				Menüleiste über den Fassungstexten angesprochen werden. Mit dem Button "3 Fassungen" kann
-				der Fassungstext von *T ausgeblendet werden, um eine bessere Darstellung auf Monitoren mit
-				geringerer Breite zu gewährleisten.
-			{/snippet}
-		</Popover>
-		und das Modell einer
-		<Popover>
-			{#snippet trigger()}Eintextedition
-			{/snippet}
-			{#snippet content()}
-				Neben der synoptischen Mehrtextedition wird auch eine Eintextedition (Lesetext) angeboten,
-				in welcher die wichtigsten editorischen Informationen gebündelt präsentiert werden. Der
-				kritische Text ist hier nach Fassung *D auf der Grundlage des St. Galler Codex 857
-				eingerichtet. Rechts daneben werden in verkleinertem Schriftgrad die Varianten der
-				Fassungstexte *G und *T (nach der jeweiligen Leithandschrift) in normalisierter Form mit der
-				jeweiligen Fassungssigle angegeben, wobei auch Binnenvarianten ausgewählter Handschriften
-				berücksichtigt werden. Die Varianten der Fassung *m (die Fassung *D nahe steht) sind dagegen
-				in der dritten Apparatetage untergebracht: Die erste dieser drei Apparatetagen listet die
-				Auswahl der Textzeugen auf, die bei der Angabe der Fassungsvarianten mit berücksichtigt
-				werden. Es sind dies neben den Leithandschriften D, m, G und T weitere vollständige
-				Handschriften und gegebenenfalls Fragmente, die aus textgeschichtlicher Perspektive als
-				besonders wichtig erachtet werden. Die zweite Apparatetage beinhaltet (ähnlich wie „Apparat
-				1“ in der synoptischen Edition) Angaben zur materiellen Gestalt der ausgewählten Textzeugen;
-				aufgeführt sind Initialen, Majuskeln sowie gegebenenfalls Überschriften und Illustrationen.
-				Die dritte Apparatetage dokumentiert Abweichungen der Leithandschrift D gegenüber dem
-				konstituierten Text *D und verzeichnet die Varianten der Fassung *m. Auf semantisch wichtige
-				Fassungsunterschiede der Fassung *m macht gegebenenfalls ein auf diese Apparatetage
-				verweisendes Pfeilsymbol in der Spalte der Fassungsvarianten (neben dem *D-Text) aufmerksam.
-				In seltenen Fällen wird das auf diesen Apparat verweisende Pfeilsymbol auch für Varianten
-				der Fassungen *G und *T verwendet, falls deren Wortlaut aus Platzgründen nicht neben dem
-				Lesetext untergebracht werden kann. Ausführlichere Erläuterungen zur Eintextedition
-				enthalten die Beiträge: Michael Stolz: Von den Fassungen zur Eintextedition. Eine neue
-				Leseausgabe von Wolframs ›Parzival‹, in: Überlieferungsgeschichte transdisziplinär. Neue
-				Perspektivenauf ein germanistisches Forschungsparadigma, in Verbindung mit Horst Brunner u.
-				Freimut Löser hg. von Dorothea Klein, Wiesbaden 2016 (Wissensliteratur im Mittelalter 52),
-				S. 353–388. Brüggen, Elke u. Michael Stolz: Fassungen, Übersetzung und Kommentar. Profile
-				einer neuen Ausgabe von Wolframs ›Parzival‹ – erscheint in: Walther von der Vogelweide.
-				Düsseldorfer Kolloquium 2018, in Verbindung mit Franz-Josef Holznagel u. Mathias Herweg hg.
-				von Ricarda Bauschke-Hartung, Berlin 2020 (Wolfram-Studien 26), S. 471–493 (im Druck)
-			{/snippet}
-		</Popover>
-		(basierend auf <a href="/hsverz" target="_self">Codex 857</a> der Stiftsbibliothek St. Gallen
-		aus der Mitte des 13. Jahrhunderts, Hs. D) erläutert.<br />
+		Bildschirm bietet, zeigt die digitale Edition. <br />
 
 		Zweifellos kann in einer Digitaledition die von der <i>New Philology</i> postulierte Varianz
 		angemessener dokumentiert werden als in konventionellen Textausgaben. Die kritischen Apparate

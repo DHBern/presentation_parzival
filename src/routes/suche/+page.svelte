@@ -73,7 +73,10 @@
 	}
 
 	const handleSearch = async (/** @type {import("minisearch").Query} */ query) => {
-		let results = activeMinisearch.search(query, { fuzzy: useExactSearch ? 0 : 0.3 });
+		let results = activeMinisearch.search(query, {
+			fuzzy: useExactSearch ? 0 : 0.3,
+			combineWith: 'AND'
+		});
 		results = await Promise.all(
 			/*
 				Processes an array of search results, enriching each result with additional information:

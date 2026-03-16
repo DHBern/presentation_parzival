@@ -19,9 +19,7 @@
 				{#if i === 0}Textzeuge{:else}Textzeugenvergleich{/if}:
 				<select class="select my-2" bind:value={selection[i]}>
 					{#if i !== 0}
-						<option value="">
-							---
-						</option>
+						<option value=""> --- </option>
 					{/if}
 					{#await sigla then resolvedSigla}
 						{#each resolvedSigla as { sigil, handle }}

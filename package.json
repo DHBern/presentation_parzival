@@ -2,9 +2,10 @@
 	"name": "presentation-parzival",
 	"version": "0.0.1",
 	"private": true,
+	"license": "MIT",
 	"scripts": {
 		"docker:start": "docker pull existdb/existdb:6.2.0 && docker run -d -p 8081:8080 -p 8444:8443 --name teipublisher existdb/existdb:6.2.0",
-		"installXar": "wget https://dhbern.github.io/parzival-static-api/parzival-0.2.xar -O parzival-0.2.xar && xst package install parzival-0.2.xar && rm parzival-0.2.xar",
+		"installXar": "wget https://data.parzival.digitaleditions.ch/parzival-0.2.xar -O parzival-0.2.xar && xst package install parzival-0.2.xar && rm parzival-0.2.xar",
 		"docker:stop": "docker stop teipublisher && docker rm teipublisher",
 		"dev": "vite dev",
 		"build": "svelte-kit sync && vite build",
@@ -28,7 +29,7 @@
 		"@tailwindcss/typography": "^0.5.19",
 		"@types/d3": "^7.4.3",
 		"autoprefixer": "^10.4.21",
-		"eslint": "^9.38.0",
+		"eslint": "^10.0.0",
 		"eslint-config-prettier": "^10.1.8",
 		"eslint-plugin-svelte": "^3.12.5",
 		"prettier": "^3.6.2",
@@ -51,6 +52,7 @@
 		"estree-walker": "^3.0.3",
 		"minisearch": "^7.2.0",
 		"openseadragon": "^5.0.1",
+		"p-limit": "^7.3.0",
 		"slugify": "^1.6.6"
 	}
 }

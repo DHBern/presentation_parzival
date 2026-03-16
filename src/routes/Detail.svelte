@@ -138,8 +138,8 @@
 	};
 	let contigousData = $derived(
 		data.map((d) => {
-			// skip for label 'fr'
-			if (d.label === 'fr') return d;
+			// skip for label 'Fr'
+			if (d.label === 'Fr') return d;
 
 			// init
 			let contiguousRanges = [];
@@ -183,10 +183,10 @@
 		)
 	);
 	let verse = $derived(Math.floor(y.invert(mousePos[1])));
-	let frValues = $derived(data.find((d) => d.label === 'fr')?.values);
+	let frValues = $derived(data.find((d) => d.label === 'Fr')?.values);
 	let manuscriptHandles = $derived(
-		scaleBandInvert(x)(mousePos[0]) === 'fr'
-			? frValues?.[verse - Math.round(selection.start)] || 'fr'
+		scaleBandInvert(x)(mousePos[0]) === 'Fr'
+			? frValues?.[verse - Math.round(selection.start)] || 'Fr'
 			: scaleBandInvert(x)(mousePos[0])
 	);
 	$effect(() => {
@@ -224,7 +224,7 @@
 								return 'Fass.';
 							}
 						} else {
-							if (d === 'fr') {
+							if (d === 'Fr') {
 								return fragmentLabel;
 							}
 						}
@@ -289,7 +289,7 @@
 		</ul>
 	{:else if manuscriptHandles === summaryLabel}
 		<p>Dreißiger {verse}</p>
-	{:else if manuscriptHandles === 'fr'}
+	{:else if manuscriptHandles === 'Fr'}
 		<p>Fragment {verse}</p>
 	{:else}
 		<p>{@html sigilFromHandle(String(manuscriptHandles))}: {verse}</p>
@@ -315,7 +315,10 @@
 	<ul>
 		{#each manuscriptHandles as handle}
 			<li>
-				<a href={`${base}/transkriptionen/${handle}/${verse}`} class="hover:text-secondary-900">
+				<a
+					href={`${base}/transkriptionen/${handle.toLowerCase()}/${verse}`}
+					class="hover:text-secondary-900"
+				>
 					{@html sigilFromHandle(handle)}
 					{verse}
 				</a>
@@ -346,7 +349,7 @@
 							{@const verseNumber = i + Math.round(selection.start)}
 							{#if values?.length === 1}
 								<a
-									href={`${base}/transkriptionen/${values[0]}/${verseNumber}`}
+									href={`${base}/transkriptionen/${values[0].toLowerCase()}/${verseNumber}`}
 									aria-label={`${values[0]}.${verseNumber}`}
 								>
 									<rect
@@ -399,7 +402,7 @@
 							</a>
 						{:else}
 							<a
-								href={`${base}/transkriptionen/${sigla.label}/${verse}`}
+								href={`${base}/transkriptionen/${sigla.label.toLowerCase()}/${verse}`}
 								aria-label={`${sigla.label}.${verse}`}
 							>
 								<rect

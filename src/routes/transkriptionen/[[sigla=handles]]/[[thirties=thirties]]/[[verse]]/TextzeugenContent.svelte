@@ -176,9 +176,6 @@
 					scrollContainer?.getBoundingClientRect().top,
 				behavior: 'instant'
 			});
-			if (verse) {
-				verse.parentElement?.classList.add('animate-pulse', 'once');
-			}
 			// check whether the verse is on the last page in the scrollcontainer
 			if (
 				scrollContainer.scrollHeight - scrollContainer.clientHeight ===
@@ -311,7 +308,7 @@
 		:global(.tei-cb) {
 			@apply text-right pr-[95px] sticky top-0;
 			:global(p) {
-				@apply bg-surface-500;
+				@apply bg-surface-500 inline;
 			}
 		}
 		:global(.tei-cb:not(.tei-cb:first-child)) {

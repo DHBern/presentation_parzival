@@ -71,9 +71,8 @@
 
 	let localPages = $state(generateLocalPagesFromData(data.content));
 
-	/** @type (Promise<string> | string)[] */
-	let activePages = $state(
-		data.content?.map((c) => {
+	const setActivePages = () => {
+		return data.content?.map((c) => {
 			if (typeof c.meta === 'object') {
 				return c.meta.then((meta) => {
 					let active = meta.find((m) => m.active);
@@ -81,8 +80,11 @@
 				});
 			}
 			return 'null';
-		})
-	);
+		});
+	};
+
+	/** @type (Promise<string> | string)[] */
+	let activePages = $state(setActivePages());
 	const generateIiifFromData = (d) => {
 		return d?.map(async (c) => {
 			if (typeof c.meta === 'object') {
@@ -101,6 +103,7 @@
 			`${data.thirties}.${data.verse ? data.verse : '01'}`
 		);
 		localPages = generateLocalPagesFromData(data.content);
+		activePages = setActivePages();
 		currentIiif = generateIiifFromData(data.content);
 	});
 

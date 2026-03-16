@@ -9,9 +9,10 @@
 	import { Switch } from '@skeletonlabs/skeleton-svelte';
 	import { page } from '$app/state';
 	import { onMount, tick, untrack } from 'svelte';
-	import { goto } from '$app/navigation';
+	import { goto, replaceState } from '$app/navigation';
 	import ApparatPopover from './ApparatPopover.svelte';
 	import handleFromSigil from '$lib/functions/handleFromSigil';
+	import { browser } from '$app/environment';
 
 	/** @type {{data: import('./$types').PageData}} */
 	let { data } = $props();
@@ -78,7 +79,9 @@
 				const condensedStructure = info.apparat.structure.reduce(reducer, {});
 
 				const formatVerseSup = (_, match) => `<sup>${match}</sup>`;
-
+				// create a shallow copy of the fasskomInfos in order to splice already
+				// painted ones, so the fasskoms with a verse range are only painted once.
+				const fasskommInfos = [...info.fasskomm];
 				const lines = doc.querySelectorAll('div.line');
 				lines.forEach((line) => {
 					line.classList.add(`column-${column}`);
@@ -87,23 +90,32 @@
 					const verseNode = line.querySelector('[data-verse]');
 					if (verseNode) {
 						const verse = verseNode.getAttribute('data-verse')?.split('.')[1];
-
+						const dataVerse = Number(verseNode.getAttribute('data-verse'));
 						// Fassungskommentar Triggers
 						const contentNode = line.querySelector('.content');
 						if (contentNode && verse) {
-							const fasskomm_info = info.fasskomm.find((f) => {
-								return Number(f.verse) === Number(verse);
+							// find whether the verse is in the range of a fasskomInfo
+							// in order to set the link to the first matching verse
+							const fasskommInfo = fasskommInfos.find((f) => {
+								if (!f.end_vers) {
+									return Number(f.verse) === Number(verse);
+								}
+								// else there is a range over several dreissigers
+								const startVerse = Number(`${f.dreissiger}.${f.verse}`);
+								return dataVerse >= startVerse && dataVerse <= Number(f.end_vers);
 							});
-							if (fasskomm_info) {
+							if (fasskommInfo) {
 								contentNode.innerHTML = `${contentNode.innerHTML}<sup><a
-									class="fasskommanchor ${fasskomm_info.id[2] === 'A' ? 'multi' : 'single'}"
-									href="#fasskomm-${fasskomm_info.dreissiger}.${verse}"
-									data-commentary="${encodeURIComponent(fasskomm_info.commentary ? fasskomm_info.commentary : '')}"
-									data-dreissiger=${fasskomm_info.dreissiger}
+									class="fasskommanchor ${fasskommInfo.id[2] === 'A' ? 'multi' : 'single'}"
+									href="#fasskomm-${fasskommInfo.dreissiger}.${verse}"
+									data-commentary="${encodeURIComponent(fasskommInfo.commentary ? fasskommInfo.commentary : '')}"
+									data-dreissiger=${fasskommInfo.dreissiger}
 									data-verse=${verse}
-									data-id=${fasskomm_info.id}
-									data-title="${composureTitlesByColumn[column] + ' ' + fasskomm_info.dreissiger + verse.replace(/^0+/, '').replace(/-(.+)$/, formatVerseSup)}"
+									data-id=${fasskommInfo.id}
+									data-title="${composureTitlesByColumn[column] + ' ' + fasskommInfo.dreissiger + verse.replace(/^0+/, '').replace(/-(.+)$/, formatVerseSup)}"
 									>K</a></sup>`;
+								// remove the already used fasskomm_info to avoid duplicate processing
+								fasskommInfos.splice(fasskommInfos.indexOf(fasskommInfo), 1);
 							}
 						}
 
@@ -216,6 +228,7 @@
 			tick().then(() => {
 				addApparatTriggerListeners();
 				addFasskommTriggerListeners();
+				openFasskommFromHash();
 			});
 			return Promise.resolve();
 		};
@@ -274,6 +287,14 @@
 		FasskommStore.id = '';
 		FasskommStore.commentary = '';
 	};
+	const openFasskommFromHash = () => {
+		const id = page.url.hash;
+		if (!id) return;
+		const el = document.querySelector(`a.fasskommanchor[href="${CSS.escape(id)}"]`);
+		if (el instanceof HTMLAnchorElement && el.href) {
+			el.click();
+		}
+	};
 
 	// Triggers
 	const addFasskommTriggerListeners = () => {
@@ -287,10 +308,19 @@
 			el.removeEventListener('click', onClickFasskommTrigger);
 		});
 	};
-	const onClickFasskommTrigger = (/** @type { Event } */ ev) => {
-		if (ev.target instanceof HTMLElement) {
-			fillFasskommStore(ev.target, false);
+
+	const onClickFasskommTrigger = (ev) => {
+		const a = ev.target instanceof HTMLAnchorElement ? ev.target : ev.target?.closest?.('a');
+		if (!a) return;
+
+		ev.preventDefault();
+		const href = a.getAttribute('href');
+
+		if (browser && href) {
+			const next = new URL(href, page.url);
+			replaceState(next.href, {});
 		}
+		fillFasskommStore(a, false);
 	};
 
 	// --------------------------------------
@@ -398,6 +428,17 @@
 			synchro = false;
 		}
 	});
+
+	let wasFasskommOpen = false;
+	$effect(() => {
+		if (typeof window === 'undefined') return;
+		const isOpen = !!FasskommStore.elTrigger;
+		if (wasFasskommOpen && !isOpen && window.location.hash.startsWith('#fasskomm-')) {
+			replaceState(`${page.url.pathname}${page.url.search}`, {});
+		}
+		wasFasskommOpen = isOpen;
+	});
+
 	let gotoThirties = $state(Number(data.thirties));
 </script>
 
@@ -432,7 +473,7 @@
 				Eintextedition als <a
 					class="anchor"
 					target="_blank"
-					href="https://dhbern.github.io/parzival-static-api/api/pdf/eintextedition.pdf#page={data.thirties}"
+					href="https://data.parzival.digitaleditions.ch/api/pdf/Parzival_Eintextedition.pdf#page={data.thirties}"
 				>
 					PDF
 				</a> aufrufen

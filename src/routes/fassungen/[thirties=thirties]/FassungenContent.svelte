@@ -44,12 +44,24 @@
 			};
 		});
 	};
+
+	let currentDistribution = $derived(distribution[activeThirties.value]);
+	const thirtiesNum = $derived(Number(page.data.thirties));
 </script>
 
 <div class="mb-4 lg:min-h-24">
-	<h2 class="h2 inline">{title}</h2>
+	<h2 class="h2 inline-flex">
+		{title}
+		{#if title.includes('T')}
+			{#if thirtiesNum >= 36 && thirtiesNum <= 157}
+				<span>(U)</span>
+			{:else if (thirtiesNum >= 573 && thirtiesNum <= 599) || (thirtiesNum >= 643 && thirtiesNum <= 678)}
+				<span>(Q)</span>
+			{/if}
+		{/if}
+	</h2>
 	<div class="inline [&_ul,&_li]:inline [&_li]:mr-1">
-		{@html distribution[activeThirties.value]}
+		{@html currentDistribution}
 	</div>
 </div>
 <div

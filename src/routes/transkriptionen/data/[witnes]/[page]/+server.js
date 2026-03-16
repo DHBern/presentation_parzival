@@ -21,7 +21,13 @@ export async function entries() {
 	const { codices, fragments } = await metadata;
 	const handles = [...codices, ...fragments].map((c) => c.handle);
 	const metadataPage = handles.map((h) =>
-		fetch(`${URL_STATIC_API}/json/metadata-ms-page/${h}.json`).then((r) => r.json())
+		fetch(`${URL_STATIC_API}/json/metadata-ms-page/${h}.json`).then((r) => {
+			if (!r.ok) {
+				console.error(`Failed to fetch metadata-ms-page for ${h}: ${r.status}`);
+				return null;
+			}
+			return r.json();
+		})
 	);
 
 	/**
@@ -30,7 +36,12 @@ export async function entries() {
 	const returnObjects = [];
 	const resolvedMetadata = await Promise.all(metadataPage);
 	handles.forEach((handle) => {
-		const data = resolvedMetadata.find((r) => r[handle])[handle];
+		const match = resolvedMetadata.find((r) => r && r[handle]);
+		if (!match) {
+			console.warn(`No metadata-ms-page data found for handle: ${handle}`);
+			return;
+		}
+		const data = match[handle];
 		data.forEach((page) => {
 			returnObjects.push({ witnes: handle, page: page.id });
 		});
