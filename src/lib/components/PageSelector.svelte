@@ -4,6 +4,7 @@
 
 	/** @type {{targetPath?: string, coordinates?: [String | boolean, String | boolean]}} */
 	let { targetPath = '/transkriptionen/d', pageId = 'd005', meta } = $props();
+	$inspect(meta);
 	/**
 	 * @type {HTMLInputElement | undefined}
 	 */
