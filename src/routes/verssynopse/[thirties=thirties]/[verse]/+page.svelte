@@ -188,27 +188,6 @@
 			</p>
 		{/if}
 	</div>
-	<section>
-		<Switch
-			name="hyparchetypes-slider"
-			thumbInactive="bg-surface-800"
-			controlInactive="bg-surface-100"
-			checked={hyparchetypesSlider}
-			onCheckedChange={(e) => (hyparchetypesSlider = e.checked)}
-		>
-			Fassungstexte ein-/ausblenden und nach Fassungen sortieren
-		</Switch>
-		<h2 class="h2 my-7">Zu Vers springen:</h2>
-		<VerseSelector targetPath="/verssynopse" coordinates={[thirties, verse]} />
-		<div class="flex justify-between">
-			{#if data?.metadata?.prev}
-				<a class="anchor" href={prevVerseURL}> vorheriger Vers </a>
-			{/if}
-			{#if data?.metadata?.next}
-				<a class="anchor" href={nextVerseURL}> nächster Vers </a>
-			{/if}
-		</div>
-	</section>
 </div>
 
 <style global>
