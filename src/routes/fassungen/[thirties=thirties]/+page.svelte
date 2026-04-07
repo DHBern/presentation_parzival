@@ -462,7 +462,7 @@
 		</button>
 	{/snippet}
 	<h1 class="h1 my-4">Fassungsedition</h1>
-	<ExpandableContent clampClass="line-clamp-3" class="mb-4">
+	<ExpandableContent clampClass="line-clamp-3" class="mb-4 typography">
 		<ErlaeuterungenFassungsedition />
 	</ExpandableContent>
 	<div class="grid gap-6 md:grid-cols-2 md:my-8">
