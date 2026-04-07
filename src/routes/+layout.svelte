@@ -12,7 +12,7 @@
 
 	let classesActive = $derived((/** @type {string} */ href) =>
 		href.split('/')[1] === page.url.pathname.split('/')[1] || href.split('/')[1] === page.url.hash
-			? 'bg-primary-300 hover:bg-primary-300 hover:text-primary-700 text-primary-900'
+	? 'bg-primary-300 hover:bg-primary-300 hover:text-primary-700 text-primary-900'
 			: 'hover:text-primary-600'
 	);
 
@@ -25,21 +25,18 @@
 	const aboutProjectPages = [
 		{ slug: 'Einführung', path: '/einfuehrung' },
 		{ slug: 'Introduction', path: '/introduction' },
-		{ slug: 'Publikationen', path: '/projektpraesentationen' },
+		{ slug: 'Publikationen', path: '/publikationen' },
 		{ slug: 'Mitarbeitende', path: '/mitarbeitende' },
 		{ slug: 'Impressum', path: '/impressum' }
-		// { slug: 'Fassungsprofile', path: '/fassungsprofile' },
-		// { slug: 'Editionsgrundsätze', path: '/editionsgrundsaetze' },
-		// { slug: 'Transkriptionsrichtlinien', path: '/transkriptionsrichtlinien' }
 	];
 
 	const mainPages = [
-		{ slug: 'Textzeugen', path: '/hsverz' },
-		{ slug: 'Verssynopse', path: '/einzelverssynopse' },
-		{ slug: 'Dreißiger-Tabelle', path: '/#edition-nach-dreissigern' },
+		{ slug: 'Textzeugen', path: '/textzeugen' },
+		{ slug: 'Verssynopse', path: '/verssynopse' },
+		{ slug: 'Dreißiger-Tabelle', path: '/#dreissigertabelle' },
 		{ slug: 'Fassungsedition', path: '/fassungen' },
-		{ slug: 'Transkriptionen', path: '/textzeugen/d/1/01' },
-		{ slug: 'Eintextedition', path: '/monotext' },
+		{ slug: 'Transkriptionen', path: '/transkriptionen/d/1/01' },
+		{ slug: 'Eintextedition', path: '/eintextedition' },
 		{ slug: 'Erläuterungen', path: '/erlaeuterungen' },
 		{ slug: 'Suche', path: '/suche' }
 	];

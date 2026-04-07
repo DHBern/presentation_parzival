@@ -15,13 +15,13 @@
 
 	let prevVerseURL = $derived(
 		data?.metadata?.prev
-			? `${base}/einzelverssynopse/${data?.metadata?.prev?.thirties}/${data?.metadata?.prev?.verse}`
+			? `${base}/verssynopse/${data?.metadata?.prev?.thirties}/${data?.metadata?.prev?.verse}`
 			: ''
 	);
 
 	let nextVerseURL = $derived(
 		data?.metadata?.next
-			? `${base}/einzelverssynopse/${data?.metadata?.next?.thirties}/${data?.metadata?.next?.verse}`
+			? `${base}/verssynopse/${data?.metadata?.next?.thirties}/${data?.metadata?.next?.verse}`
 			: ''
 	);
 
@@ -80,7 +80,7 @@
 			</Switch>
 		{/if}
 		<h2 class="h2 my-7">Zu Vers springen:</h2>
-		<VerseSelector targetPath="/einzelverssynopse" coordinates={[thirties, verse]} />
+		<VerseSelector targetPath="/verssynopse" coordinates={[thirties, verse]} />
 		<div class="flex justify-between">
 			{#if data?.metadata?.prev}
 				<a class="anchor" href={prevVerseURL}> vorheriger Vers </a>

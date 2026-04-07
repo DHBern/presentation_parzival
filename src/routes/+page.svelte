@@ -50,7 +50,7 @@
 			Handschriften im Textzeugenverzeichnis aufgerufen werden.
 		</p>
 		<div class="flex max-w-full items-baseline gap-1 my-3">
-			<VerseSelector targetPath="/einzelverssynopse" />
+			<VerseSelector targetPath="/verssynopse" />
 		</div>
 	</section>
 	<section>
@@ -73,7 +73,7 @@
 		</div>
 	</section>
 	<section class="col-span-full">
-		<H2Hoverable name="Edition nach Dreißigern" classes="h2 my-10"></H2Hoverable>
+		<H2Hoverable name="Edition nach Dreißigern" id="dreissigertabelle" classes="h2 my-10"></H2Hoverable>
 		<p class="my-5">
 			Die Tabelle ermöglicht die Auswahl von Dreißigern der synoptischen Fassungsedition und
 			Transkriptionen der Textzeugen des ›Parzival‹ (unter den einzelnen Siglen). Die Fragmente sind

@@ -7,6 +7,6 @@
 <div class="container pt-10 mx-auto typography">
 	<h2 class="h2 pb-6">Fehler</h2>
 	<p>{page.error?.message}</p>
-	<a class="anchor" href="{base}/einzelverssynopse/1/1">Zum ersten Vers</a>
-	<VerseSelector targetPath="/einzelverssynopse" />
+	<a class="anchor" href="{base}/verssynopse/1/1">Zum ersten Vers</a>
+	<VerseSelector targetPath="/verssynopse" />
 </div>

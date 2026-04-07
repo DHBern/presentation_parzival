@@ -3,5 +3,5 @@ import { base } from '$app/paths';
 
 /** @type {import('./$types').PageServerLoad} */
 export async function load() {
-	return redirect(302, `${base}/einzelverssynopse/1/01`);
+	return redirect(302, `${base}/verssynopse/1/01`);
 }

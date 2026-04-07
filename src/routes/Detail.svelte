@@ -281,7 +281,7 @@
 			{#each manuscriptHandles as mHandle}
 				<li>
 					<!-- These links are not clickable since it's not possible to put the cursor over it, but it might be possible to access the links with ARIA means. -->
-					<a href={`${base}/textzeugen/${mHandle}/${verse}`} class="hover:text-secondary-900">
+					<a href={`${base}/transkriptionen/${mHandle}/${verse}`} class="hover:text-secondary-900">
 						{@html sigilFromHandle(mHandle)}: {verse}
 					</a>
 				</li>
@@ -316,7 +316,7 @@
 		{#each manuscriptHandles as handle}
 			<li>
 				<a
-					href={`${base}/textzeugen/${handle.toLowerCase()}/${verse}`}
+					href={`${base}/transkriptionen/${handle.toLowerCase()}/${verse}`}
 					class="hover:text-secondary-900"
 				>
 					{@html sigilFromHandle(handle)}
@@ -349,7 +349,7 @@
 							{@const verseNumber = i + Math.round(selection.start)}
 							{#if values?.length === 1}
 								<a
-									href={`${base}/textzeugen/${values[0].toLowerCase()}/${verseNumber}`}
+									href={`${base}/transkriptionen/${values[0].toLowerCase()}/${verseNumber}`}
 									aria-label={`${values[0]}.${verseNumber}`}
 								>
 									<rect
@@ -402,7 +402,7 @@
 							</a>
 						{:else}
 							<a
-								href={`${base}/textzeugen/${sigla.label.toLowerCase()}/${verse}`}
+								href={`${base}/transkriptionen/${sigla.label.toLowerCase()}/${verse}`}
 								aria-label={`${sigla.label}.${verse}`}
 							>
 								<rect
