@@ -16,5 +16,5 @@
 		Sie unten an eine gültige Stelle.
 	{/if}
 </p>
-<a class="anchor" href="{base}/#edition-nach-dreissigern">Zur Dreißiger-Matrix</a>
+<a class="anchor" href="{base}/#dreissigertabelle">Zur Dreißiger-Matrix</a>
 <TextzeugenSelector />

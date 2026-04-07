@@ -107,7 +107,7 @@ export async function load({ fetch, params }) {
 				});
 			}
 			if (returnObject.id) {
-				returnObject.tpData = fetch(`${base}/textzeugen/data/${handle}/${returnObject.id}`).then(
+				returnObject.tpData = fetch(`${base}/transkriptionen/data/${handle}/${returnObject.id}`).then(
 					(r) => {
 						return r.json();
 					}
