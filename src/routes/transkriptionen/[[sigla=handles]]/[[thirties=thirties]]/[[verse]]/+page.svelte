@@ -205,8 +205,8 @@
 										{@html metadataFromHandle(info.sigla)['info-h2']}
 										<a
 											class="anchor text-primary-100"
-											href="{base}/hsverz#{sigilFromHandle(info.sigla)}"
-											>zum Verzeichnis
+											href="{base}/textzeugen#{sigilFromHandle(info.sigla)}"
+											>zum Verzeichnis ’Textzeugen’
 										</a>
 									</div>
 								{/snippet}
