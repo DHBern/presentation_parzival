@@ -3,6 +3,10 @@
 	let newLink = new URL(`https://parzdb.parzival.unibe.ch${page.url.pathname}${page.url.search}`);
 </script>
 
+<svelte:head>
+	<title>Parzival-Archivversion</title>
+</svelte:head>
+
 <div class="container mx-auto typography">
 	<h1>Parzival-Archivversion</h1>
 	<p>

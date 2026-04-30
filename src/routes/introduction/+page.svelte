@@ -8,6 +8,10 @@
 	</div>
 </div>
 
+<svelte:head>
+	<title>Introduction</title>
+</svelte:head>
+
 <div class="container mx-auto typography">
 	<h1>Wolfram von Eschenbach, ›Parzival‹.<br />A New Critical Electronic Edition</h1>
 	<h2>Introductory</h2>

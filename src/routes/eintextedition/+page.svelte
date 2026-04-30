@@ -3,6 +3,10 @@
 	import ErlaeuterungenEintextEdition from '$lib/components/erlaeuterungen-components/ErlaeuterungenEintextEdition.svelte';
 </script>
 
+<svelte:head>
+	<title>Eintextedition</title>
+</svelte:head>
+
 <div class="container mx-auto typography">
 	<h1>Eintextedition</h1>
 	<ExpandableContent clampClass="line-clamp-3" class="mb-8 typography">

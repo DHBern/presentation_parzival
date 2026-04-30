@@ -11,6 +11,10 @@
 	let tableHeight = $state(0);
 </script>
 
+<svelte:head>
+	<title>Parzival - Digitale Edition</title>
+</svelte:head>
+
 <div class="container mx-auto grid grid-cols-1 md:grid-cols-2 gap-6 gap-x-20">
 	<section class="col-span-full">
 		<div class="mt-20 mb-4">
@@ -73,7 +77,8 @@
 		</div>
 	</section>
 	<section class="col-span-full">
-		<H2Hoverable name="Edition nach Dreißigern" id="dreissigertabelle" classes="h2 my-10"></H2Hoverable>
+		<H2Hoverable name="Edition nach Dreißigern" id="dreissigertabelle" classes="h2 my-10"
+		></H2Hoverable>
 		<p class="my-5">
 			Die Tabelle ermöglicht die Auswahl von Dreißigern der synoptischen Fassungsedition und
 			Transkriptionen der Textzeugen des ›Parzival‹ (unter den einzelnen Siglen). Die Fragmente sind

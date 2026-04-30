@@ -2,6 +2,10 @@
 	import H2Hoverable from '$lib/components/H2Hoverable.svelte';
 </script>
 
+<svelte:head>
+	<title>Mitarbeitende</title>
+</svelte:head>
+
 <div class="container mx-auto typography">
 	<h1>Mitarbeitende des Parzival-Projekts</h1>
 

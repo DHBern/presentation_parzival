@@ -54,6 +54,9 @@
 </script>
 
 <svelte:window onkeydown={handleKeyDown} />
+<svelte:head>
+	<title>Verssynopse - {thirties}.{verseNoZero}</title>
+</svelte:head>
 
 <div class="container mx-auto p-4 grid lg:grid-cols-[1fr_auto] justify-between gap-9">
 	<h1 class="h1 w-full col-span-full">Verssynopse zu {thirties}.{verseNoZero}</h1>

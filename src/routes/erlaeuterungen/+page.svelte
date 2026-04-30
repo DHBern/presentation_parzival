@@ -5,6 +5,10 @@
 	import ErlaeuterungenTranskriptionen from '$lib/components/erlaeuterungen-components/ErlaeuterungenTranskriptionen.svelte';
 </script>
 
+<svelte:head>
+	<title>Erläuterungen</title>
+</svelte:head>
+
 <div class="container mx-auto typography">
 	<h1 class="h1 mb-4">
 		Erläuterungen zur Fassungsedition, zur Eintextedition und zu den Transkriptionen

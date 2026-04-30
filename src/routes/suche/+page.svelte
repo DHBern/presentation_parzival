@@ -131,6 +131,10 @@
 	};
 </script>
 
+<svelte:head>
+	<title>Suche</title>
+</svelte:head>
+
 <section class="container mx-auto typography grid sm:grid-cols-2 my-4 gap-8">
 	<div>
 		<h1>Suche</h1>

@@ -6,8 +6,12 @@
 	let gotoThirties = $state(1);
 </script>
 
+<svelte:head>
+	<title>Fassungen: Fehler</title>
+</svelte:head>
+
 <div class="container pt-10 mx-auto typography">
-	<h2 class="h2 pb-6">Fehler</h2>
+	<h1 class="h2 pb-6">Fehler</h1>
 	<p>{page.error.message}</p>
 	<a class="anchor" href="{base}/fassungen/1">Zum ersten Dreißiger</a>
 	<form class="unstyled">

@@ -2,6 +2,10 @@
 	import Popover from '$lib/components/Popover.svelte';
 </script>
 
+<svelte:head>
+	<title>Einführung</title>
+</svelte:head>
+
 <div class="container mx-auto typography">
 	<div class="flex items-start justify-end m-2">
 		<a class="btn btn-icon" href="/introduction" aria-label="Switch to English">

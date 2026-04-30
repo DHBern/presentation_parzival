@@ -6,6 +6,10 @@
 	let { sigla } = $derived(data);
 </script>
 
+<svelte:head>
+	<title>Textzeugen</title>
+</svelte:head>
+
 <div class="container mx-auto typography">
 	<h1 class="h1">Verzeichnis der Textzeugen des ›Parzival‹</h1>
 

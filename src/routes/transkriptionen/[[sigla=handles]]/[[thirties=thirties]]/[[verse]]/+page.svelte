@@ -151,6 +151,10 @@
 	};
 </script>
 
+<svelte:head>
+	<title>Transkriptionen - {data.content.map((c) => sigilFromHandle(c.sigla)).join(', ')}</title>
+</svelte:head>
+
 <section class="w-full">
 	<h1 class="h1 my-4">Transkriptionen</h1>
 	<div class="grid gap-6 md:grid-cols-2 md:my-8">

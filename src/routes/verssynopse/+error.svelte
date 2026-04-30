@@ -4,6 +4,10 @@
 	import VerseSelector from '$lib/components/VerseSelector.svelte';
 </script>
 
+<svelte:head>
+	<title>Fehler</title>
+</svelte:head>
+
 <div class="container pt-10 mx-auto typography">
 	<h2 class="h2 pb-6">Fehler</h2>
 	<p>{page.error?.message}</p>

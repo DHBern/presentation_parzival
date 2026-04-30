@@ -443,6 +443,10 @@
 </script>
 
 <svelte:window bind:innerWidth={windowWidth} />
+<svelte:head>
+	<title>Fassungsedition - Dreißiger {data.thirties}</title>
+</svelte:head>
+
 <section id="sectionFassungen" class="w-full" style="--verse-width: {verseWidth}ch">
 	{#snippet nextPrevButton(
 		/** @type {boolean} */ next,

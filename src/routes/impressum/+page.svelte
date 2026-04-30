@@ -2,12 +2,16 @@
 	import licenceIcon from '$lib/assets/cc-by-nc-sa.png';
 </script>
 
+<svelte:head>
+	<title>Impressum</title>
+</svelte:head>
+
 <div class="container mx-auto typography">
 	<h1>Impressum</h1>
 	<p>
 		Die auf der Plattform <i>parzival.unibe.ch</i> realisierte digitale Ausgabe des ›Parzival‹-Romans
-		Wolframs von Eschenbach ist ein Projekt der Universität Bern, das parallel zur Konzeption einer
-		gedruckten Ausgabe entstanden ist.
+		Wolframs von Eschenbach ist ein Projekt der Universität Bern, das parallel zur Konzeption einer gedruckten
+		Ausgabe entstanden ist.
 	</p>
 	<!--$Als DOI-Referenz für die ganze digitale Edition gilt: https://doi.org/xxx/parzival.unibe.ch.-->
 	<p>
@@ -42,9 +46,9 @@
 	<h3>1. Allgemeine Hinweise</h3>
 	<p>
 		Die Plattform <i>parzival.unibe.ch</i> kann ohne Registrierung und kostenlos besucht werden. Es werden
-		keine personenbezogenen Daten wie Name, Adresse oder E-Mail erhoben. Durch die Nutzung dieser
-		Website erklären Sie sich mit der Erhebung, Verarbeitung und Nutzung von Daten gemäß der
-		nachfolgenden Beschreibung einverstanden.
+		keine personenbezogenen Daten wie Name, Adresse oder E-Mail erhoben. Durch die Nutzung dieser Website
+		erklären Sie sich mit der Erhebung, Verarbeitung und Nutzung von Daten gemäß der nachfolgenden Beschreibung
+		einverstanden.
 	</p>
 	<h3>2. Lokale Datenspeicherung</h3>
 	<p>
@@ -75,15 +79,16 @@
 	<img src={licenceIcon} alt="CC-BY-NC-SA 4.0" class="w-32 my-4" />
 	<h2>Bildnachweise</h2>
 	<p>
-		Die Bilddigitalisate werden dank der Kooperationen mit Bibliotheken und Archiven angezeigt, die dem Projektteam
-		Bilddateien aus ihrem Bestand zur Verfügung gestellt haben.
+		Die Bilddigitalisate werden dank der Kooperationen mit Bibliotheken und Archiven angezeigt, die
+		dem Projektteam Bilddateien aus ihrem Bestand zur Verfügung gestellt haben.
 	</p>
 	<p>
 		Die Rechte an den in der digitalen ›Parzival‹-Ausgabe angezeigten Bilddigitalisaten liegen bei
-		den bestandshaltenden Institutionen. Entsprechend müssen Fragen zur Reproduktion und Weiterverwendung der
-		Bilder, z. B. in Publikationen, an die bestandshaltenden Institutionen zu gerichtet werden. Bei
-		Verweisen auf die im Rahmen der digitalen ›Parzival‹-Ausgabe angezeigten Bilddigitalisate sind
-		jeweils die bestandshaltende Institution und das konkrete Exemplar (Signatur) anzugeben.
+		den bestandshaltenden Institutionen. Entsprechend müssen Fragen zur Reproduktion und
+		Weiterverwendung der Bilder, z. B. in Publikationen, an die bestandshaltenden Institutionen zu
+		gerichtet werden. Bei Verweisen auf die im Rahmen der digitalen ›Parzival‹-Ausgabe angezeigten
+		Bilddigitalisate sind jeweils die bestandshaltende Institution und das konkrete Exemplar
+		(Signatur) anzugeben.
 	</p>
 	<h2>Zitierempfehlung</h2>
 	<p>

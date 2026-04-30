@@ -3,6 +3,10 @@
 	import { base } from '$app/paths';
 </script>
 
+<svelte:head>
+	<title>Publikationen zum Projekt</title>
+</svelte:head>
+
 <div class="container mx-auto typography">
 	<h1>Publikationen zum Projekt</h1>
 

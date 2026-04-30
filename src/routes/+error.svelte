@@ -3,6 +3,10 @@
 	import { base } from '$app/paths';
 </script>
 
+<svelte:head>
+	<title>Fehler</title>
+</svelte:head>
+
 <div class="container pt-10 mx-auto typography">
 	{#if page.status === 404}
 		<h1>{page.status}: Seite nicht gefunden</h1>
