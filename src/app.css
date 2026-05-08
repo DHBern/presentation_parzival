@@ -145,11 +145,10 @@
 	.glory-initial,
 	.capital-initial {
 		@apply font-bold;
-		@apply text-2xl;
+		font-size: 1.35em;
 		@apply text-red-500;
 	}
 
-	.majuscule,
 	.large-variant {
 		@apply font-black;
 		@apply text-base;
