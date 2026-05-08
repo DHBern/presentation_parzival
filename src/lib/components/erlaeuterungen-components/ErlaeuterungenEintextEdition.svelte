@@ -4,7 +4,7 @@
 
 <p>
 	<b>Zitierempfehlung:</b> Wolfram von Eschenbach, ›Parzival‹, Digitale Ausgabe, Eintextedition, hg. von
-	Michael Stolz in Zusammenarbeit mit Stefan Abel und einem Editionsteam an der Universität Bern, parzival.unibe.ch
+	Michael Stolz in Zusammenarbeit mit Stefan Abel und einem internationalen Editionsteam, parzival.unibe.ch
 	(Zugriff: [aktuelles Datum])
 </p>
 <p>
