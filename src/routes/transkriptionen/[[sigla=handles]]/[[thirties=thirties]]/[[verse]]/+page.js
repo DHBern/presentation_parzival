@@ -107,11 +107,11 @@ export async function load({ fetch, params }) {
 				});
 			}
 			if (returnObject.id) {
-				returnObject.tpData = fetch(`${base}/transkriptionen/data/${handle}/${returnObject.id}`).then(
-					(r) => {
-						return r.json();
-					}
-				);
+				returnObject.tpData = fetch(
+					`${base}/transkriptionen/data/${handle}/${returnObject.id}`
+				).then((r) => {
+					return r.json();
+				});
 
 				returnObject.overlay = `${URL_STATIC_API}/svg/${filenameFromHandleAndId(handle, returnObject.id)}.svg`;
 			}
@@ -136,7 +136,7 @@ export async function load({ fetch, params }) {
 		ranges: ranges['contiguous-ranges'].filter((r) => sigla?.includes(r.label)),
 		pageMeta: (await Promise.all(pageMeta)).map((data, i) => {
 			return data[sigla[i]].map((page) => {
-				return { id: page.id, l: page.l[0] };
+				return { id: page.id, l: page.l[0], iiif: page.iiif };
 			});
 		})
 	};
