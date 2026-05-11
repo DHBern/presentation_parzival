@@ -122,11 +122,19 @@
 		// 	currentIiif[i] = iiif;
 		// });
 		const createObject = (/** @type {string} */ id) => {
+			let iiifLink = data.pageMeta[i].find((meta) => meta.id === id)?.iiif;
+			let iiifData;
+			if (iiifLink && typeof iiifLink === 'object') {
+				iiifData = iiifLink.then((r) => fetch(r).then((res) => res.json()));
+			} else if (iiifLink && typeof iiifLink === 'string') {
+				iiifData = fetch(iiifLink).then((r) => r.json());
+			}
+
 			return {
 				id: id,
 				tpData: fetch(`${base}/transkriptionen/data/${sigla}/${id}`).then((r) => r.json()),
 				// using id.toUpperCase() to match the iiif file naming convention - this might change in the future
-				iiif: fetch(`${URL_IIIF}/${id}.jpf/info.json`).then((r) => r.json()),
+				iiif: iiifData,
 				overlay: `${URL_STATIC_API}/svg/${filenameFromHandleAndId(sigla, id)}.svg`
 			};
 		};
