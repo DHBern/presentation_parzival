@@ -81,11 +81,13 @@
 		<li>Dr. Richard Fasching (Universität Bern)</li>
 		<li>Marius Gehrig M.A. (Universität Bern)</li>
 		<li>Dr. Mirjam Geissbühler</li>
+		<li>Richard Glaus (Universität Bern)</li>
 		<li>Christiane Klein M.A. (Universität Bern)</li>
 		<li>Dr. Jörg Klenk (Berlin-Brandenburgische Akademie der Wissenschaften)</li>
 		<li>Simone Lahn M.A. (Friedrich-Alexander-Universität Erlangen-Nürnberg)</li>
 		<li>Dr. Judith Lange (Universität Bern)</li>
 		<li>Dr. Claudia Lingscheid (Universität Bern)</li>
+		<li>Tim Lüthi (Universität Bern)</li>
 		<li>Dr. Agata Mazurek (Universität Bern)</li>
 		<li>Dr. Robert Mohr (Universität Bern)</li>
 		<li>Dr. Christoph Pretzer (Universität Bern)</li>
@@ -100,5 +102,7 @@
 		<li>Dr. Miriam Strieder (Universität Bern)</li>
 		<li>Prof. Dr. Gabriel Viehhauser (Universität Bern, jetzt Universität Wien)</li>
 		<li>Dr. Lydia Wegener (Universität Bern)</li>
+		<li>Julia Wermelinger M.A. (Universität Bern)</li>
+		<li>Dr. Norbert Wernicke (Universität Bern)</li>
 	</ul>
 </div>
