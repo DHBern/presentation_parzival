@@ -25,8 +25,7 @@
 		// Only allow arrow-key navigation when a single witness is displayed;
 		// with multiple witnesses, navigation is done individually via the buttons.
 		if (data.content?.length !== 1) return;
-		if (e.altKey || e.ctrlKey || e.metaKey) return;
-		const active = /** @type {HTMLElement | null} */ (document.activeElement);
+		if (e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) return;
 		if (!active) return;
 		// Skip when the user is typing or interacting with a focused widget
 		// (inputs, OpenSeadragon canvas, role="application" regions, etc.).
@@ -41,7 +40,8 @@
 			return;
 		}
 		const direction = e.key === 'ArrowLeft' ? -1 : 1;
-		if (pageSelectors[0]?.step?.(direction)) {
+        const successfullNav = pageSelectors[0]?.step(direction)
+		if (successfullNav) {
 			e.preventDefault();
 		}
 	}
