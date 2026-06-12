@@ -41,7 +41,8 @@
 			return;
 		}
 		const direction = e.key === 'ArrowLeft' ? -1 : 1;
-		if (pageSelectors[0]?.step?.(direction)) {
+        const successfullNav = pageSelectors[0]?.step(direction)
+		if (successfullNav) {
 			e.preventDefault();
 			// Force a re-announcement when stepping repeatedly in the same direction.
 			navAnnouncement = '';
