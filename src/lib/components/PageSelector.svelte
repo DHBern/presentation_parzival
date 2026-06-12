@@ -78,9 +78,9 @@
 			}
 		}}
 	>
-		<label for="page-selector-input">{rvSuffix ? 'Blatt' : 'Seite'}:</label>
+		<label for={`page-selector-input-${pageId}`}>{rvSuffix ? 'Blatt' : 'Seite'}:</label>
 		<input
-			id="page-selector-input"
+			id={`page-selector-input-${pageId}`}
 			type="text"
 			placeholder="Seite oder Blatt"
 			class="input max-w-20 invalid:bg-error-500"
