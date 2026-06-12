@@ -6,8 +6,7 @@
 <p>
 	Die Anlage der Fassungsedition ist an den von Karl Lachmann eingeführten Dreißigergruppen
 	(Einheiten von jeweils 30 Versen) orientiert. Pro Dreißiger ist eine Ansicht der synoptisch
-	angeordneten Fassungen *D, *m, *G und *T abrufbar. Kontextuell werden jedem Dreißiger jeweils
-	sechs Verse des vorausgehenden und folgenden Dreißigers angefügt.
+	angeordneten Fassungen *D, *m, *G und *T abrufbar.
 </p>
 <p>
 	In der obersten Zeile sind mit Angabe der Siglen Transkriptionen aller für den jeweiligen
