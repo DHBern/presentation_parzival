@@ -19,7 +19,6 @@
 		const contentEl = headerEl?.parentElement;
 		if (!contentEl) return;
 		contentEl.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
-		contentEl.style.willChange = 'transform';
 	});
 
 	/**
@@ -82,16 +81,14 @@
 	}
 
 	/** Re-clamp on viewport resize so the modal stays on screen. */
-	$effect(() => {
-		const onResize = () => {
-			const next = clamp(offsetX, offsetY);
-			offsetX = next.x;
-			offsetY = next.y;
-		};
-		window.addEventListener('resize', onResize);
-		return () => window.removeEventListener('resize', onResize);
-	});
+	function onResize() {
+		const next = clamp(offsetX, offsetY);
+		offsetX = next.x;
+		offsetY = next.y;
+	}
 </script>
+
+<svelte:window onresize={onResize} />
 
 <Modal
 	defaultOpen={true}
@@ -100,7 +97,8 @@
 	triggerBase="btn preset-tonal"
 	contentBase="w-[80vw] card preset-filled border border-gray-400 rounded-md text-black space-y-4 shadow-xl max-w-screen-lg"
 	base=""
-	backdropClasses="bg-black/[0.03]"
+	backdropBackground=""
+	backdropClasses=""
 >
 	{#snippet content()}
 		<!-- svelte-ignore a11y_no_static_element_interactions -- header is a drag handle for the modal; not itself an interactive control -->
