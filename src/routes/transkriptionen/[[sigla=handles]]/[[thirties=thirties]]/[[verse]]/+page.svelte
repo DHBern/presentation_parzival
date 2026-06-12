@@ -18,7 +18,6 @@
 	let synchro = $state(true);
 	/** @type {Array<{step: (direction: -1 | 1) => boolean} | undefined>} */
 	let pageSelectors = $state([]);
-	let navAnnouncement = $state('');
 
 	/** @param {KeyboardEvent} e */
 	function onKeydown(e) {
@@ -44,11 +43,6 @@
 		const direction = e.key === 'ArrowLeft' ? -1 : 1;
 		if (pageSelectors[0]?.step?.(direction)) {
 			e.preventDefault();
-			// Force a re-announcement when stepping repeatedly in the same direction.
-			navAnnouncement = '';
-			queueMicrotask(() => {
-				navAnnouncement = direction < 0 ? 'Zurückgeblättert' : 'Weitergeblättert';
-			});
 		}
 	}
 
@@ -199,8 +193,6 @@
 </svelte:head>
 
 <svelte:window onkeydown={onKeydown} />
-
-<div class="sr-only" aria-live="polite" aria-atomic="true">{navAnnouncement}</div>
 
 <section class="w-full">
 	<h1 class="h1 my-4">Transkriptionen</h1>
