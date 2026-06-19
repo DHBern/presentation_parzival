@@ -16,6 +16,36 @@
 	/** @type {{data: import('./$types').PageData}} */
 	let { data } = $props();
 	let synchro = $state(true);
+	/** @type {Array<{step: (direction: -1 | 1) => boolean} | undefined>} */
+	let pageSelectors = $state([]);
+
+	/** @param {KeyboardEvent} e */
+	function onKeydown(e) {
+		if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+		// Only allow arrow-key navigation when a single witness is displayed;
+		// with multiple witnesses, navigation is done individually via the buttons.
+		if (data.content?.length !== 1) return;
+		if (e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) return;
+		const active = /** @type {HTMLElement | null} */ (document.activeElement);
+		if (!active) return;
+		// Skip when the user is typing or interacting with a focused widget
+		// (inputs, OpenSeadragon canvas, role="application" regions, etc.).
+		if (
+			active.tagName === 'INPUT' ||
+			active.tagName === 'TEXTAREA' ||
+			active.tagName === 'SELECT' ||
+			active.tagName === 'CANVAS' ||
+			active.isContentEditable ||
+			active.closest('[role="application"], canvas, iframe, .openseadragon-canvas')
+		) {
+			return;
+		}
+		const direction = e.key === 'ArrowLeft' ? -1 : 1;
+        const successfullNav = pageSelectors[0]?.step(direction)
+		if (successfullNav) {
+			e.preventDefault();
+		}
+	}
 
 	let selectedSigla = $derived(data.content ? data.content.map((c) => c.sigla) : []);
 
@@ -163,6 +193,8 @@
 	<title>Transkriptionen - {data.content.map((c) => sigilFromHandle(c.sigla)).join(', ')}</title>
 </svelte:head>
 
+<svelte:window onkeydown={onKeydown} />
+
 <section class="w-full">
 	<h1 class="h1 my-4">Transkriptionen</h1>
 	<div class="grid gap-6 md:grid-cols-2 md:my-8">
@@ -233,6 +265,7 @@
 
 							{#await activePages[i] then pageId}
 								<PageSelector
+									bind:this={pageSelectors[i]}
 									targetPath={`/transkriptionen/${data.content.map((c) => c.sigla).join('-')}`}
 									{pageId}
 									meta={data.pageMeta[i]}
