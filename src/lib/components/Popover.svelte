@@ -29,6 +29,7 @@
 	let { trigger, content, ariaHaspopup = undefined } = $props();
 
 	let open = $state(false);
+	/** @type {HTMLElement | null} */
 	let elemArrow = $state(null);
 
 	// Use Floating
@@ -57,6 +58,7 @@
 	<button
 		bind:this={floating.elements.reference}
 		{...interactions.getReferenceProps()}
+		type="button"
 		aria-haspopup={ariaHaspopup}
 		class="anchor"
 	>
