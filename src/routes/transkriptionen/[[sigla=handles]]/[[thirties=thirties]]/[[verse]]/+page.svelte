@@ -26,6 +26,7 @@
 		// with multiple witnesses, navigation is done individually via the buttons.
 		if (data.content?.length !== 1) return;
 		if (e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) return;
+		const active = /** @type {HTMLElement | null} */ (document.activeElement);
 		if (!active) return;
 		// Skip when the user is typing or interacting with a focused widget
 		// (inputs, OpenSeadragon canvas, role="application" regions, etc.).
