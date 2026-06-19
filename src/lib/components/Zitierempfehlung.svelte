@@ -61,6 +61,9 @@
 		}
 		scheduleReset();
 	}
+
+	// Cancel any pending reset on unmount so the timeout cannot fire after teardown.
+	$effect(() => () => clearTimeout(resetTimer));
 </script>
 
 {#snippet body()}
@@ -90,7 +93,7 @@
 						{/if}
 					</button>
 				</div>
-				<p aria-live="polite" class="min-h-[1.25rem] text-sm">
+				<p aria-live="polite" class="text-sm">
 					{#if copyStatus === 'error'}
 						Kopieren fehlgeschlagen. Bitte den Text manuell markieren und kopieren.
 					{/if}
