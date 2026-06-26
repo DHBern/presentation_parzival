@@ -14,9 +14,22 @@
 	} from '@skeletonlabs/floating-ui-svelte';
 	import { fade } from 'svelte/transition';
 
-	let { trigger, content } = $props();
+	/**
+	 * `ariaHaspopup` is forwarded to the trigger `<button>` as
+	 * `aria-haspopup`. When undefined, the attribute is omitted.
+	 *
+	 * @typedef {{
+	 *   trigger: import('svelte').Snippet,
+	 *   content: import('svelte').Snippet,
+	 *   ariaHaspopup?: 'menu' | 'listbox' | 'tree' | 'grid' | 'dialog'
+	 * }} Props
+	 */
+
+	/** @type {Props} */
+	let { trigger, content, ariaHaspopup = undefined } = $props();
 
 	let open = $state(false);
+	/** @type {Element | null} */
 	let elemArrow = $state(null);
 
 	// Use Floating
@@ -45,6 +58,7 @@
 	<button
 		bind:this={floating.elements.reference}
 		{...interactions.getReferenceProps()}
+		aria-haspopup={ariaHaspopup}
 		class="anchor"
 	>
 		{@render trigger()}
@@ -55,7 +69,7 @@
 			bind:this={floating.elements.floating}
 			style={floating.floatingStyles}
 			{...interactions.getFloatingProps()}
-			class="card preset-filled-primary-500 p-4 unstyled max-w-[99ch]"
+			class="card preset-filled-primary-500 p-4 unstyled max-w-[99ch] z-[60]"
 			transition:fade={{ duration: 200 }}
 		>
 			{@render content()}
