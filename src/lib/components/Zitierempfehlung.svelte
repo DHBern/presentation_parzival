@@ -22,23 +22,20 @@
 	/** @type {Props} */
 	let { mode = 'inline', variant } = $props();
 
-	const lead = $derived.by(() => {
-		const insert =
-			variant === 'fassungen'
-				? ' nach Fassungen'
-				: variant === 'eintextedition'
-					? ', Eintextedition'
-					: '';
-		return `Wolfram von Eschenbach, ›Parzival‹, Digitale Ausgabe${insert}, hg. von Michael Stolz in Zusammenarbeit mit Stefan Abel und einem internationalen Editionsteam, `;
-	});
-
-	const tail = ' (Zugriff: [aktuelles Datum])';
-	const plainText = $derived(`${lead}parzival.unibe.ch${tail}`);
+	const insert = $derived(
+		variant === 'fassungen'
+			? ' nach Fassungen'
+			: variant === 'eintextedition'
+				? ', Eintextedition'
+				: ''
+	);
 
 	/** @type {'idle' | 'success' | 'error'} */
 	let copyStatus = $state('idle');
 	/** @type {ReturnType<typeof setTimeout> | undefined} */
 	let resetTimer;
+	/** @type {HTMLParagraphElement | null} */
+	let bodyElement = $state(null);
 
 	function scheduleReset() {
 		clearTimeout(resetTimer);
@@ -49,7 +46,7 @@
 
 	async function copyCitation() {
 		try {
-			await navigator.clipboard.writeText(plainText);
+			await navigator.clipboard.writeText(bodyElement?.textContent ?? '');
 			copyStatus = 'success';
 		} catch {
 			// Clipboard API can reject in insecure contexts or when permission
@@ -65,7 +62,11 @@
 </script>
 
 {#snippet body()}
-	<p>{lead}parzival.unibe.ch{tail}</p>
+	<p bind:this={bodyElement}>
+		Wolfram von Eschenbach, ›Parzival‹, Digitale Ausgabe{insert}, hg. von Michael Stolz in
+		Zusammenarbeit mit Stefan Abel und einem internationalen Editionsteam, parzival.unibe.ch
+		(Zugriff: [aktuelles Datum])
+	</p>
 {/snippet}
 
 {#if mode === 'popup'}
