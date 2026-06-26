@@ -91,11 +91,11 @@
 						{/if}
 					</button>
 				</div>
-				<p aria-live="polite" class="text-sm">
-					{#if copyStatus === 'error'}
+				{#if copyStatus === 'error'}
+					<p aria-live="polite" class="text-sm">
 						Kopieren fehlgeschlagen. Bitte den Text manuell markieren und kopieren.
-					{/if}
-				</p>
+					</p>
+				{/if}
 			</div>
 		{/snippet}
 	</Popover>
