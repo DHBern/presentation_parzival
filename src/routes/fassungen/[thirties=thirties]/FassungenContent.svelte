@@ -49,8 +49,8 @@
 	const thirtiesNum = $derived(Number(page.data.thirties));
 </script>
 
-<div class="mb-4 lg:min-h-24">
-	<h2 class="h2 inline-flex">
+<div class="mb-2">
+	<h2 class="h3 inline-flex">
 		{title}
 		{#if title.includes('T')}
 			{#if thirtiesNum >= 36 && thirtiesNum <= 157}
@@ -60,13 +60,18 @@
 			{/if}
 		{/if}
 	</h2>
-	<div class="inline [&_ul,&_li]:inline [&_li]:mr-1">
+	<div class="inline [&_ul,&_li]:inline [&_li]:mr-1 anchor">
 		{@html currentDistribution}
 	</div>
 </div>
+<!-- Scrollable region needs tabindex so keyboard-only users can focus and scroll it with arrow keys (WCAG 2.1.1). -->
+<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
 <div
-	class="max-h-[70vh] overflow-y-auto preset-filled-surface-500"
+	class="lg:h-[calc(100vh-5rem)] lg:overflow-y-auto preset-filled-surface-500"
 	bind:this={scrollContainer}
+	tabindex="0"
+	role="region"
+	aria-label={`Fassung ${title}`}
 	onscroll={() => {
 		resetPopup();
 	}}

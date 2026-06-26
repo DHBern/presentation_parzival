@@ -226,8 +226,6 @@
 				}
 			}
 			tick().then(() => {
-				addApparatTriggerListeners();
-				addFasskommTriggerListeners();
 				openFasskommFromHash();
 			});
 			return Promise.resolve();
@@ -296,21 +294,9 @@
 		}
 	};
 
-	// Triggers
-	const addFasskommTriggerListeners = () => {
-		removeFasskommTriggerListeners();
-		document.querySelectorAll('.fasskommanchor').forEach((el) => {
-			el.addEventListener('click', onClickFasskommTrigger, false);
-		});
-	};
-	const removeFasskommTriggerListeners = () => {
-		document.querySelectorAll(`.fasskommanchor`).forEach((el) => {
-			el.removeEventListener('click', onClickFasskommTrigger);
-		});
-	};
-
-	const onClickFasskommTrigger = (ev) => {
-		const a = ev.target instanceof HTMLAnchorElement ? ev.target : ev.target?.closest?.('a');
+	const onClickFasskommTrigger = (/** @type { Event } */ ev) => {
+		const target = ev.target instanceof Element ? ev.target : null;
+		const a = target instanceof HTMLAnchorElement ? target : (target?.closest('a') ?? null);
 		if (!a) return;
 
 		ev.preventDefault();
@@ -393,23 +379,6 @@
 		}
 	};
 
-	// -------------------------------------------------
-	// Triggers
-	const addApparatTriggerListeners = () => {
-		removeApparatTriggerListeners();
-		document.querySelectorAll('.verse .anchor').forEach((el) => {
-			el.addEventListener('mouseenter', onMouseEnterApparatTrigger, false);
-			el.addEventListener('mouseleave', onMouseLeaveApparatTrigger, false);
-			el.addEventListener('click', onClickApparatTrigger, false);
-		});
-	};
-	const removeApparatTriggerListeners = () => {
-		document.querySelectorAll(`.verse .anchor`).forEach((el) => {
-			el.removeEventListener('mouseenter', onMouseEnterApparatTrigger);
-			el.removeEventListener('mouseleave', onMouseLeaveApparatTrigger);
-			el.removeEventListener('click', onClickApparatTrigger);
-		});
-	};
 	const closeApparatOnInteraction = () => {
 		resetApparatStore();
 		clearTimeouts();
@@ -417,10 +386,34 @@
 	};
 
 	$effect(() => {
-		// add eventListeners when synchro is switched
+		// Re-attach DOM listeners whenever the rendered pages or the synchro layout change.
+		// Reading these reactive values inside the effect ensures it re-runs after the
+		// new content is in the DOM; the returned cleanup detaches the previous batch.
+		localPages.pages;
 		synchro;
-		addApparatTriggerListeners();
-		addFasskommTriggerListeners();
+
+		const apparatTriggers = document.querySelectorAll('.verse .anchor');
+		apparatTriggers.forEach((el) => {
+			el.addEventListener('mouseenter', onMouseEnterApparatTrigger, false);
+			el.addEventListener('mouseleave', onMouseLeaveApparatTrigger, false);
+			el.addEventListener('click', onClickApparatTrigger, false);
+		});
+
+		const fasskommTriggers = document.querySelectorAll('.fasskommanchor');
+		fasskommTriggers.forEach((el) => {
+			el.addEventListener('click', onClickFasskommTrigger, false);
+		});
+
+		return () => {
+			apparatTriggers.forEach((el) => {
+				el.removeEventListener('mouseenter', onMouseEnterApparatTrigger);
+				el.removeEventListener('mouseleave', onMouseLeaveApparatTrigger);
+				el.removeEventListener('click', onClickApparatTrigger);
+			});
+			fasskommTriggers.forEach((el) => {
+				el.removeEventListener('click', onClickFasskommTrigger);
+			});
+		};
 	});
 
 	$effect(() => {
@@ -439,7 +432,20 @@
 		wasFasskommOpen = isOpen;
 	});
 
-	let gotoThirties = $state(Number(data.thirties));
+	// Seed once with untrack() — the $effect below keeps it in sync with the
+	// route on subsequent navigations (prev/next, scroll-triggered loads),
+	// while the input can also mutate it independently via bind:value.
+	let gotoThirties = $state(untrack(() => Number(data.thirties)));
+	$effect(() => {
+		gotoThirties = Number(data.thirties);
+	});
+
+	// --------------------------------------
+	// Fassungen ein-/ausblenden (visibility toggles per column)
+	// --------------------------------------
+	const columnKeys = /** @type {const} */ (['d', 'm', 'G', 'T']);
+	/** @type {boolean[]} */
+	let fassungenVisible = $state([true, true, true, true]);
 </script>
 
 <svelte:window bind:innerWidth={windowWidth} />
@@ -466,24 +472,64 @@
 		</button>
 	{/snippet}
 	<h1 class="h1 my-4">Fassungsedition</h1>
-	<ExpandableContent clampClass="line-clamp-3" class="mb-4 typography">
+	<ExpandableContent clampClass="line-clamp-2" class="mb-2 typography">
 		<ErlaeuterungenFassungsedition />
 	</ExpandableContent>
-	<div class="grid gap-6 md:grid-cols-2 md:my-8">
-		<div>
-			<h2 class="h5">{localPages.books[localPages.thirties.indexOf(Number(data.thirties))]}</h2>
-			<h3 class="h3 my-4">Dreißiger {data.thirties}</h3>
+
+	<div class="flex flex-wrap items-end gap-x-6 gap-y-3 my-4">
+		<div class="flex flex-col gap-1">
+			<form
+				class="flex items-baseline gap-1"
+				onsubmit={(e) => {
+					e.preventDefault();
+					localPages.reset();
+					goto(`${base}/fassungen/${gotoThirties}`);
+				}}
+			>
+				<label for="goto-thirties" class="block text-lg font-bold font-serif"
+					><span id="buch-anzeige" class="inline-block min-w-[5em] mr-1"
+						>{localPages.books[localPages.thirties.indexOf(Number(data.thirties))]}</span
+					><span class="mr-1">Dreißiger</span></label
+				>
+				<input
+					id="goto-thirties"
+					type="number"
+					placeholder="Dreißiger"
+					class="input inline w-[4em] mr-1"
+					min="1"
+					max={NUMBER_OF_PAGES}
+					bind:value={gotoThirties}
+				/>
+				<button class="btn preset-filled-primary-500">Anzeigen</button>
+			</form>
+
 			<p>
 				Eintextedition als <a
 					class="anchor"
 					target="_blank"
+					rel="noopener noreferrer"
 					href="https://data.parzival.digitaleditions.ch/api/pdf/Parzival_Eintextedition.pdf#page={data.thirties}"
 				>
 					PDF
 				</a> aufrufen
 			</p>
 		</div>
-		<div>
+
+		<div class="flex flex-wrap items-center gap-x-6 gap-y-3 ml-auto">
+			<fieldset class="flex items-center gap-3 [&>legend]:float-left">
+				<legend class="text-lg font-bold font-serif">Fassungen:</legend>
+				{#each columnKeys as key, i}
+					<label class="flex items-center gap-1">
+						<input
+							type="checkbox"
+							class="checkbox"
+							name="fassung-{key}"
+							bind:checked={fassungenVisible[i]}
+						/>
+						{composureTitles[i]}
+					</label>
+				{/each}
+			</fieldset>
 			{#if mobileBreakpoint}
 				<Switch
 					thumbInactive="bg-surface-800"
@@ -495,27 +541,6 @@
 					synchron scrollen
 				</Switch>
 			{/if}
-			<form
-				onsubmit={(e) => {
-					e.preventDefault();
-					localPages.reset();
-					goto(`${base}/fassungen/${gotoThirties}`);
-				}}
-			>
-				<label for="goto-thirties" class="block text-lg font-bold font-serif mb-2"
-					>Dreißiger wählen</label
-				>
-				<input
-					id="goto-thirties"
-					type="number"
-					placeholder="Dreißiger"
-					class="input inline max-w-28"
-					min="1"
-					max={NUMBER_OF_PAGES}
-					bind:value={gotoThirties}
-				/>
-				<button aria-label="suchen" class="btn preset-filled-primary-500">Anzeigen</button>
-			</form>
 		</div>
 	</div>
 
@@ -550,23 +575,33 @@
 			content={localPages.pages}
 			distributions={localPages.distributions}
 			titles={composureTitles}
+			{fassungenVisible}
 			{nextPrevButton}
 		/>
 	{:else}
-		<div class="grid lg:grid-cols-4 gap-4 my-4">
+		{@const visibleCount = fassungenVisible.filter(Boolean).length}
+		<div
+			class="grid gap-4 mb-2"
+			class:lg:grid-cols-1={visibleCount === 1}
+			class:lg:grid-cols-2={visibleCount === 2}
+			class:lg:grid-cols-3={visibleCount === 3}
+			class:lg:grid-cols-4={visibleCount === 4}
+		>
 			{#each localPages.pages as fassung, i}
-				<div>
-					{#if fassung.length >= 2}
-						<!-- when at least 2 pages are loaded, the one for the currect thirties should be loaded aswell  -->
-						<FassungenContent
-							resetPopup={closeApparatOnInteraction}
-							pages={fassung}
-							distribution={localPages.distributions[i]}
-							title={composureTitles[i]}
-							{nextPrevButton}
-						/>
-					{/if}
-				</div>
+				{#if fassungenVisible[i]}
+					<div>
+						{#if fassung.length >= 2}
+							<!-- when at least 2 pages are loaded, the one for the currect thirties should be loaded aswell  -->
+							<FassungenContent
+								resetPopup={closeApparatOnInteraction}
+								pages={fassung}
+								distribution={localPages.distributions[i]}
+								title={composureTitles[i]}
+								{nextPrevButton}
+							/>
+						{/if}
+					</div>
+				{/if}
 			{/each}
 		</div>
 	{/if}
