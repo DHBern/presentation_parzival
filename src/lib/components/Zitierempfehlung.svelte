@@ -1,4 +1,5 @@
 <script>
+	import { onDestroy } from 'svelte';
 	import Popover from './Popover.svelte';
 
 	/**
@@ -57,8 +58,7 @@
 		scheduleReset();
 	}
 
-	// Cancel any pending reset on unmount so the timeout cannot fire after teardown.
-	$effect(() => () => clearTimeout(resetTimer));
+	onDestroy(() => clearTimeout(resetTimer));
 </script>
 
 {#snippet body()}
