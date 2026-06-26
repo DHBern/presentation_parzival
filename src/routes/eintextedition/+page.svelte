@@ -11,7 +11,7 @@
 <div class="container mx-auto typography">
 	<div class="flex items-baseline justify-between gap-4 flex-wrap">
 		<h1 class="min-w-0">Eintextedition</h1>
-		<Zitierempfehlung mode="popup" citation={{ variant: 'eintextedition' }} />
+		<Zitierempfehlung mode="popup" variant="eintextedition" />
 	</div>
 	<ExpandableContent clampClass="line-clamp-3" class="mb-8 typography">
 		<ErlaeuterungenEintextEdition />

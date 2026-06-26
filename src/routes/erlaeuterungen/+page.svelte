@@ -16,18 +16,18 @@
 	</h1>
 	<div class="flex items-baseline justify-between gap-4 flex-wrap">
 		<H2Hoverable name="Fassungsedition"></H2Hoverable>
-		<Zitierempfehlung mode="popup" citation={{ variant: 'fassungen' }} />
+		<Zitierempfehlung mode="popup" variant="fassungen" />
 	</div>
 	<ErlaeuterungenFassungsedition />
 	<div class="flex items-baseline justify-between gap-4 flex-wrap">
 		<H2Hoverable name="Eintextedition (Kritische Edition im PDF-Format)"></H2Hoverable>
-		<Zitierempfehlung mode="popup" citation={{ variant: 'eintextedition' }} />
+		<Zitierempfehlung mode="popup" variant="eintextedition" />
 	</div>
 	<ErlaeuterungenEintextEdition />
 	<div class="flex items-baseline justify-between gap-4 flex-wrap">
 		<H2Hoverable name="Transkriptionen (auch relevant für die Darstellung in der Verssynopse)"
 		></H2Hoverable>
-		<Zitierempfehlung mode="popup" citation={{ variant: 'bare' }} />
+		<Zitierempfehlung mode="popup" />
 	</div>
 	<ErlaeuterungenTranskriptionen />
 </div>

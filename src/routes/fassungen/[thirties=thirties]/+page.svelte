@@ -468,7 +468,7 @@
 	{/snippet}
 	<div class="flex items-baseline justify-between gap-4 flex-wrap my-4">
 		<h1 class="h1 min-w-0">Fassungsedition</h1>
-		<Zitierempfehlung mode="popup" citation={{ variant: 'fassungen' }} />
+		<Zitierempfehlung mode="popup" variant="fassungen" />
 	</div>
 	<ExpandableContent clampClass="line-clamp-3" class="mb-4 typography">
 		<ErlaeuterungenFassungsedition />

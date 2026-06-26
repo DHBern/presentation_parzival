@@ -167,7 +167,7 @@
 <section class="w-full">
 	<div class="flex items-baseline justify-between gap-4 flex-wrap my-4">
 		<h1 class="h1 min-w-0">Transkriptionen</h1>
-		<Zitierempfehlung mode="popup" citation={{ variant: 'bare' }} />
+		<Zitierempfehlung mode="popup" />
 	</div>
 	<div class="grid gap-6 md:grid-cols-2 md:my-8">
 		<div class="flex flex-col gap-6">

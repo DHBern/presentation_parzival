@@ -9,26 +9,24 @@
 	 * a copy-to-clipboard button. In popup mode `aria-haspopup="dialog"` is
 	 * set on the trigger button.
 	 *
-	 * `citation.variant` inserts a string after "Digitale Ausgabe":
-	 * `'bare'` -> nothing, `'fassungen'` -> ` nach Fassungen`,
+	 * `variant` inserts a string after "Digitale Ausgabe":
+	 * omitted -> nothing, `'fassungen'` -> ` nach Fassungen`,
 	 * `'eintextedition'` -> `, Eintextedition`.
 	 *
 	 * @typedef {{
 	 *   mode?: 'inline' | 'popup',
-	 *   citation: {
-	 *     variant?: 'bare' | 'fassungen' | 'eintextedition'
-	 *   }
+	 *   variant?: 'fassungen' | 'eintextedition'
 	 * }} Props
 	 */
 
 	/** @type {Props} */
-	let { mode = 'inline', citation } = $props();
+	let { mode = 'inline', variant } = $props();
 
 	const lead = $derived.by(() => {
 		const insert =
-			citation.variant === 'fassungen'
+			variant === 'fassungen'
 				? ' nach Fassungen'
-				: citation.variant === 'eintextedition'
+				: variant === 'eintextedition'
 					? ', Eintextedition'
 					: '';
 		return `Wolfram von Eschenbach, ›Parzival‹, Digitale Ausgabe${insert}, hg. von Michael Stolz in Zusammenarbeit mit Stefan Abel und einem internationalen Editionsteam, `;
