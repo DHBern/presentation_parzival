@@ -58,7 +58,6 @@
 	<button
 		bind:this={floating.elements.reference}
 		{...interactions.getReferenceProps()}
-		type="button"
 		aria-haspopup={ariaHaspopup}
 		class="anchor"
 	>
