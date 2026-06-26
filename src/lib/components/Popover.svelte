@@ -29,7 +29,7 @@
 	let { trigger, content, ariaHaspopup = undefined } = $props();
 
 	let open = $state(false);
-	/** @type {HTMLElement | null} */
+	/** @type {Element | null} */
 	let elemArrow = $state(null);
 
 	// Use Floating
