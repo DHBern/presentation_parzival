@@ -8,6 +8,7 @@
 		"installXar": "wget https://data.parzival.digitaleditions.ch/parzival-0.2.xar -O parzival-0.2.xar && xst package install parzival-0.2.xar && rm parzival-0.2.xar",
 		"docker:stop": "docker stop teipublisher && docker rm teipublisher",
 		"dev": "vite dev",
+		"recompile:odds": "node scripts/recompile-odds.js",
 		"build": "svelte-kit sync && vite build",
 		"preview": "vite preview",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./jsconfig.json",
