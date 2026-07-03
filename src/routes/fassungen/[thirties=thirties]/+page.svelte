@@ -605,7 +605,7 @@
 				{#if fassungenVisible[i]}
 					<div>
 						{#if fassung.length >= 2}
-							<!-- when at least 2 pages are loaded, the one for the currect thirties should be loaded aswell  -->
+							<!-- when at least 2 pages are loaded, the one for the current thirties should be loaded as well  -->
 							<FassungenContent
 								resetPopup={closeApparatOnInteraction}
 								pages={fassung}

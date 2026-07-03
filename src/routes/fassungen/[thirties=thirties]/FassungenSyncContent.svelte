@@ -16,7 +16,11 @@
 
 	const columnKeys = /** @type {const} */ (['d', 'm', 'G', 'T']);
 	let visibleCount = $derived(fassungenVisible.filter(Boolean).length || 1);
-	let firstVisibleIndex = $derived(fassungenVisible.findIndex(Boolean));
+	// Clamp to 0 for the defensive case where no Fassung is visible (findIndex
+	// returns -1); the checkbox handler in +page.svelte already prevents this
+	// state, but a valid index keeps `use:addToObserver` from silently dropping
+	// off every column if the invariant is ever broken.
+	let firstVisibleIndex = $derived(Math.max(0, fassungenVisible.findIndex(Boolean)));
 	// 1-based grid-column index per Fassung among the currently visible columns.
 	// Hidden Fassungen aren't rendered in the markup, so their value just needs
 	// to be a valid grid-column integer (we use 1).
