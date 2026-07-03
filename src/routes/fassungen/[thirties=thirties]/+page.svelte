@@ -388,13 +388,13 @@
 
 	$effect(() => {
 		// Re-attach DOM listeners whenever the rendered pages, the synchro layout, or
-		// the per-Fassung visibility change. Reading each reactive value inside the
-		// effect ensures it re-runs after the new content is in the DOM (Svelte only
-		// wires up a dependency on values that are read); the returned cleanup detaches
-		// the previous batch before the effect re-runs.
+		// the per-Fassung visibility change. Each of these lines establishes a reactive
+		// dependency (Svelte only tracks values that are read); the returned cleanup
+		// detaches the previous batch before the effect re-runs. `visibleCount` is a
+		// $derived over the whole array, so toggling any Fassung retriggers this effect.
 		localPages.pages;
 		synchro;
-		fassungenVisible.forEach(Boolean);
+		visibleCount;
 
 		const apparatTriggers = document.querySelectorAll('.verse .anchor');
 		apparatTriggers.forEach((el) => {
@@ -450,6 +450,7 @@
 	const columnKeys = /** @type {const} */ (['d', 'm', 'G', 'T']);
 	/** @type {boolean[]} */
 	let fassungenVisible = $state([true, true, true, true]);
+	let visibleCount = $derived(fassungenVisible.filter(Boolean).length);
 </script>
 
 <svelte:window bind:innerWidth={windowWidth} />
@@ -525,17 +526,28 @@
 		<div class="flex flex-wrap items-center gap-x-6 gap-y-3 ml-auto">
 			<fieldset class="flex items-center gap-3 [&>legend]:float-left">
 				<legend class="text-lg font-bold font-serif">Fassungen:</legend>
+				<span id="fassungen-min-hint" class="sr-only">
+					Mindestens eine Fassung muss sichtbar bleiben
+				</span>
 				{#each columnKeys as key, i}
-					{@const isLastVisible =
-						fassungenVisible[i] && fassungenVisible.filter(Boolean).length === 1}
+					{@const isLastVisible = fassungenVisible[i] && visibleCount === 1}
 					<label class="flex items-center gap-1">
 						<input
 							type="checkbox"
 							class="checkbox"
 							name="fassung-{key}"
-							bind:checked={fassungenVisible[i]}
-							disabled={isLastVisible}
+							checked={fassungenVisible[i]}
+							aria-label="Fassung {composureTitles[i]}"
+							aria-disabled={isLastVisible}
+							aria-describedby={isLastVisible ? 'fassungen-min-hint' : undefined}
 							title={isLastVisible ? 'Mindestens eine Fassung muss sichtbar bleiben' : undefined}
+							onchange={(e) => {
+								if (isLastVisible) {
+									e.currentTarget.checked = true;
+									return;
+								}
+								fassungenVisible[i] = e.currentTarget.checked;
+							}}
 						/>
 						{composureTitles[i]}
 					</label>
@@ -590,7 +602,6 @@
 			{nextPrevButton}
 		/>
 	{:else}
-		{@const visibleCount = fassungenVisible.filter(Boolean).length}
 		<div
 			class="grid gap-4 mb-2"
 			class:lg:grid-cols-1={visibleCount === 1}
