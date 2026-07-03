@@ -525,10 +525,9 @@
 
 		<div class="flex flex-wrap items-center gap-x-6 gap-y-3 ml-auto">
 			<fieldset class="flex items-center gap-3 [&>legend]:float-left">
-				<legend class="text-lg font-bold font-serif">Fassungen:</legend>
-				<span id="fassungen-min-hint" class="sr-only">
-					Mindestens eine Fassung muss sichtbar bleiben
-				</span>
+				<legend class="text-lg font-bold font-serif">
+					Fassungen <span class="text-sm font-normal">(mindestens eine muss sichtbar bleiben)</span>:
+				</legend>
 				{#each columnKeys as key, i}
 					{@const isLastVisible = fassungenVisible[i] && visibleCount === 1}
 					<label class="flex items-center gap-1">
@@ -536,20 +535,13 @@
 							type="checkbox"
 							class="checkbox"
 							name="fassung-{key}"
-							checked={fassungenVisible[i]}
-							aria-label="Fassung {composureTitles[i]}"
-							aria-disabled={isLastVisible}
-							aria-describedby={isLastVisible ? 'fassungen-min-hint' : undefined}
-							title={isLastVisible ? 'Mindestens eine Fassung muss sichtbar bleiben' : undefined}
-							onchange={(e) => {
-								if (isLastVisible) {
-									e.currentTarget.checked = true;
-									return;
-								}
-								fassungenVisible[i] = e.currentTarget.checked;
+							bind:checked={fassungenVisible[i]}
+							aria-disabled={isLastVisible ? 'true' : undefined}
+							onclick={(e) => {
+								if (isLastVisible) e.preventDefault();
 							}}
 						/>
-						{composureTitles[i]}
+						<span class="sr-only">Fassung </span>{composureTitles[i]}
 					</label>
 				{/each}
 			</fieldset>
