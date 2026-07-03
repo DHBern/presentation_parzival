@@ -387,11 +387,14 @@
 	};
 
 	$effect(() => {
-		// Re-attach DOM listeners whenever the rendered pages or the synchro layout change.
-		// Reading these reactive values inside the effect ensures it re-runs after the
-		// new content is in the DOM; the returned cleanup detaches the previous batch.
+		// Re-attach DOM listeners whenever the rendered pages, the synchro layout, or
+		// the per-Fassung visibility change. Reading each reactive value inside the
+		// effect ensures it re-runs after the new content is in the DOM (Svelte only
+		// wires up a dependency on values that are read); the returned cleanup detaches
+		// the previous batch before the effect re-runs.
 		localPages.pages;
 		synchro;
+		fassungenVisible.forEach(Boolean);
 
 		const apparatTriggers = document.querySelectorAll('.verse .anchor');
 		apparatTriggers.forEach((el) => {
@@ -523,12 +526,16 @@
 			<fieldset class="flex items-center gap-3 [&>legend]:float-left">
 				<legend class="text-lg font-bold font-serif">Fassungen:</legend>
 				{#each columnKeys as key, i}
+					{@const isLastVisible =
+						fassungenVisible[i] && fassungenVisible.filter(Boolean).length === 1}
 					<label class="flex items-center gap-1">
 						<input
 							type="checkbox"
 							class="checkbox"
 							name="fassung-{key}"
 							bind:checked={fassungenVisible[i]}
+							disabled={isLastVisible}
+							title={isLastVisible ? 'Mindestens eine Fassung muss sichtbar bleiben' : undefined}
 						/>
 						{composureTitles[i]}
 					</label>
