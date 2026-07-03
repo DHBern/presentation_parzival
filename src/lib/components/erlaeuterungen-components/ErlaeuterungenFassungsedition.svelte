@@ -1,9 +1,4 @@
 <p>
-	<b>Zitierempfehlung:</b> Wolfram von Eschenbach, ›Parzival‹, Digitale Ausgabe nach Fassungen, hg. von
-	Michael Stolz in Zusammenarbeit mit Stefan Abel und einem internationalen Editionsteam, parzival.unibe.ch
-	(Zugriff: [aktuelles Datum])
-</p>
-<p>
 	Die Anlage der Fassungsedition ist an den von Karl Lachmann eingeführten Dreißigergruppen
 	(Einheiten von jeweils 30 Versen) orientiert. Pro Dreißiger ist eine Ansicht der synoptisch
 	angeordneten Fassungen *D, *m, *G und *T abrufbar.
@@ -35,7 +30,7 @@
 <p>
 	Textänderungen gegenüber der Leithandschrift sind durch Kursivierung bezeichnet. Gliederungsmittel
 	der Leithandschrift wie Initialen (rot, fett, größere Schrift, z. B.: <span
-		class="tei-seg9 initial Farbe: rot">W</span
+		class="initial Farbe: rot">W</span
 	>an), Versalien (schwarz, fett, größere Schrift, z. B.: <span class="large-variant">D</span>iz)
 	oder Majuskeln (Großschreibung) werden auch im normalisierten Text wiedergegeben.
 </p>

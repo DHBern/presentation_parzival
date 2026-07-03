@@ -11,7 +11,7 @@
 <p>Paratexte wie Notizen, Marginalien, Kustoden und Reklamanten werden kursiviert wiedergegeben.</p>
 <ErlaeuterungenExample href="/transkriptionen/d/8/1" label="D 8.1">
 	<span class="tei-name"
-		><span data-ref="regp:p0094"><span class="tei-seg9 initial Farbe: blau">G</span>Ahmvͦreth</span
+		><span data-ref="regp:p0094"><span class="initial Farbe: blau">G</span>Ahmvͦreth</span
 		></span
 	>
 	ſprach ave ſan. <span class="tei-note3 marginalia">Gahmuret</span>
@@ -44,27 +44,27 @@
 <p>Initialen: rot, größere Schrift.</p>
 <ErlaeuterungenExample href="/transkriptionen/d/5/29?" label="D 5.29">
 	<span class="content">
-		<span class="tei-seg9 initial Farbe: rot">D</span>o clagete man in ſere.
+		<span class="initial Farbe: rot">D</span>o clagete man in ſere.
 	</span>
 </ErlaeuterungenExample>
 <p>Prachtinitialen: rot, größere Schrift, Goldhintergrund.</p>
 <ErlaeuterungenExample href="/transkriptionen/d/1/01-01?" label="D 1.1">
 	<span class="content">
-		<span class="tei-seg8 glory-initial">I</span>ST zwiuel h<span class="tei-choice1">(er)</span>zen
+		<span class="glory-initial">I</span>ST zwiuel h<span class="tei-choice1">(er)</span>zen
 		nahgebur
 	</span>
 </ErlaeuterungenExample>
 <p>
 	Nicht ausgeführte Initialen: rot, kleinere Schrift. Hat der Schreiber den Initialbuchstaben
 	vorgeschrieben, wird dieser eingesetzt. In allen anderen Fällen steht der Stellvertreter <span
-		class="tei-seg1 not-executed">x</span
+		class="not-executed">x</span
 	>.
 </p>
 <ErlaeuterungenExample href="/transkriptionen/fr31/446/1" label="Fr. 31 446.1">
 	<div class="tei-l" id="fr31_446.01">
 		<span class="verse" data-verse="446.01">446.1<sup></sup></span>
 		<span class="content">
-			<span class="tei-seg1 not-executed">x</span>werſ rvͦchet hoeren dem tvͦn ich kvnt
+			<span class="not-executed">x</span>werſ rvͦchet hoeren dem tvͦn ich kvnt
 		</span>
 	</div>
 </ErlaeuterungenExample>
@@ -80,12 +80,14 @@
 </ErlaeuterungenExample>
 
 <p>
-	Versalien und Majuskeln werden in Fettdruck wiedergegeben (z. B.: <span class="tei-seg7 majuscule"
+	Versalien und Majuskeln werden in Fettdruck wiedergegeben (z. B.: <span class="majuscule"
 		>D</span
 	>iz).
 </p>
 
-<p>Überschriften: orangefarbig und fett (z. B.: <span class="tei-hi1 red rot">Her parcifal</span>).</p>
+<p>
+	Überschriften: orangefarbig und fett (z. B.: <span class="tei-hi1 red rot">Her parcifal</span>).
+</p>
 <ErlaeuterungenExample href="/transkriptionen/l/112/09-01?" label="L 112.9-01">
 	<span class="content"><span class="tei-hi1 red rot">her parcifal</span></span>
 </ErlaeuterungenExample>
