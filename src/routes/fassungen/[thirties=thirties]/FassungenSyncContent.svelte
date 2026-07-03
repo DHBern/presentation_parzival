@@ -106,7 +106,7 @@
 <!-- Scrollable region needs tabindex so keyboard-only users can focus and scroll it with arrow keys (WCAG 2.1.1). -->
 <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
 <div
-	class="grid gap-x-4 mb-2 tei-content synced grid-flow-dense lg:h-[calc(100vh-5rem)] lg:overflow-y-auto"
+	class="grid gap-x-4 mb-2 tei-content synced grid-flow-dense max-h-[70vh] overflow-y-auto lg:max-h-none lg:h-[calc(100vh-5rem)]"
 	class:lg:grid-cols-1={visibleCount === 1}
 	class:lg:grid-cols-2={visibleCount === 2}
 	class:lg:grid-cols-3={visibleCount === 3}
