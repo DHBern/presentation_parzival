@@ -390,9 +390,11 @@
 		// Re-attach DOM listeners whenever the rendered pages, the synchro layout, or
 		// the per-Fassung visibility change. Each of these lines establishes a reactive
 		// dependency (Svelte only tracks values that are read); the returned cleanup
-		// detaches the previous batch before the effect re-runs. `visibleCount` is a
-		// $derived over the whole array, so toggling any Fassung retriggers this effect.
-		localPages.pages;
+		// detaches the previous batch before the effect re-runs. Reading the inner
+		// arrays' `.length` is what makes this effect re-run after `fetchPage` pushes
+		// new content — reading the outer `localPages.pages` proxy alone would not
+		// react to nested `.push()` mutations.
+		localPages.pages.forEach((p) => p.length);
 		synchro;
 		visibleCount;
 
@@ -526,7 +528,7 @@
 		<div class="flex flex-wrap items-center gap-x-6 gap-y-3 ml-auto">
 			<fieldset class="flex items-center gap-3 [&>legend]:float-left">
 				<legend class="text-lg font-bold font-serif">
-					Fassungen <span class="text-sm font-normal">(mindestens eine muss sichtbar bleiben)</span>:
+					Fassungen:
 				</legend>
 				{#each columnKeys as key, i}
 					{@const isLastVisible = fassungenVisible[i] && visibleCount === 1}
