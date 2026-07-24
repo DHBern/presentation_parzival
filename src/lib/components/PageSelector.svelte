@@ -58,6 +58,7 @@
 		class="btn-icon preset-filled"
 		disabled={!prevPage}
 		aria-label={`vorherige${rvSuffix ? 's Blatt' : ' Seite'}`}
+		title="Zurückblättern. Kann auch über die entsprechende Cursor-Taste erfolgen."
 		onclick={() => {
 			if (prevPage) goto(pageUrl(prevPage));
 		}}
@@ -98,6 +99,7 @@
 		class="btn-icon preset-filled"
 		disabled={!nextPage}
 		aria-label={`nächste${rvSuffix ? 's Blatt' : ' Seite'}`}
+		title="Weiterblättern. Kann auch über die entsprechende Cursor-Taste erfolgen."
 		onclick={() => {
 			if (nextPage) goto(pageUrl(nextPage));
 		}}
