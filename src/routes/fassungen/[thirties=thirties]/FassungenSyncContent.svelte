@@ -95,10 +95,10 @@
 							<span>(Q)</span>
 						{/if}
 					{/if}
-				</h2>
-				<div class="inline [&_ul,&_li]:inline [&_li]:mr-1 anchor">
-					{@html distributions[i][page.data.thirties]}
-				</div>
+				{/if}
+			</h2>
+			<div class="inline [&_ul,&_li]:inline [&_li]:mr-1 [&_a]:anchor">
+				{@html distributions[i][page.data.thirties]}
 			</div>
 		{/if}
 	{/each}

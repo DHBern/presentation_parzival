@@ -60,7 +60,7 @@
 			{/if}
 		{/if}
 	</h2>
-	<div class="inline [&_ul,&_li]:inline [&_li]:mr-1 anchor">
+	<div class="inline [&_ul,&_li]:inline [&_li]:mr-1 [&_a]:anchor">
 		{@html currentDistribution}
 	</div>
 </div>
