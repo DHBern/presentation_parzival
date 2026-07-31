@@ -505,7 +505,7 @@
 					id="goto-thirties"
 					type="number"
 					placeholder="Dreißiger"
-					class="input inline w-[4em] mr-1"
+					class="input inline w-[5em] mr-1"
 					min="1"
 					max={NUMBER_OF_PAGES}
 					bind:value={gotoThirties}
