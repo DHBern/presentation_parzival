@@ -510,7 +510,7 @@
 					max={NUMBER_OF_PAGES}
 					bind:value={gotoThirties}
 				/>
-				<button class="btn preset-filled-primary-500">Anzeigen</button>
+				<button class="btn preset-filled">Anzeigen</button>
 			</form>
 
 			<p>
