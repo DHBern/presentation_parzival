@@ -42,8 +42,8 @@
 			return;
 		}
 		const direction = e.key === 'ArrowLeft' ? -1 : 1;
-		const successfullNav = pageSelectors[0]?.step(direction);
-		if (successfullNav) {
+		const successfulNav = pageSelectors[0]?.step(direction);
+		if (successfulNav) {
 			e.preventDefault();
 		}
 	}
