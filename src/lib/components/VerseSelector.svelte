@@ -85,6 +85,7 @@
 			<input
 				type="number"
 				placeholder="Dreißiger"
+				aria-label="Dreißiger"
 				class="input inline max-w-28"
 				min="1"
 				max={NUMBER_OF_PAGES}
@@ -94,14 +95,21 @@
 			/>.<input
 				type="number"
 				placeholder="Vers"
+				aria-label="Vers"
 				class="input max-w-20"
 				min="1"
 				max={thirtiesVal === 257 ? 32 : 30}
 				oninput={handleInput}
 				bind:this={verse}
 				value={verseVal}
-			/>-<input type="text" placeholder="Zusatz" class="input max-w-20" bind:this={additional} />
-			<button aria-label="suchen" class="btn preset-filled btn-sm shrink-0 grow-0">Anzeigen</button>
+			/>-<input
+				type="text"
+				placeholder="Zusatz"
+				aria-label="Zusatz"
+				class="input max-w-20"
+				bind:this={additional}
+			/>
+			<button class="btn preset-filled btn-sm shrink-0 grow-0">Anzeigen</button>
 		</span>
 	{/if}
 </form>
