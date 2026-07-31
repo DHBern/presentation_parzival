@@ -80,9 +80,10 @@
 </ErlaeuterungenExample>
 
 <p>
-	Versalien und Majuskeln werden in Fettdruck wiedergegeben (z. B.: <span class="majuscule"
-		>D</span
-	>iz).
+	Versalien und Majuskeln werden in Fettdruck und in größerer Schrift wiedergegeben.
+	<ErlaeuterungenExample href="/transkriptionen/t/1/15?" label="L 1.15">
+		<span class="content"><span class="tei-hi4 versal Versal">D</span>iz fligende bîſpel.</span>
+	</ErlaeuterungenExample>
 </p>
 
 <p>
