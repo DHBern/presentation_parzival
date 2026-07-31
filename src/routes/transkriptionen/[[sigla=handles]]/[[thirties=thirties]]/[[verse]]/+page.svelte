@@ -42,7 +42,7 @@
 			return;
 		}
 		const direction = e.key === 'ArrowLeft' ? -1 : 1;
-        const successfullNav = pageSelectors[0]?.step(direction)
+		const successfullNav = pageSelectors[0]?.step(direction);
 		if (successfullNav) {
 			e.preventDefault();
 		}
@@ -201,38 +201,36 @@
 		<h1 class="h1 min-w-0">Transkriptionen</h1>
 		<Zitierempfehlung mode="popup" />
 	</div>
-	<div class="grid gap-6 md:grid-cols-2 md:my-8">
-		<div class="flex flex-col gap-6">
-			<div>
-				<a
-					target="_blank"
-					rel="noopener noreferrer"
-					href="/erlaeuterungen#transkriptionen-auch-relevant-fuer-die-darstellung-in-der-verssynopse"
-					class="anchor"
-					aria-label="Erläuterungen (öffnet in neuem Tab)">Erläuterungen</a
-				>
-				zu den Transkriptionen
-			</div>
-			{#if data.content?.length > 1}
-				<div>
-					<Switch
-						thumbInactive="bg-surface-800"
-						controlInactive="bg-surface-100"
-						name="synchro"
-						checked={synchro}
-						onCheckedChange={(e) => (synchro = e.checked)}
-					>
-						synchron scrollen
-					</Switch>
-				</div>
-			{/if}
+	<div class="flex flex-col">
+		<div>
+			<a
+				target="_blank"
+				rel="noopener noreferrer"
+				href="/erlaeuterungen#transkriptionen-auch-relevant-fuer-die-darstellung-in-der-verssynopse"
+				class="anchor"
+				aria-label="Erläuterungen (öffnet in neuem Tab)">Erläuterungen</a
+			>
+			zu den Transkriptionen
 		</div>
-		<TextzeugenSelector
-			sigla={[...data.codices, ...data.fragments]}
-			{selectedSigla}
-			coordinates={[data.thirties, data.verse]}
-		/>
+		{#if data.content?.length > 1}
+			<div>
+				<Switch
+					thumbInactive="bg-surface-800"
+					controlInactive="bg-surface-100"
+					name="synchro"
+					checked={synchro}
+					onCheckedChange={(e) => (synchro = e.checked)}
+				>
+					synchron scrollen
+				</Switch>
+			</div>
+		{/if}
 	</div>
+	<TextzeugenSelector
+		sigla={[...data.codices, ...data.fragments]}
+		{selectedSigla}
+		coordinates={[data.thirties, data.verse]}
+	/>
 </section>
 {#if data.content}
 	<div class="grid grid-cols-[repeat(auto-fit,minmax(550px,1fr))] gap-4">
