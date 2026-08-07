@@ -104,7 +104,7 @@
 		<!-- svelte-ignore a11y_no_static_element_interactions -- header is a drag handle for the modal; not itself an interactive control -->
 		<header
 			bind:this={headerEl}
-			class="flex items-center justify-center px-4 py-4 bg-gray-400 rounded-t-md select-none touch-none {dragging
+			class="relative flex items-center justify-center px-4 py-4 bg-gray-400 rounded-t-md select-none touch-none {dragging
 				? 'cursor-grabbing'
 				: 'cursor-grab'}"
 			onpointerdown={onPointerDown}
@@ -119,6 +119,15 @@
 			>
 				Editorischer Kommentar ({id[2] === 'A' ? 'Fassungsübergreifend' : 'Fassungsintern'})
 			</h1>
+			<button
+				type="button"
+				class="close_button absolute right-2 top-1/2 -translate-y-1/2 flex items-center justify-center size-8 rounded-full text-black/70 hover:text-black hover:bg-black/10 cursor-pointer"
+				aria-label="Kommentar schließen"
+				onclick={() => (openState = false)}
+				onpointerdown={(e) => e.stopPropagation()}
+			>
+				<i class="fa-solid fa-xmark" aria-hidden="true"></i>
+			</button>
 		</header>
 		<article class="p-4 fk-modal-content max-h-[80vh] overflow-auto">
 			{#if content}

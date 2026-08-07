@@ -72,7 +72,7 @@
 		<button
 			class="close_button cursor-pointer"
 			onclick={resetPopup}
-			aria-label="Apparat schliessen"
+			aria-label="Apparat schließen"
 			tabindex="0"><i class="fa-solid fa-xmark"></i></button
 		>
 	</div>
