@@ -31,7 +31,7 @@
 	Textänderungen gegenüber der Leithandschrift sind durch Kursivierung bezeichnet. Gliederungsmittel
 	der Leithandschrift wie Initialen (rot, fett, größere Schrift, z. B.: <span
 		class="initial Farbe: rot">W</span
-	>an), Versalien (schwarz, fett, größere Schrift, z. B.: <span class="large-variant">D</span>iz)
+	>an), Versalien (fett, größere Schrift)
 	oder Majuskeln (Großschreibung) werden auch im normalisierten Text wiedergegeben.
 </p>
 <p>Die zwischen den Fassungstexten bestehenden Varianten sind durch Fettmarkierung angezeigt.</p>

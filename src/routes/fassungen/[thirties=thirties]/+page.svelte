@@ -532,12 +532,12 @@
 					id="goto-thirties"
 					type="number"
 					placeholder="Dreißiger"
-					class="input inline w-[4em] mr-1"
+					class="input inline w-[5em] mr-1"
 					min="1"
 					max={NUMBER_OF_PAGES}
 					bind:value={gotoThirties}
 				/>
-				<button class="btn preset-filled-primary-500">Anzeigen</button>
+				<button class="btn preset-filled">Anzeigen</button>
 			</form>
 
 			<p>
@@ -554,9 +554,7 @@
 
 		<div class="flex flex-wrap items-center gap-x-6 gap-y-3 ml-auto">
 			<fieldset class="flex items-center gap-3 [&>legend]:float-left">
-				<legend class="text-lg font-bold font-serif">
-					Fassungen:
-				</legend>
+				<legend class="text-lg font-bold font-serif"> Fassungen: </legend>
 				{#each columnKeys as key, i}
 					{@const isLastVisible = fassungenVisible[i] && visibleCount === 1}
 					<label class="flex items-center gap-1">
