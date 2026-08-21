@@ -480,21 +480,6 @@
 	/** @type {boolean[]} */
 	let fassungenVisible = $state([true, true, true, true]);
 	let visibleCount = $derived(fassungenVisible.filter(Boolean).length);
-
-	/**
-	 * Every Apparat popover opens below its anchor. This decides where it falls
-	 * back to when there is no room below: the first visible column flips up
-	 * ('top'); every column after it opens to the left, keeping the popover clear
-	 * of the surrounding text.
-	 * @param {HTMLElement} elTrigger
-	 * @returns {'top' | 'left'}
-	 */
-	const apparatFallback = (elTrigger) => {
-		const line = elTrigger.closest('.line');
-		const column = columnKeys.find((key) => line?.classList.contains(`column-${key}`));
-		const firstVisibleColumn = columnKeys[fassungenVisible.findIndex(Boolean)];
-		return column && column === firstVisibleColumn ? 'top' : 'left';
-	};
 </script>
 
 <svelte:window bind:innerWidth={windowWidth} onkeydown={onApparatKeydown} />
@@ -617,7 +602,6 @@
 		<ApparatPopover
 			resetPopup={() => closePinnedApparat(popover.elTrigger)}
 			elTrigger={popover.elTrigger}
-			fallback={apparatFallback(popover.elTrigger)}
 			autofocus={true}
 			dreissiger={popover.dreissiger}
 			verse={popover.verse}
@@ -635,7 +619,6 @@
 				onMouseEnter={onMouseEnterApparatPopover}
 				onMouseLeave={onMouseLeaveApparatPopover}
 				elTrigger={apparatHover.elTrigger}
-				fallback={apparatFallback(apparatHover.elTrigger)}
 				dreissiger={apparatHover.dreissiger}
 				verse={apparatHover.verse}
 				title={apparatHover.title}

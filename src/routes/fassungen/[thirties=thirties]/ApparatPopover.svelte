@@ -6,7 +6,6 @@
 	let {
 		resetPopup,
 		elTrigger,
-		fallback = 'left',
 		autofocus = false,
 		dreissiger,
 		verse,
@@ -19,10 +18,6 @@
 	/** @type {HTMLElement | undefined} */
 	let elPopover = $state();
 
-	// Gap between the anchor and the popover, kept generous so the popover sits
-	// clear of the triggering verse and more of the surrounding text stays visible.
-	const GAP = 12;
-
 	/**
 	 * @param {HTMLElement} elMark
 	 * @param {HTMLElement} elPopup
@@ -30,15 +25,10 @@
 	function updateFunctionFloatingPopover(elMark, elPopup) {
 		return () => {
 			computePosition(elMark, elPopup, {
-				// All columns open below the anchor. When there is no room below,
-				// flip() falls back: 'top' for the first column, 'left' for the rest.
-				placement: 'bottom',
-				middleware: [
-					offset(GAP),
-					flip({ fallbackPlacements: [/** @type {import('@floating-ui/dom').Placement} */ (fallback)] }),
-					shift({ padding: 8 })
-				],
-				strategy: 'absolute'
+				// Floating UI's defaults: open below the anchor, flip above when there
+				// is no room, then shift to stay inside the viewport. offset() adds a
+				// small gap so the popover does not sit flush against the verse.
+				middleware: [offset(8), flip(), shift()]
 			}).then(({ x, y }) => {
 				elPopup.style.top = `${y}px`;
 				elPopup.style.left = `${x}px`;
