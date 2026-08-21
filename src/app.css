@@ -150,6 +150,11 @@
 		@apply text-red-500;
 	}
 
+	.versal {
+		@apply font-bold;
+		font-size: 1.25em;
+	}
+
 	.large-variant {
 		@apply font-black;
 		@apply text-base;
