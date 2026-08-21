@@ -11,10 +11,7 @@
 	// remove leading zeros in verse
 	let verseNoZero = $derived(verse.replace(/^0+/, ''));
 	let hyparchetypesSlider = $state(false);
-	let additionsSlider = $state(false);
-	$effect(() => {
-		additionsSlider = metadata?.hasAdditions ?? false;
-	});
+	let additionsSlider = $derived(metadata?.hasAdditions);
 
 	let prevVerseURL = $derived(
 		data?.metadata?.prev
