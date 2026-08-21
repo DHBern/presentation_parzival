@@ -12,28 +12,24 @@
 	let selection = $state(selectedSigla);
 </script>
 
-<div>
-	<div class="flex gap-6 my-3">
-		{#each Array.from({ length: 2 }) as _, i}
-			<label>
-				{#if i === 0}Textzeuge{:else}Textzeugenvergleich{/if}:
-				<select class="select my-2" bind:value={selection[i]}>
-					{#if i !== 0}
-						<option value=""> --- </option>
-					{/if}
-					{#await sigla then resolvedSigla}
-						{#each resolvedSigla as { sigil, handle }}
-							<option value={handle}>{@html sigil}</option>
-						{/each}
-					{/await}
-				</select>
-			</label>
-		{/each}
-	</div>
-	<div class="flex max-w-full items-baseline gap-1 my-3">
-		<VerseSelector
-			targetPath={`/transkriptionen/${selection.filter((e) => !!e).join('-')}`}
-			{coordinates}
-		/>
-	</div>
+<div class="flex flex-wrap items-baseline gap-x-10">
+	{#each Array.from({ length: 2 }) as _, i}
+		<label class="flex items-baseline gap-2 shrink-0 font-bold">
+			{#if i === 0}Textzeuge{:else}Textzeugenvergleich{/if}:
+			<select class="select font-normal" bind:value={selection[i]}>
+				{#if i !== 0}
+					<option value=""> --- </option>
+				{/if}
+				{#await sigla then resolvedSigla}
+					{#each resolvedSigla as { sigil, handle }}
+						<option value={handle}>{@html sigil}</option>
+					{/each}
+				{/await}
+			</select>
+		</label>
+	{/each}
+	<VerseSelector
+		targetPath={`/transkriptionen/${selection.filter((/** @type {string} */ e) => !!e).join('-')}`}
+		{coordinates}
+	/>
 </div>
