@@ -2,11 +2,11 @@
 	import { onMount } from 'svelte';
 	import { autoUpdate } from '@floating-ui/dom';
 	import { computePosition, offset, flip, shift } from '@floating-ui/dom';
-	import { autoPlacement } from '@floating-ui/dom';
 
 	let {
 		resetPopup,
 		elTrigger,
+		autofocus = false,
 		dreissiger,
 		verse,
 		title,
@@ -15,18 +15,20 @@
 		onMouseEnter = () => {},
 		onMouseLeave = () => {}
 	} = $props();
+	/** @type {HTMLElement | undefined} */
 	let elPopover = $state();
 
+	/**
+	 * @param {HTMLElement} elMark
+	 * @param {HTMLElement} elPopup
+	 */
 	function updateFunctionFloatingPopover(elMark, elPopup) {
 		return () => {
 			computePosition(elMark, elPopup, {
-				middleware: [
-					autoPlacement({ allowedPlacements: ['top', 'bottom'] }),
-					offset(1),
-					flip(),
-					shift()
-				],
-				strategy: 'absolute'
+				// Floating UI's defaults: open below the anchor, flip above when there
+				// is no room, then shift to stay inside the viewport. offset() adds a
+				// small gap so the popover does not sit flush against the verse.
+				middleware: [offset(8), flip(), shift()]
 			}).then(({ x, y }) => {
 				elPopup.style.top = `${y}px`;
 				elPopup.style.left = `${x}px`;
@@ -34,16 +36,19 @@
 			});
 		};
 	}
-	const focus = (el) => {
-		el.focus();
-	};
 
-	const closeOnEscape = (ev) => {
-		if (ev.code == 'Escape') resetPopup();
+	// Only popovers opened by click (pinned) grab keyboard focus. Transient
+	// hover popovers must not steal focus from the reader.
+	/**
+	 * @param {HTMLElement} el
+	 * @param {boolean} enabled
+	 */
+	const focus = (el, enabled) => {
+		if (enabled) el.focus();
 	};
 
 	onMount(() => {
-		// Cleanup
+		if (!elPopover) return;
 		const cleanup = autoUpdate(
 			elTrigger,
 			elPopover,
@@ -55,16 +60,16 @@
 	});
 </script>
 
-<svelte:window onkeydown={closeOnEscape} />
-
 <!-- class="absolute z-10 rounded-md border-2 border-[#94ffcf] border-white bg-[#e0fff1] p-5" -->
 <div
-	use:focus
+	use:focus={autofocus}
 	role="dialog"
+	aria-modal="false"
+	aria-label="Apparat"
 	tabindex={0}
 	onmouseenter={onMouseEnter}
 	onmouseleave={onMouseLeave}
-	class="fassungen_popover z-90 absolute max-w-[500px] card preset-filled transition-transform duration-500"
+	class="fassungen_popover z-90 absolute max-w-[500px] card preset-filled"
 	bind:this={elPopover}
 >
 	<div class="py-2 px-4 flex gap-4 justify-between items-center bg-gray-400">
@@ -73,7 +78,7 @@
 			class="close_button cursor-pointer"
 			onclick={resetPopup}
 			aria-label="Apparat schließen"
-			tabindex="0"><i class="fa-solid fa-xmark"></i></button
+			tabindex="0"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button
 		>
 	</div>
 	<div class="p-4 pt-1">
@@ -94,7 +99,7 @@
 	.fassungen_popover :global(a) {
 		@apply anchor font-bold;
 	}
-	.fassungen_popover :global(.note) {
+	:global(.fassungen_popover .note) {
 		@apply italic;
 	}
 </style>
