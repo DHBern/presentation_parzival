@@ -79,7 +79,8 @@
 				const condensedReading = info.apparat.reading.reduce(reducer, {});
 				const condensedStructure = info.apparat.structure.reduce(reducer, {});
 
-				const formatVerseSup = (_, match) => `<sup>${match}</sup>`;
+				const formatVerseSup = (/** @type {string} */ _, /** @type {string} */ match) =>
+					`<sup>${match}</sup>`;
 				// create a shallow copy of the fasskomInfos in order to splice already
 				// painted ones, so the fasskoms with a verse range are only painted once.
 				const fasskommInfos = [...info.fasskomm];
@@ -313,40 +314,42 @@
 	// --------------------------------------
 	// Apparate
 	// --------------------------------------
-	// ApparatStrore contains the content of the selected popover
-	let ApparatStore = $state({
-		/** @type { HTMLElement | undefined } */ elTrigger: undefined,
-		dreissiger: '',
-		verse: '',
-		title: '',
-		structure_info: '',
-		reading_info: ''
-	});
+	/**
+	 * @typedef {Object} ApparatData
+	 * @property {HTMLElement} elTrigger
+	 * @property {string} dreissiger
+	 * @property {string} verse
+	 * @property {string} title
+	 * @property {string} structure_info
+	 * @property {string} reading_info
+	 */
+
+	// The transient popover shown on hover (at most one at a time), and the set of
+	// popovers the user pinned by clicking (each stays until its own close button).
+	/** @type {ApparatData | undefined} */
+	let apparatHover = $state(undefined);
+	/** @type {ApparatData[]} */
+	let apparatPinned = $state([]);
 
 	// Event Listeners for Popovers
 	let timeoutonMouseLeaveApparatTrigger = $state();
 	let timeoutonMouseLeaveApparatPopup = $state();
-	let ignoreApparatLeave = $state(false);
 
-	const fillApparatStore = (/** @type { HTMLElement } */ elTrigger, ignore = false) => {
-		if (!ignore) {
-			resetApparatStore();
-			const elData = elTrigger.dataset;
-			ApparatStore.elTrigger = elTrigger;
-			ApparatStore.title = elData.title ?? '';
-			ApparatStore.dreissiger = elData.dreissiger ?? '';
-			ApparatStore.verse = elData.verse ?? '';
-			ApparatStore.structure_info = decodeURIComponent(elData.structure_info ?? '');
-			ApparatStore.reading_info = decodeURIComponent(elData.reading_info ?? '');
-		}
-	};
-	const resetApparatStore = () => {
-		ApparatStore.elTrigger = undefined;
-		ApparatStore.title = '';
-		ApparatStore.dreissiger = '';
-		ApparatStore.verse = '';
-		ApparatStore.structure_info = '';
-		ApparatStore.reading_info = '';
+	/**
+	 * Read the popover content off a trigger's data-attributes.
+	 * @param {HTMLElement} elTrigger
+	 * @returns {ApparatData}
+	 */
+	const readApparatData = (elTrigger) => {
+		const elData = elTrigger.dataset;
+		return {
+			elTrigger,
+			title: elData.title ?? '',
+			dreissiger: elData.dreissiger ?? '',
+			verse: elData.verse ?? '',
+			structure_info: decodeURIComponent(elData.structure_info ?? ''),
+			reading_info: decodeURIComponent(elData.reading_info ?? '')
+		};
 	};
 
 	const clearTimeouts = () => {
@@ -354,36 +357,60 @@
 		clearTimeout(timeoutonMouseLeaveApparatPopup);
 	};
 
+	/** Clicking an anchor pins its popover; a second click on another anchor keeps the first. */
 	const onClickApparatTrigger = (/** @type { Event } */ ev) => {
-		ignoreApparatLeave = true;
-		if (ev.target instanceof HTMLElement) {
-			fillApparatStore(ev.target, false);
+		if (!(ev.target instanceof HTMLElement)) return;
+		clearTimeouts();
+		// The pinned popover supersedes the transient one for this trigger.
+		if (apparatHover?.elTrigger === ev.target) apparatHover = undefined;
+		// Don't pin the same anchor twice.
+		if (!apparatPinned.some((p) => p.elTrigger === ev.target)) {
+			apparatPinned.push(readApparatData(ev.target));
 		}
 	};
 	const onMouseEnterApparatTrigger = (/** @type { Event } */ ev) => {
 		clearTimeouts();
-		if (ev.target instanceof HTMLElement) {
-			fillApparatStore(ev.target, ignoreApparatLeave);
-		}
+		if (!(ev.target instanceof HTMLElement)) return;
+		// A pinned popover already covers this anchor; no transient one needed.
+		if (apparatPinned.some((p) => p.elTrigger === ev.target)) return;
+		apparatHover = readApparatData(ev.target);
 	};
 	const onMouseLeaveApparatTrigger = () => {
-		if (!ignoreApparatLeave) {
-			timeoutonMouseLeaveApparatTrigger = setTimeout(resetApparatStore, 500);
-		}
+		timeoutonMouseLeaveApparatTrigger = setTimeout(() => (apparatHover = undefined), 500);
 	};
 	const onMouseEnterApparatPopover = () => {
 		clearTimeouts();
 	};
 	const onMouseLeaveApparatPopover = () => {
-		if (!ignoreApparatLeave) {
-			timeoutonMouseLeaveApparatPopup = setTimeout(resetApparatStore, 500);
-		}
+		timeoutonMouseLeaveApparatPopup = setTimeout(() => (apparatHover = undefined), 500);
 	};
 
+	/** @param {HTMLElement} elTrigger */
+	const closePinnedApparat = (elTrigger) => {
+		apparatPinned = apparatPinned.filter((p) => p.elTrigger !== elTrigger);
+	};
+
+	/** Close everything (used by scroll / other interactions that should dismiss popovers). */
 	const closeApparatOnInteraction = () => {
-		resetApparatStore();
+		apparatHover = undefined;
+		apparatPinned = [];
 		clearTimeouts();
-		ignoreApparatLeave = false;
+	};
+
+	/**
+	 * Escape dismisses only the topmost Apparat popover: the transient hover one
+	 * first, otherwise the most recently pinned. Handled once at the page level so
+	 * a single keypress does not close every open popover at once.
+	 * @param {KeyboardEvent} ev
+	 */
+	const onApparatKeydown = (ev) => {
+		if (ev.key !== 'Escape') return;
+		if (apparatHover) {
+			apparatHover = undefined;
+			clearTimeouts();
+		} else if (apparatPinned.length) {
+			apparatPinned = apparatPinned.slice(0, -1);
+		}
 	};
 
 	$effect(() => {
@@ -455,7 +482,7 @@
 	let visibleCount = $derived(fassungenVisible.filter(Boolean).length);
 </script>
 
-<svelte:window bind:innerWidth={windowWidth} />
+<svelte:window bind:innerWidth={windowWidth} onkeydown={onApparatKeydown} />
 <svelte:head>
 	<title>Fassungsedition - Dreißiger {data.thirties}</title>
 </svelte:head>
@@ -568,19 +595,35 @@
 		/>
 	{/if}
 
-	<!-- Popover for Apparat -->
-	{#if ApparatStore.elTrigger}
+	<!-- Pinned Apparat popovers (one per clicked anchor, each closed individually) -->
+	{#each apparatPinned as popover (popover.elTrigger)}
 		<ApparatPopover
-			resetPopup={closeApparatOnInteraction}
-			onMouseEnter={onMouseEnterApparatPopover}
-			onMouseLeave={onMouseLeaveApparatPopover}
-			elTrigger={ApparatStore.elTrigger}
-			dreissiger={ApparatStore.dreissiger}
-			verse={ApparatStore.verse}
-			title={ApparatStore.title}
-			structure_info={ApparatStore.structure_info}
-			reading_info={ApparatStore.reading_info}
+			resetPopup={() => closePinnedApparat(popover.elTrigger)}
+			elTrigger={popover.elTrigger}
+			autofocus={true}
+			dreissiger={popover.dreissiger}
+			verse={popover.verse}
+			title={popover.title}
+			structure_info={popover.structure_info}
+			reading_info={popover.reading_info}
 		/>
+	{/each}
+
+	<!-- Transient Apparat popover shown on hover (destroyed/recreated per anchor) -->
+	{#if apparatHover}
+		{#key apparatHover.elTrigger}
+			<ApparatPopover
+				resetPopup={closeApparatOnInteraction}
+				onMouseEnter={onMouseEnterApparatPopover}
+				onMouseLeave={onMouseLeaveApparatPopover}
+				elTrigger={apparatHover.elTrigger}
+				dreissiger={apparatHover.dreissiger}
+				verse={apparatHover.verse}
+				title={apparatHover.title}
+				structure_info={apparatHover.structure_info}
+				reading_info={apparatHover.reading_info}
+			/>
+		{/key}
 	{/if}
 
 	<!-- Fassungen Content -->
