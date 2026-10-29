@@ -47,7 +47,9 @@
 
 	async function copyCitation() {
 		try {
-			await navigator.clipboard.writeText(bodyElement?.textContent ?? '');
+			// Collapse the template's indentation and line breaks into single spaces.
+			const text = (bodyElement?.textContent ?? '').replace(/\s+/g, ' ').trim();
+			await navigator.clipboard.writeText(text);
 			copyStatus = 'success';
 		} catch {
 			// Clipboard API can reject in insecure contexts or when permission
