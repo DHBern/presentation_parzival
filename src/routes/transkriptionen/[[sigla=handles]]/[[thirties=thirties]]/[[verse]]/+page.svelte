@@ -199,7 +199,6 @@
 <section class="w-full">
 	<div class="flex items-baseline justify-between gap-4 flex-wrap my-4">
 		<h1 class="h1 min-w-0">Transkriptionen</h1>
-		<Zitierempfehlung mode="popup" />
 	</div>
 	<div class="flex flex-col">
 		<div>
@@ -239,25 +238,54 @@
 				class="grid grid-cols-[repeat(auto-fit,minmax(500px,1fr))] gap-4 preset-filled-surface-500 my-4 py-4 px-8 rounded-xl"
 			>
 				<section>
-					<div class="mb-4 relative">
-						<h2 class="h2">
-							Textzeuge:
-							<Popover>
-								{#snippet trigger()}
-									{sigilFromHandle(info.sigla)}
-								{/snippet}
-								{#snippet content()}
-									<div class="h6">
-										{@html metadataFromHandle(info.sigla)['info-h2']}
-										<a
-											class="anchor text-primary-100"
-											href="{base}/textzeugen#{sigilFromHandle(info.sigla)}"
-											>zum Verzeichnis ’Textzeugen’
-										</a>
-									</div>
-								{/snippet}
-							</Popover>
-						</h2>
+					<div class="mb-4">
+						<div class="flex items-start gap-4">
+							<h2 class="h2 shrink-0">
+								Textzeuge:
+								<Popover>
+									{#snippet trigger()}
+										{sigilFromHandle(info.sigla)}
+									{/snippet}
+									{#snippet content()}
+										<div class="h6">
+											{@html metadataFromHandle(info.sigla)['info-h2']}
+											<a
+												class="anchor text-primary-100"
+												href="{base}/textzeugen#{sigilFromHandle(info.sigla)}"
+												>zum Verzeichnis ’Textzeugen’
+											</a>
+										</div>
+									{/snippet}
+								</Popover>
+							</h2>
+							<div class="flex flex-1 min-w-0 items-center justify-end gap-2">
+								<Zitierempfehlung mode="popup" />
+								{#if !(page.url.searchParams.get('iiif')?.split('-')[i] === 'false')}
+									<a
+										class="btn btn-icon shrink-0"
+										href={generateIiifLink(page.url, i, false)}
+										aria-label="Faksimile verstecken"
+									>
+										<i class="fa-solid fa-eye-slash"></i>
+									</a>
+								{:else}
+									<a
+										class="btn btn-icon shrink-0"
+										href={generateIiifLink(page.url, i, true)}
+										aria-label="Faksimile anzeigen"
+									>
+										<i class="fa-solid fa-eye"></i>
+									</a>
+								{/if}
+								<a
+									class="btn btn-icon shrink-0"
+									href={generateCloseLink(info.sigla)}
+									aria-label="Ansicht schließen"
+								>
+									<i class="fa-solid fa-x"></i>
+								</a>
+							</div>
+						</div>
 						<div class="flex gap-4 mt-2">
 							{#if localVerses[i]}
 								<p class="self-center">
@@ -273,32 +301,6 @@
 									meta={data.pageMeta[i]}
 								></PageSelector>
 							{/await}
-						</div>
-						<div class="absolute top-0 right-0">
-							{#if !(page.url.searchParams.get('iiif')?.split('-')[i] === 'false')}
-								<a
-									class="btn btn-icon"
-									href={generateIiifLink(page.url, i, false)}
-									aria-label="Faksimile verstecken"
-								>
-									<i class="fa-solid fa-eye-slash"></i>
-								</a>
-							{:else}
-								<a
-									class="btn btn-icon"
-									href={generateIiifLink(page.url, i, true)}
-									aria-label="Faksimile anzeigen"
-								>
-									<i class="fa-solid fa-eye"></i>
-								</a>
-							{/if}
-							<a
-								class="btn btn-icon"
-								href={generateCloseLink(info.sigla)}
-								aria-label="Ansicht schließen"
-							>
-								<i class="fa-solid fa-x"></i>
-							</a>
 						</div>
 					</div>
 					{#await localPages[i]}
