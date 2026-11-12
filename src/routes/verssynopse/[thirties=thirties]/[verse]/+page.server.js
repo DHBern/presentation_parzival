@@ -101,9 +101,43 @@ async function getSortedNavVerses() {
 	return _sortedNavVerses;
 }
 
+/**
+ * @param {string} distribution
+ * @param {{ handle: string, sigil: string }[]} witnesses
+ * @param {string} thirties
+ * @param {string} verse
+ */
+function witnessesForVerse(distribution, witnesses, thirties, verse) {
+	const sigils = new Set();
+	const links = distribution.matchAll(/<a\b[^>]*>([^<]*)<\/a>(?:\s*<span\b[^>]*>(.*?)<\/span>)?/gi);
+	for (const [, sigil, annotation] of links) {
+		const note = annotation?.replace(/<[^>]*>/g, '').trim();
+		// Lead-manuscript notes describe editorial roles, not witness coverage.
+		if (note && /^\(\d+\./.test(note)) {
+			const restriction = note.match(/^\((\d+)\.(.*)\)$/);
+			if (!restriction) throw new Error(`Invalid witness distribution: ${note}`);
+			const ranges = restriction[2].split(/\s*(?:,|\bund\b)\s*/).map((range) => {
+				const bounds = range.match(/^(\d+)(?:\s*[-–]\s*(\d+))?$/);
+				if (!bounds) throw new Error(`Invalid witness distribution range: ${range}`);
+				return [Number(bounds[1]), Number(bounds[2] ?? bounds[1])];
+			});
+			const verseNumber = Number(verse.split('-')[0]);
+			if (
+				Number(restriction[1]) !== Number(thirties) ||
+				!ranges.some(([start, end]) => verseNumber >= start && verseNumber <= end)
+			) {
+				continue;
+			}
+		}
+		sigils.add(sigil.trim());
+	}
+	return witnesses
+		.filter(({ sigil }) => sigils.has(sigil.replace(/^Fr\.\s*/, 'Fr')))
+		.map(({ handle }) => handle);
+}
+
 /** @type {import('./$types').PageServerLoad} */
 export async function load({ fetch, params }) {
-	console.log('einzelvers', params);
 	/** @type {{ [key: string]: Promise<any> }} */
 	const publisherData = {};
 
@@ -174,15 +208,15 @@ export async function load({ fetch, params }) {
 				const handlePath = encodeURIComponent(String(element.handle));
 				publisherData[element.handle] = [
 					limit(() =>
-						fetch(`${URL_TEI_PB}/parts/fassungen/${handlePath}/${thirties}/${verse ?? '01'}.json`)
+						fetch(
+							`${URL_TEI_PB}/parts/syn${thirties}.xml/json?odd=parzival.odd&view=single&xpath=//l[@n=%27${handlePath}%20${thirties}.${verse.replaceAll('I', 'i')}%27]`
+						)
 					)
 				];
 			}
 		);
 	}
 
-	/** @type {string[]} */
-	let loss = [];
 	// Wait for all promises to resolve and filter those with status 200
 	await metadata;
 	const resolvedPublisherData = await Promise.all(
@@ -194,8 +228,7 @@ export async function load({ fetch, params }) {
 					responses.filter((res) => res.status === 200).map(async (res) => await res.clone().json())
 				);
 			}
-			if (data === null && !key.includes('fr')) {
-				loss.push(key);
+			if (data === null) {
 				return null;
 			}
 			return [key, data];
@@ -204,18 +237,29 @@ export async function load({ fetch, params }) {
 
 	// Convert array back to object
 	const resolvedPublisherDataObject = Object.fromEntries(resolvedPublisherData);
+	const loss = (await metadata).codices
+		.filter(
+			(/** @type {{ handle: string }} */ codex) =>
+				!Object.hasOwn(resolvedPublisherDataObject, codex.handle)
+		)
+		.map((/** @type {{ handle: string }} */ codex) => codex.handle);
 
 	// get distributions and enhance the metadata
 	const apparatus = await fetch(`${URL_STATIC_API}/json/syn/syn${thirties}.json`);
 	if (!apparatus.ok) {
-		console.log('Failed to fetch apparatus', apparatus);
+		throw new Error(`Failed to fetch witness distributions: ${apparatus.status}`);
 	}
+	/** @type {{ handle: string, distribution: string }[]} */
 	let apparatusData = (await apparatus.json()).versions;
 
 	let enhancedMetadata = structuredClone(await metadata);
+	const witnesses = [...enhancedMetadata.codices, ...enhancedMetadata.fragments];
+	for (const hyparchetype of enhancedMetadata.hyparchetypes) {
+		hyparchetype.witnesses = [];
+	}
 	apparatusData.forEach((version) => {
 		const targetHyparchetype = enhancedMetadata.hyparchetypes.find(
-			(h) => h.handle === version.handle
+			(/** @type {{ handle: string }} */ h) => h.handle === version.handle
 		);
 		if (targetHyparchetype) {
 			if (targetHyparchetype.handle === '*T') {
@@ -229,52 +273,15 @@ export async function load({ fetch, params }) {
 					targetHyparchetype.sigil = `*T(Q)`;
 				}
 			}
-			targetHyparchetype.witnesses = [...enhancedMetadata.codices, ...enhancedMetadata.fragments]
-				.filter((codex) => {
-					if (codex.sigil.includes('Fr')) {
-						codex.sigil = codex.sigil.replace('. ', '');
-					}
-					if (version.distribution.includes(`>${codex.sigil}</a>`)) {
-						// ------------------------
-						// GPT wrote this to work around not having a DOM-parser
-						const dist = version.distribution ?? '';
-						const sigil = codex.sigil;
-						const linkRegex = new RegExp(
-							`<a\\b[^>]*>([^<]*${sigil.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\\\$&')}[^<]*)<\\/a>`,
-							'i'
-						);
-						const linkMatch = dist.match(linkRegex);
-						const afterLink = linkMatch
-							? dist.slice(dist.indexOf(linkMatch[0]) + linkMatch[0].length)
-							: '';
-						const spanMatch = afterLink.match(/^\s*<span\b[^>]*>(.*?)<\/span>/i);
-						const nextSibling =
-							spanMatch && spanMatch[1] ? spanMatch[1].replace(/<[^>]*>/g, '').trim() : null;
-						// ------------------------
-						if (nextSibling) {
-							//parse the verse-info
-
-							const verseMinMax = nextSibling.match(/\.(\d{1,3})-(\d{1,3})/);
-							if (
-								verseMinMax &&
-								Number(verseparts[0]) >= Number(verseMinMax[1]) &&
-								Number(verseparts[0]) <= Number(verseMinMax[2])
-							) {
-								return true;
-							} else {
-								return false;
-							}
-						} else {
-							return true;
-						}
-					} else {
-						return false;
-					}
-				})
-				.map((codex) => codex.handle);
+			targetHyparchetype.witnesses = witnessesForVerse(
+				version.distribution,
+				witnesses,
+				thirties,
+				verse
+			);
 		}
 	});
-
+	console.log(enhancedMetadata);
 	return {
 		thirties,
 		verse,

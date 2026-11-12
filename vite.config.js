@@ -7,5 +7,10 @@ export default defineConfig({
 	plugins: [tailwindcss(), enhancedImages(), sveltekit()],
 	build: {
 		target: 'es2022'
+	},
+	server: {
+		watch: {
+			ignored: ['**/build/**']
+		}
 	}
 });

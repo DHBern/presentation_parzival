@@ -70,3 +70,13 @@ npm run preview
 - `npm run check` - type and Svelte checks
 - `npm run lint` - lint and formatting checks
 - `npm run format` - apply formatting
+
+## Verse Synopsis
+
+The grouped synopsis assigns witnesses per verse using the apparatus distributions also
+shown in `/fassungen`, including fragment verse ranges. The ungrouped view shows all
+available witness texts, regardless of their assignment to a hyparchetype.
+The loss list includes codices with no matching verse or no successful text response;
+fragments and hyparchetype texts are excluded.
+
+Run the distribution regression tests with `node --test tests/verssynopse.test.mjs`.
