@@ -42,12 +42,11 @@
 	}
 
 	/**
-	 * @param {any[]} hyparchetypes
+	 * @param {string[]} witnesses
 	 */
-	function flatSortedWitnesses(hyparchetypes) {
-		const all = hyparchetypes.flatMap((a) => a.witnesses ?? []);
-		const nonFr = all.filter((w) => !w.toLowerCase().startsWith('fr'));
-		const fr = all.filter((w) => w.toLowerCase().startsWith('fr')).sort();
+	function sortedWitnesses(witnesses) {
+		const nonFr = witnesses.filter((w) => !w.toLowerCase().startsWith('fr'));
+		const fr = witnesses.filter((w) => w.toLowerCase().startsWith('fr')).sort();
 
 		return [...nonFr, ...fr];
 	}
@@ -125,7 +124,7 @@
 							{/await}
 						</tr>
 						{#each archetype.witnesses as witness}
-							{#each publisherData[witness] as witnessData}
+							{#each publisherData[witness] ?? [] as witnessData}
 								{#if witnessData?.content}
 									{@const verseWithAdd = witnessData?.id.split('.').pop()}
 									{#if additionsSlider || !verseWithAdd.match(/-\d/g)}
@@ -153,7 +152,7 @@
 						{/each}
 					{/each}
 				{:else}
-					{#each flatSortedWitnesses(metadata.hyparchetypes) as witness}
+					{#each sortedWitnesses(Object.keys(publisherData).filter((handle) => !handle.startsWith('*'))) as witness}
 						{#each publisherData[witness] as witnessData}
 							{#if witnessData?.content}
 								{@const verseWithAdd = witnessData?.id.split('.').pop()}

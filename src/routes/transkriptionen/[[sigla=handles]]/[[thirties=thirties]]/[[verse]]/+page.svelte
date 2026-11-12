@@ -7,7 +7,7 @@
 	import { base } from '$app/paths';
 	import { page } from '$app/state';
 	import { goto, replaceState } from '$app/navigation';
-	import { URL_STATIC_API, URL_IIIF } from '$lib/constants';
+	import { URL_STATIC_API } from '$lib/constants';
 	import filenameFromHandleAndId from '$lib/functions/filenameFromHandleAndId';
 	import Popover from '$lib/components/Popover.svelte';
 	import Zitierempfehlung from '$lib/components/Zitierempfehlung.svelte';
