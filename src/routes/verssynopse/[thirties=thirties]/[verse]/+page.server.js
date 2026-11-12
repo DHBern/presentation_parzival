@@ -103,7 +103,6 @@ async function getSortedNavVerses() {
 
 /** @type {import('./$types').PageServerLoad} */
 export async function load({ fetch, params }) {
-	console.log('einzelvers', params);
 	/** @type {{ [key: string]: Promise<any> }} */
 	const publisherData = {};
 
@@ -174,7 +173,9 @@ export async function load({ fetch, params }) {
 				const handlePath = encodeURIComponent(String(element.handle));
 				publisherData[element.handle] = [
 					limit(() =>
-						fetch(`${URL_TEI_PB}/parts/fassungen/${handlePath}/${thirties}/${verse ?? '01'}.json`)
+						fetch(
+							`${URL_TEI_PB}/parts/syn${thirties}.xml/json?odd=parzival.odd&view=single&xpath=//l[@n=%27${handlePath}%20${thirties}.${verse.replaceAll('I', 'i')}%27]`
+						)
 					)
 				];
 			}
