@@ -92,5 +92,5 @@
 		(Signatur) anzugeben.
 	</p>
 	<h2>Zitierempfehlung</h2>
-	<Zitierempfehlung />
+	<Zitierempfehlung citationId="parzival" />
 </div>

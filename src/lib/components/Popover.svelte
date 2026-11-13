@@ -17,16 +17,26 @@
 	/**
 	 * `ariaHaspopup` is forwarded to the trigger `<button>` as
 	 * `aria-haspopup`. When undefined, the attribute is omitted.
+	 * `triggerClass` and `ariaLabel` customize the trigger without changing
+	 * the default text-link appearance of other popovers.
 	 *
 	 * @typedef {{
 	 *   trigger: import('svelte').Snippet,
 	 *   content: import('svelte').Snippet,
+	 *   triggerClass?: string,
+	 *   ariaLabel?: string,
 	 *   ariaHaspopup?: 'menu' | 'listbox' | 'tree' | 'grid' | 'dialog'
 	 * }} Props
 	 */
 
 	/** @type {Props} */
-	let { trigger, content, ariaHaspopup = undefined } = $props();
+	let {
+		trigger,
+		content,
+		triggerClass = 'anchor',
+		ariaLabel = undefined,
+		ariaHaspopup = undefined
+	} = $props();
 
 	let open = $state(false);
 	/** @type {Element | null} */
@@ -56,10 +66,12 @@
 
 <span>
 	<button
+		type="button"
 		bind:this={floating.elements.reference}
 		{...interactions.getReferenceProps()}
 		aria-haspopup={ariaHaspopup}
-		class="anchor"
+		aria-label={ariaLabel}
+		class={triggerClass}
 	>
 		{@render trigger()}
 	</button>
