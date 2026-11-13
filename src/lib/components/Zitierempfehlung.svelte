@@ -1,5 +1,5 @@
 <script module>
-	import { citations, findCitation } from '$lib/data/citations';
+	import { citations, findCitation, findPageCitation } from '$lib/data/citations';
 
 	const citationData = await citations;
 </script>
@@ -24,7 +24,8 @@
 	 * omitted -> nothing, `'fassungen'` -> ` nach Fassungen`,
 	 * `'eintextedition'` -> `, Eintextedition`.
 	 * `citationSlug` selects an exact registry slug (e.g. `transkriptionen/d`).
-	 * Otherwise the page's first path segment is used. `citationId` explicitly
+	 * Otherwise the page's first path segment is used, or `parzival` on the homepage.
+	 * `citationId` explicitly
 	 * selects project records with empty slugs. Registry data is shared through
 	 * a module-level fetch promise, like the other API data modules.
 	 * `citationDoi` supplies a witness DOI from metadata; null means unavailable
@@ -54,12 +55,14 @@
 			};
 		}
 
-		const pageSlug = page.url.pathname.slice(base.length).split('/')[1];
+		if (citationId || citationSlug !== undefined) {
+			return findCitation(citationData.citations, {
+				slug: citationSlug,
+				id: citationId
+			});
+		}
 
-		return findCitation(citationData.citations, {
-			slug: citationSlug ?? pageSlug,
-			id: citationId
-		});
+		return findPageCitation(citationData.citations, page.url, base);
 	});
 	const lookupError = $derived(citationDoi === undefined && citationData.citationsError);
 	const doi = $derived(citation?.citation_doi.replace('https://doi.org/', ''));

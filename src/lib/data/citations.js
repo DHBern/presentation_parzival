@@ -51,6 +51,22 @@ export function findCitation(citations, { slug, id }) {
 	return citations.find((entry) => (id ? entry.id === id : !!slug && entry.slug === slug));
 }
 
+/** @param {URL} url @param {string} base */
+export function getCitationSlug(url, base) {
+	// During SSR, SvelteKit's base can be relative (e.g. "." or "..").
+	const basePath = new URL(`${base}/`, url).pathname;
+	return url.pathname.slice(basePath.length).split('/')[0];
+}
+
+/** @param {Citation[]} citations @param {URL} url @param {string} base */
+export function findPageCitation(citations, url, base) {
+	const slug = getCitationSlug(url, base);
+	if (slug === '') {
+		return findCitation(citations, { id: 'parzival' });
+	}
+	return findCitation(citations, { slug });
+}
+
 /** @param {typeof fetch} fetcher @param {string} api */
 export async function loadCitations(fetcher, api) {
 	try {

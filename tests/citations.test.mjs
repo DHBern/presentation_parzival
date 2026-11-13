@@ -48,7 +48,70 @@ try {
 } finally {
 	globalThis.fetch = originalFetch;
 }
-const { citations, findCitation, loadCitations, parseCitations } = citationModule;
+const {
+	citations,
+	findCitation,
+	findPageCitation,
+	getCitationSlug,
+	loadCitations,
+	parseCitations
+} = citationModule;
+
+test('selects the homepage project explicitly rather than an arbitrary empty slug', () => {
+	const registry = parseCitations(entries);
+	for (const [pathname, base] of [
+		['/', ''],
+		['/', '.'],
+		['/edition/', '/edition'],
+		['/edition/', '.']
+	]) {
+		const url = new URL(pathname, 'https://example.test');
+		assert.equal(findPageCitation(registry, url, base)?.id, 'parzival');
+	}
+	assert.equal(
+		findPageCitation(
+			registry.filter((entry) => entry.id !== 'parzival'),
+			new URL('https://example.test/'),
+			''
+		),
+		undefined
+	);
+});
+
+test('normalizes page slugs for nested URLs, deployment paths and relative SSR bases', () => {
+	for (const [pathname, base, expected] of [
+		['/textzeugen', '', 'textzeugen'],
+		['/textzeugen/', '', 'textzeugen'],
+		['/textzeugen/', '..', 'textzeugen'],
+		['/fassungen/123', '..', 'fassungen'],
+		['/transkriptionen/d-g/123/04', '../../..', 'transkriptionen'],
+		['/edition/textzeugen', '/edition', 'textzeugen'],
+		['/edition/textzeugen', '.', 'textzeugen'],
+		['/edition/fassungen/123', '..', 'fassungen'],
+		['/edition/transkriptionen/d-g/123/04', '../../..', 'transkriptionen'],
+		['/einfuehrung', '', 'einfuehrung'],
+		['/einfuehrung/kapitel', '..', 'einfuehrung'],
+		['/publikationen', '', 'publikationen']
+	]) {
+		assert.equal(getCitationSlug(new URL(pathname, 'https://example.test'), base), expected);
+	}
+});
+
+test('matches only the current page DOI and never inherits the project DOI', () => {
+	const registry = parseCitations(entries);
+	for (const suffix of ['', '/', '?view=details#D']) {
+		assert.equal(
+			findPageCitation(registry, new URL(`https://example.test/textzeugen${suffix}`), '')?.id,
+			'textzeugen'
+		);
+	}
+	for (const path of ['impressum', 'unknown', 'textzeugen-other']) {
+		assert.equal(
+			findPageCitation(registry, new URL(`https://example.test/${path}`), ''),
+			undefined
+		);
+	}
+});
 
 test('shares one module-level registry fetch across consumers', async () => {
 	assert.equal(citations, (await import('../src/lib/data/citations.js')).citations);
