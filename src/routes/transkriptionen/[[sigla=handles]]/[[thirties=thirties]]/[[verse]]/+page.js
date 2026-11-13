@@ -117,6 +117,8 @@ export async function load({ fetch, params, url }) {
 		content: sigla?.map((witnes, i) => {
 			return {
 				sigla: witnes,
+				citationDoi:
+					[...codices, ...fragments].find((entry) => entry.handle === witnes)?.citation_doi ?? null,
 				meta: meta ? meta[i] : false
 			};
 		}),

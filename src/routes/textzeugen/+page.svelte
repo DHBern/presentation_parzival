@@ -1,5 +1,6 @@
 <script>
 	import H2Hoverable from '$lib/components/H2Hoverable.svelte';
+	import Zitierempfehlung from '$lib/components/Zitierempfehlung.svelte';
 
 	/** @type {{data: import('./$types').PageData}} */
 	let { data } = $props();
@@ -11,7 +12,10 @@
 </svelte:head>
 
 <div class="container mx-auto typography">
-	<h1 class="h1">Verzeichnis der Textzeugen des ›Parzival‹</h1>
+	<div class="flex items-baseline justify-between gap-4 flex-wrap">
+		<h1 class="h1">Verzeichnis der Textzeugen des ›Parzival‹</h1>
+		<Zitierempfehlung mode="popup" />
+	</div>
 
 	<p>
 		Die Siglen der im Folgenden aufgelisteten Textzeugen von Wolframs ›Parzival‹ – 16 (mehr oder

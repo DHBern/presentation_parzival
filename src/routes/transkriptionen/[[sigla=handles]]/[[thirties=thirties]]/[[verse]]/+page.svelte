@@ -259,7 +259,7 @@
 								</Popover>
 							</h2>
 							<div class="flex flex-1 min-w-0 items-center justify-end gap-2">
-								<Zitierempfehlung mode="popup" />
+								<Zitierempfehlung mode="popup" citationDoi={info.citationDoi} />
 								{#if !(page.url.searchParams.get('iiif')?.split('-')[i] === 'false')}
 									<a
 										class="btn btn-icon shrink-0"
