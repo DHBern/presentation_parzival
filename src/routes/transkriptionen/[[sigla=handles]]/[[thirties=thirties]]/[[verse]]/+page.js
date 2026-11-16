@@ -2,14 +2,15 @@ import { URL_STATIC_API } from '$lib/constants';
 import { base } from '$app/paths';
 import { metadata } from '$lib/data/metadata';
 import filenameFromHandleAndId from '$lib/functions/filenameFromHandleAndId';
+import redirectToFirstVerse from '$lib/functions/redirectToFirstVerse';
 import { error } from '@sveltejs/kit';
 
 /** @type {import('./$types').PageLoad} */
-export async function load({ fetch, params }) {
+export async function load({ fetch, params, url }) {
 	if (!params.sigla) {
 		return error(404, params.verse);
 	} else if (!params.thirties) {
-		return error(404, [params.sigla, params.verse].join('/'));
+		return redirectToFirstVerse(params.sigla, fetch, url);
 	}
 	const { codices, fragments } = await metadata;
 	const sigla = params.sigla?.split('-');
@@ -26,31 +27,17 @@ export async function load({ fetch, params }) {
 		return fetch(`${URL_STATIC_API}/json/metadata-ms-page/${handle}.json`).then((r) => r.json());
 	});
 
-	// if params.thirties is not defined, we need to find the lowest thirty & verse that exists in all siglas
-	if (sigla?.length === 1) {
-		if (!params.thirties) {
-			thirties = false;
-			(await pageMeta[0])[sigla[0]].forEach((/** @type {{id: String, l: String[]}} **/ page) => {
-				if (page.id.includes(`${sigla[0]}001`)) {
-					const [tThirty, tVerse] = page.l[0].split('.');
-					if (!thirties || Number(tThirty) < Number(thirties)) {
-						thirties = tThirty;
-						verse = tVerse;
-					}
-				}
-			});
-		} else if (!params.verse && typeof thirties === 'string') {
-			verse = false;
-			(await pageMeta[0])[sigla[0]].some((/** @type {{id: String, l: String[]}} **/ page) => {
-				const newVerse = page.l
-					.find((/** @type {String} **/ l) => l?.startsWith(String(thirties)))
-					?.split('.')[1];
-				if (newVerse) {
-					verse = newVerse;
-					return true;
-				}
-			});
-		}
+	if (sigla?.length === 1 && !params.verse && typeof thirties === 'string') {
+		verse = false;
+		(await pageMeta[0])[sigla[0]].some((/** @type {{id: String, l: String[]}} **/ page) => {
+			const newVerse = page.l
+				.find((/** @type {String} **/ l) => l?.startsWith(String(thirties)))
+				?.split('.')[1];
+			if (newVerse) {
+				verse = newVerse;
+				return true;
+			}
+		});
 	}
 
 	const meta = sigla?.map(async (handle, i) => {
@@ -130,6 +117,8 @@ export async function load({ fetch, params }) {
 		content: sigla?.map((witnes, i) => {
 			return {
 				sigla: witnes,
+				citationDoi:
+					[...codices, ...fragments].find((entry) => entry.handle === witnes)?.citation_doi ?? null,
 				meta: meta ? meta[i] : false
 			};
 		}),

@@ -7,6 +7,7 @@
 	import { base } from '$app/paths';
 	import { toaster } from '$lib/components/toaster';
 	import { Toaster } from '@skeletonlabs/skeleton-svelte';
+	import DoiMetadata from '$lib/components/DoiMetadata.svelte';
 	/** @type {{children?: import('svelte').Snippet}} */
 	let { children } = $props();
 
@@ -41,6 +42,8 @@
 		{ slug: 'Suche', path: '/suche' }
 	];
 </script>
+
+<DoiMetadata />
 
 <AppBar classes="px-4 py-0 relative z-50">
 	{#snippet lead()}
