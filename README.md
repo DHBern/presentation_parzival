@@ -34,6 +34,10 @@ npm run docker:start
 ```bash
 npm run installXar
 ```
+If you encounter `Could not connect to DB! Reason: ECONNREFUSED`, use an .env file or supply credentials as
+```bash
+EXISTDB_USER=admin EXISTDB_PASS='' EXISTDB_SERVER=http://127.0.0.1:8081 npm run installXar
+```
 
 4. Start the frontend in dev mode:
 
